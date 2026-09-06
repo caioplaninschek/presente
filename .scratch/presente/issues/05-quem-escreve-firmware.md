@@ -1,9 +1,10 @@
 # Quem escreve firmware, e como o time evita conflito no repo
 
 Type: grilling
-Status: open
+Status: resolved
 Parent: map.md
-Blocked by: 01
+Blocked by: 01 (resolvido)
+Resolvido: 2026-09-06
 
 ## Question
 
@@ -23,3 +24,19 @@ Perguntas que a sessão precisa fechar:
 Bloqueado por **Divisão de responsabilidades confirmada com o grupo**: não dá para decidir quem trabalha em qual arquivo antes de saber quem é dono de qual frente.
 
 Recomendação já registrada e a ser confrontada na sessão: 2 donos no firmware, os outros nas suas camadas. O Caio ainda não concordou nem discordou disso — respondeu a política, não a mecânica.
+
+## Answer
+
+**Trabalhar direto na `main`. Sem branch, sem pull request, sem revisão obrigatória.**
+
+A resolução veio de fora deste ticket: o Caio explicitou que a divisão de responsabilidades é artefato de documentação, não contrato, e que na prática ele mesmo faz o trabalho de quem estiver atribuído. Isso responde a pergunta 1 sem precisar consultar o grupo — o número real de mãos no C++ é **uma ou duas**, não cinco.
+
+Com uma ou duas mãos, branch + PR é cerimônia de time grande num time que não é grande. Ela custa fricção diária e não compra nada: não há revisor independente de fato, e o build do PlatformIO já pega o que importa.
+
+**O que se mantém, porque não custa nada:**
+
+- **Modularização como profilaxia** (R9, §5): `rfid.cpp`, `storage.cpp`, `portal.cpp`, `net.cpp`, `tamper.cpp`, `feedback.cpp`. Se duas pessoas estiverem editando, é improvável que estejam no mesmo arquivo. Conflito de merge quase some por construção, sem processo nenhum.
+- **Commits pequenos e datados**, em português. Não é estética: o histórico do git *é* metade do diário de bordo que o professor cobra (R12).
+- **`git pull` antes de começar a mexer.** É a única disciplina que este fluxo exige.
+
+**Revisitar se** o cenário mudar — se três ou mais pessoas começarem a commitar C++ de verdade na mesma semana, aí branch por frente passa a valer o custo.

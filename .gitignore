@@ -3,3 +3,25 @@
 !AGENTS.md
 !CONTEXT.md
 !.claude/
+
+# ---------------------------------------------------------------
+# CREDENCIAIS - repo PUBLICO. Nada aqui pode subir. Ver AGENTS.md.
+# ---------------------------------------------------------------
+secrets.h
+src/secrets.h
+include/secrets.h
+.env
+*.pem
+*.key
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+build/
+
+# Editores
+.vscode/
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

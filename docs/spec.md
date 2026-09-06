@@ -62,6 +62,14 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
   - **Android:** escolher a banda 2,4 GHz explicitamente; senha sem caractere especial.
   - Gravar um **SSID de fallback** no aparelho antes do dia da apresentação.
 
+### Rodada 5 — R14–R17 (06/09, 01h)
+
+- **R14 A sincronização acontece no login, não no Iniciar.** O aparelho valida a senha, responde *"carregando turma…"*, e só então troca o rádio. Quando o painel abre, o roster está em cache e o **Iniciar** é instantâneo. A espera de 5–15 s não some — muda para o instante em que o professor já espera que a página demore. Altera o §6.
+  - Alternativa considerada e **descartada por razão acadêmica**: tirar a internet do ESP32 e deixar o celular do professor falar com o Supabase (o aparelho nunca sairia do modo AP). Mataria a troca de rádio, o bug do AP, o TLS e 40–50 KB de heap — mas numa disciplina de Sistemas Embarcados a comunicação do ESP32 com a nuvem é a competência avaliada. **Registrar no relatório técnico como caminho de evolução**, para mostrar que a escolha foi consciente.
+- **R15 Recuperação quando o AP não volta:** 2 tentativas (nunca mais, por causa do vazamento de R13b), depois `ESP.restart()`. O LED distingue três estados de rede: azul lento = sincronizando; azul rápido = vai reiniciar; azul fixo = de pé, aguardando login.
+- **R16 `sessao_atual.json` é requisito, não conveniência.** Gravado antes de toda troca de rádio, lido no boot. Reinício no meio da aula retoma a sessão em curso (mesmo `professorId`, mesmo roster, janela ainda aberta) em vez de cair no login com presenças órfãs. É o que torna R15 aceitável.
+- **R17 Repo público → `secrets.h` é obrigação, não boa prática.** Credenciais em `include/secrets.h` (no `.gitignore`); `include/secrets.example.h` versionado com os campos em branco. Chave que subir num repo público está comprometida para sempre, mesmo apagando o commit.
+
 ### Decisões operacionais
 
 - **Bluetooth não será usado** — substituído pelo Wi-Fi nativo do ESP32 (o enunciado da Entrega 02 pedia Bluetooth por boilerplate de Arduino).
@@ -130,7 +138,8 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 | Estado | LED | Som | Gatilho |
 |---|---|---|---|
 | `AGUARDANDO_LOGIN` | azul fixo | — | boot / sessão encerrada |
-| `SINCRONIZANDO` | azul piscando | — | rádio em STA (Iniciar ou Enviar) |
+| `SINCRONIZANDO` | azul lento | — | rádio em STA (após o login, ou no Enviar) |
+| `FALHA_DE_RADIO` | azul rápido | — | AP não voltou em 2 tentativas → `ESP.restart()` |
 | `SESSAO_ABERTA` | verde fixo | — | professor clicou Iniciar |
 | `REGISTRADO` | verde 2 piscadas | bip 100 ms | UID lido e gravado |
 | `DUPLICADO` | vermelho 300 ms | — | mesmo UID dentro de 5 s — nada é gravado |
@@ -147,10 +156,10 @@ HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do fi
 2. Aparelho sobe; professor procura as redes Wi-Fi
 3. Professor conecta na rede do aparelho (senha WPA2)
 4. Portal cativo abre a página de login automaticamente
-5. Professor entra com login e senha
-6. Painel com 6 ações: **Iniciar** · **Adicionar presença manual** · **Exibir relatório** · **Compartilhar relatório** · **Enviar relatório** · **Encerrar**
-7. Professor clica Iniciar
-8. Rádio vai a STA, busca a lista da turma, volta a AP. Sessão aberta com `professorId` já gravado
+5. Professor entra com login e senha. Validada a senha, o aparelho responde *"carregando turma…"* e **aproveita esse instante para sincronizar** (R14): rádio vai a STA, busca o roster, volta a AP. 5–15 s; o celular reconecta sozinho e o LED pisca azul lento
+6. Painel abre **com a lista já em cache**. Seis ações: **Iniciar** · **Adicionar presença manual** · **Exibir relatório** · **Compartilhar relatório** · **Enviar relatório** · **Encerrar**
+7. Professor clica Iniciar — **instantâneo**, sem rede
+8. Sessão aberta com `professorId` gravado, LED verde fixo
 9. Aluno encosta a tag
 10. Aparelho lê o UID e resolve **localmente** contra a lista cacheada
 11. Sem lista (modo offline): grava só o UID; o enriquecimento acontece no envio
@@ -220,17 +229,19 @@ Exportação:
 | 8 | SW-420: bater no aparelho durante a sessão | alerta gravado, chamada **não** interrompida, sem falso-positivo com porta batendo |
 | 9 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
 
-## 9. Divisão da equipe — **proposta, a confirmar com o grupo**
+## 9. Divisão da equipe
 
 | Papel | Responsável | Entregável até 21–22/09 |
 |---|---|---|
-| Hardware | Gabriel | Protoboard montada, pinagem conferida, SW-420 calibrado, alimentação estável |
-| Firmware núcleo | Cauã | `rfid.cpp` + `storage.cpp` + `feedback.cpp` + máquina de estados |
-| Portal web | Igor | SPA do professor: login, painel de 6 botões, polling do relatório |
-| Rede + API | Caio | Alternância AP↔STA, Supabase configurado, roster + upload funcionando |
-| Estrutura física + documentação | João Victor | Caixa de parede, diário de bordo, fotos/vídeo, consolidação dos PDFs |
+| Hardware | Gabriel Santarello | Protoboard montada, pinagem conferida, SW-420 calibrado, alimentação estável |
+| Firmware núcleo | Cauã Andrade | `rfid.cpp` + `storage.cpp` + `feedback.cpp` + máquina de estados |
+| Portal web | Igor Lobato | SPA do professor: login, painel de 6 botões, polling do relatório |
+| Integração e documentação | Caio Planinschek | Rede (AP↔STA), Supabase, roster + upload; consolidação dos documentos de entrega |
+| Estrutura física e diário de bordo | João Victor Cabral | Caixa de parede, diário de bordo semanal, fotos e vídeo |
 
-Cada papel tem 1 dono e 1 revisor. A revisão é cruzada (cada um revisa o papel de baixo na tabela).
+Cada papel tem 1 dono, mas as fronteiras são permeáveis: quem terminar a sua frente ajuda a próxima. O papel de **Integração** existe justamente para circular entre as camadas e fechar o que ficar entre duas cadeiras.
+
+**Fluxo de trabalho no repo:** commits direto na `main`, sem branch nem pull request. A modularização do firmware (§5) é o que evita conflito — cada frente no seu arquivo. Regra única: `git pull` antes de começar.
 
 ## 10. Principal desafio técnico
 

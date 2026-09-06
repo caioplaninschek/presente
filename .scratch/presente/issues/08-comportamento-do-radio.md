@@ -1,9 +1,10 @@
 # Comportamento do rádio: quando sincronizar e o que acontece quando a troca falha
 
 Type: grilling
-Status: open
+Status: resolved
 Parent: map.md
 Blocked by: —
+Resolvido: 2026-09-06
 
 ## Question
 
@@ -38,3 +39,28 @@ Se a resposta de (2) for "reinicia", então `sessao_atual.json` deixa de ser con
 `grilling` porque as três perguntas são de produto (o que o professor vê e o que ele perde), não de implementação. A pesquisa já entregou os fatos técnicos; falta decidir o comportamento.
 
 Enviesado para: sincronizar no login, `ESP.restart()` após 2 tentativas falhas, e `sessao_atual.json` como requisito. Mas a decisão é do Caio — especialmente a primeira, que muda o fluxo de 16 passos já escrito na spec.
+
+## Answer
+
+### 1. Sincronizar no login
+
+O aparelho valida a senha, responde ao navegador *"carregando turma…"*, e **só então** troca o rádio para buscar o roster. Quando o painel abre, a lista já está em cache e o botão **Iniciar** é instantâneo.
+
+A espera de 5–15 s não desaparece — ela **muda de lugar**, para o instante em que o professor acabou de submeter um formulário e já espera que a página demore. Sair de "botão que deveria ser instantâneo trava 15 segundos" para "login demora um pouco" é ganho de percepção, não de engenharia.
+
+**Terceira opção que foi levantada e descartada:** tirar a internet do ESP32 e deixar o celular do professor falar com o Supabase (o aparelho nunca sairia do modo AP). É tecnicamente superior — mataria a troca de rádio, o bug do AP, o TLS e 40–50 KB de heap. Descartada por razão **acadêmica, não técnica**: numa disciplina de Sistemas Embarcados, fazer o ESP32 falar com a nuvem é justamente a competência que está sendo avaliada. Vale registrar essa alternativa no relatório técnico como caminho de evolução — mostra que a escolha foi consciente.
+
+### 2. Recuperação quando o rádio não volta
+
+- **Duas tentativas** de restabelecer o AP. Não mais: cada `connect()` falho vaza ~4 KB de heap (R13b), então retry infinito derruba o aparelho de qualquer jeito.
+- Falhando as duas, **`ESP.restart()`**. Em sala, um reboot de 2 s é aceitável; um portal que não volta, não.
+- **O LED precisa distinguir três coisas**, senão o professor não sabe se espera ou se bate no aparelho:
+  - azul piscando **lento** = sincronizando, aguarde
+  - azul piscando **rápido** = falhou, vou reiniciar
+  - azul fixo = de pé, aguardando login
+
+### 3. `sessao_atual.json` vira requisito
+
+Deixa de ser conveniência. Gravado **antes de toda troca de rádio**, lido no boot. Se o aparelho reiniciar no meio da aula, ele volta direto para a sessão em curso — mesmo `professorId`, mesmo roster, mesma janela aberta — em vez de cair na tela de login com 40 presenças órfãs dentro.
+
+Este é o item que transforma o reinício de "perda de aula" em "soluço de 2 segundos", e é o que torna a decisão (2) aceitável.

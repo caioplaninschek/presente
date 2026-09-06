@@ -1,8 +1,9 @@
 # Divisão de responsabilidades confirmada com o grupo
 
 Type: task
-Status: open
+Status: resolved
 Parent: map.md
+Resolvido: 2026-09-06
 Blocked by: —
 Prazo real: 07/09 20:00 (a Entrega 03 exige esta seção)
 
@@ -23,3 +24,25 @@ Sub-perguntas que a conversa com o grupo tem que fechar:
 Este ticket é `task` e não `grilling` porque não há nada a decidir *aqui*: o que bloqueia é o Caio levar a proposta ao grupo e voltar com a resposta. É o ticket mais urgente do mapa — a Entrega 03 de 07/09 exige "Divisão das responsabilidades da equipe" e "Cronograma da equipe até 21/09" como seções obrigatórias.
 
 Resolvido quando os 5 nomes estiverem confirmados e a seção 9 da spec deixar de estar marcada como proposta.
+
+## Answer
+
+**O ticket estava mal formulado.** O Caio delegou a decisão e explicou por quê: *"na prática o que está no papel não necessariamente será a realidade — eu posso falar que outra pessoa está responsável e eu mesmo fazer"*.
+
+Isso reclassifica o artefato. A divisão **não é um contrato operacional**; é uma seção obrigatória da Entrega 03. Ela precisa ser plausível e defensável diante do professor, não vinculante entre os 5. Buscar confirmação formal do grupo para algo que ninguém vai tratar como vinculante era cerimônia.
+
+**Divisão travada** (spec §9, sai de "proposta"):
+
+| Papel | Dono |
+|---|---|
+| Hardware | Gabriel |
+| Firmware núcleo | Cauã |
+| Portal web | Igor |
+| **Integração e documentação** | **Caio** |
+| Estrutura física e diário de bordo | João |
+
+O papel do Caio é **amplo por desenho**, e isso é deliberado: "integração" legitima circular por qualquer frente. Quando ele fizer o trabalho de outro — e vai — o documento não o contradiz.
+
+**Decorrência que fecha outro ticket:** se na prática uma ou duas pessoas escrevem o código, o fluxo de git não precisa de branch nem PR. Ver *Quem escreve firmware, e como o time evita conflito no repo*.
+
+**O que continua valendo:** o Caio ainda deve mandar a tabela no grupo — não para pedir autorização, mas para que ninguém seja pego de surpresa vendo o próprio nome num papel no PDF entregue.
