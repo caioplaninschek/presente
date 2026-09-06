@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Entrega 03 — Projeto detalhado da solução</title>
+<style>
+  @page { size: A4; margin: 2.2cm 2cm 1.8cm 2.5cm; }
+  @page :first { margin: 2.5cm 3cm 2cm 3cm; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 11pt;
+    line-height: 1.2;
+    color: #000;
+    margin: 0;
+    text-align: justify;
+    hyphens: none;
+  }
+
+  /* ---------- capa ---------- */
+  .capa {
+    page-break-after: always;
+    text-align: center;
+    font-family: Calibri, "Segoe UI", Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    height: 100%;
+  }
+  .capa img { width: 146pt; display: block; margin: 0 auto 34pt; }
+  .capa .inst { font-weight: bold; }
+  .capa .nomes { margin-top: 46pt; }
+  .capa .titulo { margin-top: 46pt; font-weight: bold; }
+  .capa .disc { margin-top: 30pt; }
+  .capa .local { margin-top: 78pt; }
+
+  /* ---------- corpo ---------- */
+  h1 {
+    font-size: 13pt; text-align: center; margin: 0 0 12pt;
+    text-transform: uppercase; letter-spacing: .3pt;
+  }
+  h2 {
+    font-size: 11.5pt; margin: 8pt 0 2.5pt; text-align: left;
+    page-break-after: avoid;
+  }
+  p { margin: 0 0 4pt; orphans: 2; widows: 2; }
+  ol { margin: 0 0 4pt; padding-left: 16pt; }
+  ol li { margin-bottom: 2pt; }
+  .ident p { margin-bottom: 1pt; text-align: left; }
+  .nota { font-size: 10pt; margin-top: 4pt; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 3pt 0 5pt;
+    font-family: Calibri, "Segoe UI", Arial, sans-serif;
+    font-size: 9.5pt; line-height: 1.2; text-align: left;
+  }
+  th, td { border: .5pt solid #7a8a95; padding: 2pt 4.5pt; vertical-align: top; }
+  th { background: #eef3f6; font-weight: bold; }
+  td.n { text-align: center; white-space: nowrap; }
+  thead { display: table-header-group; }
+
+  figure { margin: 5pt 0 4pt; text-align: center; }
+  figure svg { max-width: 92%; }
+  figure svg { width: 100%; height: auto; }
+  figcaption {
+    font-size: 9.5pt; line-height: 1.2; margin-top: 4pt;
+    text-align: justify; font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  }
+
+  /* ---------- diagrama ---------- */
+  .d-box { fill: #f4f8fa; stroke: #004d7b; stroke-width: 1.4; }
+  .d-core { fill: #ffffff; stroke: #004d7b; stroke-width: 2; }
+  .d-inner { fill: #eef3f6; stroke: #7a9db3; stroke-width: 1; }
+  .d-t { font-family: Calibri, Arial, sans-serif; font-size: 17px; fill: #10232e; text-anchor: middle; }
+  .d-t.b { font-weight: bold; }
+  .d-s { font-family: Calibri, Arial, sans-serif; font-size: 13.5px; fill: #40606f; text-anchor: middle; }
+  .d-e { font-family: Calibri, Arial, sans-serif; font-size: 13px; fill: #004d7b; text-anchor: middle; }
+  .d-band { font-family: Calibri, Arial, sans-serif; font-size: 12px; fill: #7a8a95;
+            text-anchor: middle; letter-spacing: 1.1px; }
+  .d-l { stroke: #004d7b; stroke-width: 1.4; fill: none; }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<section class="capa">
+  <img src="assets/uva-logo.png" alt="Universidade Veiga de Almeida">
+  <p class="inst">UNIVERSIDADE VEIGA DE ALMEIDA</p>
+  <p>Bacharelado em Ciência da Computação</p>
+
+  <div class="nomes">
+    <p>Gabriel Albuquerque Varela Santarello - 1240110815</p>
+    <p>Cauã Manuel Proença de Andrade - 1240109764</p>
+    <p>Igor Rocha Lobato - 1240114118</p>
+    <p>Caio Parada Oliveira Planinschek - 1240205596</p>
+    <p>João Victor Berçot Chabudet Cabral - 1240108001</p>
+  </div>
+
+  <p class="titulo">DISPOSITIVO EMBARCADO PARA CONTABILIZAÇÃO DE PRESENÇA EM SALA DE AULA</p>
+
+  <p class="disc">(Trabalho da disciplina de Sistemas Embarcados)</p>
+  <p class="disc" style="margin-top:12pt"><b>Entrega 03 — Projeto detalhado da solução</b></p>
+
+  <div class="local">
+    <p>Rio de Janeiro</p>
+    <p>2026</p>
+  </div>
+</section>
+
+<!-- ============ CORPO ============ -->
+<h2>1. Identificação do projeto</h2>
+<div class="ident">
+  <p><b>Nome do projeto:</b> Presente! — terminal embarcado para contabilização de presença em sala de aula.</p>
+  <p><b>Turma:</b> _______________________________</p>
+  <p><b>Integrantes:</b> Gabriel Albuquerque Varela Santarello — 1240110815; Cauã Manuel Proença de Andrade — 1240109764; Igor Rocha Lobato — 1240114118; Caio Parada Oliveira Planinschek — 1240205596; João Victor Berçot Chabudet Cabral — 1240108001.</p>
+  <p><b>Problema escolhido:</b> o tempo de aula consumido pela chamada manual e os erros de marcação que ela produz.</p>
+</div>
+<p>Nas Entregas 01 e 02 o projeto aparece sob o nome SmartPresence, substituído em 06/09 pelo nome atual.</p>
+
+<h2>2. Problema</h2>
+<p>O problema é do professor que dá aula para turma cheia. Na UVA Barra a chamada é feita no site da própria instituição, numa tabela com duas caixas por aula, em que a caixa marcada vale falta e a caixa em branco vale presença. O professor lê a lista nome por nome, pergunta à turma quem está presente e marca as caixas conforme as respostas.</p>
+<p>Cada chamada consome de 10 a 15 minutos, e o tempo não é o único custo. Um deslize de linha na tabela marca falta no aluno errado; a conferência oral abre espaço para que alguém responda pelo colega ausente; e o professor chega ao conteúdo com a voz já gasta. Quanto maior a turma, mais tempo e mais esforço a chamada custa.</p>
+
+<h2>3. Solução proposta</h2>
+<p>O protótipo é um terminal fixo ao lado da porta, ligado à tomada. Ele mesmo cria a rede Wi-Fi pela qual é operado: o professor conecta o celular nessa rede, faz login e abre a sessão de chamada pelo navegador. A partir daí o aluno encosta o crachá no leitor e recebe a confirmação na hora, por luz e som. Encerrada a aula, o professor envia o relatório da sessão para uma API na nuvem; se a internet falhar, o professor baixa esse mesmo relatório em JSON no celular.</p>
+<p>O aparelho fala com a internet em dois momentos, e só neles: no login, quando baixa a lista da turma, e no envio, quando sobe o relatório. Descartamos a alternativa de consultar a API a cada crachá lido, porque numa turma de 40 alunos seriam 40 idas à internet durante a aula, e a fila na porta ficaria dependente do Wi-Fi. Entre os dois momentos o aparelho confere cada leitura na lista que já está na memória flash interna, sem rede nenhuma.</p>
+<p>Sem internet no login, a sessão abre mesmo assim, em modo degradado: o aparelho registra apenas o UID, o número de série gravado no chip da tag, e marca a sessão como offline. Nome e matrícula são acrescentados no envio, do lado da API. Nada se perde, mas nesse modo o aparelho não tem como saber quem pertence à turma, e por isso aceita qualquer tag lida.</p>
+<p>Uma mudança em relação ao Canvas da Entrega 02: retiramos o registro de saída por segundo toque. Ele duplicaria o estado guardado por aluno e acrescentaria um ponto de falha, sem reduzir o tempo da chamada, que é o problema que motivou o projeto. O protótipo registra presença; a ausência é o que não foi registrado até o encerramento da sessão.</p>
+
+<h2>4. Componentes</h2>
+<table>
+  <thead>
+    <tr><th style="width:31%">Componente</th><th style="width:7%">Qtd</th><th>Função</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Microcontrolador ESP32 DevKit V1</td><td class="n">1</td><td>Controla o sistema: lê o módulo NFC, grava os registros, serve o portal do professor e conversa com a API</td></tr>
+    <tr><td>Leitor RFID/NFC RC522 (13,56 MHz)</td><td class="n">1</td><td><b>Sensor 1</b> — lê o UID da tag por aproximação (SPI VSPI: SCK 18, MISO 19, MOSI 23, SS 5, RST 22)</td></tr>
+    <tr><td>Sensor de vibração SW-420</td><td class="n">1</td><td><b>Sensor 2</b> — detecta impacto ou tentativa de remoção do aparelho (GPIO 34)</td></tr>
+    <tr><td>Tags NFC 13,56 MHz (NTAG215 e cartões Mifare)</td><td class="n">3 a 5</td><td>Crachás de teste; o firmware apenas lê o UID e nunca escreve na tag</td></tr>
+    <tr><td>LED RGB de catodo comum</td><td class="n">1</td><td><b>Atuador 1</b> — sinaliza o resultado de cada leitura e o estado da rede (GPIO 25, 26 e 27)</td></tr>
+    <tr><td>Resistor de 220 Ω</td><td class="n">3</td><td>Limita a corrente de cada canal de cor do LED</td></tr>
+    <tr><td>Buzzer ativo de 5 V</td><td class="n">1</td><td><b>Atuador 2</b> — bip de 100 ms na confirmação da leitura (GPIO 33)</td></tr>
+    <tr><td>Protoboard de 830 pontos</td><td class="n">1</td><td>Montagem e interligação dos módulos</td></tr>
+    <tr><td>Jumpers macho-macho e macho-fêmea</td><td class="n">1 kit</td><td>Ligações de sinal e de alimentação</td></tr>
+    <tr><td>Fonte de 5 V 2 A com cabo micro-USB</td><td class="n">1</td><td>Alimenta o aparelho, que fica permanentemente na tomada</td></tr>
+  </tbody>
+</table>
+
+<h2>5. Diagrama de blocos</h2>
+<figure>
+<svg viewBox="0 0 800 344" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Diagrama de blocos do terminal Presente!">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#004d7b"/>
+    </marker>
+  </defs>
+
+  <text class="d-band" x="185" y="12">SENSORES</text>
+  <text class="d-band" x="435" y="12">NÚCLEO EMBARCADO</text>
+  <text class="d-band" x="715" y="12">ATUADORES</text>
+
+  <rect class="d-box" x="8" y="24" width="112" height="46" rx="4"/>
+  <text class="d-t b" x="64" y="46">Tag NFC</text>
+  <text class="d-s" x="64" y="63">13,56 MHz</text>
+  <path class="d-l" d="M120 47 H 154" marker-end="url(#a)"/>
+  <text class="d-e" x="137" y="40">RF</text>
+
+  <rect class="d-box" x="158" y="24" width="132" height="46" rx="4"/>
+  <text class="d-t b" x="224" y="46">Leitor RC522</text>
+  <text class="d-s" x="224" y="63">Sensor 1</text>
+  <path class="d-l" d="M290 47 H 348" marker-end="url(#a)"/>
+  <text class="d-e" x="319" y="40">SPI</text>
+
+  <rect class="d-box" x="158" y="100" width="132" height="46" rx="4"/>
+  <text class="d-t b" x="224" y="122">Sensor SW-420</text>
+  <text class="d-s" x="224" y="139">Sensor 2</text>
+  <path class="d-l" d="M290 123 H 348" marker-end="url(#a)"/>
+  <text class="d-e" x="319" y="116">GPIO 34</text>
+
+  <rect class="d-core" x="350" y="20" width="170" height="130" rx="5"/>
+  <text class="d-t b" x="435" y="44">ESP32 DevKit V1</text>
+  <text class="d-s" x="435" y="62">C++ / Arduino Core</text>
+  <rect class="d-inner" x="364" y="78" width="142" height="60" rx="4"/>
+  <text class="d-t" x="435" y="99">Memória flash</text>
+  <text class="d-s" x="435" y="115">LittleFS: sessão,</text>
+  <text class="d-s" x="435" y="130">eventos e contas</text>
+
+  <path class="d-l" d="M520 47 H 638" marker-end="url(#a)"/>
+  <text class="d-e" x="579" y="40">GPIO 25/26/27</text>
+  <rect class="d-box" x="640" y="24" width="150" height="46" rx="4"/>
+  <text class="d-t b" x="715" y="46">LED RGB</text>
+  <text class="d-s" x="715" y="63">Atuador 1</text>
+
+  <path class="d-l" d="M520 123 H 638" marker-end="url(#a)"/>
+  <text class="d-e" x="579" y="116">GPIO 33</text>
+  <rect class="d-box" x="640" y="100" width="150" height="46" rx="4"/>
+  <text class="d-t b" x="715" y="122">Buzzer ativo</text>
+  <text class="d-s" x="715" y="139">Atuador 2</text>
+
+  <path class="d-l" d="M435 150 V 172"/>
+  <circle cx="435" cy="179" r="7" fill="#ffcc01" stroke="#004d7b" stroke-width="1.4"/>
+  <path class="d-l" d="M435 186 V 214" marker-end="url(#a)"/>
+
+  <rect class="d-box" x="350" y="216" width="170" height="50" rx="4"/>
+  <text class="d-t b" x="435" y="238">Rádio Wi-Fi</text>
+  <text class="d-s" x="435" y="256">uma antena só</text>
+  <text class="d-e" x="435" y="286" style="font-weight:bold">alterna — nunca os dois ao mesmo tempo</text>
+
+  <path class="d-l" d="M350 241 H 206" marker-end="url(#a)"/>
+  <text class="d-e" x="278" y="233">modo hotspot</text>
+  <rect class="d-box" x="20" y="216" width="180" height="50" rx="4"/>
+  <text class="d-t b" x="110" y="238">Celular do professor</text>
+  <text class="d-s" x="110" y="256">portal em 192.168.4.1</text>
+
+  <path class="d-l" d="M520 241 H 604" marker-end="url(#a)"/>
+  <text class="d-e" x="562" y="233">modo cliente</text>
+  <rect class="d-box" x="606" y="226" width="190" height="30" rx="4"/>
+  <text class="d-t b" x="701" y="246">Hotspot de celular</text>
+  <path class="d-l" d="M701 256 V 264" marker-end="url(#a)"/>
+  <rect class="d-box" x="606" y="266" width="190" height="30" rx="4"/>
+  <text class="d-t b" x="701" y="286">API do Supabase</text>
+  <path class="d-l" d="M701 296 V 304" marker-end="url(#a)"/>
+  <rect class="d-box" x="606" y="306" width="190" height="30" rx="4"/>
+  <text class="d-t" x="701" y="326">base PostgreSQL</text>
+</svg>
+<figcaption><b>Figura 1</b> — Diagrama de blocos. A API encena o papel do sistema acadêmico da UVA, ao qual não temos acesso: é dela que vem a lista da turma e é para ela que vai o relatório.</figcaption>
+</figure>
+
+<h2>6. Funcionamento esperado</h2>
+<p>Ligado na tomada, o aparelho sobe como rede Wi-Fi própria e acende o LED azul fixo. O professor conecta o celular nessa rede, e o portal cativo abre a página de login no navegador. Validada a senha, o aparelho responde &ldquo;carregando turma&rdquo; e aproveita esse intervalo para passar o rádio ao modo cliente, baixar a lista da turma da API e voltar ao modo hotspot, com o LED em azul lento; a troca deverá levar de 5 a 15 segundos. Se o hotspot não voltar, o aparelho deverá tentar de novo duas vezes, piscar azul rápido e reiniciar — a sessão é gravada em disco antes de cada troca de rádio, de modo que as presenças já registradas sobrevivem ao reinício. Com o painel aberto, o professor clica em Iniciar, e a sessão abre na hora, sem rede, porque a lista da turma já está na memória flash. O LED fica verde fixo, e a partir daí valem as quatro regras de leitura:</p>
+<ol>
+  <li><b>Quando o leitor RC522 detectar uma tag cujo UID está na lista da turma</b>, o ESP32 deverá gravar o registro com UID, matrícula, nome e horário, fazendo com que o LED pisque verde duas vezes e o buzzer emita um bip de 100 ms. A meta é que o intervalo entre a aproximação da tag e o bip fique abaixo de 200 ms. Um toque registra a presença nos dois tempos da aula.</li>
+  <li><b>Quando o leitor detectar o mesmo UID dentro de 5 segundos</b> da leitura anterior, o ESP32 deverá descartar a leitura, fazendo com que o LED acenda vermelho por 300 ms, sem som. É o debounce que evita registro duplicado quando o aluno demora a afastar o crachá.</li>
+  <li><b>Quando o leitor detectar um UID que não está na lista da turma</b>, o ESP32 não deverá gravar nada, fazendo com que o LED acenda vermelho por 1 segundo e o buzzer emita um sinal de 400 ms. Essa verificação só existe com a lista carregada; em modo offline toda tag lida é aceita, e o verde passa a significar apenas que a leitura ocorreu.</li>
+  <li><b>Quando o sensor SW-420 detectar vibração acima do limiar</b>, o ESP32 deverá gravar um alerta com horário e duração, fazendo com que o LED pisque vermelho e o buzzer emita um sinal longo. O limiar será calibrado para responder a alguém batendo no aparelho ou tentando arrancá-lo da parede, e não à porta da sala. A chamada não é interrompida: o alerta entra no relatório e a leitura de crachás continua.</li>
+</ol>
+<p>Durante a sessão, o professor pode exibir o relatório parcial a qualquer momento e pode lançar a presença de um aluno pela matrícula, quando ele esquecer o crachá; o lançamento manual fica marcado como tal no relatório, com o autor e o motivo. No fim da aula, o professor envia o relatório: o aparelho troca de rádio outra vez, sobe a sessão e os eventos para a API e volta ao modo hotspot. Se o envio falhar, o botão Compartilhar baixa o mesmo relatório em JSON no celular do professor. Encerrada a sessão, o aparelho apaga a lista da turma e volta à tela de login, pronto para o próximo professor. No aparelho fica só a turma da aula corrente, nunca o cadastro de alunos da instituição.</p>
+
+<h2>7. Divisão das responsabilidades da equipe</h2>
+<table>
+  <thead>
+    <tr><th style="width:24%">Papel</th><th style="width:22%">Responsável</th><th>Responde por</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Hardware</td><td>Gabriel Santarello</td><td>Montagem na protoboard, pinagem, calibração do SW-420 e alimentação</td></tr>
+    <tr><td>Programação</td><td>Cauã Andrade</td><td>Firmware do ESP32: leitura do UID, gravação em disco, máquina de estados, LED e buzzer</td></tr>
+    <tr><td>Dashboard e interface</td><td>Igor Lobato</td><td>Portal do professor servido pelo aparelho: login, painel da sessão e relatório</td></tr>
+    <tr><td>Integração, documentação e apresentação</td><td>Caio Planinschek</td><td>Troca de rádio, API e lista da turma; consolidação dos documentos de entrega</td></tr>
+    <tr><td>Estrutura física</td><td>João Victor Cabral</td><td>Caixa de parede e fixação; diário de bordo, fotos e vídeo</td></tr>
+  </tbody>
+</table>
+<p>Os papéis têm um dono cada, e as fronteiras entre eles são permeáveis: quem termina a própria frente ajuda a seguinte, e o papel de integração existe para fechar o que ficar entre duas cadeiras.</p>
+
+<h2>8. Cronograma da equipe até 21/09</h2>
+<p>As duas semanas até 21/09 têm dois marcos: a Entrega 04, de 14/09, e o protótipo eletrônico da Entrega 05, de 22/09.</p>
+<table>
+  <thead>
+    <tr><th style="width:14%">Integrante</th><th style="width:43%">Até 14/09</th><th>Até 21/09</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Gabriel</td><td>Esquema de ligações fechado e compras concluídas (SW-420, LED, resistores, buzzer, jumpers e fonte)</td><td>Protoboard montada e conferida, SW-420 calibrado, alimentação estável</td></tr>
+    <tr><td>Cauã</td><td>Lógica do firmware descrita: máquina de estados, leitura do UID e gravação em disco</td><td>Leitura, debounce, gravação e feedback funcionando na placa</td></tr>
+    <tr><td>Igor</td><td>Telas do portal desenhadas: login e painel do professor</td><td>Portal servido pelo aparelho, com login e a lista de presenças da sessão</td></tr>
+    <tr><td>Caio</td><td>Documento da Entrega 04 consolidado e tabelas criadas na API</td><td>Troca de rádio e as duas chamadas à API funcionando: lista da turma e envio do relatório</td></tr>
+    <tr><td>João</td><td>Material da caixa definido e diário de bordo em dia</td><td>Caixa cortada e aparelho fixado, com a antena do leitor acessível pela frente e o SW-420 preso à estrutura</td></tr>
+  </tbody>
+</table>
+
+<h2>Principal desafio técnico</h2>
+<p>O maior risco do projeto está no rádio: o ESP32 precisa alternar entre hotspot e cliente sem derrubar o portal do professor, e precisa manter o relatório íntegro quando essa troca falhar.</p>
+<p>O ESP32 tem uma antena só. Manter o hotspot e a conexão externa ligados ao mesmo tempo faz o hotspot acompanhar o canal da rede externa e derrubar o celular do professor, e por isso os dois modos precisam se alternar. A pesquisa técnica que fizemos antes desta entrega mostrou que cada alternância leva de 5 a 15 segundos, e não os 3 segundos que estimávamos, e que há casos conhecidos, registrados no repositório do núcleo do Arduino para o ESP32, em que o hotspot não volta. A memória agrava o quadro: o handshake da conexão segura com a API exige de 40 a 50 KB de heap livre, o que torna obrigatório fechar o hotspot antes de abrir a conexão, por memória e não apenas por rádio.</p>
+<p>Concentrar a rede em dois momentos é o que torna o problema tratável, porque em vez de uma janela de risco a cada crachá lido sobram duas na aula inteira. Em troca, o modo offline degradado e a rotina de recuperação passam a ser peças que precisam funcionar — quando a troca de rádio falha, o que está dentro do aparelho é uma aula inteira de presenças.</p>
+
+</body>
+</html>

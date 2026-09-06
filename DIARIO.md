@@ -39,4 +39,8 @@ Cinco rodadas de decisão sobre o produto, todas registradas em [`docs/spec.md`]
 
 **Infraestrutura:** repositório criado e publicado; mapa de decisões do projeto em `.scratch/presente/`.
 
-**Próximo:** Entrega 03 (07/09, 20:00) — projeto detalhado em PDF de 2 a 4 páginas.
+**Entrega 03 fechada.** O documento do projeto detalhado ficou pronto em quatro páginas, dentro do limite pedido, cobrindo as oito seções do enunciado e a pergunta obrigatória sobre o principal desafio técnico. Duas divergências em relação às entregas anteriores foram declaradas no próprio texto, em vez de ficarem por conta do leitor: a troca do nome do projeto e a retirada do registro de saída por segundo toque, que o Canvas da Entrega 02 prometia. O diagrama em blocos foi redesenhado — o da entrega anterior mostrava o aparelho falando com o celular do professor e com a nuvem ao mesmo tempo, coisa que o rádio do ESP32 não faz.
+
+Falta preencher o nome da turma, campo que ficou em branco no PDF.
+
+**Próximo:** Entrega 04 (14/09) — programação planejada, lógica, conexões e plano de testes.

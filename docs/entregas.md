@@ -6,7 +6,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** 
 |---|---|---|
 | 27/08 | Formação da equipe, tema e problema | ✅ entregue |
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
-| **07/09 20:00** | **Projeto detalhado da solução** | ⬜ **próxima** |
+| **07/09 20:00** | **Projeto detalhado da solução** | 📄 **PDF pronto, falta enviar** |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ⬜ |
 | 22/09 | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
 | 29/09 | Estrutura física do protótipo | ⬜ |
@@ -47,11 +47,11 @@ O PDF deve conter, nesta ordem:
 
 | Seção | Fonte na spec | Falta |
 |---|---|---|
-| 1 | cabeçalho | **o nome/código da turma** |
+| 1 | cabeçalho | ⬜ **o nome/código da turma** — campo em branco no PDF |
 | 2 | §1 | — |
 | 3 | §1 + §3 + §6 | — |
 | 4 | §4 | — |
-| 5 | §3 | **virar imagem** (está em ASCII) |
+| 5 | §3 | ✅ virado imagem (SVG no `entrega-03.html`) |
 | 6 | §5 (máquina de estados) + §6 (16 passos) | — |
 | 7 | §9 | — |
 | 8 | §9 | — |
