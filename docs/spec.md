@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: rodada 1 (Q1–Q9) travada em 05/09/2026 de madrugada. **Rodada 2 (R1–R8) travada em 05/09/2026 12h** — revisa arquitetura de dados, sensor 2 e rede. Base para a Entrega 03 (07/09, 20:00).
+> Status: rodada 1 (Q1–Q9) travada em 05/09/2026 de madrugada. Rodada 2 (R1–R8) em 05/09/2026 12h — arquitetura de dados, sensor 2 e rede. **Rodada 3 (R9–R12) em 06/09/2026 00h** — ferramentas e processo. Base para a Entrega 03 (07/09, 20:00).
 
 ## 1. Problema e objetivo
 
@@ -38,6 +38,13 @@ Fora do escopo do protótipo (citado só como evolução na documentação): cat
   - **Login individual por professor** (hash local) → identidade. Continua um por professor, como na Q4.
 - **R7 Sensor 2 = SW-420 (vibração) como anti-violação.** ❌ Descartado o **RTC DS3231**: é redundante (o navegador do professor entrega a hora no Iniciar; a API também) e discutível como "sensor". ❌ Descartado sensor de porta (PIR/ultrassônico): outro grupo da turma faz projeto similar com sensor de porta. ✅ SW-420: o aparelho é **fixo, sozinho na sala e guarda dados de presença** — um aluno tem motivo para mexer nele. Impacto/violação vira alerta no relatório. ⚠️ Módulo é ruidoso: exige debounce em software **e** calibração do potenciômetro de limiar já montado no lugar definitivo.
 - **R8 Sem controle de saída** (confirma Q5, **diverge do Canvas da Entrega 02**, que prometia "1º toque entrada, 2º toque saída"). Motivo: duplica estado, duplica falha e não resolve o problema. **A Entrega 03 tem que assumir a mudança em uma linha explícita**, senão o professor lê como incoerência.
+
+### Rodada 3 — R9–R12 (06/09, 00h) — ferramentas e processo
+
+- **R9 Build em PlatformIO** (VS Code), não Arduino IDE. O `platformio.ini` fixa as versões de biblioteca para os 5 integrantes; divergência de versão entre máquinas é o bug que mais custa tempo em equipe.
+- **R10 A SPA do portal mora em arquivos no LittleFS**, não como string embutida no `.cpp`. Permite ajustar o HTML e subir para a placa sem recompilar o firmware — é o que deixa portal e firmware avançarem em paralelo.
+- **R11 Credenciais fora do git.** `secrets.h` no `.gitignore` (chave do Supabase, SSID/senha do hotspot) + `secrets.example.h` versionado com os campos em branco. Protótipo acadêmico vaza chave em apresentação e em relatório final; 10 minutos de prevenção.
+- **R12 O repo sobe para o GitHub e é o diário de bordo.** Os 5 sabem usar. Commits datados são a prova de evolução semanal que o professor exige; `DIARIO.md` na raiz é a versão legível, atualizada semanalmente. Regra registrada no `AGENTS.md`.
 
 ### Decisões operacionais
 
@@ -83,9 +90,9 @@ Fora do escopo do protótipo (citado só como evolução na documentação): cat
 
 Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 que existia na versão anterior **deixa de existir**.
 
-## 5. Firmware (C++, Arduino Core)
+## 5. Firmware (C++, Arduino Core sobre PlatformIO)
 
-Libs: `MFRC522` · `DNSServer` · `WebServer` · `LittleFS` · `ArduinoJson` · `HTTPClient` · `mbedtls` (SHA-256).
+Build: **PlatformIO** no VS Code (`platformio.ini` fixa as versões de biblioteca para os 5). Libs: `MFRC522` · `DNSServer` · `WebServer` · `LittleFS` · `ArduinoJson` · `HTTPClient` + `WiFiClientSecure` · `mbedtls` (SHA-256). Credenciais em `secrets.h`, fora do git.
 
 Módulos em `src/`:
 
@@ -117,6 +124,8 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 Em **modo offline** o estado `NAO_RECONHECIDO` não existe: sem lista da turma, todo UID lido é aceito e vira `REGISTRADO`. O LED verde passa a significar *"li a tag"*, não *"você está nesta turma"*.
 
 ## 6. Portal do professor — fluxo canônico (16 passos)
+
+HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do firmware), servidos pelo `WebServer`. Ajuste de layout não exige recompilar o firmware.
 
 1. Professor liga o aparelho
 2. Aparelho sobe; professor procura as redes Wi-Fi
