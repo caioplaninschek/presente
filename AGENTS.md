@@ -6,6 +6,10 @@ A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualq
 
 O mapa de decisões em aberto está em `.scratch/presente/map.md`. Leia o mapa antes de trabalhar um ticket.
 
+Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`.
+
+**Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, roteiro de vídeo. Leia antes de escrever qualquer documento.
+
 Nunca assine commits como IA: sem `Co-Authored-By` de assistente, sem `🤖 Generated with`, sem trailer equivalente.
 
 ## Diário de bordo
