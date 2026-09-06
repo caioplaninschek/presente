@@ -25,7 +25,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 
 <!-- uma linha por ticket fechado -->
 
-_(vazio — o mapa acabou de ser criado)_
+- [Caminho viável do ESP32 até o Supabase](issues/03-esp32-https-supabase.md): o caminho existe — `HTTPClient` + `WiFiClientSecure` + `setInsecure()`, sem lib de Supabase, sem NTP, sem certificado pinado (a Supabase troca de CA sozinha). Fechar o AP antes do TLS virou requisito de memória, não só de canal. A transição de rádio leva **5–15 s**, não 3, e é o ponto de falha mais provável do projeto.
 
 ## Not yet specified
 

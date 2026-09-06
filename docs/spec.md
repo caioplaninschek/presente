@@ -31,7 +31,7 @@ Fora do escopo do protótipo (citado só como evolução na documentação): cat
   - **Durante a aula** → zero internet. Consulta local, <200 ms garantido.
   - **Enviar** → 1 chamada: sobe o relatório completo.
 - **R3 Modo offline degradado.** Sem internet no Iniciar, o aparelho entra em **modo UID-cru**: registra só os números das tags, marca `modo: "offline"`, e o enriquecimento (nome/matrícula) acontece no envio. Nada se perde. Consequência: **offline o aparelho não sabe validar turma** — aceita qualquer UID lido, e o backend julga depois.
-- **R4 AP e STA nunca simultâneos.** O ESP32 tem uma antena só; ser hotspot e cliente ao mesmo tempo derruba o portal do professor. Como só existem 2 momentos de internet, o rádio **alterna**: `AP → STA (~3 s) → AP`. O celular do professor reconecta sozinho.
+- **R4 AP e STA nunca simultâneos.** O ESP32 tem uma antena só; ser hotspot e cliente ao mesmo tempo derruba o portal do professor (o softAP muda de canal para acompanhar o STA). Como só existem 2 momentos de internet, o rádio **alterna**: `AP → STA → AP`. ⚠️ **Corrigido em R13:** a transição leva **5–15 s**, não os ~3 s estimados aqui.
 - **R5 Internet vem de hotspot de celular**, com SSID e senha configuráveis pelo próprio portal. ⚠️ O ESP32 **não** passa por portal cativo nem autenticação corporativa, então a rede da UVA provavelmente está fora. Documentar: "em produção a instituição provisionaria rede dedicada aos dispositivos".
 - **R6 Duas camadas de senha, não uma.**
   - **WPA2 no SoftAP** (mesma para todos, não é segredo, pode estar colada na caixa) → criptografa o ar. Sem ela a senha do professor trafega legível na sala.
@@ -45,6 +45,22 @@ Fora do escopo do protótipo (citado só como evolução na documentação): cat
 - **R10 A SPA do portal mora em arquivos no LittleFS**, não como string embutida no `.cpp`. Permite ajustar o HTML e subir para a placa sem recompilar o firmware — é o que deixa portal e firmware avançarem em paralelo.
 - **R11 Credenciais fora do git.** `secrets.h` no `.gitignore` (chave do Supabase, SSID/senha do hotspot) + `secrets.example.h` versionado com os campos em branco. Protótipo acadêmico vaza chave em apresentação e em relatório final; 10 minutos de prevenção.
 - **R12 O repo sobe para o GitHub e é o diário de bordo.** Os 5 sabem usar. Commits datados são a prova de evolução semanal que o professor exige; `DIARIO.md` na raiz é a versão legível, atualizada semanalmente. Regra registrada no `AGENTS.md`.
+
+### Rodada 4 — R13 (06/09, 00h30) — validada por pesquisa
+
+Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fontes em `.scratch/presente/issues/03-esp32-https-supabase.md`.
+
+- **R13 Transporte: `HTTPClient` + `WiFiClientSecure` + `setInsecure()`.** Sem biblioteca de Supabase, sem NTP, sem certificado pinado.
+  - **Por que não pinar:** a Supabase não usa uma CA só e troca de emissor sem aviso (verificado em 06/09/2026: Let's Encrypt, Amazon e Google servindo endpoints diferentes). Certificado pinado quebra sozinho e ninguém saberia por quê.
+  - **Custo assumido:** `setInsecure()` criptografa mas **não autentica o servidor** — MITM teoricamente possível no hotspot. Proporcional (hotspot do próprio grupo, chave anon descartável, protótipo acadêmico). **Registrar essa limitação no relatório técnico**, não escondê-la.
+  - **Sem a lib `ESPSupabase`:** parada desde 07/2025, arrasta `WebSockets` como dependência morta, e internamente só faz o que 20 linhas próprias fazem.
+- **R13a Fechar o AP antes de abrir o TLS é requisito de memória.** O handshake pede 40–50 KB de heap livre (mbedTLS aloca 16 KB RX + 16 KB TX). R4 deixa de ser só questão de canal de rádio.
+- **R13b Limitar as tentativas de `connect()`.** `WiFiClientSecure` vaza ~4 KB de heap por conexão **falha** (arduino-esp32 #3808); retry sem limite trava o aparelho.
+- **R13c `getStream()` no GET do roster**, nunca `getString()` — `getString()` em resposta de ~3 KB fragmenta o heap.
+- **R13d Checklist de hotspot** (vai impresso para a apresentação):
+  - **iPhone:** ligar *"Maximizar Compatibilidade"* no Ponto de Acesso (força 2,4 GHz); manter a tela do hotspot aberta durante o pareamento (o iOS suspende o beacon); nome do iPhone sem acento nem caractere especial, porque vira o SSID.
+  - **Android:** escolher a banda 2,4 GHz explicitamente; senha sem caractere especial.
+  - Gravar um **SSID de fallback** no aparelho antes do dia da apresentação.
 
 ### Decisões operacionais
 
@@ -103,7 +119,7 @@ Módulos em `src/`:
 | `rfid.cpp` | Leitura de UID 4/7 bytes, debounce 5 s |
 | `clock.cpp` | Hora recebida do navegador no Iniciar (ou da API), offset sobre `millis()` |
 | `portal.cpp` | Login, cookie de sessão, rotas HTTP |
-| `net.cpp` | Alternância AP↔STA, chamada de roster, upload de relatório, fila de retry |
+| `net.cpp` | Alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta), roster, upload, retry **com limite** |
 | `tamper.cpp` | SW-420: leitura, debounce, limiar, geração de alerta |
 | `feedback.cpp` | LED + buzzer por máquina de estados com `millis()` — **sem `delay()`** |
 
@@ -199,7 +215,8 @@ Exportação:
 | 4 | Modo offline (Iniciar sem internet) | `modo: "offline"`, aceita todo UID, relatório íntegro |
 | 5 | Enviar sem internet → depois com internet | Compartilhar funciona; retry sobe o mesmo relatório sem duplicar |
 | 6 | 2 professores em sequência | 2 sessões, `professorId` distintos, sem mistura |
-| 7 | Alternância AP↔STA | celular reconecta em <10 s, sessão não se perde |
+| 7 | Alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
+| 7b | Falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
 | 8 | SW-420: bater no aparelho durante a sessão | alerta gravado, chamada **não** interrompida, sem falso-positivo com porta batendo |
 | 9 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
 
@@ -217,9 +234,13 @@ Cada papel tem 1 dono e 1 revisor. A revisão é cruzada (cada um revisa o papel
 
 ## 10. Principal desafio técnico
 
-**Alternar o rádio único do ESP32 entre hotspot e cliente sem derrubar o portal do professor, mantendo o registro de presença abaixo de 200 ms e o relatório íntegro quando não houver internet.**
+**Alternar o rádio único do ESP32 entre hotspot e cliente sem derrubar o portal do professor, mantendo o registro de presença abaixo de 200 ms e o relatório íntegro quando a troca falhar.**
 
-Quatro coisas disputam o mesmo chip: SPI do RC522 com UIDs de 2 tamanhos, o WebServer + DNS do portal cativo, a escrita append-only no LittleFS (que não pode corromper em queda de energia) e a janela de STA para falar com a API. A escolha de concentrar a rede em 2 momentos — em vez de uma chamada por aluno — é o que torna esse desafio tratável, mas ela custa um modo offline degradado que precisa se comportar direito.
+Quatro coisas disputam o mesmo chip: o SPI do RC522 com UIDs de dois tamanhos, o WebServer + DNS do portal cativo, a escrita append-only no LittleFS (que não pode corromper em queda de energia) e a janela de STA para falar com a API.
+
+A pesquisa técnica confirmou o desafio e o tornou mais preciso. O ESP32 tem **uma antena só**: rodar hotspot e cliente ao mesmo tempo faz o hotspot mudar de canal atrás da rede externa e derruba o celular do professor. Alternar entre os modos resolve o canal, mas leva **5 a 15 segundos** por transição e esbarra em bugs conhecidos do arduino-esp32 em que o hotspot simplesmente não volta. Some-se a isso o handshake TLS, que sozinho exige 40–50 KB de heap livre — o que torna **obrigatório** fechar o hotspot antes de abrir a conexão segura, por memória e não só por rádio.
+
+Concentrar toda a rede em dois instantes (Iniciar e Enviar), em vez de uma chamada por aluno, é o que torna o problema tratável: reduz de ~40 janelas de risco por aula para 2. O preço é um modo offline degradado e uma recuperação de falha que precisam se comportar direito — porque quando a troca falha, o que está em jogo é uma aula inteira de presenças dentro do aparelho.
 
 ## 11. Glossário
 
