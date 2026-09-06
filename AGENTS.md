@@ -10,12 +10,14 @@ Nunca assine commits como IA: sem `Co-Authored-By` de assistente, sem `🤖 Gene
 
 ## Diário de bordo
 
-O professor exige evidência de evolução semanal. Duas camadas, e as duas valem nota:
+O professor exige evidência de evolução semanal. São **duas camadas com cadências diferentes** — não as misture:
 
-- **O histórico do git é a prova primária.** Commits datados, mensagens em português descrevendo o que mudou de verdade. Não amontoar uma semana de trabalho num commit só.
-- **`DIARIO.md` na raiz é a versão legível.** Uma entrada por semana com data, o que foi feito, o que travou e o que vem a seguir. Atualizar **toda semana**, antes da entrega da terça.
+- **Histórico do git — cadência de sessão.** Commits datados, mensagem em português dizendo o que mudou de verdade. Não amontoar uma semana num commit só. É a prova primária e não precisa de curadoria.
+- **`DIARIO.md` na raiz — cadência semanal.** Uma entrada por semana, fechada antes da entrega de terça. É o que o professor efetivamente lê.
 
-Toda sessão de agente que produzir trabalho substantivo neste repo deve deixar a entrada correspondente no `DIARIO.md`.
+**Regra para agentes:** ao produzir trabalho substantivo, **edite a entrada da semana corrente** — crie-a se ainda não existir, senão acrescente à que já está lá. Nunca abra uma entrada nova por sessão: o diário é semanal, não um segundo log de commits.
+
+**Escreva para o professor, não para desenvolvedores.** O que foi feito, o que travou, o que vem a seguir. Sem nome de arquivo, sem nome de função, sem hash de commit — isso tudo já está no git, que é a outra camada.
 
 ## Credenciais
 
