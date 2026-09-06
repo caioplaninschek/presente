@@ -1,8 +1,8 @@
 # Presente!
 
-Terminal embarcado (ESP32 + RC522 + SW-420) para contabilização de presença em sala de aula. Trabalho da disciplina Sistemas Embarcados — UVA Barra, 3ª terça-feira.
+Terminal embarcado (ESP32 + RC522) para contabilização de presença em sala de aula. Trabalho da disciplina Sistemas Embarcados — UVA Barra, 3ª terça-feira.
 
-A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem: as decisões Q1–Q9, R1–R8 e R9–R12 já foram fechadas.
+A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem: as decisões Q1–Q9 e R1–R18 já foram fechadas.
 
 O mapa de decisões em aberto está em `.scratch/presente/map.md`. Leia o mapa antes de trabalhar um ticket.
 

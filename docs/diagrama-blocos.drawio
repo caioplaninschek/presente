@@ -1,0 +1,98 @@
+<mxfile host="app.diagrams.net" agent="Presente!" version="24.7.17" type="device">
+  <diagram id="presente-blocos" name="Diagrama de blocos">
+    <mxGraphModel dx="1400" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="band-sensor" value="SENSOR" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=12;fontColor=#7A8A95;letterSpacing=1.1;" vertex="1" parent="1">
+          <mxGeometry x="8" y="20" width="272" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="band-core" value="NÚCLEO EMBARCADO" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=12;fontColor=#7A8A95;letterSpacing=1.1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="20" width="176" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="band-atuadores" value="ATUADORES" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=12;fontColor=#7A8A95;letterSpacing=1.1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="20" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tag" value="&lt;b&gt;Tag NFC&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;13,56 MHz&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="8" y="90" width="115" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rc522" value="&lt;b&gt;Leitor RC522&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;Sensor&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="145" y="90" width="135" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="esp32" value="&lt;b&gt;ESP32 DevKit V1&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;C++ / Arduino Core&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#004D7B;strokeWidth=2;fontFamily=Calibri;fontSize=17;fontColor=#10232E;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="176" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="flash" value="Memória flash&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;LittleFS: sessão, eventos e contas&lt;/font&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#EEF3F6;strokeColor=#7A9DB3;strokeWidth=1;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="esp32">
+          <mxGeometry x="13" y="62" width="150" height="76" as="geometry" />
+        </mxCell>
+
+        <mxCell id="led" value="&lt;b&gt;LED RGB&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;Atuador 1&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="buzzer" value="&lt;b&gt;Buzzer ativo&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;Atuador 2&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="620" y="140" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="switch" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFCC01;strokeColor=#004D7B;strokeWidth=1.4;" vertex="1" parent="1">
+          <mxGeometry x="400" y="212" width="16" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="radio" value="&lt;b&gt;Rádio Wi-Fi&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;uma antena só&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="320" y="250" width="176" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="nota-radio" value="&lt;b&gt;alterna — nunca os dois ao mesmo tempo&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;" vertex="1" parent="1">
+          <mxGeometry x="288" y="308" width="240" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="celular" value="&lt;b&gt;Celular do professor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;portal em 192.168.4.1&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="15" y="250" width="190" height="52" as="geometry" />
+        </mxCell>
+
+        <mxCell id="hotspot" value="&lt;b&gt;Hotspot de celular&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="620" y="259" width="180" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="api" value="&lt;b&gt;API do Supabase&lt;/b&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="620" y="309" width="180" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="postgres" value="base PostgreSQL" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
+          <mxGeometry x="620" y="359" width="180" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-tag-rc522" value="RF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tag" target="rc522">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-rc522-esp32" value="SPI" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="rc522" target="esp32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-esp32-led" value="GPIO 25/26/27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="esp32" target="led">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-esp32-buzzer" value="GPIO 33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=1;exitY=0.8333;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="esp32" target="buzzer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-esp32-switch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="esp32" target="switch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-switch-radio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="switch" target="radio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-radio-celular" value="modo hotspot" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="radio" target="celular">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-radio-hotspot" value="modo cliente" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;labelBackgroundColor=none;verticalAlign=bottom;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="radio" target="hotspot">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-hotspot-api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="hotspot" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-postgres" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#004D7B;strokeWidth=1.4;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="api" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

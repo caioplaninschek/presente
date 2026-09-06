@@ -36,7 +36,7 @@ Fora do escopo do protótipo (citado só como evolução na documentação): cat
 - **R6 Duas camadas de senha, não uma.**
   - **WPA2 no SoftAP** (mesma para todos, não é segredo, pode estar colada na caixa) → criptografa o ar. Sem ela a senha do professor trafega legível na sala.
   - **Login individual por professor** (hash local) → identidade. Continua um por professor, como na Q4.
-- **R7 Sensor 2 = SW-420 (vibração) como anti-violação.** ❌ Descartado o **RTC DS3231**: é redundante (o navegador do professor entrega a hora no Iniciar; a API também) e discutível como "sensor". ❌ Descartado sensor de porta (PIR/ultrassônico): outro grupo da turma faz projeto similar com sensor de porta. ✅ SW-420: o aparelho é **fixo, sozinho na sala e guarda dados de presença** — um aluno tem motivo para mexer nele. Impacto/violação vira alerta no relatório. ⚠️ Módulo é ruidoso: exige debounce em software **e** calibração do potenciômetro de limiar já montado no lugar definitivo.
+- **R7 Sensor 2 = SW-420 (vibração) como anti-violação.** ❌ Descartado o **RTC DS3231**: é redundante (o navegador do professor entrega a hora no Iniciar; a API também) e discutível como "sensor". ❌ Descartado sensor de porta (PIR/ultrassônico): outro grupo da turma faz projeto similar com sensor de porta. ✅ SW-420: o aparelho é **fixo, sozinho na sala e guarda dados de presença** — um aluno tem motivo para mexer nele. Impacto/violação vira alerta no relatório. ⚠️ Módulo é ruidoso: exige debounce em software **e** calibração do potenciômetro de limiar já montado no lugar definitivo. ⚠️ **Revertido em R18:** o professor dispensou o segundo sensor e o SW-420 saiu do projeto.
 - **R8 Sem controle de saída** (confirma Q5, **diverge do Canvas da Entrega 02**, que prometia "1º toque entrada, 2º toque saída"). Motivo: duplica estado, duplica falha e não resolve o problema. **A Entrega 03 tem que assumir a mudança em uma linha explícita**, senão o professor lê como incoerência.
 
 ### Rodada 3 — R9–R12 (06/09, 00h) — ferramentas e processo
@@ -70,6 +70,10 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 - **R16 `sessao_atual.json` é requisito, não conveniência.** Gravado antes de toda troca de rádio, lido no boot. Reinício no meio da aula retoma a sessão em curso (mesmo `professorId`, mesmo roster, janela ainda aberta) em vez de cair no login com presenças órfãs. É o que torna R15 aceitável.
 - **R17 Repo público → `secrets.h` é obrigação, não boa prática.** Credenciais em `include/secrets.h` (no `.gitignore`); `include/secrets.example.h` versionado com os campos em branco. Chave que subir num repo público está comprometida para sempre, mesmo apagando o commit.
 
+### Rodada 6 — R18 (06/09, 09h30) — dispensa do segundo sensor
+
+- **R18 O projeto passa a ter um sensor só, o RC522.** O João confirmou com o professor que a exigência de dois sensores está dispensada para este projeto. **Reverte o R7:** o SW-420 sai. Motivo para tirar em vez de manter por segurança: o sensor de vibração não participa da chamada — é uma frente paralela (compra, calibração de potenciômetro no lugar definitivo, debounce próprio, um estado a mais na máquina de estados e um tipo a mais no contrato de dados) fora do problema que motivou o projeto. Saem junto o `tamper.cpp`, o estado `ALERTA_VIOLACAO`, o alerta no contrato de dados, a tabela `alertas` no Supabase e o teste 8. ⚠️ A exigência escrita ("mínimo de 2 sensores", em `docs/entregas.md`) continua publicada no Teams: a Entrega 03 declara a dispensa em uma linha, para não ser lida como descumprimento.
+
 ### Decisões operacionais
 
 - **Bluetooth não será usado** — substituído pelo Wi-Fi nativo do ESP32 (o enunciado da Entrega 02 pedia Bluetooth por boilerplate de Arduino).
@@ -79,7 +83,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 ## 3. Arquitetura em blocos
 
 ```
-[Tag NFC 13,56 MHz] --RF--> [RC522] --SPI VSPI--> [ESP32 DevKit V1] <--GPIO34-- [SW-420 vibracao]
+[Tag NFC 13,56 MHz] --RF--> [RC522] --SPI VSPI--> [ESP32 DevKit V1]
                                                         |
                                                         |--GPIO 25/26/27--> [LED RGB]
                                                         |--GPIO 33-------->  [Buzzer ativo]
@@ -101,8 +105,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 | Componente | Qtd | Função | Situação |
 |---|---|---|---|
 | ESP32 DevKit V1 / 32D | 1 | Controlador principal, Wi-Fi AP/STA alternado, WebServer, LittleFS | ✅ adquirido |
-| Leitor RFID/NFC RC522 13,56 MHz | 1 | **Sensor 1** — leitura do UID (SPI VSPI: SCK 18, MISO 19, MOSI 23, SS 5, RST 22) | ✅ adquirido |
-| Sensor de vibração SW-420 | 1 | **Sensor 2** — anti-violação: impacto/remoção do aparelho (GPIO 34, entrada) | ⬜ comprar (~R$6) |
+| Leitor RFID/NFC RC522 13,56 MHz | 1 | **Sensor** — leitura do UID (SPI VSPI: SCK 18, MISO 19, MOSI 23, SS 5, RST 22) | ✅ adquirido |
 | Tags NFC 13,56 MHz (NTAG215 + cartões brancos do kit) | 3–5 | Crachás de teste — firmware só lê o UID | ✅ adquirido |
 | LED RGB catodo comum + 3× resistor 220 Ω | 1 | **Atuador 1** — verde/vermelho/azul (GPIO 25/26/27) | ⬜ comprar |
 | Buzzer ativo 5V | 1 | **Atuador 2** — bip 100 ms na confirmação (GPIO 33) | ⬜ comprar |
@@ -110,7 +113,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 | Jumpers M-M e M-F | 1 kit | Conexões | ⬜ comprar |
 | Fonte 5V 2A / cabo micro-USB | 1 | Alimentação (aparelho fixo, sempre na tomada) | ⬜ comprar |
 
-⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. SW-420 alimentado em 3,3V para a saída ser compatível com o GPIO. Buzzer ativo 5V não liga direto no GPIO — usar transistor 2N2222 ou módulo com driver. GPIO 34 é **input-only**, correto para sensor, mas não tem pull-up interno (o SW-420 tem saída própria do comparador, então está ok).
+⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. Buzzer ativo 5V não liga direto no GPIO — usar transistor 2N2222 ou módulo com driver.
 
 Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 que existia na versão anterior **deixa de existir**.
 
@@ -128,7 +131,6 @@ Módulos em `src/`:
 | `clock.cpp` | Hora recebida do navegador no Iniciar (ou da API), offset sobre `millis()` |
 | `portal.cpp` | Login, cookie de sessão, rotas HTTP |
 | `net.cpp` | Alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta), roster, upload, retry **com limite** |
-| `tamper.cpp` | SW-420: leitura, debounce, limiar, geração de alerta |
 | `feedback.cpp` | LED + buzzer por máquina de estados com `millis()` — **sem `delay()`** |
 
 Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJson` com documento estático (sem concatenar `String`); log serial com níveis.
@@ -144,7 +146,6 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 | `REGISTRADO` | verde 2 piscadas | bip 100 ms | UID lido e gravado |
 | `DUPLICADO` | vermelho 300 ms | — | mesmo UID dentro de 5 s — nada é gravado |
 | `NAO_RECONHECIDO` | vermelho 1 s | buzz 400 ms | **só em modo online**: UID fora da lista da turma — nada é gravado |
-| `ALERTA_VIOLACAO` | vermelho piscando | buzz longo | SW-420 acima do limiar — grava alerta, **não** interrompe a chamada |
 
 Em **modo offline** o estado `NAO_RECONHECIDO` não existe: sem lista da turma, todo UID lido é aceito e vira `REGISTRADO`. O LED verde passa a significar *"li a tag"*, não *"você está nesta turma"*.
 
@@ -183,9 +184,6 @@ HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do fi
 { "uid": "A391F21B", "matricula": "...", "nome": "...",
   "timestamp": "ISO-8601 -03:00", "origem": "nfc" | "manual",
   "enriquecido": true | false, "lancado_por": "...", "motivo": "..." }
-
-// alerta (SW-420)
-{ "tipo": "violacao", "timestamp": "...", "duracao_ms": 0 }
 ```
 
 Exportação:
@@ -205,14 +203,13 @@ Exportação:
       "origem": "manual", "lancado_por": "prof02", "motivo": "esqueceu a tag" }
   ],
   "presentes": ["1240205596", "1240109764"],
-  "faltantes": ["1240108001"],
-  "alertas": []
+  "faltantes": ["1240108001"]
 }
 ```
 
 `presentes` e `faltantes` só existem quando `roster_carregado: true`. Em modo offline o relatório sai só com `eventos`, e as listas são calculadas do lado da API no momento do envio.
 
-**Supabase:** tabelas `alunos`, `sessoes`, `eventos`, `alertas`. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
+**Supabase:** tabelas `alunos`, `sessoes`, `eventos`. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
 
 ## 8. Plano de testes
 
@@ -226,14 +223,13 @@ Exportação:
 | 6 | 2 professores em sequência | 2 sessões, `professorId` distintos, sem mistura |
 | 7 | Alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
 | 7b | Falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
-| 8 | SW-420: bater no aparelho durante a sessão | alerta gravado, chamada **não** interrompida, sem falso-positivo com porta batendo |
-| 9 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
+| 8 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
 
 ## 9. Divisão da equipe
 
 | Papel | Responsável | Entregável até 21–22/09 |
 |---|---|---|
-| Hardware | Gabriel Santarello | Protoboard montada, pinagem conferida, SW-420 calibrado, alimentação estável |
+| Hardware | Gabriel Santarello | Protoboard montada, pinagem conferida, alimentação estável |
 | Firmware núcleo | Cauã Andrade | `rfid.cpp` + `storage.cpp` + `feedback.cpp` + máquina de estados |
 | Portal web | Igor Lobato | SPA do professor: login, painel de 6 botões, polling do relatório |
 | Integração e documentação | Caio Planinschek | Rede (AP↔STA), Supabase, roster + upload; consolidação dos documentos de entrega |

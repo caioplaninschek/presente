@@ -17,7 +17,7 @@ O que precisa ser levantado antes de escolher:
 3. **Quanto tempo leva** entre "modelo pronto" e "peça na mão", contando fila e possíveis reimpressões?
 4. **Qual o fallback**, e até que data ele pode ser acionado sem estourar o 29/09?
 
-Restrições que o material precisa atender (vêm da spec): aparelho **fixo na parede**, alimentado por fonte 5V na tomada, com a **antena do RC522 acessível pela frente** (encostar a tag) e o **SW-420 rigidamente acoplado à caixa** — se o sensor estiver solto por dentro, ele não detecta violação da caixa, detecta o próprio chacoalho.
+Restrições que o material precisa atender (vêm da spec): aparelho **fixo na parede**, alimentado por fonte 5V na tomada, com a **antena do RC522 acessível pela frente** (encostar a tag).
 
 ## Notas
 

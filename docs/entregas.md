@@ -51,7 +51,7 @@ O PDF deve conter, nesta ordem:
 | 2 | §1 | — |
 | 3 | §1 + §3 + §6 | — |
 | 4 | §4 | — |
-| 5 | §3 | ✅ virado imagem (SVG no `entrega-03.html`) |
+| 5 | §3 | ✅ fonte em `docs/diagrama-blocos.drawio`, exportado em SVG e embutido no `entrega-03.html` |
 | 6 | §5 (máquina de estados) + §6 (16 passos) | — |
 | 7 | §9 | — |
 | 8 | §9 | — |

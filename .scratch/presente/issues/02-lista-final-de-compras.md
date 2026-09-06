@@ -8,7 +8,7 @@ Prazo real: peças na mão até 12–14/09
 
 ## Question
 
-A spec lista como pendentes: SW-420, LED RGB catodo comum, 3× resistor 220 Ω, buzzer ativo 5V, jumpers M-M e M-F, fonte 5V 2A. Mas essa lista é inferida do que a spec diz que já foi adquirido — ninguém do grupo confirmou o inventário real.
+A spec lista como pendentes: LED RGB catodo comum, 3× resistor 220 Ω, buzzer ativo 5V, jumpers M-M e M-F, fonte 5V 2A. Mas essa lista é inferida do que a spec diz que já foi adquirido — ninguém do grupo confirmou o inventário real.
 
 O Caio vai cobrar do João o levantamento do que falta. Este ticket fecha quando existir:
 

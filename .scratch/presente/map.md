@@ -39,7 +39,6 @@ Névoa em escopo, ainda sem nitidez para virar ticket:
 - **Relatório técnico ABNT (30/11).** Ferramenta, estrutura, quem consolida, e como as decisões da spec viram texto acadêmico. Depende de quase tudo.
 - **Dados de teste.** Quantos alunos fictícios, com que nomes, e como as tags físicas são atribuídas a eles. Fica nítido quando o Supabase existir.
 - **Design e usabilidade do portal do professor.** Provável ticket de `prototype` quando o firmware servir a primeira página.
-- **Calibração do SW-420 no lugar definitivo.** Limiar, debounce, e falso-positivo com porta batendo. Só decidível com a caixa montada e fixada.
 - **Instalação na sala para a demo.** Tomada disponível, fixação, autorização da UVA para prender algo na parede. Pode virar `task` perto de 27/10.
 
 ## Out of scope

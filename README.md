@@ -17,13 +17,11 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 ```
 [Tag NFC] → [RC522] → [ESP32] → [LED RGB + Buzzer]
                           ↓
-                   [SW-420 vibração]
-                          ↓
         modo AP: portal do professor (celular)
         modo STA: Supabase (roster + relatório)
 ```
 
-**Sensores:** RC522 (leitura de UID 13,56 MHz) e SW-420 (detecção de violação do aparelho).
+**Sensor:** RC522 (leitura de UID 13,56 MHz).
 **Atuadores:** LED RGB e buzzer ativo.
 **Firmware:** C++ sobre Arduino Core, build com PlatformIO.
 
