@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: Entrega 04 (14/09, 20:00).
+> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8).
 
 ## 1. Problema e objetivo
 
@@ -11,7 +11,70 @@ Professores da UVA Barra gastam 10–15 min por aula fazendo chamada manual no s
 
 Objetivo do protótipo: terminal embarcado **fixo ao lado da porta** que registra presença por aproximação de tag NFC, com feedback imediato audiovisual, gestão pelo professor via Wi-Fi próprio do aparelho e relatório JSON que sobe para uma API na nuvem — com exportação local garantida quando não houver internet.
 
-Fora do escopo do protótipo (citado só como evolução na documentação): catraca, biometria, celular como tag, integração real com o sistema acadêmico da UVA, backend próprio auto-hospedado, controle de saída da sala.
+**Fora do escopo do protótipo.** Cada corte abaixo foi decidido, não esquecido — a razão de cada um vive aqui. O `map.md` do Wayfinder repete a lista em uma linha por item, como índice.
+
+- **Integração real com o sistema acadêmico da UVA** — não há acesso ao sistema. O Supabase **encena** esse papel no MVP (§3).
+- **Celular do aluno como tag** (NFC no aparelho pessoal) — citado na documentação como caminho de evolução, não construído.
+- **Biometria e catraca** — custo, LGPD (biometria é dado sensível) e escopo.
+- **Controle de saída da sala** — R8: duplica estado, duplica falha e não resolve o problema que motivou o projeto. Diverge do Canvas da Entrega 02; a divergência foi declarada na Entrega 03.
+- **Backend próprio auto-hospedado** (Node/Python + PostgreSQL) — substituído pelo Supabase.
+- **Segundo sensor e detecção de violação** (SW-420) — R18: o professor dispensou a exigência de dois sensores e o sensor de vibração saiu do projeto inteiro.
+
+### 1.1 Histórias de usuário
+
+O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *em que ordem* as coisas acontecem; esta seção diz *por que cada uma precisa acontecer*, e é a referência citável (`HU-xx`) para os critérios de aceitação dos tickets de implementação. Duas histórias dependem de decisão ainda aberta e estão marcadas com ⏳.
+
+#### Professor — o usuário do aparelho
+
+1. **HU-01** Como professor, quero encontrar a rede do aparelho na lista de Wi-Fi do meu celular, para começar a chamada sem instalar nada.
+2. **HU-02** Como professor, quero que a página de login abra sozinha quando eu conectar, para não precisar decorar endereço de IP.
+3. **HU-03** Como professor, quero entrar com um login e uma senha só meus, para que a chamada que eu abrir fique registrada no meu nome.
+4. **HU-04** Como professor, quero trocar a senha padrão no primeiro uso, para que minha conta não fique com a senha de fábrica.
+5. **HU-05** Como professor, quero que o aparelho baixe a lista da turma enquanto eu faço login, para que o **Iniciar** seja instantâneo e a espera caia no instante em que eu já espero que a página demore.
+6. **HU-06** Como professor, quero ver pelo LED e pela tela que o aparelho está sincronizando, para não achar que travou durante os 5–15 s de troca de rádio.
+7. **HU-07** Como professor, quero abrir a chamada com um clique, para não gastar tempo de aula com configuração.
+8. **HU-08** Como professor, quero que uma chamada cubra os dois tempos da aula, para não repetir o processo no segundo tempo.
+9. **HU-09** Como professor, quero lançar presença pela matrícula, para resolver na hora o aluno que esqueceu a tag.
+10. **HU-10** Como professor, quero que o lançamento manual fique marcado como manual, com quem lançou e por quê, para que a chamada continue auditável.
+11. **HU-11** Como professor, quero ver presentes e faltantes a qualquer momento durante a aula, para conferir antes de encerrar.
+12. **HU-12** Como professor, quero enviar o relatório para a nuvem no fim da aula, para que a presença fique registrada fora do aparelho.
+13. **HU-13** Como professor, quero baixar o relatório no meu celular quando o envio falhar, para não perder uma aula inteira de presenças por causa de internet.
+14. **HU-14** Como professor, quero encerrar a sessão e devolver o aparelho ao login, para que o próximo professor use o mesmo aparelho sem ver os meus dados.
+15. **HU-15** Como professor, quero configurar o SSID e a senha do hotspot pelo próprio portal, para trocar de celular sem reprogramar o aparelho.
+16. **HU-16** Como professor, quero que o aparelho não guarde histórico de aluno depois da aula, para que uma caixa presa na parede não vire um banco de dados sem dono.
+
+#### Aluno — quem encosta a tag
+
+17. **HU-17** Como aluno, quero registrar presença encostando a tag, para não perder aula esperando a chamada nominal.
+18. **HU-18** Como aluno, quero um sinal imediato — verde e bip — de que fui registrado, para saber que posso sentar sem perguntar.
+19. **HU-19** Como aluno, quero que encostar duas vezes não me registre duas vezes, para não gerar dúvida no relatório.
+20. **HU-20** Como aluno, quero um sinal diferente quando a tag não é reconhecida, para procurar o professor em vez de sentar achando que está tudo certo.
+21. **HU-21** Como aluno, quero receber a tag já cadastrada, para não depender de ninguém me cadastrar no aparelho.
+22. **HU-22** Como aluno, quero que minha tag seja apenas lida, nunca escrita, para poder usar o mesmo crachá em outros lugares.
+
+#### Equipe — quem constrói e opera o protótipo
+
+23. **HU-23** Como integrante da equipe, quero as versões das bibliotecas fixadas no `platformio.ini`, para que o firmware compile igual nas cinco máquinas.
+24. **HU-24** Como integrante da equipe, quero editar o HTML do portal sem recompilar o firmware, para que portal e firmware avancem em paralelo.
+25. **HU-25** Como integrante da equipe, quero cada frente no seu próprio arquivo, para commitar direto na `main` sem conflito.
+26. **HU-26** Como integrante da equipe, quero as credenciais fora do git, para que a chave do Supabase não vaze num repositório público.
+27. **HU-27** Como integrante da equipe, quero um diário de bordo semanal legível, para provar evolução ao professor sem que ele precise ler o histórico do git.
+28. **HU-28** Como integrante da equipe, quero um checklist de hotspot impresso, para que o pareamento não falhe na apresentação.
+29. **HU-29** Como integrante da equipe, quero um SSID de reserva já gravado no aparelho, para não depender de um único celular no dia.
+30. **HU-30** ⏳ Como integrante da equipe, quero mostrar o histórico acumulado de várias aulas, para que a apresentação mostre um sistema e não um leitor de crachá. *(escopo em aberto — ticket «O dashboard em nuvem existe, ou o portal do ESP32 basta?»)*
+
+#### Falha e degradação — o que sustenta a aula quando algo dá errado
+
+31. **HU-31** Como professor sem internet no login, quero que a chamada aconteça mesmo assim, para não perder a aula por causa do hotspot.
+32. **HU-32** Como professor em modo offline, quero que o relatório seja completado no envio, para não digitar nome nenhum depois.
+33. **HU-33** Como professor em modo offline, quero que o relatório declare que a sessão foi offline, para que quem o receber saiba por que faltam os nomes.
+34. **HU-34** Como professor em modo offline, quero saber que o aparelho aceita **qualquer** tag lida — sem a lista, ele não sabe quem é da turma —, para conferir a lista depois em vez de confiar no verde.
+35. **HU-35** Como professor, quero que uma queda de energia no meio da aula não apague as presenças já registradas, para não refazer a chamada.
+36. **HU-36** Como professor, quero que o aparelho retome a sessão em curso depois de reiniciar, para não cair no login com presenças órfãs.
+37. **HU-37** Como professor, quero que o aparelho se recupere sozinho quando o hotspot não voltar, para não ter que mexer nele durante a aula.
+38. **HU-38** Como integrante da equipe, quero que falhas de conexão segura não travem o aparelho, para que ele não precise de reset físico na sala.
+39. **HU-39** ⏳ Como professor, quero que clicar **Enviar** duas vezes não duplique o relatório, para não sujar o registro. *(idempotência ainda não decidida — ticket «Esquema do Supabase e como a chave anon é restringida»)*
+40. **HU-40** Como professor, quero que o registro continue abaixo de 200 ms com o aparelho cheio de eventos, para não formar fila na porta.
 
 ## 2. Decisões travadas
 
@@ -119,6 +182,24 @@ Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blo
 
 Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 que existia na versão anterior **deixa de existir**.
 
+### 4.1 Ligações do ESP32
+
+| Componente | Pino do módulo | GPIO | Direção | Observação |
+|---|---|---|---|---|
+| RC522 (sensor) | SDA / SS | 5 | Saída (SPI CS) | GPIO 5 é pino de *strapping*: precisa estar em nível alto no boot. É o repouso natural do CS, mas se a placa não subir, conferir esta linha antes de qualquer outra |
+| RC522 | SCK | 18 | Saída | VSPI por hardware |
+| RC522 | MOSI | 23 | Saída | |
+| RC522 | MISO | 19 | Entrada | |
+| RC522 | RST | 22 | Saída | |
+| RC522 | 3,3V / GND | — | Alimentação | ⚠️ **estritamente 3,3 V** — 5 V queima o módulo |
+| LED RGB (atuador 1) | R | 25 | Saída | resistor 220 Ω em série |
+| LED RGB | G | 26 | Saída | resistor 220 Ω em série |
+| LED RGB | B | 27 | Saída | resistor 220 Ω em série; catodo comum ao GND |
+| Buzzer ativo 5V (atuador 2) | via driver | 33 | Saída | **não liga direto no GPIO**: GPIO 33 → 1 kΩ → base do 2N2222, emissor no GND, coletor no negativo do buzzer, positivo do buzzer em 5 V |
+| Alimentação | — | — | — | fonte 5 V 2 A na tomada (aparelho fixo); 5 V para o buzzer, 3,3 V do regulador da placa para o RC522 |
+
+Nenhum GPIO acumula duas funções, e nada disputa os pinos de boot além do CS acima.
+
 ## 5. Firmware (C++, Arduino Core sobre PlatformIO)
 
 Build: **PlatformIO** no VS Code (`platformio.ini` fixa as versões de biblioteca para os 5). Libs: `MFRC522` · `DNSServer` · `WebServer` · `LittleFS` · `ArduinoJson` · `HTTPClient` + `WiFiClientSecure` · `mbedtls` (SHA-256). Credenciais em `secrets.h`, fora do git.
@@ -150,6 +231,66 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 | `NAO_RECONHECIDO` | vermelho 1 s | buzz 400 ms | **só em modo online**: UID fora da lista da turma — nada é gravado |
 
 Em **modo offline** o estado `NAO_RECONHECIDO` não existe: sem lista da turma, todo UID lido é aceito e vira `REGISTRADO`. O LED verde passa a significar *"li a tag"*, não *"você está nesta turma"*.
+
+### Pseudocódigo
+
+Renderização fiel da máquina de estados acima e do fluxo do §6: o que o firmware faz, não como cada módulo faz. O `loop()` nunca bloqueia — sem `delay()`, tudo temporizado por `millis()`.
+
+```
+INÍCIO (boot)
+  inicializar LittleFS, SPI, RC522, LED e buzzer
+  SE existe sessao_atual.json E a janela ainda está aberta:
+      retomar a sessão (mesmo professorId, mesmo roster)        // R16
+  SENÃO:
+      estado <- AGUARDANDO_LOGIN                                // LED azul fixo
+  subir SoftAP (WPA2) + DNS do portal cativo + WebServer
+
+ENQUANTO ligado:                                                // loop(), sem delay()
+  atender as requisições do portal
+  atualizar LED e buzzer pelo tempo decorrido (millis)
+
+  SE o professor autenticou:
+      responder "carregando turma..."
+      estado <- SINCRONIZANDO                                   // R14: sincroniza no login
+      fechar o AP e trocar o rádio para STA                     // R13a: heap do TLS
+      baixar o roster da turma
+      SE conseguiu:  gravar o roster em cache;  modo <- online
+      SENÃO:                                     modo <- offline // R3
+      voltar o rádio para AP
+      SE o AP não voltou em 2 tentativas:
+          estado <- FALHA_DE_RADIO; reiniciar                    // R15
+      abrir o painel com a lista já em cache
+
+  SE o professor clicou Iniciar:
+      abrir a sessão e gravar sessao_atual.json
+      estado <- SESSAO_ABERTA                                   // LED verde fixo
+
+  SE o RC522 leu uma tag E a sessão está aberta:
+      uid <- UID lido (4 ou 7 bytes, somente leitura)
+      SE o mesmo uid foi lido há menos de 5 s:
+          estado <- DUPLICADO                    // vermelho 300 ms, nada gravado
+      SENÃO SE modo = online E uid não está no roster:
+          estado <- NAO_RECONHECIDO              // vermelho 1 s + buzz, nada gravado
+      SENÃO:
+          gravar evento (uid, matrícula e nome se houver, horário, origem "nfc")
+          estado <- REGISTRADO                   // verde 2 piscadas + bip 100 ms
+      // do encostar da tag até o feedback: alvo < 200 ms
+
+  SE o professor lançou presença manual:
+      gravar evento com origem "manual", lancado_por e motivo    // Q6
+
+  SE o professor clicou Enviar:
+      estado <- SINCRONIZANDO
+      fechar o AP antes de abrir o TLS                           // R13a
+      enviar sessão + eventos para a API, com tentativas limitadas  // R13b
+      SE falhou: manter eventos.json e deixar o Compartilhar disponível
+      voltar o rádio para AP
+
+  SE o professor clicou Encerrar:
+      fechar a sessão e apagar o roster em cache                 // LGPD por desenho
+      estado <- AGUARDANDO_LOGIN
+FIM
+```
 
 ## 6. Portal do professor — fluxo canônico (16 passos)
 
@@ -214,6 +355,15 @@ Exportação:
 **Supabase:** tabelas `alunos`, `sessoes`, `eventos`. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
 
 ## 8. Plano de testes
+
+**Como testamos.** As decisões de teste, antes da tabela:
+
+- **O ambiente de teste é a bancada, com o aparelho real.** Não há teste automatizado, nem em host (`pio test` com ambiente `native`). É escolha, não omissão: o que pode dar errado aqui é físico e de rádio — a leitura SPI do RC522, a alternância AP↔STA que não volta, os 40–50 KB de heap do handshake TLS, a integridade do LittleFS numa queda de energia. Nada disso aparece contra um mock; o teste de host testaria o mock, e a camada de abstração necessária para escrevê-lo custaria mais do que a bancada custa.
+- **Só comportamento externo é testado**, nunca função interna: o que o LED e o buzzer fazem, o que o portal mostra, o que sai no JSON exportado, o que o log serial registra. Teste que precisa abrir o código para saber se passou não é teste deste projeto.
+- **Todo teste entrega evidência gravada** — foto ou vídeo curto do LED e do buzzer, o JSON exportado, ou o trecho do log serial com horário. É o que sustenta o entregável de 22/09 ("testes documentados") e o relatório de 30/11.
+- **O log serial com níveis (§5) é instrumento de medição**, não resto de depuração: sem ele, os <200 ms e o diagnóstico da troca de rádio viram opinião.
+- **Quem fecha uma frente roda os testes que a tocam**; a rodada completa acontece na integração, antes de 22/09, e se repete antes de cada marco com demonstração ao vivo (20/10 e 27/10).
+- **Calibração faz parte do teste, não do conserto.** Os tempos (debounce de 5 s, bip de 100 ms, vermelho de 300 ms e 1 s) e a janela de 5–15 s da troca de rádio são valores de partida. Espera-se ajustá-los com o aparelho montado na caixa e alimentado pela fonte definitiva — o teste é o que diz para onde ajustar.
 
 | # | Teste | Critério |
 |---|---|---|
