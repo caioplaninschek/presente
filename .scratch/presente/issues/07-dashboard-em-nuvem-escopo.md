@@ -6,6 +6,8 @@ Parent: map.md
 Blocked by: 03
 Prazo real: 05/10 (entregável "Dashboard")
 
+Versao em linguagem simples, para debate com o grupo: docs/pauta-do-grupo.md — Parte 2, ponto 7.
+
 ## Question
 
 O professor exige, em 05/10: *"Dashboard (ESP32 obrigatório) ou interface Serial/Processing"*. O portal servido pelo ESP32 **já cumpre o requisito inteiro** — presentes vs. faltantes em tempo real, controles, exportação.

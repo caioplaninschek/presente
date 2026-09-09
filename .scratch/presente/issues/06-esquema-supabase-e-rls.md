@@ -5,6 +5,8 @@ Status: open
 Parent: map.md
 Blocked by: 03
 
+Versao em linguagem simples, para debate com o grupo: docs/pauta-do-grupo.md — Parte 1, pontos 1 a 6.
+
 ## Question
 
 A spec esboça quatro tabelas (`alunos`, `sessoes`, `eventos`, `alertas`) e diz "chave anon + RLS", mas isso é título, não esquema. O que falta decidir:
