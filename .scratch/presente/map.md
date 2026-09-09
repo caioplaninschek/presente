@@ -19,6 +19,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 - **Idioma:** português brasileiro, exceto código.
 - **O Caio é o PO, não o engenheiro do time.** Carregar decisões técnicas com recomendação clara e explicação em prosa antes de qualquer seletor; perguntar só o que é dele (produto, time, logística).
 - **Este repo é exceção à lei anti-vazamento** (arquivos de IA podem ser commitados às claras), mas **assinatura de IA em commit continua proibida**: sem `Co-Authored-By`, sem `🤖 Generated with`.
+- **Dois lugares, uma fonte da verdade.** As decisoes que precisam do grupo sao debatidas nas **Issues do GitHub** (o forum da equipe, em linguagem de leigo, alimentado por docs/pauta-do-grupo.md); estes tickets em .scratch continuam sendo o registro de trabalho. O fluxo e de mao unica: decisao fechada no issue -> escrita na spec.md -> ticket local fechado. Nunca o contrario.
 - **Calendário manda.** Todo ticket que tem data de entrega atrás dele é urgente por construção, não por importância.
 
 ## Decisions so far

@@ -5,6 +5,7 @@ Status: open
 Parent: map.md
 Blocked by: 03
 
+Discussao do grupo: https://github.com/caioplaninschek/presente/issues/1
 Versao em linguagem simples, para debate com o grupo: docs/pauta-do-grupo.md — Parte 1, pontos 1 a 6.
 
 ## Question

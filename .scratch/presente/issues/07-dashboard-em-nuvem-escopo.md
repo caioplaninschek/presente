@@ -6,6 +6,7 @@ Parent: map.md
 Blocked by: 03
 Prazo real: 05/10 (entregável "Dashboard")
 
+Discussao do grupo: https://github.com/caioplaninschek/presente/issues/2
 Versao em linguagem simples, para debate com o grupo: docs/pauta-do-grupo.md — Parte 2, ponto 7.
 
 ## Question
