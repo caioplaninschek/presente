@@ -23,7 +23,7 @@ Duas coisas desta entrega foram revistas depois, e a revisão está registrada n
 
 ---
 
-## Semana 3 — 06/09/2026 · preparação da Entrega 03
+## Semana 3 — 07/09/2026 · Entrega 03
 
 **Foco:** fechar a especificação antes de escrever qualquer linha de código.
 
@@ -39,8 +39,16 @@ Cinco rodadas de decisão sobre o produto, todas registradas em [`docs/spec.md`]
 
 **Infraestrutura:** repositório criado e publicado; mapa de decisões do projeto em `.scratch/presente/`.
 
-**Entrega 03 fechada.** O documento do projeto detalhado ficou pronto em quatro páginas, dentro do limite pedido, cobrindo as oito seções do enunciado e a pergunta obrigatória sobre o principal desafio técnico. Duas divergências em relação às entregas anteriores foram declaradas no próprio texto, em vez de ficarem por conta do leitor: a troca do nome do projeto e a retirada do registro de saída por segundo toque, que o Canvas da Entrega 02 prometia. O diagrama em blocos foi redesenhado — o da entrega anterior mostrava o aparelho falando com o celular do professor e com a nuvem ao mesmo tempo, coisa que o rádio do ESP32 não faz. Na manhã do dia 06 ele foi refeito no **draw.io**, com o arquivo editável versionado em `docs/diagrama-blocos.drawio`: o diagrama deixa de ser desenho à mão em SVG e passa a ter fonte que qualquer integrante abre e ajusta. O SW-420 saiu do desenho junto com o resto do projeto.
+**Entrega 03 fechada.** O documento do projeto detalhado ficou pronto cobrindo as oito seções do enunciado e a pergunta obrigatória sobre o principal desafio técnico. Duas divergências em relação às entregas anteriores foram declaradas no próprio texto, em vez de ficarem por conta do leitor: a troca do nome do projeto e a retirada do registro de saída por segundo toque, que o Canvas da Entrega 02 prometia. O diagrama em blocos foi redesenhado — o da entrega anterior mostrava o aparelho falando com o celular do professor e com a nuvem ao mesmo tempo, coisa que o rádio do ESP32 não faz. Na manhã do dia 06 ele foi refeito no **draw.io**, com o arquivo editável versionado em `docs/diagrama-blocos.drawio`: o diagrama deixa de ser desenho à mão em SVG e passa a ter fonte que qualquer integrante abre e ajusta. O SW-420 saiu do desenho junto com o resto do projeto.
 
-Falta preencher o nome da turma, campo que ficou em branco no PDF.
+**Entregue em 07/09.** A montagem final saiu do repositório: o Caio assumiu a formatação ABNT e fechou o documento no Word, e o João o comprimiu para caber no limite de páginas. A compressão custou detalhe em quase toda seção — os minutos gastos por chamada, o comportamento do aparelho quando fica sem internet, as cores do LED nos estados de rede. O que saiu ficou anotado ao lado da transcrição, porque o relatório final de 30/11 vai precisar dele de volta. A turma foi identificada e o único campo que estava em branco fechou.
 
 **Próximo:** Entrega 04 (14/09) — programação planejada, lógica, conexões e plano de testes.
+
+---
+
+## Semana 4 — 14/09/2026 · Entrega 04
+
+**Foco:** programação planejada, lógica, conexões e plano de testes.
+
+**Repositório reconciliado com o documento entregue (08/09).** Até aqui o repositório guardava o rascunho que alimentou o Word, não o documento que o professor recebeu — as duas coisas já divergiam em turma, capa e no texto do §1. O documento entregue passou a ser arquivado no repositório, com transcrição em texto ao lado do PDF, e o rascunho foi renomeado para não disputar o lugar de fonte. A especificação passou a registrar a turma e o nome do professor, que até então não estavam em lugar nenhum do repositório.

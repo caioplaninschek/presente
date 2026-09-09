@@ -6,7 +6,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** 
 |---|---|---|
 | 27/08 | Formação da equipe, tema e problema | ✅ entregue |
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
-| **07/09 20:00** | **Projeto detalhado da solução** | 📄 **PDF pronto, falta enviar** |
+| 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ⬜ |
 | 22/09 | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
 | 29/09 | Estrutura física do protótipo | ⬜ |
@@ -15,7 +15,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** 
 | 27/10 | Exposição oficial na Semana da Computação | ⬜ |
 | 30/11 | Relatório técnico completo + versão final aprimorada | ⬜ |
 
-Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores**; mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
+Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores** (⚠️ **dispensado para este projeto** — o João acertou com o professor que o RC522 basta como sensor único; a exigência continua publicada no Teams, e a Entrega 03 declara a dispensa em uma linha no §4 para não ser lida como descumprimento — ver R18 na spec); mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
 
 ---
 
@@ -43,18 +43,26 @@ O PDF deve conter, nesta ordem:
 
 **Pergunta obrigatória a ser respondida:** *Qual é o principal desafio técnico que a equipe acredita que encontrará durante a construção do protótipo?*
 
-### Onde cada seção já está resolvida
+### Como foi entregue
 
-| Seção | Fonte na spec | Falta |
+Documento transcrito em [`entrega-03.md`](entrega-03.md); PDF em [`entrega-03.pdf`](entrega-03.pdf). Cinco páginas — capa mais quatro de conteúdo.
+
+| Seção | Fonte na spec | Como saiu |
 |---|---|---|
-| 1 | cabeçalho | ⬜ **o nome/código da turma** — campo em branco no PDF |
-| 2 | §1 | — |
+| 1 | cabeçalho | parágrafo único; turma `4172CMPN6A_P1`; os 5 nomes ficaram só na capa |
+| 2 | §1 | comprimido: sobrou o erro de linha, saíram os 10–15 min, a fraude e o esforço vocal |
 | 3 | §1 + §3 + §6 | — |
-| 4 | §4 | — |
-| 5 | §3 | ✅ fonte em `docs/diagrama-blocos.drawio`, exportado em SVG e embutido no `entrega-03.html` |
-| 6 | §5 (máquina de estados) + §6 (16 passos) | — |
+| 4 | §4 | um sensor só, com a linha declarando a dispensa |
+| 5 | §3 | imagem exportada de [`diagrama-blocos.drawio`](diagrama-blocos.drawio) |
+| 6 | §5 (máquina de estados) + §6 | 3 regras de leitura, sem as cores do LED nos estados de rede |
 | 7 | §9 | — |
 | 8 | §9 | — |
 | Pergunta obrigatória | §10 | — |
 
-⚠️ **Divergência a assumir explicitamente.** O Canvas da Entrega 02 prometia *"1º toque registra Entrada, 2º toque registra Saída"*. A spec retirou o controle de saída (R8). A Entrega 03 precisa de uma linha declarando a mudança e o motivo — sem isso, o professor lê como incoerência entre as entregas.
+**Divergências declaradas no próprio documento**, para não serem lidas como incoerência entre entregas:
+
+- **Nome.** SmartPresence (Entregas 01 e 02) → Presente!. Declarada no fim do §1.
+- **Controle de saída.** O Canvas da Entrega 02 prometia *"1º toque registra Entrada, 2º toque registra Saída"*; a spec o retirou em R8. Declarada no fim do §3.
+- **Um sensor só.** Declarada no §4. Não é divergência com o passado: a Entrega 02 já listava apenas o RC522 — o SW-420 nasceu e morreu entre as duas entregas, sem nunca sair em documento.
+
+⚠️ **Para a Entrega 04.** O limite de páginas conta a capa: as Entregas 01 e 02 foram numeradas assim (2 e 5 páginas). A Entrega 03 saiu com 5, para um teto de 4. Vale confirmar com o professor como ele conta antes de dimensionar a próxima.

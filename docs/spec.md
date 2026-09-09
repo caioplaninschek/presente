@@ -1,9 +1,9 @@
 # Presente! — SPEC
 
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
-> Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira
+> Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: rodada 1 (Q1–Q9) travada em 05/09/2026 de madrugada. Rodada 2 (R1–R8) em 05/09/2026 12h — arquitetura de dados, sensor 2 e rede. **Rodada 3 (R9–R12) em 06/09/2026 00h** — ferramentas e processo. Base para a Entrega 03 (07/09, 20:00).
+> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**; o documento montado a partir desta spec está transcrito em `entrega-03.md`. Próxima base: Entrega 04 (14/09, 20:00).
 
 ## 1. Problema e objetivo
 
@@ -107,7 +107,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 | ESP32 DevKit V1 / 32D | 1 | Controlador principal, Wi-Fi AP/STA alternado, WebServer, LittleFS | ✅ adquirido |
 | Leitor RFID/NFC RC522 13,56 MHz | 1 | **Sensor** — leitura do UID (SPI VSPI: SCK 18, MISO 19, MOSI 23, SS 5, RST 22) | ✅ adquirido |
 | Tags NFC 13,56 MHz (NTAG215 + cartões brancos do kit) | 3–5 | Crachás de teste — firmware só lê o UID | ✅ adquirido |
-| LED RGB catodo comum + 3× resistor 220 Ω | 1 | **Atuador 1** — verde/vermelho/azul (GPIO 25/26/27) | ⬜ comprar |
+| LED RGB catodo comum (ou 2 LEDs verde/vermelho) + 3× resistor 220 Ω | 1 | **Atuador 1** — verde/vermelho/azul (GPIO 25/26/27) | ⬜ comprar |
 | Buzzer ativo 5V | 1 | **Atuador 2** — bip 100 ms na confirmação (GPIO 33) | ⬜ comprar |
 | Protoboard 830 pontos | 1 | Montagem | ✅ adquirido |
 | Jumpers M-M e M-F | 1 kit | Conexões | ⬜ comprar |
