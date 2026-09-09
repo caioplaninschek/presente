@@ -174,6 +174,10 @@ Você comentou de imprimir a caixa. Antes da gente contar com isso, preciso sabe
 A entrega da estrutura física é *29/09*. Se a resposta for "talvez", meu voto é irmos de MDF cortado em papelaria com parafuso: barato, rápido, o professor aceita e não depende de ninguém aprender CAD em três semanas. Mas se a impressora for garantida, beleza demais.
 
 O que a caixa precisa: ficar presa na parede, ter passagem pro cabo da fonte, e deixar o leitor de crachá acessível pela frente, pra encostar a tag.
+
+Ah, e aquela tua dúvida de hoje — como o aparelho sabe voltar pro painel do professor em vez da tela de login depois de trocar de rede — virou um tópico no repositório, com a resposta: github.com/caioplaninschek/presente/issues/3
+
+Pergunta muito boa, acabou virando o primeiro pedaço de código do projeto.
 ```
 
 ---
