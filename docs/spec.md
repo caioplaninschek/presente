@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**; o documento montado a partir desta spec está transcrito em `entrega-03.md`. Próxima base: Entrega 04 (14/09, 20:00).
+> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: Entrega 04 (14/09, 20:00).
 
 ## 1. Problema e objetivo
 
@@ -81,6 +81,8 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 - **Cronograma válido = o revisado** (datas de terça: 07/09, 14/09, 22/09, 29/09, 05/10, 20/10, 27/10, 30/11). As datas de segunda que circulam são da outra turma.
 
 ## 3. Arquitetura em blocos
+
+Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blocos.drawio` (abre no draw.io). O ASCII abaixo é a referência rápida e deve ser mantido em sincronia com ele.
 
 ```
 [Tag NFC 13,56 MHz] --RF--> [RC522] --SPI VSPI--> [ESP32 DevKit V1]
@@ -191,7 +193,7 @@ Exportação:
 ```json
 {
   "sessao": { "sessaoId": "20260907-T1", "professorId": "prof02",
-              "disciplina": "Sistemas Embarcados", "turma": "3a-terca",
+              "disciplina": "Sistemas Embarcados", "turma": "4172CMPN6A_P1",
               "inicio": "2026-09-07T19:00:00-03:00", "modo": "online",
               "relogio": "portal" },
   "tempos": ["t1", "t2"],
