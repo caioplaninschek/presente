@@ -24,9 +24,9 @@ sem bloqueio, pode começar hoje
   03 checklist (Caio) ────────────┘
   06 telas do professor (Igor, 21/09)
   07 banco na nuvem (Caio, 17/09) ──> [epic 05/10: tela de histórico]
-  05 firmware do rádio (Caio) ──> 10 roteiro (Caio, 17/09) ─┐
-  04 ambiente do João (Caio+João, 14/09) ───────────────────┼─> 14 teste 7d (João, 19/09)
-  08 protoboard (João, 16/09) ──┬─> 11 buzzer (João, 16/09) │        │
+  05 firmware do rádio (Caio) ──> 10 roteiro (Caio, 17/09)  ─┐
+  04 ambiente do João (Caio+João, 14/09) ────────────────────┼─> 14 teste 7d (João, 19/09)
+  08 protoboard (João, 16/09) ──┬─> 11 buzzer (João, 16/09)  │        │
                                 │                            │        v
                                 ├─> 12 prova de vida ────┐   │   16 teste 7c (João, 20/09)
                                 └─> 13 leitor lê crachá ─┴───┼────────┤
