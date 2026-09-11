@@ -1,6 +1,7 @@
 # O .gitignore global (~/.gitignore_global) bloqueia marcadores de IA em todo repo.
 # Este projeto trabalha com IA abertamente em equipe, entao desfaz o bloqueio aqui.
 !AGENTS.md
+!CLAUDE.md
 !CONTEXT.md
 !.claude/
 

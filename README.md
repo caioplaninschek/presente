@@ -29,6 +29,7 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 
 | Onde | O quê |
 |---|---|
+| [`docs/ambiente-de-trabalho.md`](docs/ambiente-de-trabalho.md) | Como preparar a máquina: clone, IA lendo o contexto do projeto, rotina de `git pull` |
 | [`docs/spec.md`](docs/spec.md) | Especificação completa: decisões, arquitetura, contrato de dados, plano de testes |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
