@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: sete rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), e em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10).
+> Status: oito rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo) e **R23–R27 em 11/09/2026 madrugada** (a execução corrige a spec: a placa não circula, veredito parcial no 7c, credencial fora da URL, leitura do heap, onde os arquivos moram). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10), e em 11/09/2026 com a rodada 8 (§2), as lacunas conhecidas e os critérios corrigidos de 7c/7d (§8) e a divergência declarada da divisão de equipe (§9).
 
 ## 1. Problema e objetivo
 
@@ -151,6 +151,16 @@ Primeira rodada decidida **fora do chat**: as quatro decisões abaixo saíram da
 - **R22 O material está completo e a caixa sai do caminho crítico** (issue #4). O João comprou tudo e as peças estão com ele — a lista do §4 fecha em ✅. A caixa não entra no protótipo de 22/09; o material só se escolhe depois da placa montada, quando o tamanho real for conhecido. Entrega da estrutura física continua em 29/09.
   - ⚠️ **Antes de comprar transistor para o buzzer, checar na bancada:** módulo de 3 pinos já traz o driver embutido; peça solta de 2 pinos pode bastar em 3,3 V, já que o bip precisa ser audível a um passo do aparelho, não alto. Só se as duas reprovarem entra NPN — e qualquer um serve (2N2222, BC337, S8050), em loja física, por um ou dois reais.
 
+### Rodada 8 — R23–R27 (11/09, madrugada) — a execução corrige a spec
+
+Primeira rodada que nasce da **execução**, não de decisão pendente. Ao quebrar o trabalho em 24 issues do GitHub e 19 tickets locais, cinco coisas que já valiam na prática apareceram sem registro aqui — uma delas contradizendo o que esta spec afirma. Esta rodada as traz para a fonte da verdade.
+
+- **R23 A placa não circula: ela fica com o João e o trabalho chega até ela mastigado.** Decisão do Caio em 11/09. Há **um microcontrolador só**, e a divisão por papéis do §9 pressupõe quatro frentes tocando a placa em paralelo — uma fila que não existe recurso para atender. O modelo novo: toda task física nasce partida em **preparar** (qualquer um, sem placa) e **rodar** (João, com a placa na mesa dele), e o enunciado chega pronto — código, passo a passo, o que tem que aparecer, o que fazer se der errado. Consequência direta: **a tabela do §9 deixa de valer como contrato**, e a divergência está declarada ao pé dela. Custo assumido: nove execuções físicas em onze dias, todas pelo João; se empilhar, a saída é uma tarde na casa dele com mais gente, ou a placa circular por alguns dias.
+- **R24 O teste 7c aceita veredito parcial.** O critério do §8 pede iPhone **e** Android, e o 7c é o único item do projeto que exige dois celulares no mesmo cômodo da placa. Se os dois que o João conseguir forem do mesmo sistema, ele roda assim mesmo e anota qual foi: o veredito sai **parcial**, e o outro lado fecha quando houver um celular do outro sistema perto da placa. Veredito parcial é melhor que veredito nenhum — o que não se aceita é o teste não acontecer. O critério do 7c no §8 foi corrigido para dizer isso; até aqui a issue #18 estava formalmente fora da spec.
+- **R25 A credencial da sessão não viaja no endereço da página.** Objeção do Cauã, aceita pelo Caio na issue #3 em **10/09**: endereço com token dentro fica exposto em histórico de navegador, em captura de tela e em registro de acesso de servidor. A decisão estava no `DIARIO.md` e na issue, nunca aqui — é a mais séria das três divergências encontradas em 11/09, porque é decisão pública, com autor e data, que a fonte da verdade não tinha absorvido. **Derruba a opção (c) do item 2 do ticket `.scratch/presente/issues/09`**, que ainda a listava viva e em pé de igualdade com as outras. Restam (a) manter tudo no CNA e (b) trazer o professor pelo CNA e seguir em `192.168.4.1` no navegador normal — e a escolha entre as duas continua sendo medição de bancada, não conversa.
+- **R26 Medição de heap com um celular só sai otimista.** No teste 7d o hotspot ocupa o único celular disponível, então **ninguém fica conectado ao AP durante a medição** — e cliente associado consome memória. O número medido é teto, não piso. Regra de leitura: resultado **entre 40 e 45 KB é suspeito**, não aprovado; medir de novo com um cliente conectado assim que houver um segundo aparelho.
+- **R27 Onde os arquivos moram, nomeado.** O R10 e o §6 diziam "arquivos no LittleFS" sem apontar a pasta, e o §8 exigia evidência gravada sem dizer onde ela fica. Ficam fixados: portal do professor em **`data/`** (convenção do PlatformIO — é a pasta que vira a imagem de filesystem); evidência dos testes em **`docs/assets/testes/`**, consolidada em **`docs/testes-22-09.md`**; fluxograma da lógica em **`docs/fluxograma-logica.drawio`**, ao lado do `diagrama-blocos.drawio` do §3.
+
 ### Decisões operacionais
 
 - **Bluetooth não será usado** — substituído pelo Wi-Fi nativo do ESP32 (o enunciado da Entrega 02 pedia Bluetooth por boilerplate de Arduino).
@@ -159,7 +169,7 @@ Primeira rodada decidida **fora do chat**: as quatro decisões abaixo saíram da
 
 ## 3. Arquitetura em blocos
 
-Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blocos.drawio` (abre no draw.io). O ASCII abaixo é a referência rápida e deve ser mantido em sincronia com ele.
+Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blocos.drawio` (abre no draw.io). O ASCII abaixo é a referência rápida e deve ser mantido em sincronia com ele. O **fluxograma da lógica** do §5 é arquivo separado — `docs/fluxograma-logica.drawio` (R27) — e nasce na Entrega 04.
 
 ```
 [Tag NFC 13,56 MHz] --RF--> [RC522] --SPI VSPI--> [ESP32 DevKit V1]
@@ -310,7 +320,7 @@ FIM
 
 ## 6. Portal do professor — fluxo canônico (16 passos)
 
-HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do firmware), servidos pelo `WebServer`. Ajuste de layout não exige recompilar o firmware.
+HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do firmware), servidos pelo `WebServer`. A pasta versionada é **`data/`** na raiz do repo — é dela que o PlatformIO gera a imagem de filesystem que sobe para a placa (R27). Ajuste de layout não exige recompilar o firmware.
 
 1. Professor liga o aparelho
 2. Aparelho sobe; professor procura as redes Wi-Fi
@@ -376,7 +386,7 @@ Exportação:
 
 - **O ambiente de teste é a bancada, com o aparelho real.** Não há teste automatizado, nem em host (`pio test` com ambiente `native`). É escolha, não omissão: o que pode dar errado aqui é físico e de rádio — a leitura SPI do RC522, a alternância AP↔STA que não volta, o comportamento de cada celular no pulo de canal do `WIFI_AP_STA` (R19), os 40–50 KB de heap do handshake TLS, a integridade do LittleFS numa queda de energia. Nada disso aparece contra um mock; o teste de host testaria o mock, e a camada de abstração necessária para escrevê-lo custaria mais do que a bancada custa.
 - **Só comportamento externo é testado**, nunca função interna: o que o LED e o buzzer fazem, o que o portal mostra, o que sai no JSON exportado, o que o log serial registra. Teste que precisa abrir o código para saber se passou não é teste deste projeto.
-- **Todo teste entrega evidência gravada** — foto ou vídeo curto do LED e do buzzer, o JSON exportado, ou o trecho do log serial com horário. É o que sustenta o entregável de 22/09 ("testes documentados") e o relatório de 30/11.
+- **Todo teste entrega evidência gravada** — foto ou vídeo curto do LED e do buzzer, o JSON exportado, ou o trecho do log serial com horário. É o que sustenta o entregável de 22/09 ("testes documentados") e o relatório de 30/11. A evidência **mora no repositório**, em `docs/assets/testes/`, consolidada em `docs/testes-22-09.md` (R27): o que fica só em comentário de issue some da vista do professor.
 - **O log serial com níveis (§5) é instrumento de medição**, não resto de depuração: sem ele, os <200 ms e o diagnóstico da troca de rádio viram opinião.
 - **Quem fecha uma frente roda os testes que a tocam**; a rodada completa acontece na integração, antes de 22/09, e se repete antes de cada marco com demonstração ao vivo (20/10 e 27/10).
 - **Calibração faz parte do teste, não do conserto.** Os tempos (debounce de 5 s, bip de 100 ms, vermelho de 300 ms e 1 s) e a janela de 5–15 s da troca de rádio são valores de partida. Espera-se ajustá-los com o aparelho montado na caixa e alimentado pela fonte definitiva — o teste é o que diz para onde ajustar.
@@ -391,9 +401,19 @@ Exportação:
 | 6 | 2 professores em sequência | 2 sessões, `professorId` distintos, sem mistura |
 | 7 | **Plano B** — alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
 | 7b | **Plano B** — falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
-| 7c | **Plano A** — `WIFI_AP_STA`: professor logado no portal, STA conecta no hotspot em outro canal | painel continua aberto **sem novo login**, em iPhone **e** Android; se cair, reconecta sozinho em <5 s |
-| 7d | **Plano A** — heap livre no instante do handshake TLS, com AP + DNS + WebServer + roster de pé | ≥40 KB livres (`ESP.getFreeHeap()` logado antes do `connect()`); abaixo disso, reprova e vale o Plano B |
+| 7c | **Plano A** — `WIFI_AP_STA`: professor logado no portal, STA conecta no hotspot em outro canal | painel continua aberto **sem novo login**, em iPhone **e** Android; se cair, reconecta sozinho em <5 s. Com dois celulares do mesmo sistema, roda assim mesmo: o veredito sai **parcial** e o outro sistema fecha depois (R24) |
+| 7d | **Plano A** — heap livre no instante do handshake TLS, com AP + DNS + WebServer + roster de pé | ≥40 KB livres (`ESP.getFreeHeap()` logado antes do `connect()`); abaixo disso, reprova e vale o Plano B. Medido com um celular só, sem cliente no AP, o número sai otimista — **40 a 45 KB é suspeito, não aprovado** (R26) |
 | 8 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
+
+**Lacunas conhecidas (11/09).** Quatro itens desta seção **não têm task** e não vão ter antes de 22/09 — nenhum cabe na janela. Ficam listados para que a ausência seja escolha declarada, e não descuido:
+
+| Item sem dono | Por que não virou task | Quando vira |
+|---|---|---|
+| Testes **3, 4, 5 e 6** | Todos dependem do roster **dentro** do aparelho, que só existe quando o ESP32 falar com a nuvem. Vivem no epic #9, ainda não fragmentado. Declarado na #28, mas nenhum ticket os possui | 29/09–05/10, na quebra do epic #9 |
+| Testes **7 e 7b** (Plano B) | Só se tornam obrigatórios se a #19 der veredito **Plano B**; hoje a #19 emite o veredito e para aí | No dia do veredito, se der Plano B |
+| **`sessao_atual.json`** (R16) | Requisito explícito da spec sem ticket — a #27 cobre só o `eventos.json` | Com a sessão de verdade, depois do portal (após 05/10) |
+| **Máquina de estados completa** do §5 (`AGUARDANDO_LOGIN`, `SINCRONIZANDO`, `FALHA_DE_RADIO`, `SESSAO_ABERTA`) | As tasks de 22/09 cobrem só `REGISTRADO`, `DUPLICADO` e o feedback; os estados de rede e de sessão dependem do portal (#20) e do veredito de rádio (#19) | Na integração de 29/09 |
+
 
 ## 9. Divisão da equipe
 
@@ -404,6 +424,14 @@ Exportação:
 | Portal web | Igor Lobato | SPA do professor: login, painel de 6 botões, polling do relatório |
 | Integração e documentação | Caio Planinschek | Rede (AP↔STA), Supabase, roster + upload; consolidação dos documentos de entrega |
 | Estrutura física e diário de bordo | João Victor Cabral | Caixa de parede, diário de bordo semanal, fotos e vídeo |
+
+> [!WARNING] Divergência declarada em 11/09/2026 — a tabela acima é registro, não contrato
+> A tabela foi entregue ao professor na Entrega 03 e por isso **fica como está**. O que ela descreve deixou de valer em 11/09, por **R23**: há um microcontrolador só, e a placa não circula — ela fica com o João, e o trabalho chega até ela mastigado. Duas linhas mudam de sentido:
+>
+> - **Hardware / Gabriel** — a protoboard montada passou a ser a issue **#22, do João**, porque as peças estão com ele. O Gabriel segue com o fluxograma da lógica (#10) e o dossiê de evidências (#28), escolhidos por não precisarem de placa nem de código e por não travarem terceiro.
+> - **Estrutura física e diário / João** — deixou de ser "caixa de parede, diário, fotos e vídeo" e passou a ser **quem executa a bancada inteira**: toda task física nasce partida em *preparar* (qualquer um) e *rodar* (ele).
+>
+> A divisão que vale hoje são as **24 issues do GitHub** (#5 a #28), com dono por task, e o grafo de dependência em `.scratch/prototipo/graph.md`. Mesmo padrão do §1 (saída do controle de saída) e do §4 (dispensa do segundo sensor): a divergência se declara, não se apaga.
 
 Cada papel tem 1 dono, mas as fronteiras são permeáveis: quem terminar a sua frente ajuda a próxima. O papel de **Integração** existe justamente para circular entre as camadas e fechar o que ficar entre duas cadeiras.
 

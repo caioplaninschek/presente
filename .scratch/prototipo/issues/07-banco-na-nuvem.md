@@ -7,6 +7,7 @@ Prazo: 17/09
 Entrega: —
 Blocked by: —
 GitHub: https://github.com/caioplaninschek/presente/issues/21
+HU: HU-16, HU-39 (§1.1 da spec)
 
 ## O que entrega
 
