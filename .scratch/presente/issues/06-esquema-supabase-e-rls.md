@@ -1,7 +1,8 @@
 # Esquema do Supabase e como a chave anon é restringida
 
 Type: grilling
-Status: open
+Status: partial
+Esquema decidido em: 10/09/2026, pela issue #1 do GitHub (R20) — `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`) e `eventos`. A idempotência sai do `estado`: sessão `finalizada` recusa o segundo POST, o que fecha `HU-39`. **Continua em aberto a outra metade do ticket: escrever as políticas de RLS** (a chave anon lê roster e insere evento, nunca apaga nem altera o passado). Dono: Caio.
 Parent: map.md
 Blocked by: 03
 

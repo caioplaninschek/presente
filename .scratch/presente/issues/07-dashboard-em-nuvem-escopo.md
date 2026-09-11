@@ -1,7 +1,8 @@
 # O dashboard em nuvem existe, ou o portal do ESP32 basta?
 
 Type: grilling
-Status: open
+Status: resolved
+Resolvido em: 10/09/2026, pela issue #2 do GitHub (R21) — a página existe, na opção B (histórico simples lendo o banco, sem tocar no firmware), e o dono é o Igor. Fecha `HU-30`.
 Parent: map.md
 Blocked by: 03
 Prazo real: 05/10 (entregável "Dashboard")

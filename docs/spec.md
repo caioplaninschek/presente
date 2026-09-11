@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: seis rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h e **R18 em 06/09/2026 manhã** (um sensor só). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8).
+> Status: sete rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), e em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10).
 
 ## 1. Problema e objetivo
 
@@ -22,7 +22,7 @@ Objetivo do protótipo: terminal embarcado **fixo ao lado da porta** que registr
 
 ### 1.1 Histórias de usuário
 
-O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *em que ordem* as coisas acontecem; esta seção diz *por que cada uma precisa acontecer*, e é a referência citável (`HU-xx`) para os critérios de aceitação dos tickets de implementação. Duas histórias dependem de decisão ainda aberta e estão marcadas com ⏳.
+O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *em que ordem* as coisas acontecem; esta seção diz *por que cada uma precisa acontecer*, e é a referência citável (`HU-xx`) para os critérios de aceitação dos tickets de implementação. As duas histórias que dependiam de decisão aberta (`HU-30` e `HU-39`) foram fechadas em R20 e R21.
 
 #### Professor — o usuário do aparelho
 
@@ -61,7 +61,7 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 27. **HU-27** Como integrante da equipe, quero um diário de bordo semanal legível, para provar evolução ao professor sem que ele precise ler o histórico do git.
 28. **HU-28** Como integrante da equipe, quero um checklist de hotspot impresso, para que o pareamento não falhe na apresentação.
 29. **HU-29** Como integrante da equipe, quero um SSID de reserva já gravado no aparelho, para não depender de um único celular no dia.
-30. **HU-30** ⏳ Como integrante da equipe, quero mostrar o histórico acumulado de várias aulas, para que a apresentação mostre um sistema e não um leitor de crachá. *(escopo em aberto — ticket «O dashboard em nuvem existe, ou o portal do ESP32 basta?»)*
+30. **HU-30** Como integrante da equipe, quero mostrar o histórico acumulado de várias aulas, para que a apresentação mostre um sistema e não um leitor de crachá. *(fechada em R21: a página existe e é do Igor — issue #2, opção B)*
 
 #### Falha e degradação — o que sustenta a aula quando algo dá errado
 
@@ -73,7 +73,7 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 36. **HU-36** Como professor, quero que o aparelho retome a sessão em curso depois de reiniciar, para não cair no login com presenças órfãs.
 37. **HU-37** Como professor, quero que o aparelho se recupere sozinho quando o hotspot não voltar, para não ter que mexer nele durante a aula.
 38. **HU-38** Como integrante da equipe, quero que falhas de conexão segura não travem o aparelho, para que ele não precise de reset físico na sala.
-39. **HU-39** ⏳ Como professor, quero que clicar **Enviar** duas vezes não duplique o relatório, para não sujar o registro. *(idempotência ainda não decidida — ticket «Esquema do Supabase e como a chave anon é restringida»)*
+39. **HU-39** Como professor, quero que clicar **Enviar** duas vezes não duplique o relatório, para não sujar o registro. *(fechada em R20: sessão `finalizada` recusa o segundo `POST`)*
 40. **HU-40** Como professor, quero que o registro continue abaixo de 200 ms com o aparelho cheio de eventos, para não formar fila na porta.
 
 ## 2. Decisões travadas
@@ -94,8 +94,8 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
   - **Durante a aula** → zero internet. Consulta local, <200 ms garantido.
   - **Enviar** → 1 chamada: sobe o relatório completo.
 - **R3 Modo offline degradado.** Sem internet no Iniciar, o aparelho entra em **modo UID-cru**: registra só os números das tags, marca `modo: "offline"`, e o enriquecimento (nome/matrícula) acontece no envio. Nada se perde. Consequência: **offline o aparelho não sabe validar turma** — aceita qualquer UID lido, e o backend julga depois.
-- **R4 AP e STA nunca simultâneos.** O ESP32 tem uma antena só; ser hotspot e cliente ao mesmo tempo derruba o portal do professor (o softAP muda de canal para acompanhar o STA). Como só existem 2 momentos de internet, o rádio **alterna**: `AP → STA → AP`. ⚠️ **Corrigido em R13:** a transição leva **5–15 s**, não os ~3 s estimados aqui.
-- **R5 Internet vem de hotspot de celular**, com SSID e senha configuráveis pelo próprio portal. ⚠️ O ESP32 **não** passa por portal cativo nem autenticação corporativa, então a rede da UVA provavelmente está fora. Documentar: "em produção a instituição provisionaria rede dedicada aos dispositivos".
+- **R4 AP e STA nunca simultâneos.** O ESP32 tem uma antena só; ser hotspot e cliente ao mesmo tempo derruba o portal do professor (o softAP muda de canal para acompanhar o STA). Como só existem 2 momentos de internet, o rádio **alterna**: `AP → STA → AP`. ⚠️ **Corrigido em R13:** a transição leva **5–15 s**, não os ~3 s estimados aqui. ⚠️ **Reaberto em R19 (10/09):** a premissa "nunca simultâneos" está **errada**. R4 deixa de ser decisão travada e passa a ser o **Plano B** — a alternativa, caso o teste reprove o modo simultâneo.
+- **R5 Internet vem de hotspot de celular**, com SSID e senha configuráveis pelo próprio portal. ⚠️ O ESP32 **não** passa por portal cativo nem autenticação corporativa, então a rede da UVA **está fora** — confirmado em 10/09 na issue #3, com dois motivos observados além do portal: a rede nega login a aluno matriculado (o Caio não entra desde 2026.1) e o filtro de saída bloqueia serviço legítimo (Google Drive), comportamento que não dá para prever do lado do aparelho. Documentar: "em produção a instituição provisionaria rede dedicada aos dispositivos".
 - **R6 Duas camadas de senha, não uma.**
   - **WPA2 no SoftAP** (mesma para todos, não é segredo, pode estar colada na caixa) → criptografa o ar. Sem ela a senha do professor trafega legível na sala.
   - **Login individual por professor** (hash local) → identidade. Continua um por professor, como na Q4.
@@ -117,7 +117,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
   - **Por que não pinar:** a Supabase não usa uma CA só e troca de emissor sem aviso (verificado em 06/09/2026: Let's Encrypt, Amazon e Google servindo endpoints diferentes). Certificado pinado quebra sozinho e ninguém saberia por quê.
   - **Custo assumido:** `setInsecure()` criptografa mas **não autentica o servidor** — MITM teoricamente possível no hotspot. Proporcional (hotspot do próprio grupo, chave anon descartável, protótipo acadêmico). **Registrar essa limitação no relatório técnico**, não escondê-la.
   - **Sem a lib `ESPSupabase`:** parada desde 07/2025, arrasta `WebSockets` como dependência morta, e internamente só faz o que 20 linhas próprias fazem.
-- **R13a Fechar o AP antes de abrir o TLS é requisito de memória.** O handshake pede 40–50 KB de heap livre (mbedTLS aloca 16 KB RX + 16 KB TX). R4 deixa de ser só questão de canal de rádio.
+- **R13a Fechar o AP antes de abrir o TLS é requisito de memória.** O handshake pede 40–50 KB de heap livre (mbedTLS aloca 16 KB RX + 16 KB TX). R4 deixa de ser só questão de canal de rádio. ⚠️ **Com R19, este vira o argumento decisivo:** o canal deixou de ser impedimento para o modo simultâneo, a memória não. O Plano A só passa se sobrarem os 40 KB com AP, DNS, WebServer e roster de pé ao mesmo tempo — é medição, não estimativa.
 - **R13b Limitar as tentativas de `connect()`.** `WiFiClientSecure` vaza ~4 KB de heap por conexão **falha** (arduino-esp32 #3808); retry sem limite trava o aparelho.
 - **R13c `getStream()` no GET do roster**, nunca `getString()` — `getString()` em resposta de ~3 KB fragmenta o heap.
 - **R13d Checklist de hotspot** (vai impresso para a apresentação):
@@ -136,6 +136,20 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 ### Rodada 6 — R18 (06/09, 09h30) — dispensa do segundo sensor
 
 - **R18 O projeto passa a ter um sensor só, o RC522.** O João confirmou com o professor que a exigência de dois sensores está dispensada para este projeto. **Reverte o R7:** o SW-420 sai. Motivo para tirar em vez de manter por segurança: o sensor de vibração não participa da chamada — é uma frente paralela (compra, calibração de potenciômetro no lugar definitivo, debounce próprio, um estado a mais na máquina de estados e um tipo a mais no contrato de dados) fora do problema que motivou o projeto. Saem junto o `tamper.cpp`, o estado `ALERTA_VIOLACAO`, o alerta no contrato de dados, a tabela `alertas` no Supabase e o teste 8. ⚠️ A exigência escrita ("mínimo de 2 sensores", em `docs/entregas.md`) continua publicada no Teams: a Entrega 03 declara a dispensa em uma linha, para não ser lida como descumprimento.
+
+### Rodada 7 — R19–R22 (10/09, noite) — respostas do grupo nas issues
+
+Primeira rodada decidida **fora do chat**: as quatro decisões abaixo saíram das issues #1 a #4 do GitHub, com o grupo por escrito e datado.
+
+- **R19 O modo `WIFI_AP_STA` existe e é nativo; a escolha entre simultâneo e alternado vira medição.** O João trouxe a correção na issue #3 e ela procede — **R4 estava errado na premissa**. A documentação da Espressif (guia de Wi-Fi do ESP-IDF) diz que os dois modos coexistem, com uma restrição: `"In Station/AP-coexistence mode, the home channel of AP and station must be the same, if they are different, the station's home channel is always in priority."` O softAP acompanha o canal do STA e anuncia a troca por **CSA**; estação que suporta channel switch acompanha **sem cair**. Ou seja, o canal para de ser impedimento — o que sobra como risco é a memória (R13a). O projeto passa a ter dois planos:
+  - **Plano A — `WIFI_AP_STA`.** AP e STA no ar ao mesmo tempo; o professor nunca perde a conexão. Mata a transição de 5–15 s, o bug do AP que não volta (R15) e o `sessao_atual.json` como salva-vidas de reboot (R16 continua válido por queda de energia).
+  - **Plano B — alternância `AP → STA → AP`.** O que R4 especifica hoje. Só entra se o A reprovar.
+  - **Critério de decisão, medido na bancada (testes 7c e 7d do §8):** o celular do professor sobrevive ao pulo de canal, em iPhone **e** Android; e sobram ≥40 KB de heap no instante do handshake, com AP + DNS + WebServer + roster carregados. Reprovou qualquer um dos dois → Plano B.
+  - ⚠️ **O datasheet do módulo não responde isso.** `docs/esp32-wroom-32d_esp32-wroom-32u_datasheet_en.md` (v2.7) é documento de hardware: confirma antena única, 2,4 GHz e 520 KB de SRAM, e não menciona modo de Wi-Fi. Comportamento de rádio e de software vive em https://docs.espressif.com/projects/esp-idf/en/v4.4/esp32/api-guides/wifi.html — **usar essa fonte, não o datasheet, para pergunta de comportamento.**
+- **R20 O modelo de dados ganha três entidades, por proposta do Cauã na issue #1.** Além dos seis pontos já sugeridos (aceitos pelo Igor e pelo Cauã, sem objeção do Gabriel até a publicação): **professor como cadastro próprio** (o login do painel precisa conferir a senha contra alguma coisa, e o relatório precisa dizer quem deu a aula); **turma como tabela, com `alunos_turmas` no meio** (sem isso "turma" é texto solto dentro da sessão, e o mesmo aluno aparece grafado de três jeitos); e **sessão com `estado`** (`aberta` / `finalizada` / `cancelada`). O estado não é só conveniência de dashboard: **é ele que implementa a idempotência** do ponto 5 da pauta — sessão `finalizada` recusa o segundo `POST`, e `HU-39` deixa de estar em aberto.
+- **R21 O dashboard em nuvem existe, e o dono é o Igor** (issue #2, opção B: página simples lendo o histórico do banco, sem tocar no firmware). Fecha `HU-30`. Não depende do firmware: a página lê o banco, o aparelho escreve no banco, e os dois nunca se falam direto. ⚠️ Registrar para o grupo, porque a dúvida apareceu duas vezes: **não há API para escrever.** O `PostgREST` do Supabase gera os endpoints a partir das tabelas; o trabalho real é criar as tabelas e escrever as regras de RLS, e é do Caio.
+- **R22 O material está completo e a caixa sai do caminho crítico** (issue #4). O João comprou tudo e as peças estão com ele — a lista do §4 fecha em ✅. A caixa não entra no protótipo de 22/09; o material só se escolhe depois da placa montada, quando o tamanho real for conhecido. Entrega da estrutura física continua em 29/09.
+  - ⚠️ **Antes de comprar transistor para o buzzer, checar na bancada:** módulo de 3 pinos já traz o driver embutido; peça solta de 2 pinos pode bastar em 3,3 V, já que o bip precisa ser audível a um passo do aparelho, não alto. Só se as duas reprovarem entra NPN — e qualquer um serve (2N2222, BC337, S8050), em loja física, por um ou dois reais.
 
 ### Decisões operacionais
 
@@ -169,16 +183,18 @@ Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blo
 
 | Componente | Qtd | Função | Situação |
 |---|---|---|---|
-| ESP32 DevKit V1 / 32D | 1 | Controlador principal, Wi-Fi AP/STA alternado, WebServer, LittleFS | ✅ adquirido |
+| ESP32 DevKit V1 / 32D | 1 | Controlador principal, Wi-Fi (AP+STA ou alternado — R19), WebServer, LittleFS | ✅ adquirido |
 | Leitor RFID/NFC RC522 13,56 MHz | 1 | **Sensor** — leitura do UID (SPI VSPI: SCK 18, MISO 19, MOSI 23, SS 5, RST 22) | ✅ adquirido |
 | Tags NFC 13,56 MHz (NTAG215 + cartões brancos do kit) | 3–5 | Crachás de teste — firmware só lê o UID | ✅ adquirido |
-| LED RGB catodo comum (ou 2 LEDs verde/vermelho) + 3× resistor 220 Ω | 1 | **Atuador 1** — verde/vermelho/azul (GPIO 25/26/27) | ⬜ comprar |
-| Buzzer ativo 5V | 1 | **Atuador 2** — bip 100 ms na confirmação (GPIO 33) | ⬜ comprar |
+| LED RGB catodo comum (ou 2 LEDs verde/vermelho) + 3× resistor 220 Ω | 1 | **Atuador 1** — verde/vermelho/azul (GPIO 25/26/27) | ✅ adquirido |
+| Buzzer ativo 5V | 1 | **Atuador 2** — bip 100 ms na confirmação (GPIO 33) | ✅ adquirido |
 | Protoboard 830 pontos | 1 | Montagem | ✅ adquirido |
-| Jumpers M-M e M-F | 1 kit | Conexões | ⬜ comprar |
-| Fonte 5V 2A / cabo micro-USB | 1 | Alimentação (aparelho fixo, sempre na tomada) | ⬜ comprar |
+| Jumpers M-M e M-F | 1 kit | Conexões | ✅ adquirido |
+| Fonte 5V 2A / cabo micro-USB | 1 | Alimentação (aparelho fixo, sempre na tomada) | ✅ adquirido |
 
-⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. Buzzer ativo 5V não liga direto no GPIO — usar transistor 2N2222 ou módulo com driver.
+✅ **Lista fechada em 10/09/2026 (R22):** o João comprou tudo e as peças estão com ele. Não há compra pendente.
+
+⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. Buzzer ativo 5V não liga direto no GPIO — usar transistor 2N2222 ou módulo com driver. **Ordem de checagem na bancada, antes de comprar transistor (R22):** (1) se o buzzer for módulo de 3 pinos, o driver já está embutido e não falta nada; (2) se for peça solta de 2 pinos, alimentar em 3,3 V e ouvir — o bip precisa ser audível a um passo do aparelho, não alto; (3) só então o NPN, e serve qualquer um (2N2222, BC337, S8050) de loja física.
 
 Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 que existia na versão anterior **deixa de existir**.
 
@@ -352,13 +368,13 @@ Exportação:
 
 `presentes` e `faltantes` só existem quando `roster_carregado: true`. Em modo offline o relatório sai só com `eventos`, e as listas são calculadas do lado da API no momento do envio.
 
-**Supabase:** tabelas `alunos`, `sessoes`, `eventos`. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
+**Supabase:** tabelas `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`: `aberta` / `finalizada` / `cancelada`) e `eventos` — desenho fechado em R20, na issue #1. ⚠️ **A issue chamou `sessoes` de `aulas`: é a mesma entidade.** O nome no código e no banco continua `sessoes`, para não quebrar o contrato de dados acima, o `sessao_atual.json` (R16) nem o glossário. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
 
 ## 8. Plano de testes
 
 **Como testamos.** As decisões de teste, antes da tabela:
 
-- **O ambiente de teste é a bancada, com o aparelho real.** Não há teste automatizado, nem em host (`pio test` com ambiente `native`). É escolha, não omissão: o que pode dar errado aqui é físico e de rádio — a leitura SPI do RC522, a alternância AP↔STA que não volta, os 40–50 KB de heap do handshake TLS, a integridade do LittleFS numa queda de energia. Nada disso aparece contra um mock; o teste de host testaria o mock, e a camada de abstração necessária para escrevê-lo custaria mais do que a bancada custa.
+- **O ambiente de teste é a bancada, com o aparelho real.** Não há teste automatizado, nem em host (`pio test` com ambiente `native`). É escolha, não omissão: o que pode dar errado aqui é físico e de rádio — a leitura SPI do RC522, a alternância AP↔STA que não volta, o comportamento de cada celular no pulo de canal do `WIFI_AP_STA` (R19), os 40–50 KB de heap do handshake TLS, a integridade do LittleFS numa queda de energia. Nada disso aparece contra um mock; o teste de host testaria o mock, e a camada de abstração necessária para escrevê-lo custaria mais do que a bancada custa.
 - **Só comportamento externo é testado**, nunca função interna: o que o LED e o buzzer fazem, o que o portal mostra, o que sai no JSON exportado, o que o log serial registra. Teste que precisa abrir o código para saber se passou não é teste deste projeto.
 - **Todo teste entrega evidência gravada** — foto ou vídeo curto do LED e do buzzer, o JSON exportado, ou o trecho do log serial com horário. É o que sustenta o entregável de 22/09 ("testes documentados") e o relatório de 30/11.
 - **O log serial com níveis (§5) é instrumento de medição**, não resto de depuração: sem ele, os <200 ms e o diagnóstico da troca de rádio viram opinião.
@@ -373,8 +389,10 @@ Exportação:
 | 4 | Modo offline (Iniciar sem internet) | `modo: "offline"`, aceita todo UID, relatório íntegro |
 | 5 | Enviar sem internet → depois com internet | Compartilhar funciona; retry sobe o mesmo relatório sem duplicar |
 | 6 | 2 professores em sequência | 2 sessões, `professorId` distintos, sem mistura |
-| 7 | Alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
-| 7b | Falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
+| 7 | **Plano B** — alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
+| 7b | **Plano B** — falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
+| 7c | **Plano A** — `WIFI_AP_STA`: professor logado no portal, STA conecta no hotspot em outro canal | painel continua aberto **sem novo login**, em iPhone **e** Android; se cair, reconecta sozinho em <5 s |
+| 7d | **Plano A** — heap livre no instante do handshake TLS, com AP + DNS + WebServer + roster de pé | ≥40 KB livres (`ESP.getFreeHeap()` logado antes do `connect()`); abaixo disso, reprova e vale o Plano B |
 | 8 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
 
 ## 9. Divisão da equipe
@@ -393,17 +411,19 @@ Cada papel tem 1 dono, mas as fronteiras são permeáveis: quem terminar a sua f
 
 ## 10. Principal desafio técnico
 
-**Alternar o rádio único do ESP32 entre hotspot e cliente sem derrubar o portal do professor, mantendo o registro de presença abaixo de 200 ms e o relatório íntegro quando a troca falhar.**
+**Fazer o rádio único do ESP32 atender ao professor e à nuvem sem derrubar o portal, mantendo o registro de presença abaixo de 200 ms e o relatório íntegro quando a rede falhar.**
 
 Quatro coisas disputam o mesmo chip: o SPI do RC522 com UIDs de dois tamanhos, o WebServer + DNS do portal cativo, a escrita append-only no LittleFS (que não pode corromper em queda de energia) e a janela de STA para falar com a API.
 
-A pesquisa técnica confirmou o desafio e o tornou mais preciso. O ESP32 tem **uma antena só**: rodar hotspot e cliente ao mesmo tempo faz o hotspot mudar de canal atrás da rede externa e derruba o celular do professor. Alternar entre os modos resolve o canal, mas leva **5 a 15 segundos** por transição e esbarra em bugs conhecidos do arduino-esp32 em que o hotspot simplesmente não volta. Some-se a isso o handshake TLS, que sozinho exige 40–50 KB de heap livre — o que torna **obrigatório** fechar o hotspot antes de abrir a conexão segura, por memória e não só por rádio.
+A pesquisa técnica confirmou o desafio e o tornou mais preciso, e uma correção do grupo em 10/09 (R19) mudou o formato dele. O ESP32 tem **uma antena só**, mas isso não impede hotspot e cliente ao mesmo tempo: o modo `WIFI_AP_STA` é nativo, e a restrição real é de **canal** — as duas interfaces ficam no canal do cliente, e o hotspot anuncia a migração por CSA, que celular moderno acompanha sem cair. O que sobra como impedimento é **memória**: o handshake TLS exige 40–50 KB de heap livre, e esse número precisa sobrar com hotspot, DNS, WebServer e roster carregados ao mesmo tempo.
+
+O desafio, portanto, deixou de ser "como alternar" e virou **qual dos dois arranjos o hardware sustenta** — o simultâneo (Plano A), que nunca derruba o professor, ou a alternância (Plano B), que devolve memória ao preço de 5 a 15 segundos por transição e do risco conhecido do arduino-esp32 em que o hotspot não volta. A resposta é medida na bancada, nos testes 7c e 7d do §8, e é o primeiro código do projeto.
 
 Concentrar toda a rede em dois instantes (Iniciar e Enviar), em vez de uma chamada por aluno, é o que torna o problema tratável: reduz de ~40 janelas de risco por aula para 2. O preço é um modo offline degradado e uma recuperação de falha que precisam se comportar direito — porque quando a troca falha, o que está em jogo é uma aula inteira de presenças dentro do aparelho.
 
 ## 11. Glossário
 
-**Tag** = crachá físico. **UID** = número de série do chip (4 ou 7 bytes). **Roster** = lista da turma (matrícula + nome + UID) baixada da API no Iniciar. **Sessão** = janela aberta pelo professor. **Evento** = 1 registro (nfc ou manual). **Modo offline** = sessão iniciada sem internet; grava só UIDs. **Enriquecimento** = juntar nome/matrícula ao UID. **Debounce** = ignorar repetição do mesmo UID por 5 s. **AP** = o aparelho como rede Wi-Fi. **STA** = o aparelho como cliente de outra rede.
+**Tag** = crachá físico. **UID** = número de série do chip (4 ou 7 bytes). **Roster** = lista da turma (matrícula + nome + UID) baixada da API no Iniciar. **Sessão** = janela aberta pelo professor. **Evento** = 1 registro (nfc ou manual). **Modo offline** = sessão iniciada sem internet; grava só UIDs. **Enriquecimento** = juntar nome/matrícula ao UID. **Debounce** = ignorar repetição do mesmo UID por 5 s. **AP** = o aparelho como rede Wi-Fi. **STA** = o aparelho como cliente de outra rede. **AP+STA** = os dois ao mesmo tempo, no mesmo canal (Plano A, R19). **CSA** = o aviso de troca de canal que o AP manda às estações conectadas antes de migrar. **Plano A / Plano B** = modo simultâneo / alternância `AP → STA → AP`, a decidir pela bancada.
 
 ## 12. Referências
 

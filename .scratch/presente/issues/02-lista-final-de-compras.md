@@ -1,7 +1,8 @@
 # Lista final de compras e quem compra
 
 Type: task
-Status: open
+Status: resolved
+Resolvido em: 10/09/2026, pela issue #4 do GitHub (R22) — o João comprou tudo, as peças estão com ele, não há compra pendente. Ressalva única: o transistor do buzzer só se compra depois da checagem de bancada descrita no §4 da spec.
 Parent: map.md
 Blocked by: —
 Prazo real: peças na mão até 12–14/09

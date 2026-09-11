@@ -6,6 +6,18 @@ Documento para **conversar com a equipe**, em linguagem direta. O detalhe técni
 
 > Isto é um documento de conversa, não um registro. Quando o grupo decidir, a decisão vai para a `spec.md` e esta pauta pode ser jogada fora.
 
+> ## ✅ Encerrada em 10/09/2026
+>
+> Os oito pontos foram respondidos pelo grupo nas issues #1 a #4 do GitHub. As decisões estão na `spec.md`, rodada 7 (R19–R22); esta pauta fica só como registro de como as perguntas foram feitas.
+>
+> | # | Assunto | Onde foi decidido |
+> |---|---|---|
+> | 1–3 | Crachá por aluno, aluno em várias turmas, aluno que sai | issue #1 → R20 |
+> | 4–6 | Poderes da chave, duplo Enviar, aula sem internet | issue #1 → R20 (o duplo Enviar sai do `estado` da sessão) |
+> | 7 | Tela de histórico | issue #2 → R21, dono Igor |
+> | 8 | Voltar ao painel depois da troca de rede | issue #3 → R19 — **a premissa estava errada:** `WIFI_AP_STA` existe, e o projeto passa a ter Plano A e Plano B, a decidir na bancada |
+> | Parte 4 | Material e caixa | issue #4 → R22 — material completo, com o João; caixa adiada |
+
 ---
 
 # Parte 1 — O banco de dados na nuvem
