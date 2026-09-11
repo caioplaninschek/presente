@@ -2,7 +2,7 @@
 
 Terminal embarcado (ESP32 + RC522) para contabilização de presença em sala de aula. Trabalho da disciplina Sistemas Embarcados — UVA Barra, 3ª terça-feira.
 
-A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem: as decisões Q1–Q9 e R1–R18 já foram fechadas.
+A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem. **Quantas rodadas já fecharam, leia no cabeçalho da própria spec** — não confie em contagem escrita fora dela, aqui inclusive.
 
 O mapa de decisões em aberto está em `.scratch/presente/map.md`. Leia o mapa antes de trabalhar um ticket.
 
@@ -11,6 +11,30 @@ Os enunciados do professor, com o detalhamento da próxima entrega, estão em `d
 **Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, roteiro de vídeo. Leia antes de escrever qualquer documento.
 
 Nunca assine commits como IA: sem `Co-Authored-By` de assistente, sem `🤖 Generated with`, sem trailer equivalente.
+
+## Onde o trabalho vive
+
+São três lugares, com papéis diferentes. Confundi-los produz duas versões divergentes da mesma coisa.
+
+- **Issues do GitHub** — o fórum do grupo e, desde 11/09, **o enunciado completo de cada tarefa de execução**: passo a passo de bancada, o que tem que aparecer, o que fazer se der errado. É onde os integrantes leem e respondem com log e foto.
+- **`.scratch/presente/`** — tickets de **decisão**, indexados pelo `map.md`. `Status: resolved` quer dizer "a pergunta foi respondida".
+- **`.scratch/prototipo/`** — tickets de **execução**, indexados pelo `graph.md`. Pronto quer dizer "o código roda e tem evidência". São finos de propósito: título, dono, prazo, aresta, `HU-xx` e ponteiro para a issue — o texto rico vive lá, não aqui.
+
+**Todo ticket de implementação cita a história de usuário que justifica o seu critério** (`HU-xx`, §1.1 da spec). O §1.1 declara as histórias como a referência citável dos critérios de aceitação; sem a citação, as 40 histórias viram texto que ninguém abre e o critério perde a razão de ser o que é. Ticket de documentação, logística ou montagem física pode não ter `HU` — nesse caso, não invente uma.
+
+## Quando uma decisão fecha
+
+Decisão fechada numa issue **não termina na `spec.md`**. Em 11/09 uma conferência da spec contra as tarefas achou três decisões vivas na prática e mortas no documento — e a pior delas seguia sendo **oferecida ao grupo na pauta** depois de já ter sido derrubada. A ordem é sempre esta, e nenhum passo é opcional:
+
+1. **`docs/spec.md`** — a decisão vira um `R<n>` em rodada datada do §2, e as seções que ela altera são corrigidas na mesma passada.
+2. **Varra quem repete a decisão em outra linguagem.** `grep` pelos termos dela em todo `*.md` do repo. Os suspeitos de sempre: `docs/pauta-do-grupo.md` (**o mais urgente, porque é o texto voltado para o grupo**), `.scratch/presente/map.md`, o ticket de decisão correspondente, os tickets de execução que dependiam dela e as issues abertas.
+3. **Opção derrubada se risca com a razão e a data, nunca se apaga.** Quem a propuser de novo precisa esbarrar no motivo de ela ter caído.
+4. **Documento já entregue ao professor não se reescreve.** A divergência se **declara** ao pé dele — foi assim com o controle de saída (§1), com o segundo sensor (§4) e com a divisão de equipe (§9). Reescrever o que já foi lido produz exatamente a incoerência que se quer evitar.
+5. **`DIARIO.md`** — se a decisão muda o que o professor vê, entra na entrada da semana corrente.
+
+**Não enumere rodadas fora da spec.** Ponteiro do tipo "R1 a R18 já estão fechadas" envelhece sozinho e em silêncio: foi assim que este arquivo e o `map.md` passaram uma semana desatualizados. Aponte para o cabeçalho da `spec.md`, que é mantido a cada rodada.
+
+**Lacuna conhecida se declara.** Requisito da spec que ainda não tem ticket entra no §8 como lacuna, com a data em que vira tarefa. Ausência declarada é planejamento; ausência silenciosa é descuido, e o professor lê a diferença.
 
 ## Diário de bordo
 

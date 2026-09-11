@@ -32,6 +32,8 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [`docs/spec.md`](docs/spec.md) | Especificação completa: decisões, arquitetura, contrato de dados, plano de testes |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
+| [`.scratch/prototipo/graph.md`](.scratch/prototipo/graph.md) | Registro de execução: as 19 tarefas, o grafo de dependência e o de-para com as Issues |
+| [Issues](https://github.com/caioplaninschek/presente/issues) | O fórum do grupo e o enunciado completo de cada tarefa — passo a passo, o que tem que aparecer, o que fazer se der errado |
 | [`AGENTS.md`](AGENTS.md) | Convenções do repositório |
 
 ## Equipe
