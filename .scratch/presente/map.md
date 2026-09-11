@@ -21,6 +21,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 - **Este repo é exceção à lei anti-vazamento** (arquivos de IA podem ser commitados às claras), mas **assinatura de IA em commit continua proibida**: sem `Co-Authored-By`, sem `🤖 Generated with`.
 - **Dois lugares, uma fonte da verdade.** As decisoes que precisam do grupo sao debatidas nas **Issues do GitHub** (o forum da equipe, em linguagem de leigo, alimentado por docs/pauta-do-grupo.md); estes tickets em .scratch continuam sendo o registro de trabalho. O fluxo e de mao unica: decisao fechada no issue -> escrita na spec.md -> ticket local fechado. Nunca o contrario.
 - **Calendário manda.** Todo ticket que tem data de entrega atrás dele é urgente por construção, não por importância.
+- **A execução saiu daqui em 11/09.** A quebra em epics por entrega, os 19 vértices e o grafo de dependência vivem em `.scratch/prototipo/graph.md`, e as issues de atribuição estão no GitHub (#5 a #28). Este mapa continua dono só dos fios de decisão que sobraram: a metade de RLS do ticket 06, o veredito do ticket 09 e o ticket 08, reaberto pelo R19.
 
 ## Decisions so far
 
