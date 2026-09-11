@@ -43,6 +43,8 @@ A aresta que manda: **04** (o ambiente na máquina do João) trava tudo que prec
 
 A aresta que decide: **14** antes de **16**. O teste da memória precisa de um celular só e pode reprovar o Plano A sozinho; o do painel precisa de dois celulares no mesmo cômodo, que é o único item do projeto que exige gente na mesma sala.
 
+A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O firmware do teste de rádio se **escreve** sem nada, mas para **medir** o heap ele precisa abrir um TLS de verdade — e para isso o `secrets.h` precisa de um `SUPABASE_URL` que exista. O projeto no Supabase só nasce na 07. Não são as tabelas nem as políticas de RLS que travam: é o host existir. As duas são do Caio e vencem no mesmo dia (17/09), então a ordem custa nada — **criar o projeto no Supabase primeiro**, e a medição da 14 sai contra o host de verdade, com a cadeia de certificados que o aparelho vai encontrar em produção. A alternativa (medir contra um host HTTPS qualquer) funciona, mas deixa uma ressalva pendurada no veredito da 18 para sempre.
+
 ## De-para
 
 | Local | GitHub | Epic | Dono | Prazo |

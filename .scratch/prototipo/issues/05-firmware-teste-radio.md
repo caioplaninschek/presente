@@ -5,7 +5,7 @@ Status: ready-for-human
 Dono: Caio
 Prazo: 17/09
 Entrega: —
-Blocked by: —
+Blocked by: — para escrever; 07 (o projeto no Supabase existir, só o host) para a medição valer
 GitHub: https://github.com/caioplaninschek/presente/issues/15
 
 ## O que entrega
