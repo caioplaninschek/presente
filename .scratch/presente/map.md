@@ -13,7 +13,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 
 ## Notes
 
-- **Fonte da verdade das decisões de produto:** `docs/spec.md`. As rodadas Q1–Q9 (05/09), R1–R8 (05/09) e R9–R12 (06/09) já estão travadas lá. Ler antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem.
+- **Fonte da verdade das decisões de produto:** `docs/spec.md`. São **oito rodadas** travadas lá, de Q1–Q9 (05/09) até **R23–R27** (11/09). Ler antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem.
 - **Plan, don't do vale o default.** Nenhum ticket deste mapa escreve firmware, portal ou documento entregável. Ticket que ler "construir o X" está mal-tipado.
 - **Skills por sessão:** `grilling` + `domain-modeling`. Tickets de pesquisa vão para subagente.
 - **Idioma:** português brasileiro, exceto código.
@@ -34,6 +34,8 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 - [Lista final de compras](issues/02-lista-final-de-compras.md): fechada pela issue #4 (R22) — o João comprou tudo e as peças estão com ele. Nenhuma frente do projeto depende de compra. O transistor do buzzer só se compra depois da checagem de bancada (módulo de 3 pinos já tem driver; peça de 2 pinos pode bastar em 3,3 V).
 - [O dashboard em nuvem existe, ou o portal do ESP32 basta?](issues/07-dashboard-em-nuvem-escopo.md): existe, opção B (página simples lendo o banco, sem tocar no firmware), e o dono é o Igor — issue #2 (R21). Fecha `HU-30`.
 - **Esquema do banco** (metade do ticket [06](issues/06-esquema-supabase-e-rls.md)): `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`) e `eventos` — issue #1 (R20), com as três entidades propostas pelo Cauã. O `estado` da sessão é o que implementa a idempotência do Enviar, fechando `HU-39`. ⚠️ A outra metade (políticas de RLS) segue aberta.
+
+- **Credencial fora do endereço da página** (item 2 do ticket [09](issues/09-retorno-ao-painel-apos-troca-de-radio.md)): a opção (c) — carregar o token na própria URL — **caiu**, por objeção do Cauã aceita na issue #3 em 10/09 e escrita na spec como **R25** em 11/09. Restam (a) manter tudo no CNA e (b) trazer o professor pelo CNA e seguir em `192.168.4.1`. ⚠️ O **veredito do ticket segue aberto** — o que fechou foi uma das três saídas, não o ticket.
 
 ⚠️ **Decisão revertida em 10/09:** o item "AP e STA nunca simultâneos" (R4) caiu. O João mostrou na issue #3 que `WIFI_AP_STA` é nativo, e a documentação da Espressif confirma: a restrição é de **canal** (as duas interfaces vão para o canal do STA, com CSA avisando as estações), não de impossibilidade. O impedimento que resta é de **memória** (40–50 KB do handshake TLS). O projeto passa a ter **Plano A** (simultâneo) e **Plano B** (alternância), decididos por medição na bancada — ticket [09](issues/09-retorno-ao-painel-apos-troca-de-radio.md), testes 7c e 7d do §8 da spec. Por consequência, o ticket [08](issues/08-comportamento-do-radio.md) voltou a `reopened`.
 

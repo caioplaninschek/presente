@@ -141,7 +141,9 @@ Só que isso impõe duas coisas, e as duas são sugestão minha:
 
 **Minha sugestão 8b: testar isso num iPhone e num Android antes de escrever o resto do firmware.** Quando o celular entra numa rede sem internet, o sistema abre sozinho aquela janelinha de "entrar na rede" — que não é o Safari nem o Chrome, é um mini-navegador separado, com memória própria. Dois riscos moram aí: o crachá pode ficar preso nessa janelinha (que o iPhone fecha sozinho), e o celular, vendo rede sem internet, pode pular para o 4G sozinho e levar o painel do professor junto, no meio da aula.
 
-Os dois têm solução conhecida, e a mesma família de solução: depois do login, o aparelho responde ao teste de internet do celular de um jeito que o sistema entenda "estou dentro, pode parar de perguntar", e o professor segue no navegador normal. Se na bancada isso se mostrar instável, existe uma saída mais bruta e mais robusta: carregar a credencial no próprio endereço da página, e aí não importa qual janela foi fechada.
+Os dois têm solução conhecida, e a mesma família de solução: depois do login, o aparelho responde ao teste de internet do celular de um jeito que o sistema entenda "estou dentro, pode parar de perguntar", e o professor segue no navegador normal. Se na bancada isso se mostrar instável, a alternativa é manter o professor dentro da própria janelinha do sistema, em vez de mandá-lo para o navegador.
+
+⚠️ **Corrigido em 11/09.** Este ponto tinha uma terceira saída, mais bruta: carregar a credencial no próprio endereço da página, para nenhuma janela fechada importar. **Ela caiu**, por observação do Cauã aceita no tópico 3 em 10/09: endereço com credencial dentro fica guardado no histórico do celular, aparece em print de tela e sobra no registro de quem acessou. Está na especificação como R25, e não volta à mesa.
 
 **O que quero de vocês:** isso não se decide na teoria — muda entre iPhone e Android e entre versões de sistema. E dá para testar **já**: precisa só do ESP32, que a gente já tem. Nada de leitor de crachá, nada de LED. Subir a rede, fazer login, trocar o rádio, voltar e continuar logado.
 

@@ -13,7 +13,7 @@ O mapa do Wayfinder continua dono de três fios abertos, e só: a metade de RLS 
 
 O `map.md` registrou que as issues do GitHub são o fórum das decisões e o `.scratch` é o registro de trabalho. Para a execução isso se inverte, e de propósito.
 
-As peças estão todas com o João, e o combinado é que ele receba o trabalho pronto para copiar e colar. Isso põe o enunciado rico — passo a passo, o que tem que aparecer, o que fazer se der errado — dentro da issue do GitHub, que é onde ele lê e onde ele responde com o log e a foto. Os arquivos daqui ficam finos de propósito: título, dono, prazo, aresta e ponteiro. Duplicar o texto nos dois lugares só produziria duas versões divergentes.
+As peças estão todas com o João, e o combinado é que ele receba o trabalho pronto para copiar e colar. Isso põe o enunciado rico — passo a passo, o que tem que aparecer, o que fazer se der errado — dentro da issue do GitHub, que é onde ele lê e onde ele responde com o log e a foto. Os arquivos daqui ficam finos de propósito: título, dono, prazo, aresta, a história de usuário que justifica o critério (`HU-xx`, §1.1 da spec) e ponteiro. Duplicar o texto nos dois lugares só produziria duas versões divergentes.
 
 ## O grafo
 

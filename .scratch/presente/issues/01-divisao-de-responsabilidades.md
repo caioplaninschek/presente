@@ -43,6 +43,8 @@ Isso reclassifica o artefato. A divisão **não é um contrato operacional**; é
 
 O papel do Caio é **amplo por desenho**, e isso é deliberado: "integração" legitima circular por qualquer frente. Quando ele fizer o trabalho de outro — e vai — o documento não o contradiz.
 
+⚠️ **Superado em 11/09, pelo R23.** A tabela acima continua valendo como o que foi **entregue** na Entrega 03, e a resposta deste ticket ("documentação, não contrato") se provou certa — mas ela deixou de descrever quem faz o quê. Como há um microcontrolador só, **a placa parou de circular**: fica com o João, e toda task física nasce partida em *preparar* (qualquer um) e *rodar* (ele). A divisão operacional que vale hoje são as issues #5 a #28, e a divergência está declarada ao pé da tabela do §9 da spec.
+
 **Decorrência que fecha outro ticket:** se na prática uma ou duas pessoas escrevem o código, o fluxo de git não precisa de branch nem PR. Ver *Quem escreve firmware, e como o time evita conflito no repo*.
 
 **O que continua valendo:** o Caio ainda deve mandar a tabela no grupo — não para pedir autorização, mas para que ninguém seja pego de surpresa vendo o próprio nome num papel no PDF entregue.
