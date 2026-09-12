@@ -44,9 +44,7 @@ Fluxograma, sem código.
 
 ## 6 PLANO DE TESTES
 
-*Origem: §8 da spec, com as lacunas conhecidas — os testes 7 e 7b, o arquivo de sessão e a máquina de estados completa · Dono: Caio (#13) · Prazo: segunda, 14/09 · **pendente***
-
-⚠️ A observação sobre os testes 3, 4, 5 e 6 não entra aqui: ela foi escrita na seção 7.
+*Origem: §8 da spec, com as lacunas conhecidas — os testes 7 e 7b, o arquivo de sessão e a máquina de estados completa. A observação sobre os testes 3, 4, 5 e 6 não é daqui: foi escrita na seção 7 · Dono: Caio (#13) · Prazo: segunda, 14/09 · **pendente***
 
 ## 7 PREPARAÇÃO PARA 21/09
 
@@ -57,11 +55,11 @@ O ESP32, o leitor de crachá, o LED e o buzzer estão comprados e em mãos; as l
 | Integrante | O que entrega até 21-22/09 |
 |---|---|
 | Gabriel | O fluxograma da lógica (13/09) e o dossiê de evidências dos testes (22/09) |
-| Cauã | Os programas do leitor de crachá (19/09), do verde com bip sem registro duplicado (21/09) e da gravação que sobrevive ao reinício (22/09) |
+| Cauã | Os programas do leitor de crachá (19/09), do feedback de verde e bip, sem registro duplicado (21/09), e da gravação que sobrevive ao reinício (22/09) |
 | Igor | As três telas do professor no navegador: login, painel de seis botões e relatório (21/09) |
-| Caio | O ambiente de compilação da placa (14/09); o banco na nuvem, o programa do teste de rádio e o roteiro de bancada dele (17/09); e a decisão de qual arranjo de rádio vale (21/09) |
+| Caio | O ambiente de compilação no computador do João (14/09); o banco na nuvem, o programa e o roteiro de bancada do teste de rádio (17/09); e a escolha entre os dois arranjos de rádio (21/09) |
 | João | A montagem da protoboard e a checagem do buzzer (16/09), a prova de vida do LED e do bip (17/09), a medição da memória livre na conexão segura (19/09) e a verificação do painel na troca de canal (20/09); e roda na placa, de 14 a 22/09, o que os outros preparam, gravando a evidência de cada teste |
 
-Duas coisas travam o resto. Nada roda na placa antes de o ambiente de compilação estar de pé na máquina que a tem, em 14/09. E a verificação do painel é o único teste que exige dois celulares junto da placa, o que depende de um encontro combinado.
+Duas coisas travam o resto. Nada roda na placa antes de o ambiente de compilação estar de pé, em 14/09. E a verificação do painel é o único teste que exige dois celulares junto da placa, o que depende de um encontro combinado.
 
 Os testes 3, 4, 5 e 6 do plano de testes não ficam prontos em 22/09: dependem de a lista da turma estar dentro do aparelho, o que só acontece quando ele passar a falar com a nuvem, entre o fim de setembro e o começo de outubro.
