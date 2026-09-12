@@ -17,7 +17,7 @@ Perguntas que a sessão precisa fechar:
 1. **Quantos, de fato, querem escrever C++?** "Liberado para todos" e "todos vão querer" são coisas diferentes. Isso vem do grupo, não do Caio.
 2. **Fluxo de git:** direto na `main` (rápido, sem cerimônia, quebra fácil) ou branch por frente + PR (mais lento, mas o histórico vira o diário de bordo que o professor cobra)?
 3. **Revisão:** alguém revisa antes de entrar na `main`, ou confia-se no build do PlatformIO passando?
-4. **Como a modularização já decidida ajuda.** A spec (R9, §5) já quebra o firmware em `rfid.cpp`, `storage.cpp`, `portal.cpp`, `net.cpp`, `tamper.cpp`, `feedback.cpp`. Se cada dono ficar no seu arquivo, o conflito quase some — mas isso só funciona se a divisão de responsabilidades estiver de pé.
+4. **Como a modularização já decidida ajuda.** A spec (R9, §5) já quebra o firmware em `rfid.cpp`, `storage.cpp`, `portal.cpp`, `net.cpp`, ~~`tamper.cpp`~~ (saiu com a R18, 06/09), `feedback.cpp`. Se cada dono ficar no seu arquivo, o conflito quase some — mas isso só funciona se a divisão de responsabilidades estiver de pé.
 
 ## Notas
 
@@ -35,7 +35,7 @@ Com uma ou duas mãos, branch + PR é cerimônia de time grande num time que nã
 
 **O que se mantém, porque não custa nada:**
 
-- **Modularização como profilaxia** (R9, §5): `rfid.cpp`, `storage.cpp`, `portal.cpp`, `net.cpp`, `tamper.cpp`, `feedback.cpp`. Se duas pessoas estiverem editando, é improvável que estejam no mesmo arquivo. Conflito de merge quase some por construção, sem processo nenhum.
+- **Modularização como profilaxia** (R9, §5): `rfid.cpp`, `storage.cpp`, `portal.cpp`, `net.cpp`, ~~`tamper.cpp`~~ (saiu com a R18, 06/09), `feedback.cpp`. Se duas pessoas estiverem editando, é improvável que estejam no mesmo arquivo. Conflito de merge quase some por construção, sem processo nenhum.
 - **Commits pequenos e datados**, em português. Não é estética: o histórico do git *é* metade do diário de bordo que o professor cobra (R12).
 - **`git pull` antes de começar a mexer.** É a única disciplina que este fluxo exige.
 
