@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: oito rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo) e **R23–R27 em 11/09/2026 madrugada** (a execução corrige a spec: a placa não circula, veredito parcial no 7c, credencial fora da URL, leitura do heap, onde os arquivos moram). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10), e em 11/09/2026 com a rodada 8 (§2), as lacunas conhecidas e os critérios corrigidos de 7c/7d (§8) e a divergência declarada da divisão de equipe (§9).
+> Status: nove rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo) e **R23–R27 em 11/09/2026 madrugada** (a execução corrige a spec: a placa não circula, veredito parcial no 7c, credencial fora da URL, leitura do heap, onde os arquivos moram) e **R28–R29 em 12/09/2026** (a primeira linha de firmware: um ambiente por programa de bancada, versões fixadas). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. Próxima base: **Entrega 04 (14/09, 23:59)** — especificação e preparação para o desenvolvimento. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10), e em 11/09/2026 com a rodada 8 (§2), as lacunas conhecidas e os critérios corrigidos de 7c/7d (§8) e a divergência declarada da divisão de equipe (§9).
 
 ## 1. Problema e objetivo
 
@@ -161,6 +161,21 @@ Primeira rodada que nasce da **execução**, não de decisão pendente. Ao quebr
 - **R26 Medição de heap com um celular só sai otimista.** No teste 7d o hotspot ocupa o único celular disponível, então **ninguém fica conectado ao AP durante a medição** — e cliente associado consome memória. O número medido é teto, não piso. Regra de leitura: resultado **entre 40 e 45 KB é suspeito**, não aprovado; medir de novo com um cliente conectado assim que houver um segundo aparelho.
 - **R27 Onde os arquivos moram, nomeado.** O R10 e o §6 diziam "arquivos no LittleFS" sem apontar a pasta, e o §8 exigia evidência gravada sem dizer onde ela fica. Ficam fixados: portal do professor em **`data/`** (convenção do PlatformIO — é a pasta que vira a imagem de filesystem); evidência dos testes em **`docs/assets/testes/`**, consolidada em **`docs/testes-22-09.md`**; fluxograma da lógica em **`docs/fluxograma-logica.drawio`**, ao lado do `diagrama-blocos.drawio` do §3.
 
+### Rodada 9 — R28–R29 (12/09) — a primeira linha de firmware decide onde o código mora e em que versão
+
+Nasce da issue #14, o ambiente de compilação. Escrever o `platformio.ini` obrigou a responder duas perguntas que as issues seguintes pressupunham sem dizer: onde fica cada programa de bancada e em que versão o firmware compila.
+
+- **R28 Cada programa de bancada mora na sua pasta, com o seu ambiente.** Programa novo ganha `src/<nome>/` e um `[env:<nome>]` no `platformio.ini`, que compila só aquela pasta. Nomes fixados de uma vez, sem acento, porque viram pasta e aparecem no seletor do VS Code: `ambiente` (#14), `radio` (#15, rodado de novo pela #17 e pela #18), `prova-de-vida` (#24), `leitor` (#25), `encostou` (#26), `persistencia` (#27). **Por quê:** cinco programas são preparados em paralelo, por pessoas diferentes, entre 15 e 19/09, e a #17 precisa rodar de novo o programa do rádio (R26) — tudo num arquivo só faria um apagar o outro, contra a HU-25. **Consequências para quem prepara:**
+  - O passo a passo do João nomeia o ambiente a escolher na barra azul do VS Code antes do Upload. **`default_envs` nunca é definido:** com "Default" selecionado, o Upload grava todos os ambientes em sequência e a placa fica com o último, sem erro nenhum.
+  - O João nunca edita arquivo versionado: edição local dele trava o `git pull` da tarefa seguinte. Ajuste volta como comentário na issue, e quem preparou commita.
+  - Código que dois programas dividirem sobe para **`lib/<módulo>/`**, com o nome do módulo do §5 que ele vai virar (`rfid`, `feedback`, `storage`…). É o mecanismo nativo do PlatformIO: tudo em `lib/` fica visível a todos os ambientes, sem configuração.
+  - **O que a R28 não decide:** o arranjo do firmware de verdade (módulos do §5), que se monta depois de 22/09.
+  - ~~`src/main.cpp` único, com "o programa da vez"~~ — preparadores em paralelo se sobrescrevem, e o programa do rádio não poderia ser rodado de novo (12/09).
+  - ~~`default_envs` trocado pelo preparador a cada task~~ — é uma linha compartilhada editada em paralelo, exatamente o conflito que esta decisão evita (12/09).
+- **R29 As versões fixadas, e as duas alternativas derrubadas.** Plataforma **`espressif32 7.1.3`**, que traz o Arduino core **2.0.17 (IDF 4.4.7)** — a base sobre a qual R13 e R19 foram pesquisadas, e a feita para o PlatformIO Core 6.2, que uma instalação nova entrega desde 05/09. Placa `esp32doit-devkit-v1`. Bibliotecas **`MFRC522 1.4.12`** e **`ArduinoJson 6.21.6`**; as nativas do §5 (`WebServer`, `DNSServer`, `LittleFS`, `HTTPClient`, `WiFiClientSecure`, `mbedtls`) vêm fixadas pela plataforma. Nenhuma biblioteca entra sem versão. As versões vivem no `platformio.ini`; a spec guarda o porquê.
+  - ~~Arduino core 3.x (fork pioarduino)~~ — troca o mbedTLS e a pegada de memória antes da medição de heap da #17 e invalida as referências de R13 e R19 (12/09).
+  - ~~ArduinoJson 7~~ — não tem documento estático de verdade: o `StaticJsonDocument` virou alias que aloca no heap, compila e perde em silêncio a garantia que o §5 exige (12/09).
+
 ### Decisões operacionais
 
 - **Bluetooth não será usado** — substituído pelo Wi-Fi nativo do ESP32 (o enunciado da Entrega 02 pedia Bluetooth por boilerplate de Arduino).
@@ -228,7 +243,9 @@ Nenhum GPIO acumula duas funções, e nada disputa os pinos de boot além do CS 
 
 ## 5. Firmware (C++, Arduino Core sobre PlatformIO)
 
-Build: **PlatformIO** no VS Code (`platformio.ini` fixa as versões de biblioteca para os 5). Libs: `MFRC522` · `DNSServer` · `WebServer` · `LittleFS` · `ArduinoJson` · `HTTPClient` + `WiFiClientSecure` · `mbedtls` (SHA-256). Credenciais em `secrets.h`, fora do git.
+Build: **PlatformIO** no VS Code (`platformio.ini` fixa as versões de biblioteca para os 5; quais e por quê: R29). Libs: `MFRC522` · `DNSServer` · `WebServer` · `LittleFS` · `ArduinoJson` · `HTTPClient` + `WiFiClientSecure` · `mbedtls` (SHA-256). Credenciais em `secrets.h`, fora do git.
+
+Até 22/09, os programas de bancada moram cada um na sua pasta de `src/`, com o seu ambiente (R28). A tabela abaixo descreve o firmware de verdade.
 
 Módulos em `src/`:
 
@@ -435,7 +452,7 @@ Exportação:
 
 Cada papel tem 1 dono, mas as fronteiras são permeáveis: quem terminar a sua frente ajuda a próxima. O papel de **Integração** existe justamente para circular entre as camadas e fechar o que ficar entre duas cadeiras.
 
-**Fluxo de trabalho no repo:** commits direto na `main`, sem branch nem pull request. A modularização do firmware (§5) é o que evita conflito — cada frente no seu arquivo. Regra única: `git pull` antes de começar.
+**Fluxo de trabalho no repo:** commits direto na `main`, sem branch nem pull request. A modularização do firmware (§5) é o que evita conflito — cada frente no seu arquivo. Até 22/09, entre programas de bancada, quem evita conflito é cada um ter a sua pasta e o seu ambiente (R28). Regra única: `git pull` antes de começar.
 
 ## 10. Principal desafio técnico
 
