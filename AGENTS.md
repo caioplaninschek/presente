@@ -27,7 +27,7 @@ São três lugares, com papéis diferentes. Confundi-los produz duas versões di
 Decisão fechada numa issue **não termina na `spec.md`**. Em 11/09 uma conferência da spec contra as tarefas achou três decisões vivas na prática e mortas no documento — e a pior delas seguia sendo **oferecida ao grupo na pauta** depois de já ter sido derrubada. A ordem é sempre esta, e nenhum passo é opcional:
 
 1. **`docs/spec.md`** — a decisão vira um `R<n>` em rodada datada do §2, e as seções que ela altera são corrigidas na mesma passada.
-2. **Varra quem repete a decisão em outra linguagem.** `grep` pelos termos dela em todo `*.md` do repo. Os suspeitos de sempre: `docs/pauta-do-grupo.md` (**o mais urgente, porque é o texto voltado para o grupo**), `.scratch/presente/map.md`, o ticket de decisão correspondente, os tickets de execução que dependiam dela e as issues abertas.
+2. **Varra quem repete a decisão em outra linguagem, sem confiar na memória.** Escolha termos fixos para a decisão e busque-os em **todo arquivo de texto versionado** (`git grep -i -E`) **e em todo corpo e comentário de issue** (`gh issue list --state all --json number,body,comments`). Cada ocorrência recebe um veredito, e só se termina quando nenhuma ficar sem. O trecho **muda** se: (a) afirma algo que a decisão tornou falso e quem ler vai agir errado; (b) oferece como viva uma opção derrubada; (c) descreve um procedimento que ela mudou; (d) é índice, ponteiro ou contagem que deixa de achar a coisa nova. **Não muda** documento já entregue (passo 4), ticket de decisão resolvido, material de fornecedor nem palavra usada noutro sentido. **Corpo de issue muda; comentário de issue nunca**, porque é registro datado. Os suspeitos de sempre continuam sendo o ponto de partida, não a fronteira: `docs/pauta-do-grupo.md` (**o mais urgente, porque é o texto voltado para o grupo**), `.scratch/presente/map.md`, o ticket de decisão correspondente, os tickets de execução que dependiam dela e as issues abertas.
 3. **Opção derrubada se risca com a razão e a data, nunca se apaga.** Quem a propuser de novo precisa esbarrar no motivo de ela ter caído.
 4. **Documento já entregue ao professor não se reescreve.** A divergência se **declara** ao pé dele — foi assim com o controle de saída (§1), com o segundo sensor (§4) e com a divisão de equipe (§9). Reescrever o que já foi lido produz exatamente a incoerência que se quer evitar.
 5. **`DIARIO.md`** — se a decisão muda o que o professor vê, entra na entrada da semana corrente.
@@ -46,6 +46,10 @@ O professor exige evidência de evolução semanal. São **duas camadas com cad�
 **Regra para agentes:** ao produzir trabalho substantivo, **edite a entrada da semana corrente** — crie-a se ainda não existir, senão acrescente à que já está lá. Nunca abra uma entrada nova por sessão: o diário é semanal, não um segundo log de commits.
 
 **Escreva para o professor, não para desenvolvedores.** O que foi feito, o que travou, o que vem a seguir. Sem nome de arquivo, sem nome de função, sem hash de commit — isso tudo já está no git, que é a outra camada.
+
+## Firmware
+
+Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `platformio.ini`; nunca defina `default_envs`. Nenhuma biblioteca entra sem versão fixada. O porquê está na spec (R28, R29).
 
 ## Credenciais
 

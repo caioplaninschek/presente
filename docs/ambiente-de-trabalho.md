@@ -78,7 +78,11 @@ Se a IA propuser mudar arquitetura, pinagem ou contrato de dados, pare. Isso é 
 
 ## 7. Firmware
 
-Para compilar e gravar na placa, instale o **PlatformIO IDE** pela aba de extensões do VS Code. A issue #14 é a tarefa zero e detalha o resto: driver USB, identificação da porta COM e primeiro upload. É lá também que nascem o `platformio.ini` e a pasta `src/`.
+**Antes de instalar o PlatformIO, confira o nome da sua pasta de usuário.** Abra o Explorador de Arquivos, digite `%USERPROFILE%` na barra de endereço e veja o caminho. Se tiver acento ou espaço (por exemplo, `C:\Users\João`), crie uma pasta curta, sem acento e fora do OneDrive, como `C:\pio`. Depois crie uma variável de ambiente da sua conta chamada `PLATFORMIO_CORE_DIR`, com o caminho dessa pasta, e feche e abra o VS Code. Se instalar antes, o PlatformIO baixa tudo no caminho com acento, e o download inteiro precisa ser refeito.
+
+Para compilar e gravar na placa, instale o **PlatformIO IDE** pela aba de extensões do VS Code. A issue #14 é a tarefa zero e detalha o resto: driver USB, identificação da porta COM e primeiro upload.
+
+Cada programa de bancada tem a sua pasta em `src/` e o seu ambiente no `platformio.ini` (spec, R28). Para gravar um programa, escolha o ambiente dele no seletor da barra azul, na parte de baixo do VS Code (`env:ambiente`, `env:radio`...), e só então clique em Upload. Nunca grave com `Default` selecionado: o PlatformIO grava todos os programas em sequência, e a placa fica com o último, sem aviso de erro.
 
 Quando o firmware precisar do Wi-Fi ou do banco:
 

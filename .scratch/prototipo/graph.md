@@ -13,7 +13,7 @@ O mapa do Wayfinder continua dono de três fios abertos, e só: a metade de RLS 
 
 O `map.md` registrou que as issues do GitHub são o fórum das decisões e o `.scratch` é o registro de trabalho. Para a execução isso se inverte, e de propósito.
 
-As peças estão todas com o João, e o combinado é que ele receba o trabalho pronto para copiar e colar. Isso põe o enunciado rico — passo a passo, o que tem que aparecer, o que fazer se der errado — dentro da issue do GitHub, que é onde ele lê e onde ele responde com o log e a foto. Os arquivos daqui ficam finos de propósito: título, dono, prazo, aresta, a história de usuário que justifica o critério (`HU-xx`, §1.1 da spec) e ponteiro. Duplicar o texto nos dois lugares só produziria duas versões divergentes.
+As peças estão todas com o João, e o combinado é que o trabalho chegue a ele pronto no repositório: o código na pasta do programa, o ambiente nomeado e o passo a passo na issue. Ele não copia código; ele puxa, escolhe o ambiente e grava. Isso põe o enunciado rico — passo a passo, o que tem que aparecer, o que fazer se der errado — dentro da issue do GitHub, que é onde ele lê e onde ele responde com o log e a foto. Os arquivos daqui ficam finos de propósito: título, dono, prazo, aresta, a história de usuário que justifica o critério (`HU-xx`, §1.1 da spec) e ponteiro. Duplicar o texto nos dois lugares só produziria duas versões divergentes.
 
 ## O grafo
 
@@ -70,6 +70,21 @@ A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O 
 | 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 22/09 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
+
+## Onde mora o código de cada vértice (R28)
+
+Cada programa de bancada tem a sua pasta em `src/` e o seu ambiente no `platformio.ini`, com o mesmo nome. O passo a passo do João diz qual ambiente escolher antes do Upload.
+
+| Vértice | Issue | Pasta | Ambiente |
+|---|---|---|---|
+| 04 | #14 | `src/ambiente/` | `ambiente` |
+| 05 | #15 | `src/radio/` | `radio` (rodado de novo pelos vértices 14 e 16) |
+| 12 | #24 | `src/prova-de-vida/` | `prova-de-vida` |
+| 13 | #25 | `src/leitor/` | `leitor` |
+| 15 | #26 | `src/encostou/` | `encostou` |
+| 17 | #27 | `src/persistencia/` | `persistencia` |
+
+Código que dois programas dividirem sobe para `lib/<módulo do §5>/`.
 
 ## Não fragmentado ainda
 

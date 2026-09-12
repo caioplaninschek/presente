@@ -23,7 +23,7 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 
 **Sensor:** RC522 (leitura de UID 13,56 MHz).
 **Atuadores:** LED RGB e buzzer ativo.
-**Firmware:** C++ sobre Arduino Core, build com PlatformIO.
+**Firmware:** C++ sobre Arduino Core, build com PlatformIO. Versões fixadas no `platformio.ini`, e cada programa de bancada com a sua pasta e o seu ambiente (spec, R28 e R29).
 
 ## Documentação
 

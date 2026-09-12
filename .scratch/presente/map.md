@@ -13,7 +13,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 
 ## Notes
 
-- **Fonte da verdade das decisões de produto:** `docs/spec.md`. São **oito rodadas** travadas lá, de Q1–Q9 (05/09) até **R23–R27** (11/09). Ler antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem.
+- **Fonte da verdade das decisões de produto:** `docs/spec.md`. Quantas rodadas estão travadas e até qual decisão, o cabeçalho `Status:` da spec diz. Ler antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem.
 - **Plan, don't do vale o default.** Nenhum ticket deste mapa escreve firmware, portal ou documento entregável. Ticket que ler "construir o X" está mal-tipado.
 - **Skills por sessão:** `grilling` + `domain-modeling`. Tickets de pesquisa vão para subagente.
 - **Idioma:** português brasileiro, exceto código.
@@ -28,7 +28,7 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 <!-- uma linha por ticket fechado -->
 
 - [Divisão de responsabilidades confirmada com o grupo](issues/01-divisao-de-responsabilidades.md): o ticket estava mal formulado — a divisão é **artefato de documentação, não contrato operacional**. Travada sem consulta formal; o papel do Caio ("Integração e documentação") é amplo por desenho, para que fazer o trabalho de outro não contradiga o papel.
-- [Quem escreve firmware, e como o time evita conflito no repo](issues/05-quem-escreve-firmware.md): direto na `main`, sem branch nem PR — o número real de mãos no C++ é 1 ou 2, e a modularização já decidida (R9) faz o trabalho que o processo faria.
+- [Quem escreve firmware, e como o time evita conflito no repo](issues/05-quem-escreve-firmware.md): direto na `main`, sem branch nem PR — o número real de mãos no C++ é 1 ou 2, e a modularização já decidida (R9) faz o trabalho que o processo faria. Até 22/09, entre programas de bancada, esse papel é de cada um ter a sua pasta e o seu ambiente (R28).
 - [Comportamento do rádio: quando sincronizar e o que acontece quando a troca falha](issues/08-comportamento-do-radio.md): sincronizar **no login**, não no Iniciar; 2 tentativas e depois `ESP.restart()`; `sessao_atual.json` vira requisito para a sessão sobreviver ao reboot. A alternativa de passar a internet para o celular do professor foi descartada por razão acadêmica, não técnica.
 - [Caminho viável do ESP32 até o Supabase](issues/03-esp32-https-supabase.md): o caminho existe — `HTTPClient` + `WiFiClientSecure` + `setInsecure()`, sem lib de Supabase, sem NTP, sem certificado pinado (a Supabase troca de CA sozinha). Fechar o AP antes do TLS virou requisito de memória, não só de canal. A transição de rádio leva **5–15 s**, não 3, e é o ponto de falha mais provável do projeto.
 - [Lista final de compras](issues/02-lista-final-de-compras.md): fechada pela issue #4 (R22) — o João comprou tudo e as peças estão com ele. Nenhuma frente do projeto depende de compra. O transistor do buzzer só se compra depois da checagem de bancada (módulo de 3 pinos já tem driver; peça de 2 pinos pode bastar em 3,3 V).
