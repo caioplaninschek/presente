@@ -22,7 +22,7 @@ include/secrets.h
 build/
 
 # Editores
-.vscode/
+.vscode/*
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
