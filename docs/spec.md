@@ -220,7 +220,7 @@ Fonte editável do diagrama: `docs/diagrama-blocos.drawio` (abre no draw.io), co
 
 ✅ **Lista fechada em 10/09/2026 (R22):** o João comprou tudo e as peças estão com ele. Não há compra pendente.
 
-⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. Buzzer ativo 5V não liga direto no GPIO — usar transistor 2N2222 ou módulo com driver. **Ordem de checagem na bancada, antes de comprar transistor (R22):** (1) se o buzzer for módulo de 3 pinos, o driver já está embutido e não falta nada; (2) se for peça solta de 2 pinos, alimentar em 3,3 V e ouvir — o bip precisa ser audível a um passo do aparelho, não alto; (3) só então o NPN, e serve qualquer um (2N2222, BC337, S8050) de loja física.
+⚠️ **Atenção elétrica:** RC522 é estritamente **3,3V** — 5V queima o módulo. Buzzer ativo 5V: a ligação ao GPIO depende da checagem abaixo, e o transistor só entra no fim dela. **Ordem de checagem na bancada, antes de comprar transistor (R22):** (1) se o buzzer for módulo de 3 pinos, o driver já está embutido e não falta nada; (2) se for peça solta de 2 pinos, alimentar em 3,3 V e ouvir — o bip precisa ser audível a um passo do aparelho, não alto; (3) só então o NPN, e serve qualquer um (2N2222, BC337, S8050) de loja física.
 
 Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 que existia na versão anterior **deixa de existir**.
 
@@ -344,7 +344,7 @@ HTML/CSS/JS vivem como arquivos no LittleFS (imagem de filesystem separada do fi
 2. Aparelho sobe; professor procura as redes Wi-Fi
 3. Professor conecta na rede do aparelho (senha WPA2)
 4. Portal cativo abre a página de login automaticamente
-5. Professor entra com login e senha. Validada a senha, o aparelho responde *"carregando turma…"* e **aproveita esse instante para sincronizar** (R14): rádio vai a STA, busca o roster, volta a AP. 5–15 s; o celular reconecta sozinho e o LED pisca azul lento
+5. Professor entra com login e senha. Validada a senha, o aparelho responde *"carregando turma…"* e **aproveita esse instante para sincronizar** (R14): no Plano A, o STA busca o roster com o AP no ar, e o celular não perde a conexão; no Plano B, o rádio vai a STA, busca o roster e volta a AP em 5–15 s, o celular reconecta sozinho e o LED pisca azul lento (R19)
 6. Painel abre **com a lista já em cache**. Seis ações: **Iniciar** · **Adicionar presença manual** · **Exibir relatório** · **Compartilhar relatório** · **Enviar relatório** · **Encerrar**
 7. Professor clica Iniciar — **instantâneo**, sem rede
 8. Sessão aberta com `professorId` gravado, LED verde fixo
