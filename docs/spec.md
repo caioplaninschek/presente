@@ -184,7 +184,7 @@ Nasce da issue #14, o ambiente de compilação. Escrever o `platformio.ini` obri
 
 ## 3. Arquitetura em blocos
 
-Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blocos.drawio` (abre no draw.io). O ASCII abaixo é a referência rápida e deve ser mantido em sincronia com ele. O **fluxograma da lógica** do §5 é arquivo separado — `docs/fluxograma-logica.drawio` (R27) — e nasce na Entrega 04.
+Fonte editável do diagrama: `docs/diagrama-blocos.drawio` (abre no draw.io), com a imagem exportada, usada nos documentos de entrega, em `docs/diagrama-blocos.png`. O ASCII abaixo é a referência rápida e deve ser mantido em sincronia com ele. O **fluxograma da lógica** do §5 é arquivo separado — `docs/fluxograma-logica.drawio` (R27) — e nasce na Entrega 04.
 
 ```
 [Tag NFC 13,56 MHz] --RF--> [RC522] --SPI VSPI--> [ESP32 DevKit V1]
@@ -195,6 +195,7 @@ Fonte editável do diagrama, usada nos documentos de entrega: `docs/diagrama-blo
                                                         |
                                             +-----------+-----------+
                                      modo AP (aula)          modo STA (2 momentos)
+                              ao mesmo tempo (Plano A) ou alternando (Plano B) — R19
                                             |                       |
                             [Celular do professor]        [Hotspot celular] --> [API Supabase]
                              SoftAP WPA2 + portal                                  |
@@ -236,7 +237,7 @@ Sem o RTC, o barramento I2C some e o conflito de pino SDA 21 / SCL 22 vs RST 22 
 | LED RGB (atuador 1) | R | 25 | Saída | resistor 220 Ω em série |
 | LED RGB | G | 26 | Saída | resistor 220 Ω em série |
 | LED RGB | B | 27 | Saída | resistor 220 Ω em série; catodo comum ao GND |
-| Buzzer ativo 5V (atuador 2) | via driver | 33 | Saída | **não liga direto no GPIO**: GPIO 33 → 1 kΩ → base do 2N2222, emissor no GND, coletor no negativo do buzzer, positivo do buzzer em 5 V |
+| Buzzer ativo 5V (atuador 2) | sinal | 33 | Saída | **a ligação sai da checagem de bancada (R22)**: módulo de 3 pinos já traz o driver; peça solta de 2 pinos pode bastar em 3,3 V; só se as duas reprovarem entra um NPN qualquer (2N2222, BC337, S8050) — GPIO 33 → 1 kΩ → base, emissor no GND, coletor no negativo do buzzer, positivo do buzzer em 5 V |
 | Alimentação | — | — | — | fonte 5 V 2 A na tomada (aparelho fixo); 5 V para o buzzer, 3,3 V do regulador da placa para o RC522 |
 
 Nenhum GPIO acumula duas funções, e nada disputa os pinos de boot além do CS acima.
@@ -256,7 +257,7 @@ Módulos em `src/`:
 | `rfid.cpp` | Leitura de UID 4/7 bytes, debounce 5 s |
 | `clock.cpp` | Hora recebida do navegador no Iniciar (ou da API), offset sobre `millis()` |
 | `portal.cpp` | Login, cookie de sessão, rotas HTTP |
-| `net.cpp` | Alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta), roster, upload, retry **com limite** |
+| `net.cpp` | Rádio: `WIFI_AP_STA` no Plano A; no Plano B, alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta). Roster, upload, retry **com limite** |
 | `feedback.cpp` | LED + buzzer por máquina de estados com `millis()` — **sem `delay()`** |
 
 Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJson` com documento estático (sem concatenar `String`); log serial com níveis.
@@ -267,7 +268,7 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 |---|---|---|---|
 | `AGUARDANDO_LOGIN` | azul fixo | — | boot / sessão encerrada |
 | `SINCRONIZANDO` | azul lento | — | rádio em STA (após o login, ou no Enviar) |
-| `FALHA_DE_RADIO` | azul rápido | — | AP não voltou em 2 tentativas → `ESP.restart()` |
+| `FALHA_DE_RADIO` | azul rápido | — | AP não voltou em 2 tentativas → `ESP.restart()` (só no Plano B) |
 | `SESSAO_ABERTA` | verde fixo | — | professor clicou Iniciar |
 | `REGISTRADO` | verde 2 piscadas | bip 100 ms | UID lido e gravado |
 | `DUPLICADO` | vermelho 300 ms | — | mesmo UID dentro de 5 s — nada é gravado |
@@ -277,7 +278,7 @@ Em **modo offline** o estado `NAO_RECONHECIDO` não existe: sem lista da turma, 
 
 ### Pseudocódigo
 
-Renderização fiel da máquina de estados acima e do fluxo do §6: o que o firmware faz, não como cada módulo faz. O `loop()` nunca bloqueia — sem `delay()`, tudo temporizado por `millis()`.
+Renderização fiel da máquina de estados acima e do fluxo do §6: o que o firmware faz, não como cada módulo faz. O `loop()` nunca bloqueia — sem `delay()`, tudo temporizado por `millis()`. Os passos marcados `só no Plano B` são a alternância de rádio e deixam de existir se a bancada aprovar o Plano A (R19); o fluxograma marca os mesmos passos com `*`.
 
 ```
 INÍCIO (boot)
@@ -295,13 +296,13 @@ ENQUANTO ligado:                                                // loop(), sem d
   SE o professor autenticou:
       responder "carregando turma..."
       estado <- SINCRONIZANDO                                   // R14: sincroniza no login
-      fechar o AP e trocar o rádio para STA                     // R13a: heap do TLS
+      fechar o AP e trocar o rádio para STA                     // R13a: heap do TLS · só no Plano B
       baixar o roster da turma
       SE conseguiu:  gravar o roster em cache;  modo <- online
       SENÃO:                                     modo <- offline // R3
-      voltar o rádio para AP
-      SE o AP não voltou em 2 tentativas:
-          estado <- FALHA_DE_RADIO; reiniciar                    // R15
+      voltar o rádio para AP                                    // só no Plano B
+      SE o AP não voltou em 2 tentativas:                       // só no Plano B
+          estado <- FALHA_DE_RADIO; reiniciar                    // R15 · só no Plano B
       abrir o painel com a lista já em cache
 
   SE o professor clicou Iniciar:
@@ -324,10 +325,10 @@ ENQUANTO ligado:                                                // loop(), sem d
 
   SE o professor clicou Enviar:
       estado <- SINCRONIZANDO
-      fechar o AP antes de abrir o TLS                           // R13a
+      fechar o AP antes de abrir o TLS                           // R13a · só no Plano B
       enviar sessão + eventos para a API, com tentativas limitadas  // R13b
       SE falhou: manter eventos.json e deixar o Compartilhar disponível
-      voltar o rádio para AP
+      voltar o rádio para AP                                    // só no Plano B
 
   SE o professor clicou Encerrar:
       fechar a sessão e apagar o roster em cache                 // LGPD por desenho
@@ -462,7 +463,7 @@ Quatro coisas disputam o mesmo chip: o SPI do RC522 com UIDs de dois tamanhos, o
 
 A pesquisa técnica confirmou o desafio e o tornou mais preciso, e uma correção do grupo em 10/09 (R19) mudou o formato dele. O ESP32 tem **uma antena só**, mas isso não impede hotspot e cliente ao mesmo tempo: o modo `WIFI_AP_STA` é nativo, e a restrição real é de **canal** — as duas interfaces ficam no canal do cliente, e o hotspot anuncia a migração por CSA, que celular moderno acompanha sem cair. O que sobra como impedimento é **memória**: o handshake TLS exige 40–50 KB de heap livre, e esse número precisa sobrar com hotspot, DNS, WebServer e roster carregados ao mesmo tempo.
 
-O desafio, portanto, deixou de ser "como alternar" e virou **qual dos dois arranjos o hardware sustenta** — o simultâneo (Plano A), que nunca derruba o professor, ou a alternância (Plano B), que devolve memória ao preço de 5 a 15 segundos por transição e do risco conhecido do arduino-esp32 em que o hotspot não volta. A resposta é medida na bancada, nos testes 7c e 7d do §8, e é o primeiro código do projeto.
+O desafio, portanto, deixou de ser "como alternar" e virou **qual dos dois arranjos o hardware sustenta** — o simultâneo (Plano A), que nunca derruba o professor, ou a alternância (Plano B), que devolve memória ao preço de 5 a 15 segundos por transição e do risco conhecido do arduino-esp32 em que o hotspot não volta. A resposta é medida na bancada, nos testes 7c e 7d do §8.
 
 Concentrar toda a rede em dois instantes (Iniciar e Enviar), em vez de uma chamada por aluno, é o que torna o problema tratável: reduz de ~40 janelas de risco por aula para 2. O preço é um modo offline degradado e uma recuperação de falha que precisam se comportar direito — porque quando a troca falha, o que está em jogo é uma aula inteira de presenças dentro do aparelho.
 
