@@ -31,7 +31,7 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 3. **HU-03** Como professor, quero entrar com um login e uma senha só meus, para que a chamada que eu abrir fique registrada no meu nome.
 4. **HU-04** Como professor, quero trocar a senha padrão no primeiro uso, para que minha conta não fique com a senha de fábrica.
 5. **HU-05** Como professor, quero que o aparelho baixe a lista da turma enquanto eu faço login, para que o **Iniciar** seja instantâneo e a espera caia no instante em que eu já espero que a página demore.
-6. **HU-06** Como professor, quero ver pelo LED e pela tela que o aparelho está sincronizando, para não achar que travou durante os 5–15 s de troca de rádio.
+6. **HU-06** Como professor, quero ver pelo LED e pela tela que o aparelho está sincronizando, para não achar que travou enquanto ele sincroniza, o que no Plano B inclui os 5–15 s da troca de rádio.
 7. **HU-07** Como professor, quero abrir a chamada com um clique, para não gastar tempo de aula com configuração.
 8. **HU-08** Como professor, quero que uma chamada cubra os dois tempos da aula, para não repetir o processo no segundo tempo.
 9. **HU-09** Como professor, quero lançar presença pela matrícula, para resolver na hora o aluno que esqueceu a tag.
@@ -285,6 +285,7 @@ INÍCIO (boot)
   inicializar LittleFS, SPI, RC522, LED e buzzer
   SE existe sessao_atual.json E a janela ainda está aberta:
       retomar a sessão (mesmo professorId, mesmo roster)        // R16
+      estado <- SESSAO_ABERTA                                   // R16: a janela ainda está aberta
   SENÃO:
       estado <- AGUARDANDO_LOGIN                                // LED azul fixo
   subir SoftAP (WPA2) + DNS do portal cativo + WebServer
@@ -329,6 +330,8 @@ ENQUANTO ligado:                                                // loop(), sem d
       enviar sessão + eventos para a API, com tentativas limitadas  // R13b
       SE falhou: manter eventos.json e deixar o Compartilhar disponível
       voltar o rádio para AP                                    // só no Plano B
+      SE o AP não voltou em 2 tentativas:                       // só no Plano B
+          estado <- FALHA_DE_RADIO; reiniciar                    // R15 · só no Plano B
 
   SE o professor clicou Encerrar:
       fechar a sessão e apagar o roster em cache                 // LGPD por desenho
