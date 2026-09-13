@@ -1,5 +1,7 @@
 # Issue tracker: Local Markdown
 
+> **Neste repo:** a spec é `docs/spec.md`, e não `.scratch/<feature-slug>/spec.md`. Os tickets de execução (`.scratch/prototipo/`) são finos de propósito: o enunciado completo de cada um, e a conversa sobre ele, vivem na issue do GitHub. Ver `AGENTS.md`, "Onde o trabalho vive".
+
 Issues and specs for this repo live as markdown files in `.scratch/`.
 
 ## Conventions

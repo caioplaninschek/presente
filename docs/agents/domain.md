@@ -1,5 +1,7 @@
 # Domain Docs
 
+> **Neste repo:** o glossário é o §11 de `docs/spec.md`. Não crie `CONTEXT.md` paralelo, porque dois glossários divergem; termo resolvido entra no §11. ADRs continuam em `docs/adr/`, sob demanda.
+
 How the engineering skills should consume this repo's domain documentation when exploring the codebase.
 
 ## Before exploring, read these

@@ -6,7 +6,7 @@ A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualq
 
 O mapa de decisões em aberto está em `.scratch/presente/map.md`. Leia o mapa antes de trabalhar um ticket.
 
-Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`.
+Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`. **O prazo de cada entrega é o do enunciado.** Data que ainda não saiu de enunciado é provisória e se confere quando ele for publicado; não deduza prazo de dia da semana nem de turma.
 
 **Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, roteiro de vídeo. Leia antes de escrever qualquer documento.
 
@@ -53,18 +53,18 @@ Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `plat
 
 ## Credenciais
 
-Chave do Supabase e SSID/senha do hotspot vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, com os campos em branco. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
+Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, com os campos em branco. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
 
 ## Agent skills
 
 ### Issue tracker
 
-Issues e specs vivem como markdown em `.scratch/<feature>/` neste repo. See `docs/agents/issue-tracker.md`.
+Os tickets vivem como markdown em `.scratch/<feature>/`, mas a spec é `docs/spec.md`, e o enunciado das tarefas de execução vive nas Issues do GitHub (ver "Onde o trabalho vive"). See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
-Vocabulário canônico padrão (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), gravado como linha `Status:` no topo de cada arquivo de issue. See `docs/agents/triage-labels.md`.
+Vocabulário canônico padrão (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), gravado como linha `Status:` no topo de cada arquivo de issue; os estados de fim e os de ticket de decisão também estão lá. See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 
-Single-context: um `CONTEXT.md` na raiz e ADRs em `docs/adr/`, criados sob demanda. See `docs/agents/domain.md`.
+O glossário é o §11 da `docs/spec.md`: não crie `CONTEXT.md` paralelo, porque dois glossários divergem. ADRs em `docs/adr/`, criados sob demanda. See `docs/agents/domain.md`.
