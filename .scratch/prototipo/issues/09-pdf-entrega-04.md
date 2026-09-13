@@ -1,7 +1,8 @@
 # 09: Montar o PDF da Entrega 04 e entregar
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 13/09/2026, pela issue #13 do GitHub
 Dono: Caio
 Prazo: 14/09 23:59
 Entrega: 04
