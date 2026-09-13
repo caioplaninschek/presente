@@ -147,3 +147,7 @@ Registrado porque o texto integral está no rascunho e na spec, e parte do que s
 - **§3** — a fonte de 5 V na tomada, que alimenta o conjunto; e as observações pino a pino da spec §4.1: o GPIO 5 como pino de *strapping*, os resistores de 220 Ω do LED e a ordem de checagem do buzzer antes de qualquer transistor.
 - **§5** — duas ações do fluxograma que não couberam nas 22 linhas: abrir o painel com a lista em cache depois do login e abrir a sessão no Iniciar, que o estado `SESSAO_ABERTA` deixa implícita.
 - **§6** — a política de teste da spec §8: por que não há teste automatizado, o log serial como instrumento de medição, quem roda cada teste e a calibração dos tempos como parte do teste.
+
+## Divergência declarada depois da entrega (13/09)
+
+O fluxograma e o pseudocódigo da spec ganharam duas linhas que o documento entregue não tem, ambas alinhamento ao R15 e ao R16, sem decisão nova: a volta do rádio depois do Enviar passa pela mesma checagem de duas tentativas do login, e a sessão retomada no boot fica em `SESSAO_ABERTA`. O PDF arquivado em `entrega-04.pdf` mostra o fluxograma como foi entregue; `fluxograma-logica.png` já traz a versão corrigida.
