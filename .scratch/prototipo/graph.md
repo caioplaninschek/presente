@@ -5,7 +5,7 @@ Origem: `/to-tickets` sobre o `docs/spec.md` e o mapa `.scratch/presente/map.md`
 
 ## Por que este diretório existe, separado de `.scratch/presente/`
 
-`.scratch/presente/` é o mapa do Wayfinder: tickets de **decisão**, onde `Status: resolved` quer dizer "a pergunta foi respondida". Aqui são tickets de **execução**, onde pronto quer dizer "o código roda e tem evidência". Dois sentidos no mesmo campo, no mesmo diretório, seriam ilegíveis daqui a um mês.
+`.scratch/presente/` é o mapa do Wayfinder: tickets de **decisão**, onde `Status: resolved` quer dizer "a pergunta foi respondida". Aqui são tickets de **execução**, onde pronto quer dizer "o código roda e tem evidência", e o ticket pronto recebe `Status: done` e uma linha `Fechado em: DD/MM/AAAA, pela issue #N do GitHub`. Dois sentidos no mesmo campo, no mesmo diretório, seriam ilegíveis daqui a um mês.
 
 O mapa do Wayfinder continua dono de três fios abertos, e só: a metade de RLS do ticket 06, o veredito do ticket 09, e o ticket 08, que voltou a `reopened` com o R19. Cada um fecha quando o ticket de execução correspondente fechar (07, 18 e 18, nesta ordem).
 

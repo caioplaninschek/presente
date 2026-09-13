@@ -18,7 +18,7 @@ São três lugares, com papéis diferentes. Confundi-los produz duas versões di
 
 - **Issues do GitHub** — o fórum do grupo e, desde 11/09, **o enunciado completo de cada tarefa de execução**: passo a passo de bancada, o que tem que aparecer, o que fazer se der errado. É onde os integrantes leem e respondem com log e foto.
 - **`.scratch/presente/`** — tickets de **decisão**, indexados pelo `map.md`. `Status: resolved` quer dizer "a pergunta foi respondida".
-- **`.scratch/prototipo/`** — tickets de **execução**, indexados pelo `graph.md`. Pronto quer dizer "o código roda e tem evidência". São finos de propósito: título, dono, prazo, aresta, `HU-xx` e ponteiro para a issue — o texto rico vive lá, não aqui.
+- **`.scratch/prototipo/`** — tickets de **execução**, indexados pelo `graph.md`. Pronto quer dizer "o código roda e tem evidência", e o ticket pronto vira `Status: done`, com a data e a issue que o fecharam. São finos de propósito: título, dono, prazo, aresta, `HU-xx` e ponteiro para a issue — o texto rico vive lá, não aqui.
 
 **Todo ticket de implementação cita a história de usuário que justifica o seu critério** (`HU-xx`, §1.1 da spec). O §1.1 declara as histórias como a referência citável dos critérios de aceitação; sem a citação, as 40 histórias viram texto que ninguém abre e o critério perde a razão de ser o que é. Ticket de documentação, logística ou montagem física pode não ter `HU` — nesse caso, não invente uma.
 

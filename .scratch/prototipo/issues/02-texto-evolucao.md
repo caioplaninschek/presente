@@ -1,7 +1,8 @@
 # 02: Texto: o que evoluiu desde 07/09
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 11/09/2026, pela issue #11 do GitHub
 Dono: Caio
 Prazo: 13/09
 Entrega: 04

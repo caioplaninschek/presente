@@ -1,7 +1,8 @@
 # 01: Fluxograma da lógica no draw.io
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 12/09/2026, pela issue #10 do GitHub
 Dono: Gabriel
 Prazo: 13/09
 Entrega: 04

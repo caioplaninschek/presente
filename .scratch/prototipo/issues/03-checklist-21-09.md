@@ -1,7 +1,8 @@
 # 03: Checklist de 21/09 com donos
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 12/09/2026, pela issue #12 do GitHub
 Dono: Caio
 Prazo: 13/09
 Entrega: 04
