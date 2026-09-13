@@ -1,5 +1,7 @@
 # Entrega 04 — Especificação e preparação para o desenvolvimento
 
+> ✅ **Montado e entregue.** O documento que o professor recebeu está transcrito em `entrega-04.md`, com o PDF em `entrega-04.pdf`. Este rascunho guarda o texto integral, anterior aos cortes da montagem.
+>
 > **Espaço de montagem compartilhado**, no mesmo papel que o `entrega-03-rascunho.html` teve na entrega anterior. Cada seção traz de onde sai o conteúdo, quem escreve e até quando. A formatação em ABNT, a capa e a numeração são da montagem final (#13), que produz a transcrição em `entrega-04.md` ao lado do PDF.
 >
 > **Contrato do artefato.** Finalidade: mostrar ao professor o que o projeto especificou e preparou para o desenvolvimento. Público: o professor que avalia, não desenvolvedor. Registro: acadêmico direto, primeira pessoa do plural, sem nome de arquivo, de função nem de commit. Formato: PDF de 2 a 4 páginas, montado como **capa mais quatro de conteúdo**, o formato em que o professor aceitou a Entrega 03; sete seções, cinco delas ocupadas por diagrama, tabela, fluxograma, pseudocódigo e tabela; a seção 1 tem meia página, de 250 a 350 palavras. Fonte dos fatos: `spec.md` e `DIARIO.md`; fato que não está lá se pergunta, não se preenche.

@@ -7,7 +7,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** 
 | 27/08 | Formação da equipe, tema e problema | ✅ entregue |
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
-| 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ⬜ |
+| 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
 | 22/09 | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
 | 29/09 | Estrutura física do protótipo | ⬜ |
 | 05/10 | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
@@ -65,7 +65,7 @@ Documento transcrito em [`entrega-03.md`](entrega-03.md); PDF em [`entrega-03.pd
 - **Controle de saída.** O Canvas da Entrega 02 prometia *"1º toque registra Entrada, 2º toque registra Saída"*; a spec o retirou em R8. Declarada no fim do §3.
 - **Um sensor só.** Declarada no §4. Não é divergência com o passado: a Entrega 02 já listava apenas o RC522 — o SW-420 nasceu e morreu entre as duas entregas, sem nunca sair em documento.
 
-⚠️ **Para a Entrega 04.** O limite de páginas conta a capa: as Entregas 01 e 02 foram numeradas assim (2 e 5 páginas). A Entrega 03 saiu com 5, para um teto de 4. Vale confirmar com o professor como ele conta antes de dimensionar a próxima.
+**Formato de páginas.** As Entregas 01 e 02 foram numeradas contando a capa (2 e 5 páginas). A Entrega 03 saiu com capa mais quatro de conteúdo, para um teto de 4, e o professor aceitou; a Entrega 04 saiu no mesmo formato.
 
 ---
 
@@ -89,4 +89,20 @@ O PDF deve conter, nesta ordem:
 
 **7. Preparação para 21/09** — checklist com o que precisa estar pronto: ESP32, sensores, atuador, ligações, código inicial, fluxograma, componentes testados individualmente e divisão das tarefas definida.
 
-⚠️ O modelo do enunciado pressupõe **dois sensores** (`Sensor 1 / Sensor 2 → ESP32 → Atuador`) nas seções 2, 3 e 5. A dispensa acertada com o professor (R18) provavelmente precisa ser repetida em uma linha, como a Entrega 03 fez no §4.
+⚠️ O modelo do enunciado pressupõe **dois sensores** (`Sensor 1 / Sensor 2 → ESP32 → Atuador`) nas seções 2, 3 e 5. A dispensa acertada com o professor (R18) foi repetida em uma frase, debaixo da tabela da seção 3.
+
+### Como foi entregue
+
+Documento transcrito em [`entrega-04.md`](entrega-04.md); PDF em [`entrega-04.pdf`](entrega-04.pdf). Cinco páginas — capa mais quatro de conteúdo —, montadas no Word sobre uma cópia do `.docx` da Entrega 03. Para caber, o corpo saiu com entrelinha 1,15, e só as seções 1 a 3 foram cortadas: o fluxograma ocupa uma página inteira e divide o documento em blocos que fecham em página inteira, de modo que só o bloco das seções 1 a 3 ganhava página com corte.
+
+| Seção | Fonte na spec | Como saiu | Página |
+|---|---|---|---|
+| 1 | §2 (rodadas 7 e 8), §9, §10 e o diário | cortada para 259 palavras; o R19 e o desafio de memória ficaram inteiros | 2 |
+| 2 | §3 | imagem de [`diagrama-blocos.png`](diagrama-blocos.png) a 10 cm, só com a legenda | 2 |
+| 3 | §4.1 | tabela com as nove linhas que têm GPIO e uma frase com a alimentação, o buzzer e a dispensa do segundo sensor | 2 |
+| 4 | fluxograma | [`fluxograma-logica.png`](fluxograma-logica.png) a 16 cm, página inteira | 3 |
+| 5 | §5 | 22 linhas, com os passos do Plano B marcados como no fluxograma | 4 |
+| 6 | §8 | os 11 testes, integrais | 4–5 |
+| 7 | checklist da divisão em tarefas de 11/09 | integral | 5 |
+
+O que saiu por falta de espaço está listado ao pé da transcrição.
