@@ -151,3 +151,7 @@ Registrado porque o texto integral está no rascunho e na spec, e parte do que s
 ## Divergência declarada depois da entrega (13/09)
 
 O fluxograma e o pseudocódigo da spec ganharam duas linhas que o documento entregue não tem, ambas alinhamento ao R15 e ao R16, sem decisão nova: a volta do rádio depois do Enviar passa pela mesma checagem de duas tentativas do login, e a sessão retomada no boot fica em `SESSAO_ABERTA`. O PDF arquivado em `entrega-04.pdf` mostra o fluxograma como foi entregue; `fluxograma-logica.png` já traz a versão corrigida.
+
+Na mesma data, a spec ganhou a rodada 10, e a **R30** mudou a leitura do crachá: quem já está registrado na sessão não se registra de novo em momento nenhum, e o estado da repetição passou a se chamar `JA_REGISTRADO`, com verde de uma piscada no lugar do vermelho. O pseudocódigo da seção 5 entregue ainda protege só os primeiros 5 s ("SE mesmo UID há menos de 5 s: estado = DUPLICADO"), e a figura da seção 4 faz o mesmo. A tabela da seção 6 continua valendo, porque o teste 1 pede um registro só e o teste 8 pede nenhuma duplicata.
+
+O teste 4 da seção 6 diz "com o Iniciar sem internet", mas desde a R14 (06/09) o modo offline se decide no login, como mostra o pseudocódigo da própria seção 5. A spec passou a dizer "login sem internet".

@@ -126,4 +126,12 @@ Registrado porque o texto integral está no rascunho e pode ser reaproveitado na
 - **§2** — os 10 a 15 minutos por chamada, a fraude por resposta de terceiro e o esforço vocal do professor. Sobrou só o erro de linha.
 - **§3** — o botão Compartilhar como saída quando a internet falha; a fila na porta refém do Wi-Fi; e a frase que dizia que, em modo offline, o aparelho aceita qualquer tag por não saber quem é da turma.
 - **§6** — as cores do LED nos estados de rede (azul fixo, azul lento, azul rápido) e o Compartilhar no fim da aula.
-- **Desafio técnico** — a comparação entre os 5 a 15 segundos medidos e os 3 segundos estimados antes da pesquisa.
+- **Desafio técnico** — a comparação entre os 5 a 15 segundos levantados na pesquisa e os 3 segundos estimados antes dela.
+
+## Divergência declarada depois da entrega
+
+Decisões posteriores a 07/09 deixaram três pontos deste documento desatualizados. O texto entregue fica como está; a spec registra cada mudança, e a Entrega 04 contou as duas primeiras ao professor.
+
+- **§6 e desafio técnico — a alternância de rádio.** O documento trata a troca entre hotspot e cliente como o único arranjo possível. Em 10/09 a R19 mostrou que o modo simultâneo é nativo do ESP32: a alternância virou o Plano B, e a escolha sai dos testes de bancada. A Entrega 04 declarou a correção na seção 1.
+- **§7 e §8 — a divisão por papéis e o cronograma por integrante.** Em 11/09 a R23 passou a distribuir o trabalho em tarefas com dono e prazo, porque há uma placa só e ela fica com o João. A seção 7 da Entrega 04 traz o checklist que substitui o §8, e a spec declara a divergência ao pé do §9.
+- **§6, regra 2 — o mesmo crachá em 5 s.** O documento descarta a leitura repetida dentro de 5 s, com vermelho de 300 ms. Em 13/09 a R30 trocou isso por uma presença por sessão: quem já está registrado recebe verde de uma piscada, e nada é gravado, em qualquer momento da aula.

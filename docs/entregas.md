@@ -1,6 +1,6 @@
 # Entregas — enunciados do professor
 
-Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** (datas de terça). As datas de segunda que circulam em outra versão do slide são da outra turma.
+Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunciado do professor.** As datas marcadas com \* ainda não têm enunciado publicado: vêm do cronograma passado ao grupo em 05/09 e se conferem quando o enunciado sair. Os dois enunciados já publicados, das Entregas 03 e 04, citam **21/09** como a data da preparação. ~~O cronograma válido é o revisado (datas de terça); as datas de segunda são da outra turma~~ — informação errada, corrigida em 13/09.
 
 | Data | Entrega | Estado |
 |---|---|---|
@@ -8,12 +8,12 @@ Fonte: Teams da disciplina, aba Tarefas. **O cronograma válido é o revisado** 
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
-| 22/09 | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
-| 29/09 | Estrutura física do protótipo | ⬜ |
-| 05/10 | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
-| 20/10 | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
-| 27/10 | Exposição oficial na Semana da Computação | ⬜ |
-| 30/11 | Relatório técnico completo + versão final aprimorada | ⬜ |
+| 22/09\* | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
+| 29/09\* | Estrutura física do protótipo | ⬜ |
+| 05/10\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
+| 20/10\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
+| 27/10\* | Exposição oficial na Semana da Computação | ⬜ |
+| 30/11\* | Relatório técnico completo + versão final aprimorada | ⬜ |
 
 Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores** (⚠️ **dispensado para este projeto** — o João acertou com o professor que o RC522 basta como sensor único; a exigência continua publicada no Teams, e a Entrega 03 declara a dispensa em uma linha no §4 para não ser lida como descumprimento — ver R18 na spec); mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
 
