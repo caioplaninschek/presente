@@ -3,9 +3,9 @@
 Type: task
 Status: ready-for-human
 Dono: Gabriel
-Prazo: 22/09
-Entrega: 04
-Blocked by: 11, 15, 17, 14
+Prazo: 21/09 (adiantado em 13/09)
+Entrega: 05
+Blocked by: 11, 15, 17, 14, e 16 se o 14 aprovar
 GitHub: https://github.com/caioplaninschek/presente/issues/28
 
 ## O que entrega

@@ -31,12 +31,13 @@ sem bloqueio, pode começar hoje
                                 ├─> 12 prova de vida ────┐   │   16 teste 7c (João, 20/09)
                                 └─> 13 leitor lê crachá ─┴───┼────────┤
                                                              │        v
-                                       15 verde+bip+debounce │   18 veredito (Caio, 21/09)
+                                       15 verde+bip uma vez  │   18 veredito (Caio, 21/09)
                                               │              │
                                               v              │
-                                       17 não se perde ──────┴─> 19 dossiê (Gabriel, 22/09)
+                                       17 não se perde ──────┴─> 19 dossiê (Gabriel, 21/09)
 
 08 protoboard ──> [epic 29/09: estrutura física]
+07 banco na nuvem ┄┄> 05 firmware do rádio   (aresta escondida: só o host do Supabase existir)
 ```
 
 A aresta que manda: **04** (o ambiente na máquina do João) trava tudo que precisa da placa. É a tarefa zero.
@@ -44,6 +45,8 @@ A aresta que manda: **04** (o ambiente na máquina do João) trava tudo que prec
 A aresta que decide: **14** antes de **16**. O teste da memória precisa de um celular só e pode reprovar o Plano A sozinho; o do painel precisa de dois celulares no mesmo cômodo, que é o único item do projeto que exige gente na mesma sala.
 
 A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O firmware do teste de rádio se **escreve** sem nada, mas para **medir** o heap ele precisa abrir um TLS de verdade — e para isso o `secrets.h` precisa de um `SUPABASE_URL` que exista. O projeto no Supabase só nasce na 07. Não são as tabelas nem as políticas de RLS que travam: é o host existir. As duas são do Caio e vencem no mesmo dia (17/09), então a ordem custa nada — **criar o projeto no Supabase primeiro**, e a medição da 14 sai contra o host de verdade, com a cadeia de certificados que o aparelho vai encontrar em produção. A alternativa (medir contra um host HTTPS qualquer) funciona, mas deixa uma ressalva pendurada no veredito da 18 para sempre.
+
+A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega 05 ainda não saiu, e os dois enunciados já publicados citam 21/09. Para tudo caber nessa data, o 15 e o 17 rodam na mesma tarde do 16, que já exige gente junta por causa dos dois celulares, com os programas prontos até sábado, 19/09; o 19 cai para segunda, 21/09. Se o enunciado disser 22/09, sobra um dia de folga.
 
 ## De-para
 
@@ -63,11 +66,11 @@ A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O 
 | 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | livre + João | 17/09 |
 | 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09 |
 | 14 | [#17](https://github.com/caioplaninschek/presente/issues/17) | #6 | João | 19/09 |
-| 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 21/09 |
+| 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 |
 | 16 | [#18](https://github.com/caioplaninschek/presente/issues/18) | #6 | João | 20/09 |
-| 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 22/09 |
+| 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 |
 | 18 | [#19](https://github.com/caioplaninschek/presente/issues/19) | #6 | Caio | 21/09 |
-| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 22/09 |
+| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 21/09 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
 
@@ -94,5 +97,5 @@ Os epics #8 (estrutura física, 29/09) e #9 (dashboard e o aparelho falando com 
 
 1. **Nove execuções físicas em onze dias, todas pelo João.** É o preço do modelo em que a placa não circula. Se empilhar, a saída é uma tarde na casa dele com mais gente, ou a placa circular por alguns dias.
 2. **Sem aula presencial na terça 15/09.** Some o único encontro garantido da semana, e é dele que o teste 16 (7c) depende, por precisar de dois celulares juntos.
-3. **O Igor ainda não é colaborador do repositório** — convite pendente desde 06/09. A issue #20 e o epic #9 estão sem assignee por causa disso.
+3. **O Igor ainda não é colaborador do repositório** — convite pendente desde 06/09. A issue #20 segue sem assignee por causa disso (convite ainda pendente em 13/09); o epic #9 passou a ter o Caio.
 4. **O Gabriel não se manifestou em nenhuma issue até 11/09.** Os dois vértices dele (01 e 19) foram escolhidos de propósito sem placa e sem código, e nenhum dos dois trava terceiro.

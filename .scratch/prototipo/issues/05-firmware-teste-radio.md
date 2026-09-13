@@ -7,6 +7,7 @@ Prazo: 17/09
 Entrega: —
 Blocked by: — para escrever; 07 (o projeto no Supabase existir, só o host) para a medição valer
 GitHub: https://github.com/caioplaninschek/presente/issues/15
+HU: HU-06, HU-38 (§1.1 da spec)
 
 ## O que entrega
 

@@ -11,6 +11,6 @@ HU: HU-06, HU-38 (§1.1 da spec)
 
 ## O que entrega
 
-O painel continuar aberto sem novo login quando o rádio pula de canal. Precisa de dois celulares no mesmo cômodo; veredito parcial se só houver um sistema.
+O painel continuar aberto sem novo login quando o rádio pula de canal. Precisa de dois celulares no mesmo cômodo; veredito parcial se só houver um sistema. Anota também a memória livre com o celular do professor conectado (R31), onde a página de login abriu e se o celular trocou sozinho para o 4G (lacuna do §8).
 
 O enunciado completo, com o passo a passo de bancada e os critérios de pronto, vive na issue do GitHub. Ver o porquê em `../graph.md`.

@@ -4,7 +4,7 @@ Type: prototype
 Status: in-progress
 Dono: Caio (frente "Rede" do §9 da spec; assumido na issue #3 em 10/09/2026)
 Parent: map.md
-Blocked by: placa física — o ESP32 está com o João; combinado de passar na segunda, 15/09
+Blocked by: ~~placa física — o ESP32 está com o João; combinado de passar na segunda, 15/09~~ — a placa não circula (R23, 11/09). Hoje: os testes 7d (#17) e 7c (#18), que o João roda, e o veredito (#19)
 Prazo real: 21/09 (item "código inicial preparado" do checklist do professor)
 Discussão do grupo: https://github.com/caioplaninschek/presente/issues/3
 Versão em linguagem simples: docs/pauta-do-grupo.md — Parte 3, ponto 8.
@@ -37,10 +37,12 @@ O que segue valendo nos dois planos:
 
 4. **Como a página volta.** A página que mostra "carregando turma…" precisa sondar o aparelho até ele responder. Intervalo, tempo limite, e o que exibir se estourar.
 
+⚠️ **Atualizado em 13/09: a execução deste protótipo foi quebrada em cinco issues** — firmware (#15), roteiro (#16), teste 7d (#17), teste 7c (#18) e veredito (#19). A #19 resolve o veredito entre os planos, com três desfechos possíveis (Plano A, Plano A provisório pela R32 ou Plano B). Os itens 2 e 3 **não têm teste** antes da Entrega 05: a #18 só observa onde o login abriu e se o celular trocou sozinho para o 4G, e a escolha está declarada como lacuna no §8 da spec.
+
 ## Notas
 
-`prototype` porque nada disso se decide em conversa: o comportamento muda entre iPhone e Android e entre versões de sistema. O artefato é um firmware mínimo — SoftAP + portal + login + rede + volta — sem RC522, sem LED e sem Supabase real, testado em pelo menos um iPhone e um Android. Ordem de execução: montar o **Plano A** primeiro (é o mais curto: sem sequência de desligamento, sem recuperação de AP) e só descer para o B se algum dos dois critérios reprovar.
+`prototype` porque nada disso se decide em conversa: o comportamento muda entre iPhone e Android e entre versões de sistema. O artefato é um firmware mínimo — SoftAP + portal + login + rede + volta — sem RC522, sem LED e sem banco de verdade, testado em pelo menos um iPhone e um Android (ou com veredito parcial, R24 e R32). A conexão segura, porém, abre contra o host real do Supabase, para a medição de memória valer (aresta 07 → 05 do `.scratch/prototipo/graph.md`, 11/09). Ordem de execução: montar o **Plano A** primeiro (é o mais curto: sem sequência de desligamento, sem recuperação de AP) e só descer para o B se algum dos dois critérios reprovar.
 
-**Este é o candidato natural a primeira fatia vertical do projeto.** Ele ataca o R10 (principal desafio técnico) isoladamente, só precisa do ESP32 que já está em mãos, e é exatamente o "código inicial preparado" que o professor cobra em 21/09. Se funcionar, o resto do firmware é montagem sobre um esqueleto que já se provou.
+**Este é o candidato natural a primeira fatia vertical do projeto.** Ele ataca o §10 (principal desafio técnico) isoladamente, só precisa do ESP32 que já está em mãos, e é exatamente o "código inicial preparado" que o professor cobra em 21/09. Se funcionar, o resto do firmware é montagem sobre um esqueleto que já se provou.
 
-Resolvido quando existir: o veredito entre Plano A e Plano B com as duas medidas registradas (comportamento do celular no pulo de canal e heap livre no handshake), a decisão dos itens 2 e 3 verificada nos dois sistemas, e o resultado escrito no §5, no §6 e no R4 da spec. Evidência gravada, conforme a política do §8 — log serial com o número do heap e vídeo curto do painel sobrevivendo à sincronização.
+Resolvido quando existir: o veredito entre Plano A e Plano B com as duas medidas registradas (comportamento do celular no pulo de canal e heap livre no handshake), a decisão dos itens 2 e 3 verificada nos dois sistemas, e o resultado escrito no §5, no §6 e no R4 da spec. Desde 13/09 o fechamento é em duas partes: o veredito sai na #19, e os itens 2 e 3 fecham depois da Entrega 05, quando o portal rodar dentro do aparelho. Evidência gravada, conforme a política do §8 — log serial com o número do heap e vídeo curto do painel sobrevivendo à sincronização.
