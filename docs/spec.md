@@ -3,7 +3,7 @@
 > Projeto: Terminal embarcado para contabilização de presença em sala de aula
 > Disciplina: Sistemas Embarcados — UVA Barra, 3ª terça-feira · Turma **4172CMPN6A_P1** · Professor Thiago Alberto Ramos Gabriel
 > Equipe: Gabriel Albuquerque Varela Santarello (1240110815) · Cauã Manuel Proença de Andrade (1240109764) · Igor Rocha Lobato (1240114118) · Caio Parada Oliveira Planinschek (1240205596) · João Victor Berçot Chabudet Cabral (1240108001)
-> Status: nove rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo) e **R23–R27 em 11/09/2026 madrugada** (a execução corrige a spec: a placa não circula, veredito parcial no 7c, credencial fora da URL, leitura do heap, onde os arquivos moram) e **R28–R29 em 12/09/2026** (a primeira linha de firmware: um ambiente por programa de bancada, versões fixadas). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. **Entrega 04 entregue** (prazo em 14/09, 23:59), transcrita em `entrega-04.md`, também um subconjunto comprimido. Próxima base: **Entrega 05 (22/09)** — protótipo eletrônico com testes documentados. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10), e em 11/09/2026 com a rodada 8 (§2), as lacunas conhecidas e os critérios corrigidos de 7c/7d (§8) e a divergência declarada da divisão de equipe (§9).
+> Status: dez rodadas de decisão travadas — Q1–Q9 e R1–R8 em 05/09/2026, R9–R12 e R13 em 06/09/2026 00h, R14–R17 em 06/09/2026 01h, **R18 em 06/09/2026 manhã** (um sensor só) e **R19–R22 em 10/09/2026 noite** (primeira rodada decidida nas issues do GitHub: AP+STA reabre R4, modelo de dados, dono do dashboard, material completo) e **R23–R27 em 11/09/2026 madrugada** (a execução corrige a spec: a placa não circula, veredito parcial no 7c, credencial fora da URL, leitura do heap, onde os arquivos moram) e **R28–R29 em 12/09/2026** (a primeira linha de firmware: um ambiente por programa de bancada, versões fixadas) e **R30–R32 em 13/09/2026** (depois da Entrega 04: uma presença por sessão, o teste de memória suspeito resolvido na #18, o veredito parcial). **Entrega 03 entregue em 07/09/2026**, transcrita em `entrega-03.md`. ⚠️ O documento entregue é um **subconjunto comprimido** desta spec: coube em quatro páginas cortando detalhe de quase toda seção. **Esta spec é o registro completo** — nada do que saiu do PDF saiu daqui. **Entrega 04 entregue** (prazo em 14/09, 23:59), transcrita em `entrega-04.md`, também um subconjunto comprimido. Próxima base: **Entrega 05** — protótipo eletrônico com testes documentados, em 22/09 pelo cronograma de 05/09; o prazo que vale é o do enunciado do professor, ainda não publicado. Spec incrementada em 08/09/2026 com histórias de usuário (§1.1), ligações do ESP32 (§4.1), pseudocódigo (§5) e política de teste (§8), em 10/09/2026 com a rodada 7 (§2), os testes 7c/7d (§8) e o desafio técnico reescrito (§10), em 11/09/2026 com a rodada 8 (§2), as lacunas conhecidas e os critérios corrigidos de 7c/7d (§8) e a divergência declarada da divisão de equipe (§9), e em 13/09/2026 com a rodada 10 (§2), duas lacunas novas (§8) e os termos de registro e presença no glossário (§11).
 
 ## 1. Problema e objetivo
 
@@ -82,7 +82,7 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 
 - **Q2 Tags:** firmware só **LÊ** o UID, nunca escreve na tag. Mifare (4 bytes) e NTAG215 (7 bytes) funcionam igual. Trabalhar com as tags já compradas; cartões brancos do kit RC522 servem de teste extra.
 - **Q4 Auth:** até ~10 contas locais em `professores.json`, senha como hash SHA-256 + salt, sessão por cookie. Cada sessão carrega `professorId`. Troca de senha default no primeiro boot.
-- **Q5 Semântica:** 1 toque = presente. Ausência = falta. Debounce: mesmo UID ignorado por 5 s. Meta de latência: tag → LED+buzzer em **<200 ms**.
+- **Q5 Semântica:** 1 toque = presente. Ausência = falta. Debounce: mesmo UID ignorado por 5 s. Meta de latência: tag → LED+buzzer em **<200 ms**. ⚠️ **Corrigido em R30 (13/09):** o UID já registrado não se registra de novo em nenhum momento da sessão; os 5 s passam a ser só a janela de silêncio para o crachá parado no leitor.
 - **Q6 Fallback:** professor lança matrícula manual pelo portal (`origem: "manual"`, com `lancado_por` + `motivo`).
 - **Q8 Tempos UVA:** 1 sessão de chamada cobre os 2 tempos (`tempos: ["t1","t2"]`, 1 toque = presente nos dois).
 
@@ -90,10 +90,10 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 
 - **R1 Cadastro de tag sai do aparelho.** A tag chega ao aluno **já cadastrada** — pela equipe no protótipo, pela instituição no cenário real. O professor nunca cadastra ninguém. Consequência: **`turma_ativa.json` deixa de existir**; a lista da turma passa a vir da API.
 - **R2 Sincronização em 2 momentos, nunca por toque.** ❌ Descartado: uma chamada de API por aluno (40 alunos = 40 idas à internet durante a aula, latência refém do Wi-Fi, fila na porta). ✅ Adotado:
-  - **Iniciar** → 1 chamada: baixa a lista da turma (matrícula + nome + UID, ~3 KB p/ 40 alunos) e cacheia no LittleFS pela sessão.
+  - **Iniciar** → 1 chamada: baixa a lista da turma (matrícula + nome + UID, ~3 KB p/ 40 alunos) e cacheia no LittleFS pela sessão. ⚠️ **Corrigido em R14 (06/09):** essa chamada passou para o login.
   - **Durante a aula** → zero internet. Consulta local, <200 ms garantido.
   - **Enviar** → 1 chamada: sobe o relatório completo.
-- **R3 Modo offline degradado.** Sem internet no Iniciar, o aparelho entra em **modo UID-cru**: registra só os números das tags, marca `modo: "offline"`, e o enriquecimento (nome/matrícula) acontece no envio. Nada se perde. Consequência: **offline o aparelho não sabe validar turma** — aceita qualquer UID lido, e o backend julga depois.
+- **R3 Modo offline degradado.** Sem internet no Iniciar, o aparelho entra em **modo UID-cru**: registra só os números das tags, marca `modo: "offline"`, e o enriquecimento (nome/matrícula) acontece no envio. Nada se perde. Consequência: **offline o aparelho não sabe validar turma** — aceita qualquer UID lido, e o backend julga depois. ⚠️ **Corrigido em R14 (06/09):** o modo offline se decide no login, quando a sincronização falha, e não no Iniciar.
 - **R4 AP e STA nunca simultâneos.** O ESP32 tem uma antena só; ser hotspot e cliente ao mesmo tempo derruba o portal do professor (o softAP muda de canal para acompanhar o STA). Como só existem 2 momentos de internet, o rádio **alterna**: `AP → STA → AP`. ⚠️ **Corrigido em R13:** a transição leva **5–15 s**, não os ~3 s estimados aqui. ⚠️ **Reaberto em R19 (10/09):** a premissa "nunca simultâneos" está **errada**. R4 deixa de ser decisão travada e passa a ser o **Plano B** — a alternativa, caso o teste reprove o modo simultâneo.
 - **R5 Internet vem de hotspot de celular**, com SSID e senha configuráveis pelo próprio portal. ⚠️ O ESP32 **não** passa por portal cativo nem autenticação corporativa, então a rede da UVA **está fora** — confirmado em 10/09 na issue #3, com dois motivos observados além do portal: a rede nega login a aluno matriculado (o Caio não entra desde 2026.1) e o filtro de saída bloqueia serviço legítimo (Google Drive), comportamento que não dá para prever do lado do aparelho. Documentar: "em produção a instituição provisionaria rede dedicada aos dispositivos".
 - **R6 Duas camadas de senha, não uma.**
@@ -135,7 +135,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 
 ### Rodada 6 — R18 (06/09, 09h30) — dispensa do segundo sensor
 
-- **R18 O projeto passa a ter um sensor só, o RC522.** O João confirmou com o professor que a exigência de dois sensores está dispensada para este projeto. **Reverte o R7:** o SW-420 sai. Motivo para tirar em vez de manter por segurança: o sensor de vibração não participa da chamada — é uma frente paralela (compra, calibração de potenciômetro no lugar definitivo, debounce próprio, um estado a mais na máquina de estados e um tipo a mais no contrato de dados) fora do problema que motivou o projeto. Saem junto o `tamper.cpp`, o estado `ALERTA_VIOLACAO`, o alerta no contrato de dados, a tabela `alertas` no Supabase e o teste 8. ⚠️ A exigência escrita ("mínimo de 2 sensores", em `docs/entregas.md`) continua publicada no Teams: a Entrega 03 declara a dispensa em uma linha, para não ser lida como descumprimento.
+- **R18 O projeto passa a ter um sensor só, o RC522.** O João confirmou com o professor que a exigência de dois sensores está dispensada para este projeto. **Reverte o R7:** o SW-420 sai. Motivo para tirar em vez de manter por segurança: o sensor de vibração não participa da chamada — é uma frente paralela (compra, calibração de potenciômetro no lugar definitivo, debounce próprio, um estado a mais na máquina de estados e um tipo a mais no contrato de dados) fora do problema que motivou o projeto. Saem junto o `tamper.cpp`, o estado `ALERTA_VIOLACAO`, o alerta no contrato de dados, a tabela `alertas` no Supabase e o teste 8, que era o de violação (o de estresse, então teste 9, passou a ser o 8). ⚠️ A exigência escrita ("mínimo de 2 sensores", em `docs/entregas.md`) continua publicada no Teams: a Entrega 03 declara a dispensa em uma linha, para não ser lida como descumprimento.
 
 ### Rodada 7 — R19–R22 (10/09, noite) — respostas do grupo nas issues
 
@@ -176,11 +176,29 @@ Nasce da issue #14, o ambiente de compilação. Escrever o `platformio.ini` obri
   - ~~Arduino core 3.x (fork pioarduino)~~ — troca o mbedTLS e a pegada de memória antes da medição de heap da #17 e invalida as referências de R13 e R19 (12/09).
   - ~~ArduinoJson 7~~ — não tem documento estático de verdade: o `StaticJsonDocument` virou alias que aloca no heap, compila e perde em silêncio a garantia que o §5 exige (12/09).
 
+### Rodada 10 — R30–R32 (13/09) — depois da Entrega 04
+
+Nasce da conferência do repositório inteiro contra as issues, feita depois da entrega. Uma decisão muda o que acontece quando o aluno encosta o crachá de novo; as outras duas dizem o que fazer quando os testes de rádio saírem incompletos. As três são do Caio.
+
+- **R30 Uma presença por sessão.** O UID que já está registrado na sessão não se registra de novo, em momento nenhum. O aluno que encosta outra vez recebe `JA_REGISTRADO` — verde, uma piscada, sem bip — e nada é gravado. Até aqui só os primeiros 5 s estavam protegidos (Q5): um toque depois disso gravava um segundo evento, e a HU-19 prometia mais do que a máquina de estados fazia. **Consequências:**
+  - Os 5 s continuam só como **janela de silêncio**: leituras do mesmo UID nesse intervalo são ignoradas sem sinal nenhum, para o crachá parado no leitor não repetir o feedback.
+  - **A regra sobrevive ao reinício.** Ao retomar a sessão (R16), o aparelho relê o `eventos.json` para saber quem já está registrado. Sem isso, um reinício no meio da aula reabriria o registro duplo.
+  - **Lançamento manual.** Com a lista da turma carregada, o portal recusa lançar quem já está presente, e o toque de quem foi lançado à mão dá `JA_REGISTRADO`. Sem a lista (modo offline), o aparelho não tem como ligar a matrícula ao UID: grava os dois eventos, e a API os junta no envio, como já faz com `presentes` e `faltantes` (§7).
+  - O estado se chamava `DUPLICADO` e foi renomeado para não disputar sentido com **duplicata**, que no teste 8 é defeito (§11).
+  - ~~O mesmo UID, passados os 5 s, grava evento novo~~ — a HU-19 promete ao aluno não ser registrado duas vezes, e o segundo evento só não virava presença dupla porque `presentes` é calculado (13/09).
+  - ~~Repetição sinalizada com vermelho de 300 ms~~ — vermelho é o sinal do crachá não reconhecido (HU-20), e o aluno que já está na lista entenderia que deu erro (13/09).
+- **R31 O teste 7d suspeito se resolve na #18.** Abaixo de 40 KB, a #17 reprova o Plano A, e a #18 não acontece. De 40 a 45 KB o resultado é suspeito (R26): a #18 acontece mesmo assim e, como nela o celular do professor fica conectado à rede do aparelho, é a memória medida ali que decide. Acima de 45 KB, a #18 confirma o número com cliente conectado. Nenhuma sessão de bancada a mais.
+  - ~~Suspeito repete a #17 num dia com dois celulares~~ — a #18 já é esse dia (13/09).
+  - ~~Suspeito conta como reprovado~~ — descartaria o Plano A por um número que a própria R26 diz ser teto, e não piso (13/09).
+- **R32 O veredito parcial adota o Plano A provisoriamente.** Se o 7c sair parcial (R24) e aprovado, e a memória passar, a spec adota o Plano A para a integração e registra no R19 qual sistema de celular faltou. Esse sistema é testado até a entrega do dashboard (05/10 pelo cronograma de 05/09): se reprovar, o projeto vai para o Plano B, que continua especificado; se o teste não acontecer até lá, a apresentação usa um celular do sistema já aprovado.
+  - ~~Os dois planos em aberto até testar o outro sistema~~ — a integração pararia à espera de um celular (13/09).
+  - ~~Veredito parcial vale como completo~~ — a R24 aceitou o parcial para o teste acontecer, não para dispensar o outro sistema (13/09).
+
 ### Decisões operacionais
 
 - **Bluetooth não será usado** — substituído pelo Wi-Fi nativo do ESP32 (o enunciado da Entrega 02 pedia Bluetooth por boilerplate de Arduino).
 - **Aparelho fixo na sala** (decisão do professor + grupo) → alimentação por fonte 5V, caixa de parede, contas de vários professores no mesmo aparelho.
-- **Cronograma válido = o revisado** (datas de terça: 07/09, 14/09, 22/09, 29/09, 05/10, 20/10, 27/10, 30/11). As datas de segunda que circulam são da outra turma.
+- **O prazo de cada entrega é o do enunciado do professor.** Datas sem enunciado publicado vêm do cronograma passado ao grupo em 05/09 (22/09, 29/09, 05/10, 20/10, 27/10, 30/11) e se conferem quando o enunciado sair. Até 13/09 só as Entregas 03 e 04 tinham enunciado, e as duas citam **21/09** como a data da preparação. ~~Cronograma válido = o revisado (datas de terça: 07/09, 14/09, 22/09, 29/09, 05/10, 20/10, 27/10, 30/11); as datas de segunda são da outra turma~~ — informação errada: 07/09, 14/09, 05/10 e 30/11 caem numa segunda (13/09).
 
 ## 3. Arquitetura em blocos
 
@@ -252,9 +270,9 @@ Módulos em `src/`:
 
 | Arquivo | Responsabilidade |
 |---|---|
-| `config.h` | Pinos, SSID/senha do AP, tempos, URL da API |
-| `storage.cpp` | LittleFS: professores, sessão atual, append de eventos |
-| `rfid.cpp` | Leitura de UID 4/7 bytes, debounce 5 s |
+| `config.h` | Pinos e tempos. SSID e senha do AP, credenciais do hotspot e URL e chave da API vêm do `secrets.h` (R11, R17) |
+| `storage.cpp` | LittleFS: professores, sessão atual, append de eventos, quem já está registrado na sessão (R30) |
+| `rfid.cpp` | Leitura de UID 4/7 bytes, janela de silêncio de 5 s (R30) |
 | `clock.cpp` | Hora recebida do navegador no Iniciar (ou da API), offset sobre `millis()` |
 | `portal.cpp` | Login, cookie de sessão, rotas HTTP |
 | `net.cpp` | Rádio: `WIFI_AP_STA` no Plano A; no Plano B, alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta). Roster, upload, retry **com limite** |
@@ -271,10 +289,12 @@ Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJso
 | `FALHA_DE_RADIO` | azul rápido | — | AP não voltou em 2 tentativas → `ESP.restart()` (só no Plano B) |
 | `SESSAO_ABERTA` | verde fixo | — | professor clicou Iniciar |
 | `REGISTRADO` | verde 2 piscadas | bip 100 ms | UID lido e gravado |
-| `DUPLICADO` | vermelho 300 ms | — | mesmo UID dentro de 5 s — nada é gravado |
+| `JA_REGISTRADO` | verde 1 piscada | — | UID já registrado nesta sessão (R30) — nada é gravado |
 | `NAO_RECONHECIDO` | vermelho 1 s | buzz 400 ms | **só em modo online**: UID fora da lista da turma — nada é gravado |
 
 Em **modo offline** o estado `NAO_RECONHECIDO` não existe: sem lista da turma, todo UID lido é aceito e vira `REGISTRADO`. O LED verde passa a significar *"li a tag"*, não *"você está nesta turma"*.
+
+O crachá parado no leitor não repete sinal: leituras do mesmo UID até 5 s depois da anterior são ignoradas sem feedback nenhum, e só depois disso um novo toque de quem já está registrado dá `JA_REGISTRADO` (R30).
 
 ### Pseudocódigo
 
@@ -285,6 +305,7 @@ INÍCIO (boot)
   inicializar LittleFS, SPI, RC522, LED e buzzer
   SE existe sessao_atual.json E a janela ainda está aberta:
       retomar a sessão (mesmo professorId, mesmo roster)        // R16
+      reler eventos.json: quem já está registrado               // R30
       estado <- SESSAO_ABERTA                                   // R16: a janela ainda está aberta
   SENÃO:
       estado <- AGUARDANDO_LOGIN                                // LED azul fixo
@@ -304,16 +325,16 @@ ENQUANTO ligado:                                                // loop(), sem d
       voltar o rádio para AP                                    // só no Plano B
       SE o AP não voltou em 2 tentativas:                       // só no Plano B
           estado <- FALHA_DE_RADIO; reiniciar                    // R15 · só no Plano B
-      abrir o painel com a lista já em cache
+      abrir o painel com a lista já em cache                    // estado seguinte: lacuna do §8
 
   SE o professor clicou Iniciar:
       abrir a sessão e gravar sessao_atual.json
       estado <- SESSAO_ABERTA                                   // LED verde fixo
 
-  SE o RC522 leu uma tag E a sessão está aberta:
+  SE o RC522 leu uma tag nova E a sessão está aberta:  // nova: fora da janela de 5 s do mesmo UID (R30)
       uid <- UID lido (4 ou 7 bytes, somente leitura)
-      SE o mesmo uid foi lido há menos de 5 s:
-          estado <- DUPLICADO                    // vermelho 300 ms, nada gravado
+      SE uid já está registrado nesta sessão:
+          estado <- JA_REGISTRADO                // verde 1 piscada, nada gravado · R30
       SENÃO SE modo = online E uid não está no roster:
           estado <- NAO_RECONHECIDO              // vermelho 1 s + buzz, nada gravado
       SENÃO:
@@ -322,7 +343,10 @@ ENQUANTO ligado:                                                // loop(), sem d
       // do encostar da tag até o feedback: alvo < 200 ms
 
   SE o professor lançou presença manual:
-      gravar evento com origem "manual", lancado_por e motivo    // Q6
+      SE modo = online E a matrícula já está presente:
+          recusar no portal                                      // R30
+      SENÃO:
+          gravar evento com origem "manual", lancado_por e motivo  // Q6
 
   SE o professor clicou Enviar:
       estado <- SINCRONIZANDO
@@ -332,6 +356,7 @@ ENQUANTO ligado:                                                // loop(), sem d
       voltar o rádio para AP                                    // só no Plano B
       SE o AP não voltou em 2 tentativas:                       // só no Plano B
           estado <- FALHA_DE_RADIO; reiniciar                    // R15 · só no Plano B
+      // estado seguinte ao Enviar: lacuna do §8
 
   SE o professor clicou Encerrar:
       fechar a sessão e apagar o roster em cache                 // LGPD por desenho
@@ -399,7 +424,7 @@ Exportação:
 
 `presentes` e `faltantes` só existem quando `roster_carregado: true`. Em modo offline o relatório sai só com `eventos`, e as listas são calculadas do lado da API no momento do envio.
 
-**Supabase:** tabelas `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`: `aberta` / `finalizada` / `cancelada`) e `eventos` — desenho fechado em R20, na issue #1. ⚠️ **A issue chamou `sessoes` de `aulas`: é a mesma entidade.** O nome no código e no banco continua `sessoes`, para não quebrar o contrato de dados acima, o `sessao_atual.json` (R16) nem o glossário. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no Iniciar e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
+**Supabase:** tabelas `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`: `aberta` / `finalizada` / `cancelada`) e `eventos` — desenho fechado em R20, na issue #1. ⚠️ **A issue chamou `sessoes` de `aulas`: é a mesma entidade.** O nome no código e no banco continua `sessoes`, para não quebrar o contrato de dados acima, o `sessao_atual.json` (R16) nem o glossário. Chave anon + RLS. O ESP32 faz `GET /alunos?turma=eq.<turma>` no login (R14) e `POST /sessoes` + `POST /eventos` no Enviar. Falha de rede → o relatório fica em `eventos.json` e o botão Compartilhar continua funcionando.
 
 ## 8. Plano de testes
 
@@ -410,30 +435,32 @@ Exportação:
 - **Todo teste entrega evidência gravada** — foto ou vídeo curto do LED e do buzzer, o JSON exportado, ou o trecho do log serial com horário. É o que sustenta o entregável de 22/09 ("testes documentados") e o relatório de 30/11. A evidência **mora no repositório**, em `docs/assets/testes/`, consolidada em `docs/testes-22-09.md` (R27): o que fica só em comentário de issue some da vista do professor.
 - **O log serial com níveis (§5) é instrumento de medição**, não resto de depuração: sem ele, os <200 ms e o diagnóstico da troca de rádio viram opinião.
 - **Quem fecha uma frente roda os testes que a tocam**; a rodada completa acontece na integração, antes de 22/09, e se repete antes de cada marco com demonstração ao vivo (20/10 e 27/10).
-- **Calibração faz parte do teste, não do conserto.** Os tempos (debounce de 5 s, bip de 100 ms, vermelho de 300 ms e 1 s) e a janela de 5–15 s da troca de rádio são valores de partida. Espera-se ajustá-los com o aparelho montado na caixa e alimentado pela fonte definitiva — o teste é o que diz para onde ajustar.
+- **Calibração faz parte do teste, não do conserto.** Os tempos (janela de silêncio de 5 s, bip de 100 ms, piscada do `JA_REGISTRADO`, vermelho de 1 s) e a janela de 5–15 s da troca de rádio são valores de partida. Espera-se ajustá-los com o aparelho montado na caixa e alimentado pela fonte definitiva — o teste é o que diz para onde ajustar.
 
 | # | Teste | Critério |
 |---|---|---|
-| 1 | UID 4 bytes (Mifare), 3 aproximações seguidas | 1 evento só (debounce), <200 ms |
+| 1 | UID 4 bytes (Mifare), 3 aproximações seguidas | 1 evento só (R30), <200 ms |
 | 2 | UID 7 bytes (NTAG215) | registra pelo UID, sem escrita na tag |
 | 3 | Modo online, tag fora da turma | vermelho longo, nada gravado |
-| 4 | Modo offline (Iniciar sem internet) | `modo: "offline"`, aceita todo UID, relatório íntegro |
+| 4 | Modo offline (login sem internet, R14) | `modo: "offline"`, aceita todo UID, relatório íntegro |
 | 5 | Enviar sem internet → depois com internet | Compartilhar funciona; retry sobe o mesmo relatório sem duplicar |
 | 6 | 2 professores em sequência | 2 sessões, `professorId` distintos, sem mistura |
 | 7 | **Plano B** — alternância AP↔STA, 10 ciclos seguidos | AP volta nas 10 vezes; celular reconecta; transição dentro de 5–15 s |
 | 7b | **Plano B** — falha forçada na volta ao AP (hotspot desligado no meio) | aparelho se recupera sozinho e **não perde** as presenças já registradas |
-| 7c | **Plano A** — `WIFI_AP_STA`: professor logado no portal, STA conecta no hotspot em outro canal | painel continua aberto **sem novo login**, em iPhone **e** Android; se cair, reconecta sozinho em <5 s. Com dois celulares do mesmo sistema, roda assim mesmo: o veredito sai **parcial** e o outro sistema fecha depois (R24) |
-| 7d | **Plano A** — heap livre no instante do handshake TLS, com AP + DNS + WebServer + roster de pé | ≥40 KB livres (`ESP.getFreeHeap()` logado antes do `connect()`); abaixo disso, reprova e vale o Plano B. Medido com um celular só, sem cliente no AP, o número sai otimista — **40 a 45 KB é suspeito, não aprovado** (R26) |
-| 8 | Stress: 30 toques + reboot no meio | zero duplicata, zero perda (LittleFS persiste) |
+| 7c | **Plano A** — `WIFI_AP_STA`: professor logado no portal, STA conecta no hotspot em outro canal | painel continua aberto **sem novo login**, em iPhone **e** Android; se cair, reconecta sozinho em <5 s. Com dois celulares do mesmo sistema, roda assim mesmo: o veredito sai **parcial** e o outro sistema fecha depois (R24); parcial e aprovado, adota o Plano A provisoriamente (R32) |
+| 7d | **Plano A** — heap livre no instante do handshake TLS, com AP + DNS + WebServer + roster de pé | ≥40 KB livres (`ESP.getFreeHeap()` logado antes do `connect()`); abaixo disso, reprova e vale o Plano B. Medido com um celular só, sem cliente no AP, o número sai otimista — **40 a 45 KB é suspeito, não aprovado** (R26), e a memória que decide passa a ser a medida no 7c, com cliente conectado (R31) |
+| 8 | Stress: 30 toques + reboot no meio | zero duplicata — um registro por crachá, e quem já estava registrado continua recusado depois do reboot (R30) —, zero perda (LittleFS persiste) |
 
-**Lacunas conhecidas (11/09).** Quatro itens desta seção **não têm task** e não vão ter antes de 22/09 — nenhum cabe na janela. Ficam listados para que a ausência seja escolha declarada, e não descuido:
+**Lacunas conhecidas (11/09, ampliadas em 13/09).** Seis itens **não têm task** e não vão ter antes da Entrega 05 — nenhum cabe na janela. Ficam listados para que a ausência seja escolha declarada, e não descuido:
 
 | Item sem dono | Por que não virou task | Quando vira |
 |---|---|---|
 | Testes **3, 4, 5 e 6** | Todos dependem do roster **dentro** do aparelho, que só existe quando o ESP32 falar com a nuvem. Vivem no epic #9, ainda não fragmentado. Declarado na #28, mas nenhum ticket os possui | 29/09–05/10, na quebra do epic #9 |
 | Testes **7 e 7b** (Plano B) | Só se tornam obrigatórios se a #19 der veredito **Plano B**; hoje a #19 emite o veredito e para aí | No dia do veredito, se der Plano B |
 | **`sessao_atual.json`** (R16) | Requisito explícito da spec sem ticket — a #27 cobre só o `eventos.json` | Com a sessão de verdade, depois do portal (após 05/10) |
-| **Máquina de estados completa** do §5 (`AGUARDANDO_LOGIN`, `SINCRONIZANDO`, `FALHA_DE_RADIO`, `SESSAO_ABERTA`) | As tasks de 22/09 cobrem só `REGISTRADO`, `DUPLICADO` e o feedback; os estados de rede e de sessão dependem do portal (#20) e do veredito de rádio (#19) | Na integração de 29/09 |
+| **Máquina de estados completa** do §5 (`AGUARDANDO_LOGIN`, `SINCRONIZANDO`, `FALHA_DE_RADIO`, `SESSAO_ABERTA`) | As tasks de 22/09 cobrem só `REGISTRADO`, `JA_REGISTRADO` e o feedback; os estados de rede e de sessão dependem do portal (#20) e do veredito de rádio (#19) | Na integração, depois da Entrega 05 |
+| **Estado depois do login e depois do Enviar** (§5) | O pseudocódigo põe o aparelho em `SINCRONIZANDO` e não diz para qual estado ele volta: com o painel aberto, o LED fica em azul lento até o Iniciar. Caso que a decisão tem de responder: o Enviar dá certo às 20h50 e um aluno atrasado encosta às 20h51 — a sessão continua aberta? O toque grava? Um segundo Enviar seria recusado pela sessão `finalizada` (R20)? Achado em 13/09 | Na integração, depois da Entrega 05, junto da máquina de estados completa |
+| **Perguntas 2 e 3 do portal cativo** (ticket `.scratch/presente/issues/09`): o login fica na janelinha que o celular abre sozinho ou segue no navegador; o celular que vê "rede sem internet" e troca sozinho para o 4G | A R25 diz que a escolha se mede na bancada, mas nenhuma task a testa. A #18 só **observa** e anota o que aconteceu, sem decidir. Achado em 13/09 | Quando o portal (#20) rodar dentro do aparelho, depois da Entrega 05 |
 
 
 ## 9. Divisão da equipe
@@ -468,11 +495,11 @@ A pesquisa técnica confirmou o desafio e o tornou mais preciso, e uma correçã
 
 O desafio, portanto, deixou de ser "como alternar" e virou **qual dos dois arranjos o hardware sustenta** — o simultâneo (Plano A), que nunca derruba o professor, ou a alternância (Plano B), que devolve memória ao preço de 5 a 15 segundos por transição e do risco conhecido do arduino-esp32 em que o hotspot não volta. A resposta é medida na bancada, nos testes 7c e 7d do §8.
 
-Concentrar toda a rede em dois instantes (Iniciar e Enviar), em vez de uma chamada por aluno, é o que torna o problema tratável: reduz de ~40 janelas de risco por aula para 2. O preço é um modo offline degradado e uma recuperação de falha que precisam se comportar direito — porque quando a troca falha, o que está em jogo é uma aula inteira de presenças dentro do aparelho.
+Concentrar toda a rede em dois instantes (login e Enviar), em vez de uma chamada por aluno, é o que torna o problema tratável: reduz de ~40 janelas de risco por aula para 2. O preço é um modo offline degradado e uma recuperação de falha que precisam se comportar direito — porque quando a troca falha, o que está em jogo é uma aula inteira de presenças dentro do aparelho.
 
 ## 11. Glossário
 
-**Tag** = crachá físico. **UID** = número de série do chip (4 ou 7 bytes). **Roster** = lista da turma (matrícula + nome + UID) baixada da API no Iniciar. **Sessão** = janela aberta pelo professor. **Evento** = 1 registro (nfc ou manual). **Modo offline** = sessão iniciada sem internet; grava só UIDs. **Enriquecimento** = juntar nome/matrícula ao UID. **Debounce** = ignorar repetição do mesmo UID por 5 s. **AP** = o aparelho como rede Wi-Fi. **STA** = o aparelho como cliente de outra rede. **AP+STA** = os dois ao mesmo tempo, no mesmo canal (Plano A, R19). **CSA** = o aviso de troca de canal que o AP manda às estações conectadas antes de migrar. **Plano A / Plano B** = modo simultâneo / alternância `AP → STA → AP`, a decidir pela bancada.
+**Tag** = crachá físico. **UID** = número de série do chip (4 ou 7 bytes). **Cadastro** = o vínculo entre o crachá e o aluno, feito pela equipe ou pela instituição, fora do aparelho (R1); o aparelho nunca cadastra ninguém. **Roster** = lista da turma (matrícula + nome + UID) baixada da API no login (R14). **Sessão** = janela aberta pelo professor. **Registro** = gravar a presença de um aluno na sessão; acontece uma vez por aluno por sessão (R30). **Evento** = uma linha do `eventos.json`: um toque aceito ou um lançamento manual. **Presença** = o aluno em `presentes`, calculada a partir dos eventos. **Duplicata** = defeito: o mesmo toque gravado mais de uma vez, que é o que o teste 8 procura. O toque de quem já está registrado não é duplicata: é `JA_REGISTRADO`, e nada é gravado. **Modo offline** = sessão cujo login aconteceu sem internet; grava só UIDs. **Enriquecimento** = juntar nome/matrícula ao UID. **Janela de silêncio** = os 5 s em que novas leituras do mesmo UID são ignoradas sem sinal, para o crachá parado no leitor (chamava-se *debounce* até a R30). **AP** = o aparelho como rede Wi-Fi. **STA** = o aparelho como cliente de outra rede. **AP+STA** = os dois ao mesmo tempo, no mesmo canal (Plano A, R19). **CSA** = o aviso de troca de canal que o AP manda às estações conectadas antes de migrar. **Plano A / Plano B** = modo simultâneo / alternância `AP → STA → AP`, a decidir pela bancada.
 
 ## 12. Referências
 
