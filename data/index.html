@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Presente!</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<!--
+  Portal do professor (spec, §6). Uma página só, com quatro telas trocadas pelo
+  app.js: login, espera, painel e relatório.
+
+  Por que uma página só, e não um arquivo por tela:
+    - o §9 e o R10 pedem uma SPA servida do LittleFS;
+    - o portal cativo devolve esta mesma página para qualquer endereço pedido
+      (passo 4 do §6), e isso é trivial com um índice só;
+    - sem navegação de página não há endereço para carregar credencial (R25).
+
+  HTML, CSS e JS ficam em arquivos separados por exigência do R10: dá para
+  ajustar a tela e regravar a imagem de filesystem sem recompilar o firmware.
+-->
+
+<header class="topo">
+  <span class="marca">Presente!</span>
+  <span class="topo-estado" id="topo-estado" hidden></span>
+</header>
+
+<main>
+
+  <!-- ------------------------------------------------------ 1. LOGIN ---- -->
+  <section class="tela" id="tela-login" aria-labelledby="titulo-login">
+    <h1 id="titulo-login">Entrar</h1>
+    <p class="sub">Chamada da turma pelo aparelho da sala.</p>
+
+    <!--
+      method="post" de propósito, e o envio é interceptado pelo app.js. Um
+      formulário GET colocaria usuário e senha na barra de endereço, que é
+      exatamente o que a R25 proíbe: endereço com credencial fica em histórico,
+      em captura de tela e em registro de acesso.
+    -->
+    <form id="form-login" method="post" action="/api/login" autocomplete="on" novalidate>
+      <label for="usuario">Usuário</label>
+      <input id="usuario" name="usuario" type="text" inputmode="text"
+             autocapitalize="none" autocorrect="off" spellcheck="false"
+             autocomplete="username" required>
+
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password"
+             autocomplete="current-password" required>
+
+      <p class="erro" id="erro-login" role="alert" hidden></p>
+
+      <button class="botao primario" type="submit" id="botao-entrar">Entrar</button>
+    </form>
+
+    <!-- Preenchido pelo mentira.js. Some sozinho quando o aparelho for real. -->
+    <div id="nota-de-mentira"></div>
+  </section>
+
+  <!-- ------------------------------------------------------ 2. ESPERA ---- -->
+  <!--
+    A espera do passo 5 do §6: validada a senha, o aparelho busca a lista da
+    turma antes de abrir o painel (R14). No Plano B o rádio sai do ar e volta,
+    e isso leva de 5 a 15 s (R13) — por isso a tela conta o tempo e diz o que
+    está acontecendo, em vez de ficar parada parecendo travamento.
+  -->
+  <section class="tela" id="tela-espera" hidden aria-labelledby="titulo-espera">
+    <div class="espera-caixa">
+      <div class="giro" aria-hidden="true"></div>
+      <h1 id="titulo-espera">Carregando turma…</h1>
+      <p class="sub" id="espera-explica">
+        O aparelho está buscando a lista da turma na internet.
+        A rede dele pode sair do ar por alguns segundos — o celular reconecta sozinho.
+      </p>
+      <p class="contador"><span id="espera-segundos">0</span> s</p>
+      <p class="aviso-vivo" id="espera-recado" role="status" aria-live="polite"></p>
+
+      <div id="espera-estourou" hidden>
+        <p class="erro-bloco">
+          O aparelho não conseguiu baixar a lista da turma.
+        </p>
+        <p class="sub">
+          A chamada pode acontecer assim mesmo: sem a lista, o aparelho aceita
+          qualquer crachá lido e grava só os números. Os nomes entram quando o
+          relatório for enviado.
+        </p>
+        <button class="botao primario" id="botao-seguir-offline" type="button">
+          Seguir sem a lista
+        </button>
+        <button class="botao" id="botao-voltar-login" type="button">Voltar ao login</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------ 3. PAINEL ---- -->
+  <section class="tela" id="tela-painel" hidden aria-labelledby="titulo-painel">
+    <h1 id="titulo-painel">Painel</h1>
+    <p class="sub" id="painel-quem"></p>
+
+    <div class="cartao" id="painel-resumo">
+      <div class="linha-estado">
+        <span class="pilula" id="pilula-sessao">Sessão fechada</span>
+        <span class="pilula" id="pilula-modo"></span>
+      </div>
+      <p class="contagem" id="painel-contagem"></p>
+      <p class="ultimo" id="painel-ultimo" role="status" aria-live="polite"></p>
+    </div>
+
+    <p class="aviso-vivo" id="painel-recado" role="alert" hidden></p>
+
+    <!-- As seis ações do passo 6 do §6, nesta ordem. -->
+    <div class="botoes">
+      <button class="botao primario" id="acao-iniciar"     type="button">Iniciar</button>
+      <button class="botao"          id="acao-manual"      type="button">Adicionar presença manual</button>
+      <button class="botao"          id="acao-exibir"      type="button">Exibir relatório</button>
+      <button class="botao"          id="acao-compartilhar" type="button">Compartilhar relatório</button>
+      <button class="botao"          id="acao-enviar"      type="button">Enviar relatório</button>
+      <button class="botao perigo"   id="acao-encerrar"    type="button">Encerrar</button>
+    </div>
+  </section>
+
+  <!-- --------------------------------------------------- 4. RELATÓRIO ---- -->
+  <section class="tela" id="tela-relatorio" hidden aria-labelledby="titulo-relatorio">
+    <h1 id="titulo-relatorio">Relatório</h1>
+    <p class="sub" id="relatorio-cabecalho"></p>
+
+    <p class="aviso-bloco" id="relatorio-offline" hidden>
+      Sessão sem lista da turma. O aparelho gravou só os números dos crachás;
+      os nomes e as faltas são calculados quando o relatório for enviado.
+    </p>
+
+    <h2 class="titulo-lista">Presentes <span class="conta" id="conta-presentes"></span></h2>
+    <ul class="lista" id="lista-presentes"></ul>
+    <p class="vazio" id="vazio-presentes" hidden>Ninguém registrado ainda.</p>
+
+    <h2 class="titulo-lista" id="titulo-faltantes">Faltantes <span class="conta" id="conta-faltantes"></span></h2>
+    <ul class="lista" id="lista-faltantes"></ul>
+    <p class="vazio" id="vazio-faltantes" hidden>Nenhum faltante.</p>
+
+    <button class="botao" id="acao-voltar" type="button">Voltar ao painel</button>
+  </section>
+
+</main>
+
+<!-- ------------------------------------------------------------ MODAL ---- -->
+<div class="fundo-modal" id="fundo-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <h2 id="modal-titulo"></h2>
+    <div id="modal-corpo"></div>
+    <div class="modal-botoes">
+      <button class="botao" id="modal-cancelar" type="button">Cancelar</button>
+      <button class="botao primario" id="modal-confirmar" type="button">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!--
+  mentira.js é o aparelho de mentira: responde as mesmas rotas que o firmware
+  vai responder e simula os crachás encostando. Apagar este arquivo e a linha
+  abaixo é o que troca o protótipo pelo aparelho de verdade.
+-->
+<script src="mentira.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
