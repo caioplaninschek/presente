@@ -13,6 +13,15 @@ const byte PINO_RST = 22;
 
 MFRC522 leitor(PINO_SS, PINO_RST);
 
+// Memoria da janela de silencio (R30).
+Uid ultimoUid = {{0}, 0};
+unsigned long instanteDaUltimaLeitura = 0;
+bool houveLeituraAceita = false;
+
+// micros() do comeco da tentativa em curso, guardado antes de falar com o
+// RC522: e dele que sai o numero que o alvo de 200 ms da secao 5 cobra.
+unsigned long inicioDaTentativaUs = 0;
+
 }  // namespace
 
 void iniciar() {
@@ -33,7 +42,32 @@ bool leitorRespondeu() {
   return versao != 0x00 && versao != 0xFF;
 }
 
+bool mesmoUid(const Uid& a, const Uid& b) {
+  if (a.tamanho != b.tamanho || a.tamanho == 0) {
+    return false;
+  }
+  for (byte i = 0; i < a.tamanho; i++) {
+    if (a.bytes[i] != b.bytes[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+unsigned long inicioDaLeituraUs() {
+  return inicioDaTentativaUs;
+}
+
+void esquecerUltimaTag() {
+  houveLeituraAceita = false;
+  ultimoUid.tamanho = 0;
+}
+
 bool lerTagNova(Uid& uid) {
+  // Marcado antes de qualquer conversa com o RC522: o tempo do barramento SPI
+  // esta dentro do intervalo que a secao 5 limita a 200 ms, e e ele que pesa.
+  const unsigned long comecouEm = micros();
+
   if (!leitor.PICC_IsNewCardPresent()) {
     return false;
   }
@@ -41,12 +75,13 @@ bool lerTagNova(Uid& uid) {
     return false;
   }
 
-  uid.tamanho = leitor.uid.size;
-  if (uid.tamanho > UID_MAX_BYTES) {
-    uid.tamanho = UID_MAX_BYTES;
+  Uid lido;
+  lido.tamanho = leitor.uid.size;
+  if (lido.tamanho > UID_MAX_BYTES) {
+    lido.tamanho = UID_MAX_BYTES;
   }
-  for (byte i = 0; i < uid.tamanho; i++) {
-    uid.bytes[i] = leitor.uid.uidByte[i];
+  for (byte i = 0; i < lido.tamanho; i++) {
+    lido.bytes[i] = leitor.uid.uidByte[i];
   }
 
   // Manda a tag dormir: enquanto ela ficar no campo, nao responde de novo. E o
@@ -54,6 +89,22 @@ bool lerTagNova(Uid& uid) {
   // leituras. Nao ha PCD_StopCrypto1 porque nunca houve autenticacao: o UID sai
   // na resposta do anticolisao, sem ler bloco nenhum e sem escrever (HU-22).
   leitor.PICC_HaltA();
+
+  // Janela de silencio (R30): o mesmo UID de novo, cedo demais, e descartado
+  // aqui dentro. Quem chamou nao fica sabendo, e e essa a intencao -- nenhum
+  // feedback acontece, nem verde nem bip. A janela conta da ultima leitura
+  // aceita, entao encostar sem parar nao a empurra para frente.
+  if (houveLeituraAceita && mesmoUid(lido, ultimoUid) &&
+      millis() - instanteDaUltimaLeitura < JANELA_DE_SILENCIO_MS) {
+    return false;
+  }
+
+  ultimoUid = lido;
+  instanteDaUltimaLeitura = millis();
+  houveLeituraAceita = true;
+  inicioDaTentativaUs = comecouEm;
+
+  uid = lido;
   return true;
 }
 

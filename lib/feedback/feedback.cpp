@@ -19,10 +19,28 @@ bool buzzerLigado = false;
 unsigned long inicioDoBip = 0;
 unsigned long duracaoDoBip = 0;
 
+// Piscada em curso.
+bool haPiscada = false;
+Cor corDaPiscada = Cor::APAGADO;
+Cor corDeFundo = Cor::APAGADO;  // o que estava aceso antes, e para onde se volta
+byte piscadasQueFaltam = 0;
+bool piscadaAcesa = false;
+unsigned long inicioDaFase = 0;
+unsigned long duracaoAceso = 0;
+unsigned long duracaoApagado = 0;
+
 // Toda escrita no LED passa por aqui: e o que faz a constante acima bastar.
 void escreverNaPerna(byte pino, bool acesa) {
   const bool nivel = CATODO_COMUM ? acesa : !acesa;
   digitalWrite(pino, nivel ? HIGH : LOW);
+}
+
+// Escreve no LED sem mexer na piscada em curso nem na cor de fundo.
+void mostrar(Cor umaCor) {
+  cor = umaCor;
+  escreverNaPerna(PINO_VERMELHO, umaCor == Cor::VERMELHO);
+  escreverNaPerna(PINO_VERDE, umaCor == Cor::VERDE);
+  escreverNaPerna(PINO_AZUL, umaCor == Cor::AZUL);
 }
 
 }  // namespace
@@ -39,10 +57,32 @@ void iniciar() {
 }
 
 void acender(Cor novaCor) {
-  cor = novaCor;
-  escreverNaPerna(PINO_VERMELHO, novaCor == Cor::VERMELHO);
-  escreverNaPerna(PINO_VERDE, novaCor == Cor::VERDE);
-  escreverNaPerna(PINO_AZUL, novaCor == Cor::AZUL);
+  haPiscada = false;
+  corDeFundo = novaCor;
+  mostrar(novaCor);
+}
+
+void piscar(Cor novaCor, byte vezes, unsigned long acesoMs, unsigned long apagadoMs) {
+  if (vezes == 0) {
+    return;
+  }
+  // A cor de fundo so se guarda se nao houver piscada em curso; senao uma
+  // piscada que interrompe outra passaria a "voltar" para a cor da anterior.
+  if (!haPiscada) {
+    corDeFundo = cor;
+  }
+  haPiscada = true;
+  corDaPiscada = novaCor;
+  piscadasQueFaltam = vezes;
+  duracaoAceso = acesoMs;
+  duracaoApagado = apagadoMs;
+  piscadaAcesa = true;
+  inicioDaFase = millis();
+  mostrar(novaCor);
+}
+
+bool piscando() {
+  return haPiscada;
 }
 
 Cor corAtual() {
@@ -73,12 +113,44 @@ bool bipando() {
 }
 
 void atualizar() {
-  if (!buzzerLigado) {
-    return;
-  }
-  if (millis() - inicioDoBip >= duracaoDoBip) {
+  const unsigned long agora = millis();
+
+  if (buzzerLigado && agora - inicioDoBip >= duracaoDoBip) {
     digitalWrite(PINO_BUZZER, LOW);
     buzzerLigado = false;
+  }
+
+  if (!haPiscada) {
+    return;
+  }
+
+  if (piscadaAcesa) {
+    if (agora - inicioDaFase >= duracaoAceso) {
+      piscadaAcesa = false;
+      inicioDaFase += duracaoAceso;
+      mostrar(Cor::APAGADO);
+      piscadasQueFaltam--;
+      if (piscadasQueFaltam == 0) {
+        // Terminou na fase apagada; o intervalo seguinte fecha a piscada e
+        // devolve o LED ao que estava aceso antes dela.
+        if (duracaoApagado == 0) {
+          haPiscada = false;
+          mostrar(corDeFundo);
+        }
+      }
+    }
+    return;
+  }
+
+  if (agora - inicioDaFase >= duracaoApagado) {
+    inicioDaFase += duracaoApagado;
+    if (piscadasQueFaltam == 0) {
+      haPiscada = false;
+      mostrar(corDeFundo);
+    } else {
+      piscadaAcesa = true;
+      mostrar(corDaPiscada);
+    }
   }
 }
 

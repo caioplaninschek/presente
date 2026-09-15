@@ -123,3 +123,11 @@ O mecanismo do LED e do bip foi escrito separado do programa, pela mesma razão 
 Um detalhe ficou preparado de propósito. O LED pode ser de dois tipos, que se ligam de maneira oposta, e o programa foi escrito para o tipo que a especificação prevê. Se for o outro, nenhuma cor acende, e a correção é uma única linha, indicada por escrito no próprio arquivo — quem estiver com a placa na mão não precisa procurar, nem esperar por quem escreveu.
 
 Este programa também ainda não rodou na placa: depende da montagem da protoboard. A gravação está marcada para quinta, 17/09.
+
+**O leitor e o aviso foram ligados um ao outro (15/09).** Com o crachá lido de um lado e o LED obedecendo do outro, o programa que junta os dois é o que faz o aparelho parecer um aparelho: o aluno encosta, o LED pisca verde duas vezes, o buzzer apita, e ele sabe que pode sentar. Quem já está registrado e encosta de novo recebe uma piscada verde só, sem som, e nada é gravado — a regra decidida no domingo, de uma presença por chamada. O crachá esquecido em cima do leitor não repete sinal nenhum.
+
+O programa mede e imprime quanto tempo passa entre o crachá encostar e o aviso começar, porque a especificação promete que isso fique abaixo de dois décimos de segundo, e acima disso forma fila na porta da sala. A medição que a tarefa pedia, porém, cobre só o trecho final desse caminho e sairia perto de zero em qualquer circunstância, o que não provaria nada. O programa passou a imprimir também o trecho que contém o tempo de verdade, que é a conversa com o leitor de crachás. Nem esse número é o total exato, porque o tempo em que o crachá espera encostado antes de o programa ir buscá-lo não é visível de dentro do aparelho; ele é um piso, e está declarado como tal.
+
+Com isso, os três programas desta frente estão escritos e o trabalho comum entre eles — a leitura do crachá, o LED e o buzzer, e a lista de quem já foi registrado — está em um só lugar, e não copiado em cada um.
+
+Nenhum dos três rodou na placa ainda, porque a protoboard não foi montada. São três programas empilhados sobre a mesma fiação, e convém que os dois primeiros sejam gravados antes do domingo, e não os três na mesma tarde.
