@@ -115,3 +115,11 @@ A especificação também passou a registrar duas lacunas novas, que ficam para 
 A leitura propriamente dita foi escrita separada do programa, porque o programa seguinte desta semana, o que acende a luz verde e toca o bip, se apoia na mesma leitura e não deve reescrevê-la. O programa também informa, assim que é ligado, se o leitor não respondeu, e em que ordem conferir a montagem. Sem esse aviso, o leitor mudo e o crachá não reconhecido produzem a mesma tela vazia, e quem está na bancada não tem como distinguir um do outro.
 
 O programa compila, mas ainda não rodou na placa: depende da montagem da protoboard, que é do João, e a gravação está marcada para sábado, 19/09.
+
+**O LED e o buzzer ganharam o programa que os põe à prova (15/09).** Antes de ler qualquer crachá, é preciso saber que as peças de aviso obedecem. O programa percorre as três cores do LED, um segundo cada uma, apaga e toca o bip, e escreve no monitor do computador o nome da cor que está acesa naquele instante — de modo que quem estiver na bancada compare o que lê com o que vê, e descubra na hora se dois fios estão trocados entre si.
+
+O mecanismo do LED e do bip foi escrito separado do programa, pela mesma razão que a leitura do crachá já tinha sido: é ele que o programa seguinte, o que dá o sinal de presença registrada, vai usar. A duração do bip aqui já é a que a especificação atribui ao sinal de presença, embora neste programa ela sirva apenas para ouvir a peça.
+
+Um detalhe ficou preparado de propósito. O LED pode ser de dois tipos, que se ligam de maneira oposta, e o programa foi escrito para o tipo que a especificação prevê. Se for o outro, nenhuma cor acende, e a correção é uma única linha, indicada por escrito no próprio arquivo — quem estiver com a placa na mão não precisa procurar, nem esperar por quem escreveu.
+
+Este programa também ainda não rodou na placa: depende da montagem da protoboard. A gravação está marcada para quinta, 17/09.
