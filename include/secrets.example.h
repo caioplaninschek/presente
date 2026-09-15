@@ -26,7 +26,9 @@
 #define STA_PASSWORD_FALLBACK  ""
 
 // --- Supabase ---------------------------------------------------
-// A chave anon fica dentro do binario de um aparelho fixo numa sala sem
-// vigilancia. Restrinja o que ela pode fazer via RLS (ticket 06).
-#define SUPABASE_URL       "https://SEU-PROJETO.supabase.co"
-#define SUPABASE_ANON_KEY  ""
+// A chave publicavel (sb_publishable_...) fica dentro do binario de um
+// aparelho fixo numa sala sem vigilancia. Por isso ela nao tem privilegio
+// em tabela nenhuma: so executa as duas funcoes do banco (R33 e R35 na spec).
+// Vai no cabecalho "apikey", nunca em "Authorization: Bearer".
+#define SUPABASE_URL              "https://SEU-PROJETO.supabase.co"
+#define SUPABASE_PUBLISHABLE_KEY  ""

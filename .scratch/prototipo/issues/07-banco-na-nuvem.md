@@ -1,7 +1,8 @@
 # 07: Banco na nuvem: tabelas, regras e dados
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 14/09/2026, pela issue #21 do GitHub
 Dono: Caio
 Prazo: 17/09
 Entrega: —

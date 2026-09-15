@@ -51,6 +51,10 @@ O professor exige evidência de evolução semanal. São **duas camadas com cad�
 
 Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `platformio.ini`; nunca defina `default_envs`. Nenhuma biblioteca entra sem versão fixada. O porquê está na spec (R28, R29).
 
+## Banco
+
+O SQL do Supabase mora em `supabase/`, em arquivos numerados e aplicados pelo editor de SQL do painel. **Arquivo já aplicado não se edita:** mudança no banco vira o arquivo seguinte (`003-…`). Depois de aplicar qualquer um, rode `supabase/verificar.ps1`, que testa o banco com a chave do aparelho. O porquê está na spec (R33, R34, R35).
+
 ## Credenciais
 
 Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, com os campos em branco. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
