@@ -99,7 +99,7 @@ void setup() {
   Serial.begin(115200);
   rfid::iniciar();
   feedback::iniciar();
-  storage::iniciarSessao();
+  storage::iniciarSessaoNaMemoria();
 
   Serial.println();
   Serial.println("Presente! - encostou: verde, bip, e nada de registrar duas vezes (issue #26)");
@@ -138,7 +138,7 @@ void loop() {
 
   // A decisao. E aqui que a R30 vive: quem ja esta registrado nao se registra de
   // novo em momento nenhum, e o sinal disso e verde de uma piscada, sem som.
-  const bool primeiraVez = storage::registrar(uid);
+  const bool primeiraVez = storage::registrar(uid, millis());
 
   if (primeiraVez) {
     feedback::piscar(feedback::Cor::VERDE, 2, PISCADA_ACESA_MS, PISCADA_APAGADA_MS);

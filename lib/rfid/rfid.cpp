@@ -122,4 +122,39 @@ void formatarUid(const Uid& uid, char* destino, size_t tamanhoDoDestino) {
   destino[escritos] = '\0';
 }
 
+bool uidDeTexto(const char* texto, Uid& uid) {
+  if (texto == nullptr) {
+    return false;
+  }
+
+  size_t digitos = 0;
+  while (texto[digitos] != '\0') {
+    digitos++;
+  }
+  if (digitos == 0 || digitos % 2 != 0 || digitos / 2 > UID_MAX_BYTES) {
+    return false;
+  }
+
+  uid.tamanho = digitos / 2;
+  for (byte i = 0; i < uid.tamanho; i++) {
+    byte valor = 0;
+    for (byte metade = 0; metade < 2; metade++) {
+      const char c = texto[i * 2 + metade];
+      byte digito;
+      if (c >= '0' && c <= '9') {
+        digito = c - '0';
+      } else if (c >= 'A' && c <= 'F') {
+        digito = c - 'A' + 10;
+      } else if (c >= 'a' && c <= 'f') {
+        digito = c - 'a' + 10;
+      } else {
+        return false;
+      }
+      valor = (valor << 4) | digito;
+    }
+    uid.bytes[i] = valor;
+  }
+  return true;
+}
+
 }  // namespace rfid

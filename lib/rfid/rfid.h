@@ -75,6 +75,11 @@ bool mesmoUid(const Uid& a, const Uid& b);
 // de UID_TEXTO_TAMANHO bytes.
 void formatarUid(const Uid& uid, char* destino, size_t tamanhoDoDestino);
 
+// A volta do formatarUid: le "A391F21B" e devolve o UID. false se o texto nao
+// for um numero par de digitos hexadecimais dentro do tamanho maximo. E o que
+// permite ao eventos.json ser relido no boot (R30).
+bool uidDeTexto(const char* texto, Uid& uid);
+
 }  // namespace rfid
 
 #endif  // RFID_H

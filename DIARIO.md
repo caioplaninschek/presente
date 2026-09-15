@@ -131,3 +131,13 @@ O programa mede e imprime quanto tempo passa entre o crachá encostar e o aviso 
 Com isso, os três programas desta frente estão escritos e o trabalho comum entre eles — a leitura do crachá, o LED e o buzzer, e a lista de quem já foi registrado — está em um só lugar, e não copiado em cada um.
 
 Nenhum dos três rodou na placa ainda, porque a protoboard não foi montada. São três programas empilhados sobre a mesma fiação, e convém que os dois primeiros sejam gravados antes do domingo, e não os três na mesma tarde.
+
+**As presenças passaram a sobreviver a uma queda de energia (15/09).** O aparelho vai ficar preso na parede de uma sala, ligado na tomada, e uma queda no meio da aula não pode obrigar o professor a refazer a chamada. Cada crachá lido passa a ser gravado na memória permanente da placa assim que é lido, e ao religar o aparelho relê o que gravou: quem já estava registrado antes do tranco continua registrado depois dele, e não é registrado de novo.
+
+**Uma pergunta de formato precisou ser respondida antes de escrever, e ela não estava decidida.** A especificação mostra os registros de uma chamada dentro de uma lista, no formato em que o relatório sai do aparelho. Mas uma lista, para ser legível por um programa, precisa ter o seu fechamento reescrito a cada registro novo — e é exatamente essa reescrita que uma queda de energia não pode interromper, sob pena de o arquivo inteiro deixar de abrir. O modo seguro de gravar é o oposto: acrescentar no fim e nunca voltar atrás.
+
+A saída adotada separa as duas coisas. No disco, cada registro é uma linha independente, acrescentada ao fim do arquivo; uma queda de energia estraga no máximo a última linha, que é descartada na releitura. A lista que a especificação mostra é montada na hora de exibir, compartilhar ou enviar o relatório, e continua idêntica ao que já estava combinado — nada muda para quem vai receber esses dados. Isso não contraria a especificação: ela já chama cada registro de "uma linha do arquivo" e já descreve a gravação como acréscimo ao fim.
+
+O campo de horário recebeu um nome próprio, e não o nome que o relatório final usa. O horário de verdade vem do navegador do professor, que ainda não existe; até lá o que se grava é o tempo desde que a placa ligou, e chamá-lo pelo nome do outro faria o documento prometer uma coisa e o arquivo entregar outra.
+
+As duas escolhas estão registradas no fórum do projeto, com data, para virarem decisão formal na próxima revisão da especificação.
