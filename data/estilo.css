@@ -1,0 +1,296 @@
+/* Presente! — portal do professor.
+   Arquivo separado por exigência do R10: ajustar a tela não pode obrigar a
+   recompilar o firmware. Sem biblioteca e sem fonte externa — o aparelho serve
+   isto da própria memória, e na sala não há internet para buscar nada. */
+
+/* Paleta da UVA: azul institucional e amarelo da marca, turquesa e magenta
+   dos materiais da universidade. Os tons de texto e de fundo puxam para o azul
+   para não brigarem com a marca; o magenta e o turquesa foram escurecidos em
+   relação ao site para o texto sobre eles passar no contraste da WCAG AA. */
+:root {
+  --uva-azul: #0b5285;
+  --uva-amarelo: #ffc709;
+  --uva-turquesa: #0b7a64;
+  --uva-magenta: #c4006b;
+
+  --fundo: #f2f5f8;
+  --papel: #ffffff;
+  --tinta: #10263a;
+  --tinta-fraca: #55667a;
+  --borda: #d2dae3;
+  --borda-campo: #838f9c;      /* 3,3:1 sobre o papel: contorno de campo e de botão (WCAG 1.4.11) */
+  --acento: var(--uva-azul);
+  --acento-tinta: #ffffff;
+  --acento-2: var(--uva-turquesa);
+  --acento-2-tinta: #ffffff;
+  --perigo: var(--uva-magenta);
+  --alerta-fundo: #fff6d6;
+  --alerta-borda: var(--uva-amarelo);
+  --alerta-tinta: #6b5200;
+  --erro-fundo: #fdeaf3;
+  --erro-borda: #f0a8ca;
+  --toque: 3rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0d1922;
+    --papel: #15242f;
+    --tinta: #e8eef4;
+    --tinta-fraca: #96a6b6;
+    --borda: #2b3d4c;
+    --borda-campo: #66788a;
+    --acento: #2f86c7;          /* o azul da UVA clareado, para contrastar no escuro */
+    --acento-tinta: #04141f;
+    --acento-2: #2fbfa0;
+    --acento-2-tinta: #04231c;  /* o turquesa clareia no escuro; branco em cima dele dá 2,3:1 */
+    --perigo: #ff7ab8;
+    --alerta-fundo: #3a3110;
+    --alerta-borda: #a8860c;
+    --alerta-tinta: #ffe08a;
+    --erro-fundo: #38102a;
+    --erro-borda: #8a2a5c;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--fundo);
+  color: var(--tinta);
+  font: 1rem/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ------------------------------------------------------------- topo ---- */
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .75rem 1rem;
+  padding-top: max(.75rem, env(safe-area-inset-top));
+  background: var(--acento);
+  color: var(--acento-tinta);
+}
+.marca { font-weight: 700; letter-spacing: .01em; }
+.topo-estado { font-size: .8125rem; opacity: .92; text-align: right; }
+
+/* ------------------------------------------------------------ telas ---- */
+main {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+h1 { font-size: 1.375rem; margin: .5rem 0 .25rem; }
+h2 { font-size: 1rem; margin: 1.25rem 0 .5rem; }
+.sub { color: var(--tinta-fraca); margin: 0 0 1rem; font-size: .9375rem; }
+
+/* ----------------------------------------------------------- formulário - */
+label {
+  display: block;
+  font-size: .875rem;
+  font-weight: 600;
+  margin: .875rem 0 .25rem;
+}
+
+input[type="text"], input[type="password"], input[type="number"] {
+  width: 100%;
+  min-height: var(--toque);
+  padding: .625rem .75rem;
+  font-size: 1rem;              /* 16px evita o zoom automático do iOS */
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--borda-campo);
+  border-radius: .5rem;
+}
+input:focus-visible, .botao:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+h1[tabindex="-1"]:focus { outline: none; }
+
+/* ---------------------------------------------------------- botões ---- */
+.botoes { display: flex; flex-direction: column; gap: .5rem; margin-top: 1rem; }
+
+.botao {
+  display: block;
+  width: 100%;
+  min-height: var(--toque);
+  padding: .75rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--borda-campo);
+  border-radius: .5rem;
+  cursor: pointer;
+  text-align: center;
+}
+.botao + .botao { margin-top: 0; }
+.botao:active { transform: translateY(1px); }
+
+.botao.primario {
+  color: var(--acento-tinta);
+  background: var(--acento);
+  border-color: var(--acento);
+}
+.botao.perigo { color: var(--perigo); border-color: var(--perigo); }
+
+.botao:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+form .botao { margin-top: 1.25rem; }
+
+/* ----------------------------------------------------------- cartão ---- */
+.cartao {
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: .75rem;
+  padding: .875rem;
+}
+
+.linha-estado { display: flex; flex-wrap: wrap; gap: .375rem; }
+
+.pilula {
+  display: inline-block;
+  padding: .1875rem .5rem;
+  font-size: .75rem;
+  font-weight: 700;
+  border: 1px solid var(--borda);
+  border-radius: 1rem;
+  color: var(--tinta-fraca);
+}
+.pilula.viva {
+  color: var(--acento-2-tinta);
+  background: var(--acento-2);
+  border-color: var(--acento-2);
+}
+.pilula.atencao {
+  color: var(--alerta-tinta);
+  background: var(--alerta-fundo);
+  border-color: var(--alerta-borda);
+}
+
+.contagem { margin: .625rem 0 0; font-size: 1.5rem; font-weight: 700; }
+.ultimo { margin: .25rem 0 0; font-size: .875rem; color: var(--tinta-fraca); min-height: 1.3em; }
+
+/* ----------------------------------------------------------- avisos ---- */
+.erro { color: var(--perigo); font-size: .875rem; margin: .75rem 0 0; font-weight: 600; }
+
+.erro-bloco, .aviso-bloco, .aviso-vivo {
+  margin: .875rem 0 0;
+  padding: .625rem .75rem;
+  border-radius: .5rem;
+  font-size: .9375rem;
+  border: 1px solid;
+}
+.erro-bloco { background: var(--erro-fundo); border-color: var(--erro-borda); color: var(--perigo); font-weight: 600; }
+.aviso-bloco, .aviso-vivo { background: var(--alerta-fundo); border-color: var(--alerta-borda); color: var(--alerta-tinta); }
+.aviso-vivo.bom { background: transparent; border-color: var(--borda); color: var(--tinta-fraca); font-weight: 600; }
+
+/* ----------------------------------------------------------- espera ---- */
+.espera-caixa { text-align: center; padding: 2rem 0 1rem; }
+.contador { font-size: .875rem; color: var(--tinta-fraca); margin: .25rem 0 0; font-variant-numeric: tabular-nums; }
+
+.giro {
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0 auto 1rem;
+  border: 4px solid var(--borda);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: girar 1s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .giro { animation-duration: 3s; }
+}
+
+#espera-estourou .botao { margin-top: .5rem; }
+
+/* ---------------------------------------------------------- listas ---- */
+.titulo-lista { display: flex; align-items: baseline; gap: .5rem; }
+.conta { font-size: .8125rem; font-weight: 400; color: var(--tinta-fraca); }
+
+.lista { list-style: none; margin: 0; padding: 0; }
+
+.lista li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .25rem .5rem;
+  padding: .625rem .75rem;
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: .5rem;
+  margin-bottom: .375rem;
+}
+.lista .nome { font-weight: 600; flex: 1 1 60%; }
+.lista .matricula { font-size: .8125rem; color: var(--tinta-fraca); font-variant-numeric: tabular-nums; }
+.lista .hora { font-size: .8125rem; color: var(--tinta-fraca); font-variant-numeric: tabular-nums; }
+.lista .marca-manual {
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .0625rem .375rem;
+  border-radius: .75rem;
+  background: var(--alerta-fundo);
+  border: 1px solid var(--alerta-borda);
+  color: var(--alerta-tinta);
+}
+.lista .motivo { flex: 1 1 100%; font-size: .8125rem; color: var(--tinta-fraca); }
+
+.vazio { color: var(--tinta-fraca); font-size: .9375rem; font-style: italic; margin: .25rem 0 0; }
+
+#tela-relatorio .botao { margin-top: 1.5rem; }
+
+/* ----------------------------------------------------------- modal ---- */
+.fundo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 10;
+}
+
+.modal {
+  background: var(--papel);
+  border-radius: .75rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 28rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal h2 { margin-top: 0; }
+.modal-botoes { display: flex; gap: .5rem; margin-top: 1.25rem; }
+.modal-botoes .botao { margin-top: 0; }
+
+@media (min-width: 30rem) {
+  .fundo-modal { align-items: center; }
+}
+
+/* Nota dos dados de mentira: só existe enquanto o mentira.js existir. */
+.nota-mentira {
+  margin-top: 2rem;
+  padding: .625rem .75rem;
+  border: 1px dashed var(--borda);
+  border-radius: .5rem;
+  font-size: .8125rem;
+  color: var(--tinta-fraca);
+}
+.nota-mentira code { font-size: .875em; }

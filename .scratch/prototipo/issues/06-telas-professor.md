@@ -1,7 +1,8 @@
 # 06: As telas do professor, no navegador
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 15/09/2026, pela issue #20 do GitHub
 Dono: Igor
 Prazo: 21/09
 Entrega: —
