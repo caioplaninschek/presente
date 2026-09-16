@@ -308,7 +308,9 @@ void abrirConexaoSegura() {
 
   // Com o nome, e nao com o IP, o connect() manda o SNI que o host exige.
   if (!cliente.connect(host.c_str(), 443)) {
-    char erro[100];
+    // Quando o DNS falha, o connect() devolve 0 sem gravar o erro, e o lastError()
+    // nao escreve no buffer: sem este texto, o log sairia com lixo de memoria.
+    char erro[100] = "nao achei o endereco do banco";
     const int codigo = cliente.lastError(erro, sizeof(erro));
     Serial.printf("A conexao segura FALHOU (%d: %s). A tentativa que falha vaza memoria: aperte EN antes de medir de novo.\n",
                   codigo, erro);
@@ -316,7 +318,9 @@ void abrirConexaoSegura() {
     return;
   }
 
-  Serial.printf("Conexao segura aberta com %s.\n", host.c_str());
+  // Sem o endereco: ele e credencial (secrets.h), e o log vai colado em comentario
+  // de issue, num repositorio publico.
+  Serial.println("Conexao segura aberta.");
   imprimirMemoria("MEMORIA DURANTE a conexao segura", ESP.getFreeHeap());
   Serial.println();
   imprimirMemoria("Menor memoria livre desde o boot", ESP.getMinFreeHeap());
