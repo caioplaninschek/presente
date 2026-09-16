@@ -10,6 +10,8 @@ Os enunciados do professor, com o detalhamento da próxima entrega, estão em `d
 
 **Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, roteiro de vídeo. Leia antes de escrever qualquer documento.
 
+**Commit direto na `main` é o padrão**, sem branch nem revisão obrigatória (§9). A exceção é uma só, e tem razão fixa: quem tomou por conta própria uma decisão que o grupo ainda não viu abre pull request, para que ela possa cair **antes** de entrar na `main` (R39).
+
 Nunca assine commits como IA: sem `Co-Authored-By` de assistente, sem `🤖 Generated with`, sem trailer equivalente.
 
 ## Onde o trabalho vive
@@ -47,9 +49,21 @@ O professor exige evidência de evolução semanal. São **duas camadas com cad�
 
 **Escreva para o professor, não para desenvolvedores.** O que foi feito, o que travou, o que vem a seguir. Sem nome de arquivo, sem nome de função, sem hash de commit — isso tudo já está no git, que é a outra camada.
 
+**Ao fechar a semana, dê uma passada de narrativa na entrada inteira.** Durante a semana os blocos entram na ordem em que o trabalho acontece, que é a ordem dos commits; no fechamento eles se reagrupam **por frente**, para o professor ler uma história por assunto em vez de um extrato cronológico. A passada é a última coisa antes da entrega de terça, e não se antecipa: blocos ainda em movimento se reescreveriam duas vezes.
+
+A entrada é em **terceira pessoa, nomeando quem fez** (`docs/padrao-editorial.md`).
+
 ## Firmware
 
-Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `platformio.ini`; nunca defina `default_envs`. Nenhuma biblioteca entra sem versão fixada. O porquê está na spec (R28, R29).
+Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `platformio.ini`; nunca defina `default_envs`. **Código que dois programas dividirem sobe para `lib/<módulo>/`**, com o nome do módulo do §5 que ele vai virar (`rfid`, `feedback`, `storage`…): tudo que está em `lib/` fica visível a todos os ambientes, sem configuração. Nenhuma biblioteca entra sem versão fixada. O porquê está na spec (R28, R29).
+
+A partição de LittleFS é **uma só**, dividida entre o portal (`data/`) e o `eventos.json`. Por isso o `platformio.ini` declara `board_build.filesystem = littlefs`, e o `LittleFS.begin(true)` — que formata quando a montagem falha — vale nos programas de bancada e sai no firmware integrado (R41).
+
+## Portal do professor
+
+O HTML, o CSS e o JavaScript do portal moram em **`data/`** na raiz, que é a pasta de onde o PlatformIO gera a imagem de filesystem (R27). É uma página só, sem biblioteca e sem recurso externo (R10), e credencial nenhuma viaja no endereço (R25). Nenhuma tela avança sem o aparelho confirmar: todo pedido tem tempo-limite, com falha visível e o botão liberado (R40).
+
+Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec.
 
 ## Banco
 

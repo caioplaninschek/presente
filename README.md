@@ -37,6 +37,15 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [Issues](https://github.com/caioplaninschek/presente/issues) | O fórum do grupo e o enunciado completo de cada tarefa — passo a passo, o que tem que aparecer, o que fazer se der errado |
 | [`AGENTS.md`](AGENTS.md) | Convenções do repositório |
 
+Onde mora o código:
+
+| Onde | O quê |
+|---|---|
+| `src/<nome>/` | Um programa de bancada por pasta, com o ambiente de mesmo nome no `platformio.ini` (R28) |
+| `lib/<módulo>/` | O que dois programas dividem, com o nome do módulo do §5 da spec: `rfid`, `feedback`, `storage` |
+| `data/` | O portal do professor (HTML, CSS e JS). É desta pasta que sai a imagem de filesystem da placa (R27) |
+| `supabase/` | O SQL do banco, em arquivos numerados. Arquivo já aplicado não se edita (R33) |
+
 ## Equipe
 
 Gabriel Santarello · Cauã Andrade · Igor Lobato · Caio Planinschek · João Victor Cabral

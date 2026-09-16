@@ -15,7 +15,7 @@ Regra de arbitragem: a revisão editorial pode apontar excesso ou padrão artifi
 ## Contexto deste projeto
 
 **Público:** o professor da disciplina, que avalia. Não é desenvolvedor buscando referência de API nem banca de mestrado.
-**Registro:** acadêmico, direto, sem solenidade postiça. Primeira pessoa do plural quando a equipe é o agente ("implementamos", "decidimos").
+**Registro:** acadêmico, direto, sem solenidade postiça. **Primeira pessoa do plural** nos documentos de entrega e no relatório técnico, quando a equipe é o agente ("implementamos", "decidimos"). O **`DIARIO.md` é a exceção: terceira pessoa, nomeando quem fez** ("o Cauã isolou a leitura num programa"). O diário é registro de evolução, e o professor precisa ver quem tocou o quê; "implementamos" apaga exatamente essa informação (15/09).
 **Tipos de artefato em jogo:** documentação (entregas técnicas, relatório) e resumo editado (`DIARIO.md`). Ver as seções correspondentes na referência completa.
 **Fonte dos fatos:** `docs/spec.md`. Fato que não está lá nem foi dado pelo Caio **não existe** — pergunte, não preencha.
 
@@ -39,7 +39,8 @@ Regra de arbitragem: a revisão editorial pode apontar excesso ou padrão artifi
 
 ## Termos técnicos
 
-- **Mantenha o estrangeiro** quando for o termo consagrado do domínio ou quando traduzir perder precisão: *firmware*, *heap*, *handshake*, *debounce*, *hotspot*.
+- **Mantenha o estrangeiro** quando for o termo consagrado do domínio ou quando traduzir perder precisão: *firmware*, *heap*, *handshake*, *hotspot*, *boot*.
+- **Termo que a spec aposentou não volta pela porta dos fundos.** *debounce* era exemplo de estrangeiro mantido nesta lista até a **R30** rebatizá-lo de **janela de silêncio**, para não disputar sentido com *duplicata* (§11 da spec, 13/09). Quem manda no vocabulário é o glossário da spec; esta lista só ilustra o critério.
 - **Prefira o português** quando for igualmente preciso e natural: *chamada*, *crachá*, *lista da turma*.
 - **Integre à sintaxe portuguesa.** Artigo, gênero, número e preposição saem do conceito português que o termo designa. Uma interface é *o CLI*; uma habilidade é *uma skill*.
 - **Gênero de nome próprio vem do uso estabelecido, não do predicado da frase.** *O Google é uma empresa* não autoriza *a Google*. Sem uso verificável, explicite o núcleo comum (*a plataforma Supabase*) ou reescreva sem artigo. Não chute.
