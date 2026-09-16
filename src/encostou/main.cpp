@@ -156,10 +156,12 @@ void loop() {
                 feedbackComecouEm - leituraVoltouEm,
                 feedbackComecouEm - rfid::inicioDaLeituraUs());
 
-  // A lista cheia nao acontece numa turma nem no teste 8, mas se acontecer o
-  // aluno recebe o sinal de registrado sem estar na lista, e isso precisa sair
-  // no log em vez de passar em silencio. O limite e deste programa de bancada:
-  // a #27 poe o arquivo no lugar do vetor.
+  // A lista cheia nao acontece numa turma nem no teste 8, mas se acontecer
+  // precisa sair no log em vez de passar em silencio. O aviso sai no evento que
+  // ENCHE a lista, o 64o cracha, que ainda entra; do 65o em diante registrar()
+  // devolve false por lista cheia e o cracha novo recebe o sinal de
+  // JA_REGISTRADO -- uma piscada verde, sem som -- sem ter sido registrado.
+  // O limite e deste programa de bancada: a #27 poe o arquivo no lugar do vetor.
   if (primeiraVez && storage::cheia()) {
     Serial.println("AVISO: a lista de registrados encheu; os proximos crachas nao entram.");
   }

@@ -329,6 +329,8 @@ Módulos em `src/`:
 | `net.cpp` | Rádio: `WIFI_AP_STA` no Plano A; no Plano B, alternância AP↔STA (sequência fixa: parar server+DNS → `softAPdisconnect(true)` → `WIFI_OFF` → `delay(500)` → `WIFI_STA`; e o inverso na volta). Roster, upload, retry **com limite** |
 | `feedback.cpp` | LED + buzzer por máquina de estados com `millis()` — **sem `delay()`** |
 
+**Enquanto o `config.h` não existir, a pinagem do §4.1 mora em dois lugares:** `lib/feedback/feedback.cpp` (LED 25/26/27 e buzzer 33) e `lib/rfid/rfid.cpp` (SS 5 e RST 22). Mudança de pino toca os dois, e conferir só um deixa a placa meio ligada pelo mapa novo e meio pelo antigo. O `config.h` nasce com o firmware integrado; programa de bancada nenhum precisa dele.
+
 Regras de performance: loop sem `delay()`; SPI em VSPI por hardware; `ArduinoJson` com documento estático (sem concatenar `String`); log serial com níveis.
 
 ### Máquina de estados

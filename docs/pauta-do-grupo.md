@@ -17,6 +17,8 @@ Documento para **conversar com a equipe**, em linguagem direta. O detalhe técni
 > | 7 | Tela de histórico | issue #2 → R21, dono Igor |
 > | 8 | Voltar ao painel depois da troca de rede | issue #3 → R19 — **a premissa estava errada:** `WIFI_AP_STA` existe, e o projeto passa a ter Plano A e Plano B, a decidir na bancada |
 > | Parte 4 | Material e caixa | issue #4 → R22 — material completo, com o João; caixa adiada |
+>
+> **O corpo abaixo preserva as premissas de 08–10/09 e não se reescreve** — é o registro de como as perguntas foram feitas. Duas delas já não valem: o ponto 8 afirma que o aparelho não consegue ser rede e usar internet ao mesmo tempo (a R19 derrubou: `WIFI_AP_STA` existe), e a mensagem pronta ao João manda comprar transistor 2N2222 e resistor de 1 kΩ (a R22 trocou por uma checagem de bancada, e o transistor só entra se as duas ligações diretas reprovarem). O que vale está na `spec.md`.
 
 ---
 
