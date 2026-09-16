@@ -247,7 +247,8 @@ void aoMudarARede(arduino_event_id_t evento) {
 uint8_t escolherCanalDoAparelho() {
   const int redes = WiFi.scanNetworks();
   int canalDoHotspot = 0;
-  for (int i = 0; i < redes; i++) {
+  // Rede oculta anuncia nome vazio: com o STA_SSID em branco, ela passaria por hotspot.
+  for (int i = 0; i < redes && strlen(STA_SSID) > 0; i++) {
     if (WiFi.SSID(i) == STA_SSID) {
       canalDoHotspot = WiFi.channel(i);
       break;
