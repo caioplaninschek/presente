@@ -66,6 +66,7 @@
 
 const size_t ALUNOS_NA_LISTA = 40;
 const unsigned long ESPERA_DO_HOTSPOT_MS = 20000;
+const unsigned long ESPERA_DO_CELULAR_MS = 15000;
 const byte PORTA_DNS = 53;
 const IPAddress ENDERECO_DO_APARELHO(192, 168, 4, 1);
 
@@ -86,7 +87,11 @@ bool conectando = false;
 bool medicaoFalhou = false;
 unsigned long inicioDaConexao = 0;
 uint8_t canalAntesDaConexao = 0;
+int celularesAntesDaConexao = 0;
+bool esperandoCelular = false;
+unsigned long inicioDaEspera = 0;
 unsigned long saiuEm = 0;
+uint8_t macQueSaiu[6];
 
 const char PAGINA_LOGIN[] PROGMEM = R"HTML(<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
@@ -188,9 +193,14 @@ void servirLogin() {
 }
 
 void aceitarLogin() {
-  char token[17];
-  snprintf(token, sizeof(token), "%08x%08x", esp_random(), esp_random());
-  tokenDaSessao = token;
+  // Um token por boot, e nao um por login: um segundo login (outro celular, ou o
+  // mesmo celular no navegador depois da janelinha do portal cativo, que guarda
+  // outro cookie) derrubaria o primeiro, e a #18 anotaria como queda o que nao e.
+  if (tokenDaSessao.isEmpty()) {
+    char token[17];
+    snprintf(token, sizeof(token), "%08x%08x", esp_random(), esp_random());
+    tokenDaSessao = token;
+  }
 
   server.sendHeader("Set-Cookie", "sessao=" + tokenDaSessao + "; HttpOnly; Path=/");
   server.sendHeader("Location", "/painel");
@@ -223,14 +233,15 @@ void mandarParaOPortal() {
   server.send(302);
 }
 
-void aoMudarARede(arduino_event_id_t evento) {
+void aoMudarARede(arduino_event_id_t evento, arduino_event_info_t info) {
   const unsigned long segundos = millis() / 1000;
 
   if (evento == ARDUINO_EVENT_WIFI_AP_STACONNECTED) {
     Serial.printf("Celular entrou na rede do aparelho (%d conectado(s)) - %lu s desde o boot\n",
                   WiFi.softAPgetStationNum(), segundos);
-    if (saiuEm != 0) {
-      // E o "se cair, volta em <5 s" do 7c, visto do lado do aparelho.
+    if (saiuEm != 0 && memcmp(info.wifi_ap_staconnected.mac, macQueSaiu, 6) == 0) {
+      // E o "se cair, volta em <5 s" do 7c, visto do lado do aparelho. So conta
+      // se quem entrou e o mesmo celular que saiu, senao o tempo nao e de ninguem.
       Serial.printf("Celular voltou depois de %.1f s fora\n", (millis() - saiuEm) / 1000.0f);
       saiuEm = 0;
     }
@@ -239,6 +250,7 @@ void aoMudarARede(arduino_event_id_t evento) {
 
   if (evento == ARDUINO_EVENT_WIFI_AP_STADISCONNECTED) {
     saiuEm = millis();
+    memcpy(macQueSaiu, info.wifi_ap_stadisconnected.mac, 6);
     Serial.printf("Celular saiu da rede do aparelho (%d conectado(s)) - %lu s desde o boot\n",
                   WiFi.softAPgetStationNum(), segundos);
   }
@@ -327,7 +339,7 @@ void abrirConexaoSegura() {
 }
 
 void medir() {
-  if (conectando) {
+  if (conectando || esperandoCelular) {
     return;
   }
   if (medicaoFalhou) {
@@ -342,6 +354,7 @@ void medir() {
 
   Serial.printf("Conectando no hotspot %s...\n", STA_SSID);
   canalAntesDaConexao = canalAtual();
+  celularesAntesDaConexao = WiFi.softAPgetStationNum();
   inicioDaConexao = millis();
   conectando = true;
   WiFi.begin(STA_SSID, STA_PASSWORD);
@@ -364,6 +377,14 @@ void acompanharConexao() {
       Serial.printf("O PULO DE CANAL NAO ACONTECEU: os dois ja estavam no canal %d. O teste 7c nao vale nesta rodada.\n",
                     canalAgora);
     }
+    if (celularesAntesDaConexao > 0 && WiFi.softAPgetStationNum() == 0) {
+      // O celular caiu no pulo em vez de acompanhar. Medir agora daria o numero
+      // sem cliente conectado, justo o da #18, que e o que decide o suspeito (R31).
+      Serial.println("Esperando o celular voltar para a rede do aparelho antes de medir (ate 15 s).");
+      esperandoCelular = true;
+      inicioDaEspera = millis();
+      return;
+    }
     abrirConexaoSegura();
     return;
   }
@@ -372,6 +393,22 @@ void acompanharConexao() {
     conectando = false;
     WiFi.disconnect();
     Serial.println("Nao conectei no hotspot em 20 s. Confira nome, senha e se ele esta em 2,4 GHz.");
+  }
+}
+
+void acompanharVoltaDoCelular() {
+  if (!esperandoCelular) {
+    return;
+  }
+  if (WiFi.softAPgetStationNum() > 0) {
+    esperandoCelular = false;
+    abrirConexaoSegura();
+    return;
+  }
+  if (millis() - inicioDaEspera >= ESPERA_DO_CELULAR_MS) {
+    esperandoCelular = false;
+    Serial.println("O celular nao voltou em 15 s: a medicao sai sem ele.");
+    abrirConexaoSegura();
   }
 }
 
@@ -437,4 +474,5 @@ void loop() {
   }
 
   acompanharConexao();
+  acompanharVoltaDoCelular();
 }
