@@ -53,6 +53,12 @@ create table public.sessoes (
                constraint sessoes_modo check (modo in ('online', 'offline')),
   relogio      text
                constraint sessoes_relogio check (relogio in ('portal', 'api')),
+  -- O aparelho só escreve 'finalizada' (R42): a sessão chega no Enviar, já
+  -- encerrada, e o enviar_relatorio nomeia o estado no insert, então o default
+  -- 'aberta' nunca chega a valer por esse caminho. 'aberta' e 'cancelada' são
+  -- escrita administrativa, de quem corrige uma aula à mão; o 'aberta' pode
+  -- voltar a ser escrito pelo aparelho quando a lacuna "estado depois do
+  -- Enviar" (§8 da spec) for decidida na integração.
   estado       text not null default 'aberta'
                constraint sessoes_estado check (estado in ('aberta', 'finalizada', 'cancelada'))
 );

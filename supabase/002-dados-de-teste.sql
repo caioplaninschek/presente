@@ -100,6 +100,10 @@ select matricula, 'TESTE01', true
 
 -- 5. Aulas passadas da turma real, nas terças de 04/08 a 08/09, às 19h.
 -- 18/08 foi sem internet (offline); 01/09 foi cancelada.
+-- A aula cancelada é semeada à mão: nenhum aparelho a produziria, porque ele só
+-- escreve 'finalizada' (R42). Ela existe para a página de histórico (R21) ter os
+-- três estados para mostrar, e é por isso que não recebe evento nenhum nos
+-- blocos 6 e 7 abaixo, que filtram por estado = 'finalizada'.
 insert into public.sessoes (id, professor_id, turma, inicio, fim, modo, relogio, estado) values
   ('teste-4172CMPN6A_P1-20260804-1900', 'prof-teste-1', '4172CMPN6A_P1', '2026-08-04 19:00:00-03', '2026-08-04 21:40:00-03', 'online',  'portal', 'finalizada'),
   ('teste-4172CMPN6A_P1-20260811-1900', 'prof-teste-1', '4172CMPN6A_P1', '2026-08-11 19:00:00-03', '2026-08-11 21:40:00-03', 'online',  'portal', 'finalizada'),
