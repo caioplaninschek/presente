@@ -15,16 +15,28 @@
 // Exportacao do secao 7, com os eventos dentro de um array, e montado na saida
 // -- no Exibir, no Compartilhar e no Enviar --, nunca guardado assim.
 //
-// O porque: manter um array valido em disco obriga a reescrever o fecho a cada
-// evento, e uma queda de energia no meio dessa reescrita deixa o arquivo inteiro
-// impossivel de abrir. Trocaria a perda de um registro pela perda de todos, que
-// e exatamente o contrario da HU-35. Com linhas, uma queda deixa no maximo uma
-// ultima linha sem o \n, e a releitura do boot a descarta.
+// O porque, em duas razoes (R36):
+//   - a releitura fica barata. Uma linha por vez cabe num documento estatico,
+//     que e a razao de existir da R29: nada de heap fragmentado depois de
+//     algumas dezenas de eventos.
+//   - o custo de escrita e o desgaste da flash nao crescem com o tamanho da
+//     chamada. Manter um array valido obriga a reescrever o fecho a cada evento,
+//     e reescrever o fecho significa reescrever tudo o que ja esta la.
+//
+// Uma razao que a proposta oferecia e que NAO vale: a de que a queda de energia
+// no meio da reescrita deixaria o arquivo ilegivel. O littlefs grava em copia e
+// volta ao ultimo estado bom quando falta energia, entao o arquivo voltaria ao
+// conteudo anterior. Conferido na fonte em 15/09 e riscado na spec, dentro da
+// R36; a decisao continua de pe pelas duas razoes acima.
+//
+// Com linhas, uma queda de energia estraga no maximo a ultima linha, que fica
+// sem o \n e e descartada na releitura do boot -- um registro, nunca a
+// chamada inteira (HU-35).
 //
 // Isto nao contraria o secao 7, que e contrato de saida e nao formato em disco:
 // o secao 11 ja define evento como "uma linha do eventos.json" e o secao 10 ja
-// chama a escrita de append-only. Decidido na issue #27 pelo Caua; falta virar
-// R<n> no secao 2 da spec.
+// chama a escrita de append-only. Proposto pelo Caua na issue #27 e travado
+// como R36 e R37 na rodada 12 da spec (15/09).
 //
 // O campo de horario chama-se ms_desde_boot e NAO timestamp. O timestamp do
 // secao 7 e ISO-8601 com fuso e vem do navegador do professor no Iniciar, que

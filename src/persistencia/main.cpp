@@ -18,8 +18,11 @@
 //
 // O arquivo inteiro nao e um JSON valido, e e de proposito. O array do secao 7
 // se monta na saida -- no Exibir, no Compartilhar e no Enviar. Manter o array
-// fechado em disco obrigaria a reescrever o fecho a cada evento, e a queda de
-// energia no meio dessa reescrita levaria o arquivo todo, nao um registro.
+// fechado em disco obrigaria a reescrever o fecho a cada evento, e reescrever o
+// fecho significa reescrever tudo o que ja esta la: o custo de escrita e o
+// desgaste da flash cresceriam com o tamanho da chamada. A releitura tambem fica
+// barata assim, uma linha por vez em documento estatico (R36). O porque inteiro,
+// com a razao que caiu, esta no cabecalho do lib/storage/storage.h.
 //
 // ms_desde_boot nao e timestamp. O timestamp do secao 7 e ISO-8601 com fuso e
 // vem do navegador do professor no Iniciar, que ainda nao existe. O porque
