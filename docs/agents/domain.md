@@ -13,18 +13,17 @@ If `docs/adr/` doesn't exist yet, **proceed silently**. Don't flag its absence; 
 
 ## File structure
 
-Single-context repo (most repos):
+Single-context repo — **this repo**:
 
 ```
 /
-├── CONTEXT.md
-├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
+├── docs/
+│   ├── spec.md                        ← §11 is the glossary
+│   └── adr/                           ← created on demand
 └── src/
 ```
 
-Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
+Multi-context repo (presence of `CONTEXT-MAP.md` at the root) — not this repo's shape, kept only so you recognize one:
 
 ```
 /
@@ -32,10 +31,8 @@ Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
 ├── docs/adr/                          ← system-wide decisions
 └── src/
     ├── ordering/
-    │   ├── CONTEXT.md
     │   └── docs/adr/                  ← context-specific decisions
     └── billing/
-        ├── CONTEXT.md
         └── docs/adr/
 ```
 
