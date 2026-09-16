@@ -76,6 +76,8 @@ Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entr
 
 **Onde os vértices estavam em 15/09.** O 06 fechou com o merge do PR #29. Os vértices 12, 13, 15 e 17 têm o **código preparado e compilando** — o Cauã preparou os quatro em 15/09 —, e o que falta nos quatro é rodar na placa, que depende do 08 (protoboard). O João avisou em 15/09 que o **RC522 precisa de solda nos pinos**: isso não trava o 12, que usa só LED e buzzer, mas trava o 13, o 15 e o 17, que são os testes 1, 2 e 8 do §8.
 
+⚠️ **O 04 continua aberto**, vencido desde 14/09 e sem uma linha do João em issue nenhuma. Ele é a tarefa zero e trava **tudo** que sobe na placa, o 12 inclusive — a solda não é a única trava da quinta. Cobrado na #14 e no grupo em 16/09.
+
 ## Onde mora o código de cada vértice (R28)
 
 Cada programa de bancada tem a sua pasta em `src/` e o seu ambiente no `platformio.ini`, com o mesmo nome. O passo a passo do João diz qual ambiente escolher antes do Upload.
