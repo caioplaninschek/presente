@@ -283,6 +283,11 @@ void abrirConexaoSegura() {
   WiFiClientSecure cliente;
   cliente.setInsecure();
 
+  // O connect() bloqueia o loop() por alguns segundos, e nesse tempo o DNS e as
+  // paginas ficam sem resposta: a pagina do celular pode ficar vermelha sem que o
+  // radio tenha caido. O aviso sai antes, para ninguem anotar isso como queda no 7c.
+  Serial.println("Abrindo a conexao segura: o aparelho para de responder por alguns segundos, e a pagina do celular pode ficar vermelha. Isso e esperado e nao e queda do radio.");
+
   // O ANTES e a ultima coisa antes do connect(): e o numero do criterio do 7d.
   const int celulares = WiFi.softAPgetStationNum();
   const uint32_t antes = ESP.getFreeHeap();
