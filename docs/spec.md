@@ -90,7 +90,7 @@ O comportamento esperado do sistema pelo ponto de vista de quem usa. O §6 diz *
 
 - **R1 Cadastro de tag sai do aparelho.** A tag chega ao aluno **já cadastrada** — pela equipe no protótipo, pela instituição no cenário real. O professor nunca cadastra ninguém. Consequência: **`turma_ativa.json` deixa de existir**; a lista da turma passa a vir da API.
 - **R2 Sincronização em 2 momentos, nunca por toque.** ❌ Descartado: uma chamada de API por aluno (40 alunos = 40 idas à internet durante a aula, latência refém do Wi-Fi, fila na porta). ✅ Adotado:
-  - **Iniciar** → 1 chamada: baixa a lista da turma (matrícula + nome + UID, ~3 KB p/ 40 alunos) e cacheia no LittleFS pela sessão. ⚠️ **Corrigido em R14 (06/09):** essa chamada passou para o login. ⚠️ **Medido em 14/09, na #21 (R33):** a lista da turma de 40 alunos dos dados de teste veio com 3230 bytes.
+  - **Iniciar** → 1 chamada: baixa a lista da turma (matrícula + nome + UID, ~3 KB p/ 40 alunos) e cacheia no LittleFS pela sessão. ⚠️ **Corrigido em R14 (06/09):** essa chamada passou para o login. ⚠️ **Medido em 15/09, na #21 (R33):** a lista da turma de 40 alunos dos dados de teste veio com 3230 bytes.
   - **Durante a aula** → zero internet. Consulta local, <200 ms garantido.
   - **Enviar** → 1 chamada: sobe o relatório completo.
 - **R3 Modo offline degradado.** Sem internet no Iniciar, o aparelho entra em **modo UID-cru**: registra só os números das tags, marca `modo: "offline"`, e o enriquecimento (nome/matrícula) acontece no envio. Nada se perde. Consequência: **offline o aparelho não sabe validar turma** — aceita qualquer UID lido, e o backend julga depois. ⚠️ **Corrigido em R14 (06/09):** o modo offline se decide no login, quando a sincronização falha, e não no Iniciar.
@@ -115,7 +115,7 @@ Fecha o ticket *Caminho viável do ESP32 até o Supabase*. Detalhe completo e fo
 
 - **R13 Transporte: `HTTPClient` + `WiFiClientSecure` + `setInsecure()`.** Sem biblioteca de Supabase, sem NTP, sem certificado pinado.
   - **Por que não pinar:** a Supabase não usa uma CA só e troca de emissor sem aviso (verificado em 06/09/2026: Let's Encrypt, Amazon e Google servindo endpoints diferentes). Certificado pinado quebra sozinho e ninguém saberia por quê.
-  - **Custo assumido:** `setInsecure()` criptografa mas **não autentica o servidor** — MITM teoricamente possível no hotspot. Proporcional (hotspot do próprio grupo, chave anon descartável, protótipo acadêmico). **Registrar essa limitação no relatório técnico**, não escondê-la.
+  - **Custo assumido:** `setInsecure()` criptografa mas **não autentica o servidor** — MITM teoricamente possível no hotspot. Proporcional (hotspot do próprio grupo, chave publicável e descartável — R35 —, protótipo acadêmico). **Registrar essa limitação no relatório técnico**, não escondê-la.
   - **Sem a lib `ESPSupabase`:** parada desde 07/2025, arrasta `WebSockets` como dependência morta, e internamente só faz o que 20 linhas próprias fazem.
 - **R13a Fechar o AP antes de abrir o TLS é requisito de memória.** O handshake pede 40–50 KB de heap livre (mbedTLS aloca 16 KB RX + 16 KB TX). R4 deixa de ser só questão de canal de rádio. ⚠️ **Com R19, este vira o argumento decisivo:** o canal deixou de ser impedimento para o modo simultâneo, a memória não. O Plano A só passa se sobrarem os 40 KB com AP, DNS, WebServer e roster de pé ao mesmo tempo — é medição, não estimativa.
 - **R13b Limitar as tentativas de `connect()`.** `WiFiClientSecure` vaza ~4 KB de heap por conexão **falha** (arduino-esp32 #3808); retry sem limite trava o aparelho.
