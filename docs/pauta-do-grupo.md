@@ -13,7 +13,7 @@ Documento para **conversar com a equipe**, em linguagem direta. O detalhe técni
 > | # | Assunto | Onde foi decidido |
 > |---|---|---|
 > | 1–3 | Crachá por aluno, aluno em várias turmas, aluno que sai | issue #1 → R20 |
-> | 4–6 | Poderes da chave, duplo Enviar, aula sem internet | issue #1 → R20 (o duplo Enviar sai do `estado` da sessão) |
+> | 4–6 | Poderes da chave, duplo Enviar, aula sem internet | issue #1 → R20 — ~~o duplo Enviar sai do `estado` da sessão~~, sai da chave primária `sessaoId` desde a R33, e o aparelho só escreve `finalizada` (R42, 16/09) |
 > | 7 | Tela de histórico | issue #2 → R21, dono Igor |
 > | 8 | Voltar ao painel depois da troca de rede | issue #3 → R19 — **a premissa estava errada:** `WIFI_AP_STA` existe, e o projeto passa a ter Plano A e Plano B, a decidir na bancada |
 > | Parte 4 | Material e caixa | issue #4 → R22 — material completo, com o João; caixa adiada |
