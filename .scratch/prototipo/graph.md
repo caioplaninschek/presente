@@ -63,7 +63,7 @@ A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega
 | 09 | [#13](https://github.com/caioplaninschek/presente/issues/13) | #5 | Caio | 14/09 |
 | 10 | [#16](https://github.com/caioplaninschek/presente/issues/16) | #6 | Caio | 17/09 |
 | 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | 16/09 |
-| 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | livre + João | 17/09 |
+| 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | Cauã + João | 17/09 |
 | 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09 |
 | 14 | [#17](https://github.com/caioplaninschek/presente/issues/17) | #6 | João | 19/09 |
 | 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 |
@@ -73,6 +73,8 @@ A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega
 | 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 21/09 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
+
+**Onde os vértices estavam em 15/09.** O 06 fechou com o merge do PR #29. Os vértices 12, 13, 15 e 17 têm o **código preparado e compilando** — o Cauã preparou os quatro em 15/09 —, e o que falta nos quatro é rodar na placa, que depende do 08 (protoboard). O João avisou em 15/09 que o **RC522 precisa de solda nos pinos**: isso não trava o 12, que usa só LED e buzzer, mas trava o 13, o 15 e o 17, que são os testes 1, 2 e 8 do §8.
 
 ## Onde mora o código de cada vértice (R28)
 
@@ -97,5 +99,5 @@ Os epics #8 (estrutura física, 29/09) e #9 (dashboard e o aparelho falando com 
 
 1. **Nove execuções físicas em onze dias, todas pelo João.** É o preço do modelo em que a placa não circula. Se empilhar, a saída é uma tarde na casa dele com mais gente, ou a placa circular por alguns dias.
 2. **Sem aula presencial na terça 15/09.** Some o único encontro garantido da semana, e é dele que o teste 16 (7c) depende, por precisar de dois celulares juntos.
-3. **O Igor ainda não é colaborador do repositório** — convite pendente desde 06/09. A issue #20 segue sem assignee por causa disso (convite ainda pendente em 13/09); o epic #9 passou a ter o Caio.
+3. ~~**O Igor ainda não é colaborador do repositório** — convite pendente desde 06/09. A issue #20 segue sem assignee por causa disso (convite ainda pendente em 13/09)~~ — **fechado em 15/09**: o convite foi aceito, o Igor tem permissão de escrita, a #20 está atribuída a ele e o trabalho dela chegou pelo PR #29. O epic #9 continua com o Caio.
 4. **O Gabriel não se manifestou em nenhuma issue até 11/09.** Os dois vértices dele (01 e 19) foram escolhidos de propósito sem placa e sem código, e nenhum dos dois trava terceiro.

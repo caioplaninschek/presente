@@ -37,6 +37,10 @@ O que segue valendo nos dois planos:
 
 4. **Como a página volta.** A página que mostra "carregando turma…" precisa sondar o aparelho até ele responder. Intervalo, tempo limite, e o que exibir se estourar.
 
+   ⚠️ **Atualizado em 15/09 (R40), com o protótipo da #20 na mão.** O Igor respondeu os três números como **valores de partida**: sonda de 1 em 1 s, desiste em 25 s e, ao desistir, oferece seguir sem a lista — que é o modo offline que o §5 já previa. A conferência achou o defeito que isso escondia: o botão *Seguir sem a lista* pedia `/api/seguir-offline` e só trocava de tela dentro do `.then()`, de modo que **com o aparelho mudo — exatamente o caso em que a tela existe — ele não fazia nada e não avisava nada**. O *Voltar ao login* tinha o mesmo desenho. A **R40** fechou a parte que é do portal: todo pedido ao aparelho tem tempo-limite, a falha aparece na tela, o botão volta a aceitar toque e nenhuma tela troca sem confirmação.
+
+   **O que continua deste item:** os três números só se calibram na bancada, com o rádio de verdade saindo do ar; e sobra a pergunta de firmware que a R40 não responde — como o aparelho confirma "seguir sem a lista" se ele é justamente quem não está respondendo. Fecha com o portal rodando dentro do aparelho, depois da Entrega 05.
+
 ⚠️ **Atualizado em 13/09: a execução deste protótipo foi quebrada em cinco issues** — firmware (#15), roteiro (#16), teste 7d (#17), teste 7c (#18) e veredito (#19). A #19 resolve o veredito entre os planos, com três desfechos possíveis (Plano A, Plano A provisório pela R32 ou Plano B). Os itens 2 e 3 **não têm teste** antes da Entrega 05: a #18 só observa onde o login abriu e se o celular trocou sozinho para o 4G, e a escolha está declarada como lacuna no §8 da spec.
 
 ## Notas

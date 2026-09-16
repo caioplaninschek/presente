@@ -2,7 +2,7 @@
 
 Type: task
 Status: ready-for-human
-Dono: livre (preparar) + João (rodar)
+Dono: Cauã (preparar) + João (rodar)
 Prazo: 17/09
 Entrega: —
 Blocked by: 08, 04
