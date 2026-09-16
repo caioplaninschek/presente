@@ -3,7 +3,7 @@
 Type: grilling
 Status: resolved
 Resolvido: 13/09/2026, na preparação da issue #21 do GitHub (R33–R35)
-Esquema decidido em: 10/09/2026, pela issue #1 do GitHub (R20) — `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`) e `eventos`. A idempotência sai do `estado`: sessão `finalizada` recusa o segundo POST, o que fecha `HU-39`. **Continua em aberto a outra metade do ticket: escrever as políticas de RLS** (a chave anon lê roster e insere evento, nunca apaga nem altera o passado). Dono: Caio.
+Esquema decidido em: 10/09/2026, pela issue #1 do GitHub (R20) — `alunos`, `professores`, `turmas`, `alunos_turmas`, `sessoes` (com `estado`) e `eventos`. A idempotência sai do `estado`: sessão `finalizada` recusa o segundo POST, o que fecha `HU-39`. ~~Continua em aberto a outra metade do ticket: escrever as políticas de RLS (a chave anon lê roster e insere evento, nunca apaga nem altera o passado). Dono: Caio.~~ — a outra metade fechou em 13/09 com a **R33**, que tirou o aparelho das tabelas: ele não tem privilégio em nenhuma e só executa `roster` e `enviar_relatorio`. A chave também deixou de ser a `anon`: é a **publicável** (R35). Ver a `## Answer` abaixo.
 Parent: map.md
 Blocked by: 03
 
