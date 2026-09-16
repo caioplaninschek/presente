@@ -1,7 +1,8 @@
 # 05: Firmware do teste de rádio (Plano A)
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 16/09/2026, pela issue #15 do GitHub
 Dono: Caio
 Prazo: 17/09
 Entrega: —
