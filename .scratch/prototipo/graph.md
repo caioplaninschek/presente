@@ -26,7 +26,7 @@ sem bloqueio, pode começar hoje
   07 banco na nuvem (Caio, 17/09) ──> [epic 05/10: tela de histórico]
   05 firmware do rádio (Caio) ──> 10 roteiro (Caio, 17/09)  ─┐
   04 ambiente do João (Caio+João, 14/09) ────────────────────┼─> 14 teste 7d (João, 19/09)
-  08 protoboard (João, 16/09) ──┬─> 11 buzzer (João, 16/09)  │        │
+  08 protoboard (João, 19/09) ──┬─> 11 buzzer (João, 19/09)  │        │
                                 │                            │        v
                                 ├─> 12 prova de vida ────┐   │   16 teste 7c (João, 20/09)
                                 └─> 13 leitor lê crachá ─┴───┼────────┤
@@ -59,12 +59,12 @@ A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega
 | 05 | [#15](https://github.com/caioplaninschek/presente/issues/15) | #6 | Caio | 17/09 |
 | 06 | [#20](https://github.com/caioplaninschek/presente/issues/20) | #6 | Igor | 21/09 |
 | 07 | [#21](https://github.com/caioplaninschek/presente/issues/21) | #6 | Caio | 17/09 |
-| 08 | [#22](https://github.com/caioplaninschek/presente/issues/22) | #7 | João | 16/09 |
+| 08 | [#22](https://github.com/caioplaninschek/presente/issues/22) | #7 | João | ~~16/09~~ 19/09, o leitor depois da solda |
 | 09 | [#13](https://github.com/caioplaninschek/presente/issues/13) | #5 | Caio | 14/09 |
 | 10 | [#16](https://github.com/caioplaninschek/presente/issues/16) | #6 | Caio | 17/09 |
-| 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | 16/09 |
-| 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | Cauã + João | 17/09 |
-| 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09 |
+| 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | ~~16/09~~ 19/09, antes do 12 |
+| 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | Cauã + João | ~~17/09~~ 19/09, assim que o 04 funcionar |
+| 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09, depois da solda |
 | 14 | [#17](https://github.com/caioplaninschek/presente/issues/17) | #6 | João | 19/09 |
 | 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 |
 | 16 | [#18](https://github.com/caioplaninschek/presente/issues/18) | #6 | João | 20/09 |
@@ -77,6 +77,8 @@ Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entr
 **Onde os vértices estavam em 15/09.** O 06 fechou com o merge do PR #29. Os vértices 12, 13, 15 e 17 têm o **código preparado e compilando** — o Cauã preparou os quatro em 15/09 —, e o que falta nos quatro é rodar na placa, que depende do 08 (protoboard). O João avisou em 15/09 que o **RC522 precisa de solda nos pinos**: isso não trava o 12, que usa só LED e buzzer, mas trava o 13, o 15 e o 17, que são os testes 1, 2 e 8 do §8.
 
 ⚠️ **O 04 continua aberto**, vencido desde 14/09 e sem uma linha do João em issue nenhuma. Ele é a tarefa zero e trava **tudo** que sobe na placa, o 12 inclusive — a solda não é a única trava da quinta. Cobrado na #14 e no grupo em 16/09.
+
+**A solda ficou para sábado (17/09).** O João avisou no grupo que só consegue soldar os pinos do RC522 no sábado, 19/09. O que não depende dela — a parte sem leitor do 08, o 11 e o 12 — passa a ter prazo até sábado, com o 12 rodando assim que o 04 funcionar. O 13 roda no mesmo sábado, depois da solda. O 15 e o 17 seguem no domingo, 20/09, e agora dependem de a solda sair no sábado.
 
 ## Onde mora o código de cada vértice (R28)
 

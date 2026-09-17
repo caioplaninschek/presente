@@ -3,7 +3,7 @@
 Type: task
 Status: ready-for-human
 Dono: João
-Prazo: 16/09
+Prazo: ~~16/09~~ 19/09; LED, resistores, buzzer e alimentação antes do 11 e do 12, o leitor depois da solda (atualizado em 17/09)
 Entrega: —
 Blocked by: —
 GitHub: https://github.com/caioplaninschek/presente/issues/22

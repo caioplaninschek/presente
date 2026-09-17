@@ -3,7 +3,7 @@
 Type: task
 Status: ready-for-human
 Dono: Cauã (preparar) + João (rodar)
-Prazo: 17/09
+Prazo: ~~17/09~~ assim que o 04 funcionar, até 19/09, porque o 15 depende dele (atualizado em 17/09)
 Entrega: —
 Blocked by: 08, 04
 GitHub: https://github.com/caioplaninschek/presente/issues/24

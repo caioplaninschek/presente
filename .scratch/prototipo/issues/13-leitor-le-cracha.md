@@ -3,7 +3,7 @@
 Type: task
 Status: ready-for-human
 Dono: Cauã (preparar) + João (rodar)
-Prazo: 19/09
+Prazo: 19/09, depois da solda dos pinos do RC522, marcada para o mesmo dia (atualizado em 17/09)
 Entrega: —
 Blocked by: 08, 04
 GitHub: https://github.com/caioplaninschek/presente/issues/25

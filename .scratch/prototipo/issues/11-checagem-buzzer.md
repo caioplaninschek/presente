@@ -3,7 +3,7 @@
 Type: task
 Status: ready-for-human
 Dono: João
-Prazo: 16/09
+Prazo: ~~16/09~~ antes do 12, até 19/09; não espera a solda (atualizado em 17/09)
 Entrega: —
 Blocked by: 08
 GitHub: https://github.com/caioplaninschek/presente/issues/23
