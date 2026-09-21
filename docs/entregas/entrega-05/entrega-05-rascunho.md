@@ -8,9 +8,9 @@
 >
 > ⚠️ **Este bloco de trabalho sai do documento na montagem.**
 >
-> ⚠️ **Duas divergências de hardware em aberto em 20/09, que podem obrigar a corrigir texto já escrito:**
-> 1. **O LED pode não ser RGB.** O João descreve a peça como "um verde, um amarelo, um vermelho"; o §4.1 da spec e os quatro programas assumem vermelho, verde e azul nos GPIO 25, 26 e 27. As seções 1 e 2 abaixo seguem a spec. Se a peça for outra, as duas seções mudam.
-> 2. **A ligação do buzzer não tem veredito** (#23). A spec manda checar antes de afirmar, e nenhuma frase deste rascunho afirma transistor.
+> ~~⚠️ **Duas divergências de hardware em aberto em 20/09, que podem obrigar a corrigir texto já escrito.**~~ **As duas se resolveram em 21/09, na prova de vida (#24), e a spec as registrou na R44:**
+> 1. ~~**O LED pode não ser RGB.**~~ **O LED é RGB de catodo comum.** As três cores acenderam e bateram com o monitor serial, e o João mandou o vídeo. A montagem usa resistores de 300 Ω, e não de 220 Ω; a seção 1.1 já diz 300.
+> 2. ~~**A ligação do buzzer não tem veredito** (#23).~~ **O buzzer entrou por um transistor TIP122**, alimentado em 5 V pelo VIN, e mesmo assim o som saiu muito baixo e estranho, audível só de perto. A peça vai ser trocada. A seção 1 já cita o transistor, e o problema entra na seção 3, na prova de vida.
 
 ---
 
@@ -24,7 +24,7 @@ O sistema registra a presença do aluno em sala pelo crachá, sem chamada oral e
 
 **O processamento é o ESP32 DevKit V1.** Ele recebe o UID e decide sem consultar rede nenhuma: se aquele crachá ainda não foi registrado nesta sessão, o evento é gravado; se o mesmo crachá voltar ao campo em menos de cinco segundos, nada acontece, porque é a mesma aproximação sendo lida de novo; e se ele já estava registrado, o aparelho avisa que reconheceu, mas não grava uma segunda vez. A decisão se apoia numa lista gravada no sistema de arquivos interno do próprio microcontrolador, o LittleFS, relida toda vez que o aparelho liga. É o que impede que uma queda de energia no meio da aula apague a chamada.
 
-**Os atuadores são o LED RGB**, ligado aos GPIO 25, 26 e 27, **e o buzzer**, no GPIO 33. Eles carregam a resposta que o aluno vê e ouve, e as três respostas são deliberadamente diferentes entre si: duas piscadas verdes com um bip de 100 ms quando a presença entra; uma piscada verde, sem som, quando o crachá já estava registrado; e nada, nem luz nem som, na releitura dentro da janela de cinco segundos. O aluno não precisa olhar para tela nenhuma para saber o que aconteceu.
+**Os atuadores são o LED RGB**, ligado aos GPIO 25, 26 e 27, **e o buzzer**, comandado pelo GPIO 33 por meio de um transistor TIP122. O pino do ESP32 entrega 3,3 V e pouca corrente, e o transistor permite alimentar o buzzer com os 5 V da placa. Eles carregam a resposta que o aluno vê e ouve, e as três respostas são deliberadamente diferentes entre si: duas piscadas verdes com um bip de 100 ms quando a presença entra; uma piscada verde, sem som, quando o crachá já estava registrado; e nada, nem luz nem som, na releitura dentro da janela de cinco segundos. O aluno não precisa olhar para tela nenhuma para saber o que aconteceu.
 
 O ciclo completo, portanto, é **crachá → RC522 → ESP32 → decisão → LED e buzzer → registro em disco**, e se fecha inteiro dentro do aparelho, sem internet. A rede serve a dois momentos que não são esse: o professor abre a sessão pelo celular, numa página servida pelo próprio ESP32, e o relatório sobe para a nuvem no fim da aula.
 
@@ -50,7 +50,7 @@ Figura 2 – Fluxograma da lógica do programa.
 | LED RGB | B | 27 | Saída |
 | Buzzer ativo (atuador 2) | sinal | 33 | Saída |
 
-Uma fonte de 5 V na tomada alimenta o conjunto, porque o aparelho é fixo e foi pensado para ficar preso à parede da sala; o leitor recebe os 3,3 V do regulador da própria placa. Cada linha do LED tem um resistor de 220 Ω em série. O projeto usa **um sensor só**: o professor dispensou esta equipe da exigência de dois.
+Uma fonte de 5 V na tomada alimenta o conjunto, porque o aparelho é fixo e foi pensado para ficar preso à parede da sala; o leitor recebe os 3,3 V do regulador da própria placa. Cada linha do LED tem um resistor de 300 Ω em série, e o buzzer é acionado pelo GPIO 33 através do transistor, com o positivo ligado aos 5 V. O projeto usa **um sensor só**: o professor dispensou esta equipe da exigência de dois.
 
 ---
 
@@ -87,13 +87,23 @@ A especificação do projeto acompanhou o código. Ela passou por quatro rodadas
 
 *Origem: `docs/testes-22-09.md` (#28, Gabriel) · Dono: Gabriel, montagem do Caio (#30) · Prazo: segunda, 21/09 · **formulário montado em 20/09, resultados em branco***
 
-> ⚠️ **Estado em 20/09, 12h53:** nenhum teste rodou. O formulário abaixo traz a descrição e o resultado esperado de cada teste, que saem da especificação e não dependem de execução. **O resultado obtido, os problemas, as correções e a evidência são preenchidos com o retorno do João.** Nada aqui pode ser dado como feito antes de a evidência existir.
+> ⚠️ **Estado em 21/09, 14h25:** rodaram a prova de vida do LED e do buzzer (#24), o teste de memória (#17) e uma rodada do teste do painel (#18) que não passou pelo pulo de canal. Os testes 1, 2 e 8 esperam a solda do leitor, que o João faz em 21/09. **O resultado obtido, os problemas, as correções e a evidência são preenchidos com o retorno do João.** Nada aqui pode ser dado como feito antes de a evidência existir. O vídeo da prova de vida está com o Caio e ainda precisa ser versionado em `docs/assets/testes/`.
 
 Os testes são executados na placa real, com o aparelho montado, e verificam apenas o comportamento externo: o que o LED e o buzzer fazem, o que sai no monitor serial e o que fica gravado em disco. Cada teste deixa evidência gravada, que pode ser uma foto, um vídeo curto ou o trecho do log com o horário, e ela fica versionada no repositório.
 
 > Fotografia do protótipo montado, de cima, com as ligações visíveis.
 
-Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a foto é pendência da #22.)*
+Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a foto é pendência da #22. O João gravou em 21/09 um vídeo do protótipo montado sem o leitor, que ainda não tinha sido soldado; um quadro dele serve de foto provisória se a foto com o leitor não chegar.)*
+
+### Prova de vida: as três cores do LED e o bip
+
+*(Não é um dos testes do §8 da spec: é a checagem dos atuadores isolados, antes do leitor. Entra aqui porque rodou e revelou o problema do buzzer.)*
+
+- **Descrição:** com o programa de prova de vida, o LED percorre vermelho, verde e azul, um segundo cada, apaga e toca um bip de 100 ms, e o monitor serial imprime o nome da cor acesa.
+- **Resultado esperado:** as três cores acendem uma de cada vez, o nome no monitor serial bate com a cor acesa, e o bip é audível a um passo da placa.
+- **Resultado obtido:** as três cores acenderam na ordem e bateram com o monitor serial. O bip saiu muito baixo e com um som estranho, audível só de perto.
+- **Problemas e correções:** o buzzer é de 5 V, e a ligação foi feita com um transistor TIP122, como a especificação previa para esse caso. Com o transistor o som saiu fraco, e a peça vai ser trocada. A causa está em conferência: a suspeita é que a peça seja um buzzer passivo, que só estala quando recebe tensão constante, e não o buzzer ativo que o projeto prevê.
+- **Evidência:** vídeo das cores e do bip, enviado pelo João em 21/09, e o trecho do monitor serial colado na issue da prova de vida (#24).
 
 ### Teste 1: Crachá de 4 bytes, três aproximações seguidas
 
@@ -123,16 +133,16 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 
 - **Descrição:** com a rede do aparelho, o serviço de nomes, o servidor de páginas e a lista da turma de pé, medir a memória livre no instante em que a conexão segura com a nuvem é aberta.
 - **Resultado esperado:** pelo menos 40 KB livres. Abaixo disso, o arranjo simultâneo reprova. Medido sem nenhum celular conectado ao aparelho o número sai otimista, e um valor entre 40 e 45 KB é suspeito, não aprovado.
-- **Resultado obtido:** `[a preencher: o menor número das três rodadas]`
-- **Problemas e correções:** `[a preencher]`
-- **Evidência:** `[a preencher: trecho do log das três rodadas]`
+- **Resultado obtido:** 236,5 KB livres imediatamente antes da conexão segura, sem nenhum celular conectado ao aparelho, o que cai na faixa de aprovação (acima de 45 KB). Durante a conexão sobraram 196,3 KB, e o menor valor desde a inicialização foi 186,6 KB. Foi registrada uma rodada, e não as três previstas.
+- **Problemas e correções:** três, nenhum de memória. O endereço do banco não respondia, porque o projeto gratuito na nuvem tinha sido pausado por falta de uso, e o Caio o reativou. O monitor mostrou o aviso `request handler not found` enquanto havia aparelho conectado à rede da placa; o aviso é inofensivo, e a medição foi refeita sem ninguém nessa rede. Numa tentativa, a conexão falhou por não encontrar o endereço do banco na internet do celular; repetida depois de reiniciar a placa, passou.
+- **Evidência:** trecho do monitor serial colado na issue do teste de memória (#17).
 
 ### Teste 7c: O painel sobrevive ao pulo de canal
 
 - **Descrição:** com o professor logado no painel pelo celular, o aparelho conecta a um hotspot que está em outro canal.
 - **Resultado esperado:** o painel continua aberto, sem pedir login de novo; se cair, reconecta sozinho em menos de cinco segundos. Com dois celulares do mesmo sistema operacional, o veredito sai parcial.
-- **Resultado obtido:** `[a preencher]`
-- **Problemas e correções:** `[a preencher]`
+- **Resultado obtido:** `[a preencher]` *(estado em 21/09: não obtido. Na única rodada registrada, o aparelho já estava conectado ao hotspot quando o botão foi apertado no celular, e o monitor avisou que a medição não teria pulo de canal. A página continuou aberta, mas sem passar pela troca de canal, que é o que o teste mede. Com um celular conectado, a memória livre antes da conexão segura foi de 229,6 KB, o que confirma o teste 7d.)*
+- **Problemas e correções:** `[a preencher]` *(a rodada precisa ser refeita desde a reinicialização: reiniciar a placa, conectar o celular do professor, fazer login e só então pedir a conexão ao hotspot.)*
 - **Evidência:** `[a preencher: trecho do log e o que foi observado nos dois celulares]`
 
 ---

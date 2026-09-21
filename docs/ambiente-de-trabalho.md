@@ -84,6 +84,8 @@ Para compilar e gravar na placa, instale o **PlatformIO IDE** pela aba de extens
 
 Cada programa de bancada tem a sua pasta em `src/` e o seu ambiente no `platformio.ini` (spec, R28). Para gravar um programa, escolha o ambiente dele no seletor da barra azul, na parte de baixo do VS Code (`env:ambiente`, `env:leitor`...), e só então clique em Upload. Nunca grave com `Default` selecionado: o PlatformIO grava todos os programas em sequência, e a placa fica com o último, sem aviso de erro.
 
+Na placa do projeto, o Upload só passa com o botão `BOOT` apertado: segure-o quando o Upload começar e solte quando a barra de progresso andar. O João confirmou isso na primeira gravação (#14, 21/09); a placa aparece no Windows como `USB-SERIAL CH340`, sem driver a instalar.
+
 Quando o firmware precisar do Wi-Fi ou do banco:
 
 ```bash

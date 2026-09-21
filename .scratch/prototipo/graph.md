@@ -78,9 +78,11 @@ Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entr
 
 **Onde os vértices estavam em 15/09.** O 06 fechou com o merge do PR #29. Os vértices 12, 13, 15 e 17 têm o **código preparado e compilando** — o Cauã preparou os quatro em 15/09 —, e o que falta nos quatro é rodar na placa, que depende do 08 (protoboard). O João avisou em 15/09 que o **RC522 precisa de solda nos pinos**: isso não trava o 12, que usa só LED e buzzer, mas trava o 13, o 15 e o 17, que são os testes 1, 2 e 8 do §8.
 
-⚠️ **O 04 continua aberto**, vencido desde 14/09 e sem uma linha do João em issue nenhuma. Ele é a tarefa zero e trava **tudo** que sobe na placa, o 12 inclusive — a solda não é a única trava da quinta. Cobrado na #14 e no grupo em 16/09.
+~~⚠️ **O 04 continua aberto**, vencido desde 14/09 e sem uma linha do João em issue nenhuma. Ele é a tarefa zero e trava **tudo** que sobe na placa, o 12 inclusive — a solda não é a única trava da quinta. Cobrado na #14 e no grupo em 16/09.~~ O 04 funcionou, e o João registrou na #14 em 21/09 (ver o bloco de 21/09 abaixo).
 
 **A solda ficou para sábado (17/09).** O João avisou no grupo que só consegue soldar os pinos do RC522 no sábado, 19/09. O que não depende dela — a parte sem leitor do 08, o 11 e o 12 — passa a ter prazo até sábado, com o 12 rodando assim que o 04 funcionar. O 13 roda no mesmo sábado, depois da solda. O 15 e o 17 seguem no domingo, 20/09, e agora dependem de a solda sair no sábado.
+
+**Onde os vértices estavam em 21/09, 14h.** A solda não saiu no sábado, e a tarde de domingo não aconteceu: tudo rodou na segunda. O **04** funcionou: a placa aparece como CH340 na COM3, sem driver a instalar, e o Upload só passa segurando o `BOOT`. O **12** rodou: as três cores bateram com o monitor serial, e o vídeo chegou pelo WhatsApp. O bip saiu fraco, e o **11** terminou aí: o buzzer entrou por um transistor TIP122, e a peça vai ser trocada (R44). O **14** passou, com 236,5 KB livres antes da conexão segura. O **16** teve uma rodada sem pulo de canal, que não vale, e precisa ser refeito; o **18**, o veredito, espera por ele. O **13**, o **15** e o **17** esperam a solda do RC522, que o João faz em 21/09. O **19** e o **20** fecham com o que chegar até terça.
 
 ## Onde mora o código de cada vértice (R28)
 
