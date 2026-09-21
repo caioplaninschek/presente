@@ -18,6 +18,11 @@ Regra de arbitragem: a revisão editorial pode apontar excesso ou padrão artifi
 **Registro:** acadêmico, direto, sem solenidade postiça. **Primeira pessoa do plural** nos documentos de entrega e no relatório técnico, quando a equipe é o agente ("implementamos", "decidimos"). O **`DIARIO.md` é a exceção: terceira pessoa, nomeando quem fez** ("o Cauã isolou a leitura num programa"). O diário é registro de evolução, e o professor precisa ver quem tocou o quê; "implementamos" apaga exatamente essa informação (15/09).
 **Tipos de artefato em jogo:** documentação (entregas técnicas, relatório) e resumo editado (`DIARIO.md`). Ver as seções correspondentes na referência completa.
 **Fonte dos fatos:** `docs/spec.md`. Fato que não está lá nem foi dado pelo Caio **não existe** — pergunte, não preencha.
+**Forma simples, porque o time é de iniciantes (20/09, decisão do Caio).** No texto que sai para outra pessoa (documento de entrega, diário, comentário de issue, mensagem ao time), três regras de forma:
+
+- **Sem travessão.** A referência de pontuação admite o travessão, e por isso ele não é erro: é uma escolha da casa. O texto já escrito não se reescreve só por causa dele; a regra vale para texto novo e para a passada de narrativa do diário.
+- **Número e identificador vêm com o nome por extenso e a issue entre parênteses:** "o teste de memória (#17)", e não "o 7d"; "a prova de vida do LED e do buzzer (#24)", e não "a #24" sozinha.
+- **O trabalho com as peças não se chama "bancada"** no texto voltado ao time. O projeto é trabalho amador de pequena escala, e o termo não o descreve. A spec e os tickets, que já usam a palavra como nome do ambiente de teste, não se reescrevem por isso.
 
 ## Fluxo
 
