@@ -87,7 +87,7 @@ A especificação do projeto acompanhou o código. Ela passou por quatro rodadas
 
 *Origem: `docs/testes-22-09.md` (#28, Gabriel) · Dono: Gabriel, montagem do Caio (#30) · Prazo: segunda, 21/09 · **formulário montado em 20/09, resultados em branco***
 
-> ⚠️ **Estado em 21/09, 14h25:** rodaram a prova de vida do LED e do buzzer (#24), o teste de memória (#17) e uma rodada do teste do painel (#18) que não passou pelo pulo de canal. Os testes 1, 2 e 8 esperam a solda do leitor, que o João faz em 21/09. **O resultado obtido, os problemas, as correções e a evidência são preenchidos com o retorno do João.** Nada aqui pode ser dado como feito antes de a evidência existir. O vídeo da prova de vida está com o Caio e ainda precisa ser versionado em `docs/assets/testes/`.
+> ⚠️ **Estado em 21/09, 14h25:** rodaram a prova de vida do LED e do buzzer (#24), o teste de memória (#17) e uma rodada do teste do painel (#18) que não passou pelo pulo de canal. Os testes 1, 2 e 8 esperam a solda do leitor, que o João faz em 21/09. **O resultado obtido, os problemas, as correções e a evidência são preenchidos com o retorno do João.** Nada aqui pode ser dado como feito antes de a evidência existir. O vídeo da prova de vida está versionado em `docs/assets/testes/prova-de-vida-2026-09-21.mp4`.
 
 Os testes são executados na placa real, com o aparelho montado, e verificam apenas o comportamento externo: o que o LED e o buzzer fazem, o que sai no monitor serial e o que fica gravado em disco. Cada teste deixa evidência gravada, que pode ser uma foto, um vídeo curto ou o trecho do log com o horário, e ela fica versionada no repositório.
 
@@ -103,7 +103,7 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 - **Resultado esperado:** as três cores acendem uma de cada vez, o nome no monitor serial bate com a cor acesa, e o bip é audível a um passo da placa.
 - **Resultado obtido:** as três cores acenderam na ordem e bateram com o monitor serial. O bip saiu muito baixo e com um som estranho, audível só de perto.
 - **Problemas e correções:** o buzzer é de 5 V, e a ligação foi feita com um transistor TIP122, como a especificação previa para esse caso. Com o transistor o som saiu fraco, e a peça vai ser trocada. A causa está em conferência: a suspeita é que a peça seja um buzzer passivo, que só estala quando recebe tensão constante, e não o buzzer ativo que o projeto prevê.
-- **Evidência:** vídeo das cores e do bip, enviado pelo João em 21/09, e o trecho do monitor serial colado na issue da prova de vida (#24).
+- **Evidência:** vídeo das cores, gravado pelo João em 21/09 (`docs/assets/testes/prova-de-vida-2026-09-21.mp4`), e o trecho do monitor serial colado na issue da prova de vida (#24).
 
 ### Teste 1: Crachá de 4 bytes, três aproximações seguidas
 
