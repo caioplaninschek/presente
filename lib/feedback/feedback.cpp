@@ -3,7 +3,8 @@
 namespace feedback {
 namespace {
 
-// Pinos da secao 4.1 da spec. Cada perna do LED tem 220 ohm em serie.
+// Pinos da secao 4.1 da spec. Cada perna do LED tem um resistor em serie: a
+// montagem de 21/09 usa 300 ohm, onde a spec previa 220 (R44).
 const byte PINO_VERMELHO = 25;
 const byte PINO_VERDE = 26;
 const byte PINO_AZUL = 27;
@@ -105,7 +106,9 @@ void bipar(unsigned long duracaoMs) {
   inicioDoBip = millis();
   duracaoDoBip = duracaoMs;
   buzzerLigado = true;
-  digitalWrite(PINO_BUZZER, HIGH);  // buzzer ativo: nivel alto ja e som
+  digitalWrite(PINO_BUZZER, HIGH);  // buzzer ativo: nivel alto ja e som.
+  // Buzzer passivo so estala com nivel constante; e a hipotese da R44 para o
+  // som fraco de 21/09, a conferir na peca antes de mexer aqui.
 }
 
 bool bipando() {

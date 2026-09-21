@@ -155,3 +155,5 @@ O fluxograma e o pseudocódigo da spec ganharam duas linhas que o documento entr
 Na mesma data, a spec ganhou a rodada 10, e a **R30** mudou a leitura do crachá: quem já está registrado na sessão não se registra de novo em momento nenhum, e o estado da repetição passou a se chamar `JA_REGISTRADO`, com verde de uma piscada no lugar do vermelho. O pseudocódigo da seção 5 entregue ainda protege só os primeiros 5 s ("SE mesmo UID há menos de 5 s: estado = DUPLICADO"), e a figura da seção 4 faz o mesmo. A tabela da seção 6 continua valendo, porque o teste 1 pede um registro só e o teste 8 pede nenhuma duplicata.
 
 O teste 4 da seção 6 diz "com o Iniciar sem internet", mas desde a R14 (06/09) o modo offline se decide no login, como mostra o pseudocódigo da própria seção 5. A spec passou a dizer "login sem internet".
+
+Em 21/09 a montagem saiu diferente do que a seção 3 descreve em dois pontos, e a spec registrou os dois na R44: os resistores do LED são de 300 Ω, e não de 220 Ω, e a checagem do buzzer terminou num transistor TIP122. O documento entregue continua como está; a Entrega 05 descreve a montagem real.
