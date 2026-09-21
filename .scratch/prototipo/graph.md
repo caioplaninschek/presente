@@ -37,6 +37,7 @@ sem bloqueio, pode começar hoje
                                        17 não se perde ──────┴─> 19 dossiê (Gabriel, 21/09)
 
 08 protoboard ──> [epic 29/09: estrutura física]
+19 dossiê ──> 20 documento da Entrega 05 (Caio, 22/09 23:59)   (vértice acrescentado em 20/09, quando o enunciado saiu)
 07 banco na nuvem ┄┄> 05 firmware do rádio   (aresta escondida: só o host do Supabase existir)
 ```
 
@@ -46,7 +47,7 @@ A aresta que decide: **14** antes de **16**. O teste da memória precisa de um c
 
 A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O firmware do teste de rádio se **escreve** sem nada, mas para **medir** o heap ele precisa abrir um TLS de verdade — e para isso o `secrets.h` precisa de um `SUPABASE_URL` que exista. O projeto no Supabase só nasce na 07. Não são as tabelas nem as políticas de RLS que travam: é o host existir. As duas são do Caio e vencem no mesmo dia (17/09), então a ordem custa nada — **criar o projeto no Supabase primeiro**, e a medição da 14 sai contra o host de verdade, com a cadeia de certificados que o aparelho vai encontrar em produção. A alternativa (medir contra um host HTTPS qualquer) funciona, mas deixa uma ressalva pendurada no veredito da 18 para sempre.
 
-A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega 05 ainda não saiu, e os dois enunciados já publicados citam 21/09. Para tudo caber nessa data, o 15 e o 17 rodam na mesma tarde do 16, que já exige gente junta por causa dos dois celulares, com os programas prontos até sábado, 19/09; o 19 cai para segunda, 21/09. Se o enunciado disser 22/09, sobra um dia de folga.
+~~A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega 05 ainda não saiu, e os dois enunciados já publicados citam 21/09. Para tudo caber nessa data, o 15 e o 17 rodam na mesma tarde do 16, que já exige gente junta por causa dos dois celulares, com os programas prontos até sábado, 19/09; o 19 cai para segunda, 21/09. Se o enunciado disser 22/09, sobra um dia de folga.~~ A tarde de domingo não aconteceu, e a carga empilhou toda na segunda, 21/09. O enunciado saiu em 20/09 e fixou o envio em **22/09, às 23:59**, com demonstração presencial na aula do mesmo dia; é esse o dia de folga que a linha riscada previa, e ele virou o prazo (20/09).
 
 ## De-para
 
@@ -71,6 +72,7 @@ A tarde que junta, decidida em 13/09: **domingo, 20/09.** O enunciado da Entrega
 | 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 |
 | 18 | [#19](https://github.com/caioplaninschek/presente/issues/19) | #6 | Caio | 21/09 |
 | 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 21/09 |
+| 20 | [#30](https://github.com/caioplaninschek/presente/issues/30) | #7 | Caio | 22/09 23:59 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
 

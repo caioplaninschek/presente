@@ -1,6 +1,6 @@
 # Entregas — enunciados do professor
 
-Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunciado do professor.** As datas marcadas com \* ainda não têm enunciado publicado: vêm do cronograma passado ao grupo em 05/09 e se conferem quando o enunciado sair. Os dois enunciados já publicados, das Entregas 03 e 04, citam **21/09** como a data da preparação. ~~O cronograma válido é o revisado (datas de terça); as datas de segunda são da outra turma~~ — informação errada, corrigida em 13/09.
+Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunciado do professor.** As datas marcadas com \* ainda não têm enunciado publicado: vêm do cronograma passado ao grupo em 05/09 e se conferem quando o enunciado sair. Os enunciados das Entregas 03 e 04 citavam **21/09** como a data da preparação; o da Entrega 05 saiu em 20/09 e fixou **22/09, 23:59**. ~~O cronograma válido é o revisado (datas de terça); as datas de segunda são da outra turma~~ — informação errada, corrigida em 13/09.
 
 | Data | Entrega | Estado |
 |---|---|---|
@@ -8,7 +8,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
-| 22/09\* | Protótipo eletrônico: ESP32 + sensores + atuador + testes documentados | ⬜ |
+| 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | 🟡 em andamento |
 | 29/09\* | Estrutura física do protótipo | ⬜ |
 | 05/10\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
 | 20/10\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
@@ -106,3 +106,27 @@ Documento transcrito em [`entregas/entrega-04/entrega-04.md`](entregas/entrega-0
 | 7 | checklist da divisão em tarefas de 11/09 | integral | 5 |
 
 O que saiu por falta de espaço está listado ao pé da transcrição.
+
+---
+
+## Entrega 05: Integração sensor + atuador + testes documentados
+
+**Prazo: 22/09/2026, 23:59. Vários envios permitidos. Demonstração presencial obrigatória, no laboratório, na aula do mesmo dia.** O enunciado saiu em 20/09 e não fixa formato nem limite de páginas.
+
+O critério principal, nas palavras do professor: **Sensor → Processamento → Atuador → Teste → Evidência**. A equipe precisa saber explicar e demonstrar o que o sistema recebe, como processa a informação e que ação executa como resultado.
+
+O envio no Teams deve conter:
+
+**1. Descrição da integração.** Qual sensor, qual atuador, qual microcontrolador ou plataforma, e como sensor, processamento e atuador interagem.
+
+**2. Código-fonte atualizado.** O programa que roda no protótipo, organizado e comentado nos trechos principais, com as alterações feitas desde a Entrega 04 identificadas.
+
+**3. Testes documentados.** Fotografia do protótipo montado, vídeo curto do funcionamento, os valores obtidos pelo sensor, a descrição de cada teste, o resultado esperado ao lado do obtido, e os problemas encontrados com as respectivas correções.
+
+**4. Demonstração no laboratório.** O envio no Teams sozinho não valida o protótipo. Na aula, a equipe leva microcontrolador, sensor, atuador, protoboard, jumpers, alimentação e o que mais o projeto exigir, apresenta o protótipo funcionando e roda pelo menos um teste prático diante do professor, que confere se o que está na mesa bate com o que foi documentado.
+
+A dispensa do segundo sensor (R18) continua valendo, e o documento a repete em uma frase, como nas Entregas 03 e 04.
+
+### Como está sendo montada
+
+O documento sai do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 vem do dossiê de testes (`docs/testes-22-09.md`, issue #28). A montagem e o envio são a issue #30. Depois do envio, o PDF e a transcrição ficam na mesma pasta, no padrão das Entregas 03 e 04.
