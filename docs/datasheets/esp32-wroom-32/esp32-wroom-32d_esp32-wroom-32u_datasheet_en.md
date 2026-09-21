@@ -189,7 +189,7 @@ At the core of the modules is **ESP32-D0WD**, an Xtensa® 32-bit LX6 CPU that op
 
 The pin diagram below shows the approximate location of pins on the module. For the actual diagram drawn to scale, please refer to Section [9.1 Module Dimensions](#91-module-dimensions).
 
-![Figure 1: ESP32-WROOM-32D Pin Layout (Top View)](assets/esp32_datasheet/figure_01_esp32_wroom_32d_pin_layout.png)
+![Figure 1: ESP32-WROOM-32D Pin Layout (Top View)](figuras/figure_01_esp32_wroom_32d_pin_layout.png)
 
 ### Pinout Mapping Diagram (Top View)
 
@@ -322,7 +322,7 @@ The timing of signals connected to the strapping pins should adhere to the setup
 | **$t_{SU}$** | Setup time is the time reserved for the power rails to stabilize before the `CHIP_PU` pin is pulled high to activate the chip. | **0** |
 | **$t_{H}$** | Hold time is the time reserved for the chip to read the strapping pin values after `CHIP_PU` is already high and before these pins start operating as regular IO pins. | **1** |
 
-![Figure 2: Visualization of Timing Parameters for the Strapping Pins](assets/esp32_datasheet/figure_02_timing_strapping_pins.png)
+![Figure 2: Visualization of Timing Parameters for the Strapping Pins](figuras/figure_02_timing_strapping_pins.png)
 
 ```
 CHIP_PU             ____________________________________ High
@@ -355,7 +355,7 @@ ______Low______/
 
 In Joint Download Boot mode, the detailed boot flow of the chip is shown in Figure 3.
 
-![Figure 3: Chip Boot Flow](assets/esp32_datasheet/figure_03_chip_boot_flow.png)
+![Figure 3: Chip Boot Flow](figuras/figure_03_chip_boot_flow.png)
 
 ```mermaid
 flowchart TD
@@ -430,7 +430,7 @@ If `EFUSE_DISABLE_JTAG` is set to `1`, the source of JTAG signals can be disable
 
 Once the power is supplied to the chip, its power rails need a short time to stabilize. After that, `CHIP_PU` – the pin used for power-up and reset – is pulled high to activate the chip. For information on `CHIP_PU` as well as power-up and reset timing, see Figure 4 and Table 9.
 
-![Figure 4: Visualization of Timing Parameters for Power-up and Reset](assets/esp32_datasheet/figure_04_timing_power_up_reset.png)
+![Figure 4: Visualization of Timing Parameters for Power-up and Reset](figuras/figure_04_timing_power_up_reset.png)
 
 ```
 VDD               ___________________________ Stable (> VDD3P3_RTC Min)
@@ -899,7 +899,7 @@ For RX tests, the PER (packet error rate) limit is 8% for 802.11b, and 10% for 8
 
 ## 7.1 ESP32-WROOM-32D Schematics
 
-![Figure 5: ESP32-WROOM-32D Schematics](assets/esp32_datasheet/figure_05_esp32_wroom_32d_schematics.png)
+![Figure 5: ESP32-WROOM-32D Schematics](figuras/figure_05_esp32_wroom_32d_schematics.png)
 
 > **Design Notes:**  
 > - *The values of C1 and C2 vary with the selection of the crystal.*  
@@ -950,7 +950,7 @@ For RX tests, the PER (packet error rate) limit is 8% for 802.11b, and 10% for 8
 
 ## 7.2 ESP32-WROOM-32U Schematics
 
-![Figure 6: ESP32-WROOM-32U Schematics](assets/esp32_datasheet/figure_06_esp32_wroom_32u_schematics.png)
+![Figure 6: ESP32-WROOM-32U Schematics](figuras/figure_06_esp32_wroom_32u_schematics.png)
 
 ### Bill of Materials & Differences — ESP32-WROOM-32U vs 32D
 The internal schematic of ESP32-WROOM-32U is identical to ESP32-WROOM-32D in terms of:
@@ -969,7 +969,7 @@ The internal schematic of ESP32-WROOM-32U is identical to ESP32-WROOM-32D in ter
 
 This is the typical application circuit of the module connected with peripheral components (for example, power supply, antenna, reset button, JTAG interface, and UART interface).
 
-![Figure 7: ESP32-WROOM-32D & ESP32-WROOM-32U Peripheral Schematics](assets/esp32_datasheet/figure_07_peripheral_schematics.png)
+![Figure 7: ESP32-WROOM-32D & ESP32-WROOM-32U Peripheral Schematics](figuras/figure_07_peripheral_schematics.png)
 
 ```
                             +-----------------------------+
@@ -1062,7 +1062,7 @@ This is the typical application circuit of the module connected with peripheral 
 
 ### Dimensions of ESP32-WROOM-32D
 
-![Figure 8: Physical Dimensions of ESP32-WROOM-32D](assets/esp32_datasheet/figure_08_physical_dimensions_esp32_wroom_32d.png)
+![Figure 8: Physical Dimensions of ESP32-WROOM-32D](figuras/figure_08_physical_dimensions_esp32_wroom_32d.png)
 
 #### Table: Physical Dimensions Breakdown — ESP32-WROOM-32D (Unit: mm)
 
@@ -1092,7 +1092,7 @@ This is the typical application circuit of the module connected with peripheral 
 
 ### Dimensions of ESP32-WROOM-32U
 
-![Figure 9: Physical Dimensions of ESP32-WROOM-32U](assets/esp32_datasheet/figure_09_physical_dimensions_esp32_wroom_32u.png)
+![Figure 9: Physical Dimensions of ESP32-WROOM-32U](figuras/figure_09_physical_dimensions_esp32_wroom_32u.png)
 
 #### Table: Physical Dimensions Breakdown — ESP32-WROOM-32U (Unit: mm)
 
@@ -1128,7 +1128,7 @@ ESP32-WROOM-32U uses the first generation external antenna connector as shown in
 - **MHF I** connector from I-PEX
 - **AMC** connector from Amphenol
 
-![Figure 10: Dimensions of External Antenna Connector](assets/esp32_datasheet/figure_10_external_antenna_connector.png)
+![Figure 10: Dimensions of External Antenna Connector](figuras/figure_10_external_antenna_connector.png)
 
 #### Table: External Antenna Connector Detailed Specifications (Unit: mm)
 
@@ -1169,7 +1169,7 @@ This section provides the following resources for your reference:
 
 ### Recommended PCB Land Pattern of ESP32-WROOM-32D
 
-![Figure 11: Recommended PCB Land Pattern of ESP32-WROOM-32D](assets/esp32_datasheet/figure_11_pcb_land_pattern_esp32_wroom_32d.png)
+![Figure 11: Recommended PCB Land Pattern of ESP32-WROOM-32D](figuras/figure_11_pcb_land_pattern_esp32_wroom_32d.png)
 
 #### Land Pattern Dimensions — ESP32-WROOM-32D (Unit: mm)
 - **Module Outline on Land Pattern:** 18.00 mm (width) × 25.50 mm (height)
@@ -1193,7 +1193,7 @@ This section provides the following resources for your reference:
 
 ### Recommended PCB Land Pattern of ESP32-WROOM-32U
 
-![Figure 12: Recommended PCB Land Pattern of ESP32-WROOM-32U](assets/esp32_datasheet/figure_12_pcb_land_pattern_esp32_wroom_32u.png)
+![Figure 12: Recommended PCB Land Pattern of ESP32-WROOM-32U](figuras/figure_12_pcb_land_pattern_esp32_wroom_32u.png)
 
 #### Land Pattern Dimensions — ESP32-WROOM-32U (Unit: mm)
 - **Module Outline on Land Pattern:** 18.00 mm (width) × 19.20 mm (height)
@@ -1245,7 +1245,7 @@ After unpacking, the module must be soldered within **168 hours** with the facto
 
 Solder the module in a single reflow.
 
-![Figure 13: Reflow Profile](assets/esp32_datasheet/figure_13_reflow_profile.png)
+![Figure 13: Reflow Profile](figuras/figure_13_reflow_profile.png)
 
 #### Table: Solder Reflow Temperature Profile Specifications
 

@@ -31,6 +31,9 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 |---|---|
 | [`docs/ambiente-de-trabalho.md`](docs/ambiente-de-trabalho.md) | Como preparar a máquina: clone, IA lendo o contexto do projeto, rotina de `git pull` |
 | [`docs/spec.md`](docs/spec.md) | Especificação completa: decisões, arquitetura, contrato de dados, plano de testes |
+| [`docs/entregas.md`](docs/entregas.md) | Os enunciados do professor e o que saiu em cada entrega |
+| [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral |
+| [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
 | [`.scratch/prototipo/graph.md`](.scratch/prototipo/graph.md) | Registro de execução: as 19 tarefas, o grafo de dependência e o de-para com as Issues |

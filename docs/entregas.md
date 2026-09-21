@@ -45,7 +45,7 @@ O PDF deve conter, nesta ordem:
 
 ### Como foi entregue
 
-Documento transcrito em [`entrega-03.md`](entrega-03.md); PDF em [`entrega-03.pdf`](entrega-03.pdf). Cinco páginas — capa mais quatro de conteúdo.
+Documento transcrito em [`entregas/entrega-03/entrega-03.md`](entregas/entrega-03/entrega-03.md); PDF em [`entrega-03.pdf`](entregas/entrega-03/entrega-03.pdf), e o rascunho com o texto integral ao lado, na mesma pasta. Cinco páginas — capa mais quatro de conteúdo.
 
 | Seção | Fonte na spec | Como saiu |
 |---|---|---|
@@ -93,7 +93,7 @@ O PDF deve conter, nesta ordem:
 
 ### Como foi entregue
 
-Documento transcrito em [`entrega-04.md`](entrega-04.md); PDF em [`entrega-04.pdf`](entrega-04.pdf). Cinco páginas — capa mais quatro de conteúdo —, montadas no Word sobre uma cópia do `.docx` da Entrega 03. Para caber, o corpo saiu com entrelinha 1,15, e só as seções 1 a 3 foram cortadas: o fluxograma ocupa uma página inteira e divide o documento em blocos que fecham em página inteira, de modo que só o bloco das seções 1 a 3 ganhava página com corte.
+Documento transcrito em [`entregas/entrega-04/entrega-04.md`](entregas/entrega-04/entrega-04.md); PDF em [`entrega-04.pdf`](entregas/entrega-04/entrega-04.pdf), e o rascunho com o texto integral ao lado, na mesma pasta. Cinco páginas — capa mais quatro de conteúdo —, montadas no Word sobre uma cópia do `.docx` da Entrega 03. Para caber, o corpo saiu com entrelinha 1,15, e só as seções 1 a 3 foram cortadas: o fluxograma ocupa uma página inteira e divide o documento em blocos que fecham em página inteira, de modo que só o bloco das seções 1 a 3 ganhava página com corte.
 
 | Seção | Fonte na spec | Como saiu | Página |
 |---|---|---|---|

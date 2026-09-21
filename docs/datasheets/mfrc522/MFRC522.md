@@ -363,7 +363,7 @@ transfer to and from the host and the contactless UART and vice versa.
 
 Various host interfaces are implemented to meet different customer requirements.
 
-![Figure 1: Simplified block diagram of the MFRC522](assets/mfrc522_datasheet/figure_01_simplified_block_diagram.png)
+![Figure 1: Simplified block diagram of the MFRC522](figuras/figure_01_simplified_block_diagram.png)
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -405,7 +405,7 @@ Various host interfaces are implemented to meet different customer requirements.
 |  | ANALOG INTERFACE |
 | --- | --- |
 
-![Figure 2: Detailed block diagram of the MFRC522](assets/mfrc522_datasheet/figure_02_detailed_block_diagram.png)
+![Figure 2: Detailed block diagram of the MFRC522](figuras/figure_02_detailed_block_diagram.png)
 
 #### Detailed Functional Subsystems Breakdown
 
@@ -514,7 +514,7 @@ Detailed block diagram of the MFRC522
 
 # 7. Pinning information
 
-![Figure 3: Pinning configuration HVQFN32 (SOT617-1)](assets/mfrc522_datasheet/figure_03_pinning_configuration_hvqfn32.png)
+![Figure 3: Pinning configuration HVQFN32 (SOT617-1)](figuras/figure_03_pinning_configuration_hvqfn32.png)
 
 ```
                              +-------------------+
@@ -627,7 +627,7 @@ reader/writer
 
 001aak583
 
-![Figure 4: MFRC522 Read/Write mode](assets/mfrc522_datasheet/figure_04_mfrc522_read_write_mode.png)
+![Figure 4: MFRC522 Read/Write mode](figuras/figure_04_mfrc522_read_write_mode.png)
 
 ```
                  READER / PCD                                        TRANSPONDER / PICC
@@ -671,7 +671,7 @@ reader/writer
   - Bit Encoding: Manchester code with subcarrier ASK modulation.
   - Nominal Bit Rate: 106 kBd. Higher speeds (212, 424, 848 kBd) use BPSK load modulation.
 
-![Figure 5: ISO/IEC 14443 A/MIFARE Read/Write mode communication diagram](assets/mfrc522_datasheet/figure_05_iso14443a_communication_diagram.png)
+![Figure 5: ISO/IEC 14443 A/MIFARE Read/Write mode communication diagram](figuras/figure_05_iso14443a_communication_diagram.png)
 
 ```
      READER / PCD (MFRC522)                                    CARD / PICC
@@ -747,7 +747,7 @@ start
 | 8-bit data |  | 8-bit data |  | 8-bit data |  |
 | --- | --- | --- | --- | --- | --- |
 
-![Figure 6: Data coding and framing according to ISO/IEC 14443 A](assets/mfrc522_datasheet/figure_06_data_coding_and_framing.png)
+![Figure 6: Data coding and framing according to ISO/IEC 14443 A](figuras/figure_06_data_coding_and_framing.png)
 
 ```
 A. PCD -> PICC (Modified Miller Code, 100% ASK, 106 kBd):
@@ -828,7 +828,7 @@ standard.
 
 The timing specification is given in Section 14.1 on page 78.
 
-![Figure 7: SPI connection to host](assets/mfrc522_datasheet/figure_07_spi_connection_to_host.png)
+![Figure 7: SPI connection to host](figuras/figure_07_spi_connection_to_host.png)
 
 ```
    HOST MICROCONTROLLER (e.g. ESP32)                   MFRC522
@@ -894,7 +894,7 @@ Remark: The MSB must be sent first.
 
 The address byte must meet the following format.
 
-![Figure 8: UART connection to microcontrollers](assets/mfrc522_datasheet/figure_08_uart_connection_to_microcontrollers.png)
+![Figure 8: UART connection to microcontrollers](figuras/figure_08_uart_connection_to_microcontrollers.png)
 
 ```
    HOST MICROCONTROLLER                                MFRC522
@@ -1044,7 +1044,7 @@ used. The first byte sent defines both the mode and the address.
 | RX (pin 24) | address | - |
 | TX (pin 31) | - | data 0 |
 
-![Figure 9: UART read data timing diagram](assets/mfrc522_datasheet/figure_09_uart_read_data_timing_diagram.png)
+![Figure 9: UART read data timing diagram](figuras/figure_09_uart_read_data_timing_diagram.png)
 
 ```
 Pin RX (Host -> MFRC522 Address Byte):
@@ -1095,7 +1095,7 @@ The first byte sent defines both the mode and the address.
 | RX (pin 24) | address 0 | data 0 |
 | TX (pin 31) | - | address 0 |
 
-![Figure 10: UART write data timing diagram](assets/mfrc522_datasheet/figure_10_uart_write_data_timing_diagram.png)
+![Figure 10: UART write data timing diagram](figuras/figure_10_uart_write_data_timing_diagram.png)
 
 ```
 Pin RX (Host -> MFRC522 Write Frame):
@@ -1142,7 +1142,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx xxx
 
 ### 8.1.4 I2C-bus interface
 
-![Figure 11: I2C-bus interface](assets/mfrc522_datasheet/figure_11_i2c_bus_interface.png)
+![Figure 11: I2C-bus interface](figuras/figure_11_i2c_bus_interface.png)
 
 ```
    HOST MICROCONTROLLER (I2C Master)                   MFRC522 (I2C Slave)
@@ -1187,7 +1187,7 @@ See Table 155 on page 79 for timing requirements.
 
 #### 8.1.4.1 Data validity
 
-![Figure 12: Bit transfer on the I2C-bus](assets/mfrc522_datasheet/figure_12_bit_transfer_on_i2c_bus.png)
+![Figure 12: Bit transfer on the I2C-bus](figuras/figure_12_bit_transfer_on_i2c_bus.png)
 
 ```
                |<- Data Stable ->|                     |<- Data Stable ->|
@@ -1207,7 +1207,7 @@ SCL:  -----------------+                 +---------------------+                
 
 #### 8.1.4.2 START and STOP conditions
 
-![Figure 13: START and STOP conditions](assets/mfrc522_datasheet/figure_13_start_and_stop_conditions.png)
+![Figure 13: START and STOP conditions](figuras/figure_13_start_and_stop_conditions.png)
 
 ```
                   START Condition (S)                    STOP Condition (P)
@@ -1237,7 +1237,7 @@ but must meet the read/write cycle format.
 
 #### 8.1.4.4 Acknowledge
 
-![Figure 14: Acknowledge on the I2C-bus](assets/mfrc522_datasheet/figure_14_acknowledge_on_i2c_bus.png)
+![Figure 14: Acknowledge on the I2C-bus](figuras/figure_14_acknowledge_on_i2c_bus.png)
 
 ```
                  Clock Pulse 1 to 8 (Data Bits)         Clock Pulse 9 (Acknowledge)
@@ -1262,7 +1262,7 @@ SDA Receiver:  --------------------------------------+                          
    - **ACK (Acknowledge):** The receiving device pulls the SDA line LOW, holding it stable LOW during the entire HIGH period of the 9th SCL clock pulse.
    - **NACK (Not Acknowledge):** If the receiver leaves SDA HIGH during the 9th clock pulse, a Not Acknowledge condition is detected, causing the master to generate either a STOP condition or repeated START.
 
-![Figure 15: Data transfer on the I2C-bus](assets/mfrc522_datasheet/figure_15_data_transfer_on_i2c_bus.png)
+![Figure 15: Data transfer on the I2C-bus](figuras/figure_15_data_transfer_on_i2c_bus.png)
 
 ```
 +---+ +---------------------------------+ +---+ +---------------------------------+ +---+ +---+
@@ -1282,7 +1282,7 @@ START | MSB                         LSB |  ACK  | MSB                         LS
 
 #### 8.1.4.5 7-Bit addressing
 
-![Figure 16: First byte following the START procedure](assets/mfrc522_datasheet/figure_16_first_byte_following_start_procedure.png)
+![Figure 16: First byte following the START procedure](figuras/figure_16_first_byte_following_start_procedure.png)
 
 ```
   Bit 7      Bit 6      Bit 5      Bit 4      Bit 3      Bit 2      Bit 1      Bit 0
@@ -1332,7 +1332,7 @@ FIFO buffer access or register polling.
 
 The Read/Write (R/W) bit is set to logic 1.
 
-![Figure 17: Register read and write access](assets/mfrc522_datasheet/figure_17_register_read_and_write_access.png)
+![Figure 17: Register read and write access](figuras/figure_17_register_read_and_write_access.png)
 
 ```
 1. I2C Register WRITE Access Sequence:
@@ -1400,7 +1400,7 @@ HS mode can only start after all of the following conditions (all of which are i
 
 3. Not-acknowledge bit (A)
 
-![Figure 18: I2C-bus HS mode protocol switch](assets/mfrc522_datasheet/figure_18_i2c_bus_hs_mode_protocol_switch.png)
+![Figure 18: I2C-bus HS mode protocol switch](figuras/figure_18_i2c_bus_hs_mode_protocol_switch.png)
 
 ```
            Fast / Standard Mode (<= 400 kBd)         |   High-Speed Mode (<= 3.4 MBd)
@@ -1427,7 +1427,7 @@ HS mode can only start after all of the following conditions (all of which are i
 | Sr | SLAVE ADDRESS |
 | --- | --- |
 
-![Figure 19: I2C-bus HS mode protocol frame](assets/mfrc522_datasheet/figure_19_i2c_bus_hs_mode_protocol_frame.png)
+![Figure 19: I2C-bus HS mode protocol frame](figuras/figure_19_i2c_bus_hs_mode_protocol_frame.png)
 
 ```
                       F/S Mode                                  HS Mode
@@ -1580,7 +1580,7 @@ The serial signal switch is controlled by the TxSelReg and RxSelReg registers.
 
 Figure 20 shows the serial data switch for p-driver TX1 and TX2.
 
-![Figure 20: Serial data switch for p-driver TX1 and TX2](assets/mfrc522_datasheet/figure_20_serial_data_switch_for_p_driver_tx1_tx2.png)
+![Figure 20: Serial data switch for p-driver TX1 and TX2](figuras/figure_20_serial_data_switch_for_p_driver_tx1_tx2.png)
 
 ```
                           DriverSel[1:0]
@@ -1639,7 +1639,7 @@ on pin PVSS. If pin MFIN is not used it must be connected to either pin SVDD or 
 PVSS. If pin SVDD is not used it must be connected to either pin DVDD, pin PVDD or any 
 other voltage supply pin.
 
-![Figure 21: Overview of MFIN and MFOUT signal routing](assets/mfrc522_datasheet/figure_21_overview_mfin_mfout_signal_routing.png)
+![Figure 21: Overview of MFIN and MFOUT signal routing](figuras/figure_21_overview_mfin_mfout_signal_routing.png)
 
 ```
                                MFOutSel[3:0]
@@ -1978,7 +1978,7 @@ TxControlReg register’s Tx1RFEn bit or Tx2RFEn bit to logic 0.
 
 ## 8.7 Oscillator circuit
 
-![Figure 22: Quartz crystal connection](assets/mfrc522_datasheet/figure_22_quartz_crystal_connection.png)
+![Figure 22: Quartz crystal connection](figuras/figure_22_quartz_crystal_connection.png)
 
 ```
            +--------------------------+
@@ -2025,7 +2025,7 @@ the signal must be LOW for at least 100 ns.
 
 ### 8.8.2 Oscillator start-up time
 
-![Figure 23: Oscillator start-up time](assets/mfrc522_datasheet/figure_23_oscillator_startup_time.png)
+![Figure 23: Oscillator start-up time](figuras/figure_23_oscillator_startup_time.png)
 
 ```
 NRSTPD Pin:
@@ -3805,7 +3805,7 @@ VDD(PVDD) must always be the same or lower voltage than VDDD.
 | C L | load capacitance |  |  | - | 10 | - | pF |
 | P xtal | crystal power dissipation |  |  | - | 50 | 100 | mW |
 
-![Figure 24: Pin RX input voltage range](assets/mfrc522_datasheet/figure_24_pin_rx_input_voltage_range.png)
+![Figure 24: Pin RX input voltage range](figuras/figure_24_pin_rx_input_voltage_range.png)
 
 ```
 Voltage
@@ -3872,7 +3872,7 @@ Voltage
 | t f | fall time | SDA and SCL signals | 20 | 300 | 10 | 80 | ns |
 | t BUF | bus free time between a STOP and START condition |  | 1.3 | - | 1.3 | - | µs |
 
-![Figure 25: Timing diagram for SPI](assets/mfrc522_datasheet/figure_25_timing_diagram_for_spi.png)
+![Figure 25: Timing diagram for SPI](figuras/figure_25_timing_diagram_for_spi.png)
 
 ```
           |<-- tsu(NSS) -->|                                                   |<- th(NSS) ->|
@@ -3903,7 +3903,7 @@ MISO:  ======================================+-------------+--- ... -----------+
 | $t_{	ext{su}(NSS)}$ | NSS setup time before first rising edge of SCK | 40 | - |
 | $t_{h(NSS)}$ | NSS hold time after last falling edge of SCK | 40 | - |
 
-![Figure 26: Timing for Fast and Standard mode devices on the I2C-bus](assets/mfrc522_datasheet/figure_26_timing_fast_standard_mode_i2c_bus.png)
+![Figure 26: Timing for Fast and Standard mode devices on the I2C-bus](figuras/figure_26_timing_fast_standard_mode_i2c_bus.png)
 
 ```
            |<-- tBUF -->|         |<- tf ->|      |<- tr ->|
@@ -3943,7 +3943,7 @@ MFRC522 is shown in Figure 27.
 The antenna tuning and RF part matching is described in the application note Ref. 1 and 
 Ref. 2.
 
-![Figure 27: Typical application diagram](assets/mfrc522_datasheet/figure_27_typical_application_diagram.png)
+![Figure 27: Typical application diagram](figuras/figure_27_typical_application_diagram.png)
 
 #### Complete Circuit Schematic & Component Analysis (Figure 27)
 
@@ -4147,7 +4147,7 @@ TestDAC1Reg register is programmed with a slope defined by values 00h to 3Fh and
 TestDAC2Reg register is programmed with a rectangular signal defined by values 00h 
 and 3Fh.
 
-![Figure 28: Output test signals TestDAC1 on pin AUX1 and TestDAC2 on pin AUX2](assets/mfrc522_datasheet/figure_28_output_test_signals_testdac1_testdac2.png)
+![Figure 28: Output test signals TestDAC1 on pin AUX1 and TestDAC2 on pin AUX2](figuras/figure_28_output_test_signals_testdac1_testdac2.png)
 
 ```
 Voltage
@@ -4184,7 +4184,7 @@ Voltage
 Figure 29 shows test signals Corr1 and MinLevel on pins AUX1 and AUX2, respectively. 
 The AnalogTestReg register is set to 24h.
 
-![Figure 29: Output test signals Corr1 on pin AUX1 and MinLevel on pin AUX2](assets/mfrc522_datasheet/figure_29_output_test_signals_corr1_minlevel.png)
+![Figure 29: Output test signals Corr1 on pin AUX1 and MinLevel on pin AUX2](figuras/figure_29_output_test_signals_corr1_minlevel.png)
 
 ```
 Voltage
@@ -4219,7 +4219,7 @@ Voltage
 Figure 30 shows the channel behavior test signals ADC_I and ADC_Q on pins AUX1 and 
 AUX2, respectively. The AnalogTestReg register is set to 56h.
 
-![Figure 30: Output ADC channel I on pin AUX1 and ADC channel Q on pin AUX2](assets/mfrc522_datasheet/figure_30_output_adc_channel_i_channel_q.png)
+![Figure 30: Output ADC channel I on pin AUX1 and ADC channel Q on pin AUX2](figuras/figure_30_output_adc_channel_i_channel_q.png)
 
 ```
 Voltage
@@ -4256,7 +4256,7 @@ Voltage
 Figure 31 shows the RxActive and TxActive test signals relating to RF communication. 
 The AnalogTestReg register is set to CDh.
 
-![Figure 31: Output RxActive on pin AUX1 and TxActive on pin AUX2](assets/mfrc522_datasheet/figure_31_output_rxactive_txactive.png)
+![Figure 31: Output RxActive on pin AUX1 and TxActive on pin AUX2](figuras/figure_31_output_rxactive_txactive.png)
 
 ```
 Logic Level
@@ -4301,7 +4301,7 @@ see Section 16.1.2 on page 82. The TestSel1Reg register’s TstBusBitSel[2:0] bi
 to 06h (pin D6 = s_data) and AnalogTestReg register is set to FFh (TstBusBit) which 
 outputs the received data stream on pins AUX1 and AUX2.
 
-![Figure 32: Received data stream on pins AUX1 and AUX2](assets/mfrc522_datasheet/figure_32_received_data_stream_aux1_aux2.png)
+![Figure 32: Received data stream on pins AUX1 and AUX2](figuras/figure_32_received_data_stream_aux1_aux2.png)
 
 ```
 Signal
@@ -4341,7 +4341,7 @@ ITU-TO150 before selecting PRBS transmission.
 
 # 17. Package outline
 
-![Figure 33: Package outline SOT617-1 (HVQFN32)](assets/mfrc522_datasheet/figure_33_package_outline_sot617_1_hvqfn32.png)
+![Figure 33: Package outline SOT617-1 (HVQFN32)](figuras/figure_33_package_outline_sot617_1_hvqfn32.png)
 
 #### Package Mechanical Dimensions (HVQFN32 - SOT617-1)
 
@@ -4409,7 +4409,7 @@ Unlimited out-of-pack floor life at maximum ambient 30 °C/85 % RH.
 
 # 19. Packing information
 
-![Figure 34: Packing information 1 tray](assets/mfrc522_datasheet/figure_34_packing_information_1_tray.png)
+![Figure 34: Packing information 1 tray](figuras/figure_34_packing_information_1_tray.png)
 
 ```
 +-------------------------------------------------------------------------------+

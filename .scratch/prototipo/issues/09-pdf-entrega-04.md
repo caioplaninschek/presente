@@ -11,6 +11,6 @@ GitHub: https://github.com/caioplaninschek/presente/issues/13
 
 ## O que entrega
 
-O documento postado no Teams, transcrito em docs/entrega-04.md, com o que foi cortado anotado ao lado.
+O documento postado no Teams, transcrito em docs/entregas/entrega-04/entrega-04.md, com o que foi cortado anotado ao lado.
 
 O enunciado completo, com o passo a passo de bancada e os critérios de pronto, vive na issue do GitHub. Ver o porquê em `../graph.md`.
