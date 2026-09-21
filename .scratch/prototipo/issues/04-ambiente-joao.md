@@ -1,7 +1,8 @@
 # 04: Ambiente na máquina do João
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 21/09/2026, pela issue #14 do GitHub
 Dono: Caio (preparar) + João (rodar)
 Prazo: 14/09
 Entrega: —

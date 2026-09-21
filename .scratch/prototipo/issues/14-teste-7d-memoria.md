@@ -1,7 +1,8 @@
 # 14: Teste 7d: heap livre no handshake
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 21/09/2026, pela issue #17 do GitHub
 Dono: João
 Prazo: 19/09
 Entrega: —

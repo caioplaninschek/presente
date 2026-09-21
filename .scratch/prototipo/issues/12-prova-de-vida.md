@@ -1,7 +1,8 @@
 # 12: Prova de vida: LED e buzzer
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 21/09/2026, pela issue #24 do GitHub
 Dono: Cauã (preparar) + João (rodar)
 Prazo: ~~17/09~~ assim que o 04 funcionar, até 19/09, porque o 15 depende dele (atualizado em 17/09)
 Entrega: —
