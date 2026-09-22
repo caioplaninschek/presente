@@ -129,4 +129,4 @@ A dispensa do segundo sensor (R18) continua valendo, e o documento a repete em u
 
 ### Como está sendo montada
 
-O documento sai do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 vem do dossiê de testes (`docs/testes-22-09.md`, issue #28). A montagem e o envio são a issue #30. Depois do envio, o PDF e a transcrição ficam na mesma pasta, no padrão das Entregas 03 e 04.
+O documento sai do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 é o próprio dossiê de testes (issue #28), escrito direto no rascunho em 22/09. A montagem e o envio são a issue #30. Depois do envio, o PDF e a transcrição ficam na mesma pasta, no padrão das Entregas 03 e 04.

@@ -1,7 +1,8 @@
 # 13: O leitor lê o crachá
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #25 do GitHub
 Dono: Cauã (preparar) + João (rodar)
 Prazo: 19/09, depois da solda dos pinos do RC522, marcada para o mesmo dia (atualizado em 17/09)
 Entrega: —

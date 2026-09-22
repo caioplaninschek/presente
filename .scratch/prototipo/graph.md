@@ -65,13 +65,13 @@ A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O 
 | 10 | [#16](https://github.com/caioplaninschek/presente/issues/16) | #6 | Caio | 17/09 |
 | 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | ~~16/09~~ 19/09, antes do 12 |
 | 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | Cauã + João | ~~17/09~~ 19/09, assim que o 04 funcionar |
-| 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09, depois da solda |
+| 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09, depois da solda · **fechado em 22/09** |
 | 14 | [#17](https://github.com/caioplaninschek/presente/issues/17) | #6 | João | 19/09 |
 | 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 |
 | 16 | [#18](https://github.com/caioplaninschek/presente/issues/18) | #6 | João | 20/09 |
 | 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 |
 | 18 | [#19](https://github.com/caioplaninschek/presente/issues/19) | #6 | Caio | 21/09 |
-| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | Gabriel | 21/09 |
+| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | ~~Gabriel~~ Caio (22/09) | ~~21/09~~ 22/09 |
 | 20 | [#30](https://github.com/caioplaninschek/presente/issues/30) | #7 | Caio | 22/09 23:59 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
@@ -83,6 +83,8 @@ Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entr
 **A solda ficou para sábado (17/09).** O João avisou no grupo que só consegue soldar os pinos do RC522 no sábado, 19/09. O que não depende dela — a parte sem leitor do 08, o 11 e o 12 — passa a ter prazo até sábado, com o 12 rodando assim que o 04 funcionar. O 13 roda no mesmo sábado, depois da solda. O 15 e o 17 seguem no domingo, 20/09, e agora dependem de a solda sair no sábado.
 
 **Onde os vértices estavam em 21/09, 14h.** A solda não saiu no sábado, e a tarde de domingo não aconteceu: tudo rodou na segunda. O **04** funcionou: a placa aparece como CH340 na COM3, sem driver a instalar, e o Upload só passa segurando o `BOOT`. O **12** rodou: as três cores bateram com o monitor serial, e o vídeo chegou pelo WhatsApp. O bip saiu fraco, e o **11** terminou aí: o buzzer entrou por um transistor TIP122, e a peça vai ser trocada (R44). O **14** passou, com 236,5 KB livres antes da conexão segura. O **16** teve uma rodada sem pulo de canal, que não vale, e precisa ser refeito; o **18**, o veredito, espera por ele. O **13**, o **15** e o **17** esperam a solda do RC522, que o João faz em 21/09. O **19** e o **20** fecham com o que chegar até terça.
+
+**Onde os vértices estavam em 22/09, 10h.** O RC522 foi soldado na noite de 21/09, e o João rodou o **13** e o **15** na mesma noite. O **13** fechou: leram a tag adesiva, de 7 bytes, e o cartão e o chaveiro, de 4. O **15** passou no registro, na recusa do já registrado, na janela de silêncio e no tempo (29,3 ms do toque ao feedback, contra o piso de 200 ms), mas só com crachás de 4 bytes; a tag de 7 bytes nesse programa foi pedida ao João na manhã de 22/09, e é o que falta para ele fechar. As tags são difíceis de ler, a adesiva mais que as outras. O buzzer não apita: faz um clique curto em todo toque, até nos que o programa não manda bipar, e o João diz que a peça, testada à parte num Arduino, está danificada. O **08** (foto e medida), o **11** (buzzer direto no VIN) e o **17** (persistência) ficaram sem retorno e também foram pedidos de manhã. O **19** passou para o Caio, que escreve a seção 3 direto no rascunho da entrega, sem o `docs/testes-22-09.md`.
 
 ## Onde mora o código de cada vértice (R28)
 

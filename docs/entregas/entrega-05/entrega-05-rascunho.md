@@ -85,9 +85,9 @@ A especificação do projeto acompanhou o código. Ela passou por quatro rodadas
 
 ## 3 TESTES DOCUMENTADOS
 
-*Origem: `docs/testes-22-09.md` (#28, Gabriel) · Dono: Gabriel, montagem do Caio (#30) · Prazo: segunda, 21/09 · **formulário montado em 20/09, resultados em branco***
+*Origem: os comentários das issues #17, #24, #25 e #26 e os vídeos do João · Dono: Caio, que assumiu a #28 em 22/09, escrevendo direto aqui em vez do `docs/testes-22-09.md` · Prazo: terça, 22/09 · **escrita em 22/09; faltam a foto, a tag de 7 bytes no programa do sinal de presença e o teste 8***
 
-> ⚠️ **Estado em 21/09, 14h25:** rodaram a prova de vida do LED e do buzzer (#24), o teste de memória (#17) e uma rodada do teste do painel (#18) que não passou pelo pulo de canal. Os testes 1, 2 e 8 esperam a solda do leitor, que o João faz em 21/09. **O resultado obtido, os problemas, as correções e a evidência são preenchidos com o retorno do João.** Nada aqui pode ser dado como feito antes de a evidência existir. O vídeo da prova de vida está versionado em `docs/assets/testes/prova-de-vida-2026-09-21.mp4`.
+> ⚠️ **Estado em 22/09, 10h:** o leitor foi soldado em 21/09, e na mesma noite o João rodou o leitor (#25, fechada) e o sinal de presença (#26). Os testes 1 e 2 estão escritos com esse retorno. Pedidos ao João na manhã de 22/09: a tag de 7 bytes no programa do sinal de presença (fecha o teste 2 e a #26), a ligação do buzzer direto no VIN (#23), a foto com a medida (#22) e, se der tempo, a persistência (#27, teste 8). Nada aqui pode ser dado como feito antes de a evidência existir.
 
 Os testes são executados na placa real, com o aparelho montado, e verificam apenas o comportamento externo: o que o LED e o buzzer fazem, o que sai no monitor serial e o que fica gravado em disco. Cada teste deixa evidência gravada, que pode ser uma foto, um vídeo curto ou o trecho do log com o horário, e ela fica versionada no repositório.
 
@@ -102,24 +102,38 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 - **Descrição:** com o programa de prova de vida, o LED percorre vermelho, verde e azul, um segundo cada, apaga e toca um bip de 100 ms, e o monitor serial imprime o nome da cor acesa.
 - **Resultado esperado:** as três cores acendem uma de cada vez, o nome no monitor serial bate com a cor acesa, e o bip é audível a um passo da placa.
 - **Resultado obtido:** as três cores acenderam na ordem e bateram com o monitor serial. O bip saiu muito baixo e com um som estranho, audível só de perto.
-- **Problemas e correções:** o buzzer é de 5 V, e a ligação foi feita com um transistor TIP122, como a especificação previa para esse caso. Com o transistor o som saiu fraco, e a peça vai ser trocada. A causa está em conferência: a suspeita é que a peça seja um buzzer passivo, que só estala quando recebe tensão constante, e não o buzzer ativo que o projeto prevê.
+- **Problemas e correções:** o buzzer é de 5 V, e a ligação foi feita com um transistor TIP122, como a especificação previa para esse caso. Mesmo assim, o que se ouve é um clique curto, parecido com o de um botão de mouse, e não um bip. O João testou a peça à parte, ligada a um Arduino com um programa de teste, e ela também não apitou; a hipótese dele é que o disco cerâmico do buzzer esteja danificado. A peça vai ser trocada. *(⚠️ marca de trabalho: acrescentar o resultado da ligação direta no VIN, pedida na #23, que distingue peça ativa de passiva.)*
 - **Evidência:** vídeo das cores, gravado pelo João em 21/09 (`docs/assets/testes/prova-de-vida-2026-09-21.mp4`), e o trecho do monitor serial colado na issue da prova de vida (#24).
 
 ### Teste 1: Crachá de 4 bytes, três aproximações seguidas
 
 - **Descrição:** encostar uma tag Mifare, de UID com 4 bytes, três vezes em sequência.
 - **Resultado esperado:** um único registro, e não três, com a resposta do LED e do buzzer em menos de 200 ms, contados do início da conversa com o leitor. O número é declarado como piso, e não como medida exata: o tempo em que a tag espera no campo até o programa ir buscá-la não é visível de dentro do aparelho.
-- **Resultado obtido:** `[a preencher]`
-- **Problemas e correções:** `[a preencher]`
-- **Evidência:** `[a preencher: vídeo e trecho do log]`
+- **Resultado obtido:** com o cartão Mifare (UID `62EF7E05`), o primeiro toque registrou a presença, com duas piscadas verdes. Alguns segundos depois, o mesmo cartão foi encostado de novo e recebeu uma piscada verde, com o veredito "ja registrado" no monitor serial e nenhum registro novo. Encostado logo em seguida, ainda dentro dos cinco segundos de silêncio, foi ignorado: o LED não acendeu e nada saiu no monitor. Passado esse intervalo, um novo toque deu outra vez uma piscada e nenhum registro. O chaveiro (UID `51A79F97`), encostado na sequência, registrou normalmente, com duas piscadas, porque cada crachá tem o seu próprio registro. Nas cinco leituras do log, o tempo entre o início da conversa com o leitor e o começo do feedback ficou entre 29,2 e 29,3 ms, abaixo do piso de 200 ms, e a decisão levou no máximo 0,1 ms. O teste passou no registro, na janela de silêncio e no tempo de resposta; a parte sonora não passou, porque o buzzer não apita.
+- **Problemas e correções:** em todas as aproximações ouviu-se o mesmo clique curto da prova de vida, inclusive naquelas em que o programa não aciona o buzzer, que são a recusa do crachá já registrado e o toque dentro dos cinco segundos. Como o programa só liga o buzzer no primeiro registro de cada crachá, esses cliques não vêm do comando do bip, e a causa deles não foi isolada até esta entrega. O registro, a recusa e a janela de silêncio funcionaram na primeira gravação, sem correção no programa.
+- **Evidência:** vídeo gravado pelo João na madrugada de 22/09 (`docs/assets/testes/encostou-2026-09-22.mp4`) e o log do monitor serial, colado na issue do sinal de presença (#26):
+
+```text
+62EF7E05  4 bytes  registrado     decidir: 0.1 ms  toque->feedback: 29.3 ms
+62EF7E05  4 bytes  ja registrado  decidir: 0.0 ms  toque->feedback: 29.2 ms
+62EF7E05  4 bytes  ja registrado  decidir: 0.0 ms  toque->feedback: 29.2 ms
+51A79F97  4 bytes  registrado     decidir: 0.0 ms  toque->feedback: 29.2 ms
+51A79F97  4 bytes  ja registrado  decidir: 0.0 ms  toque->feedback: 29.2 ms
+```
 
 ### Teste 2: Crachá de 7 bytes
 
-- **Descrição:** encostar uma tag NTAG215, de UID com 7 bytes.
+- **Descrição:** encostar uma tag NTAG215, de UID com 7 bytes. *(⚠️ marca de trabalho: o João descreveu a tag adesiva como NTAG213 na #25. Para o firmware não faz diferença, porque as duas têm UID de 7 bytes, mas o nome aqui precisa bater com a embalagem.)*
 - **Resultado esperado:** o registro acontece pelo UID, e nada é escrito na tag.
-- **Resultado obtido:** `[a preencher]`
-- **Problemas e correções:** `[a preencher]`
-- **Evidência:** `[a preencher: lista dos UIDs lidos, em texto]`
+- **Resultado obtido:** no programa que apenas lê o crachá, a tag adesiva foi lida com UID de 7 bytes (`04B5A979C32A81`), ao lado do cartão e do chaveiro, ambos de 4 bytes, e cada crachá devolveu sempre o mesmo número. *(⚠️ marca de trabalho: falta o registro da tag de 7 bytes no programa do sinal de presença, pedido ao João na manhã de 22/09 na #26. Se não chegar, esta frase diz que o registro com 7 bytes não foi obtido.)*
+- **Problemas e correções:** a leitura exigiu aproximação cuidadosa, sobretudo com a tag adesiva: a antena dela é pequena, e o leitor só a detecta bem encostada. Nenhuma correção foi feita até esta entrega. Quanto à escrita, o programa não contém nenhum comando que grave na tag, de modo que a garantia de que nada é escrito no crachá vem do código, e não de uma observação.
+- **Evidência:** a lista dos UIDs lidos, colada na issue do leitor (#25):
+
+```text
+04B5A979C32A81  7 bytes  tag adesiva
+51A79F97        4 bytes  chaveiro
+62EF7E05        4 bytes  cartão
+```
 
 ### Teste 8: Estresse: 30 toques com um reinício no meio
 
