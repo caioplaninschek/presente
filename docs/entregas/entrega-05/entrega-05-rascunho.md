@@ -44,7 +44,7 @@ Figura 1 – Diagrama de blocos do sistema.
 | LED RGB (atuador 1) | R | 25 | Saída |
 | LED RGB | G | 26 | Saída |
 | LED RGB | B | 27 | Saída |
-| Buzzer ativo (atuador 2) | sinal | 33 | Saída |
+| Buzzer (atuador 2) | sinal | 33 | Saída |
 
 Uma fonte de 5 V na tomada alimenta o conjunto, porque o aparelho é fixo e foi pensado para ficar preso à parede da sala; o leitor recebe os 3,3 V do regulador da própria placa. Cada linha do LED tem um resistor de 300 Ω em série, e o buzzer é acionado pelo GPIO 33 através do transistor, com o positivo ligado aos 5 V. O projeto usa **um sensor só**: o professor dispensou esta equipe da exigência de dois.
 
@@ -71,6 +71,8 @@ A decisão de organização mais importante do período foi escrever **um progra
 | `persistencia/` | O mesmo, com o arquivo de eventos atrás: a lista de quem já está registrado sobrevive ao reinício | **Teste 8** |
 | `radio/` | Mede a memória livre no instante da conexão segura e observa o comportamento do painel no pulo de canal | **Testes 7c e 7d** |
 
+O programa gravado no protótipo, que rodou nos testes 1 e 2 e é o mesmo apresentado na demonstração em laboratório, é o `encostou`, no arquivo `src/encostou/main.cpp`. O arquivo abre com um comentário que explica o que o programa faz, a que testes atende e em que módulo da pasta `lib/` está cada parte do mecanismo; os trechos principais, como a decisão entre registrar e recusar e a temporização das piscadas e do bip sem espera bloqueante, têm comentário próprio.
+
 Para que esses programas não repetissem o mesmo código, o que é comum a eles vive em três módulos, na pasta `lib/`. O módulo `rfid/` faz a leitura do UID de 4 e de 7 bytes e controla a janela de silêncio de cinco segundos; o `feedback/` comanda o LED e o buzzer por máquina de estados, sem nunca travar o programa numa espera; e o `storage/` grava os eventos no LittleFS, uma linha por evento, em modo de acréscimo, relendo o arquivo quando o aparelho liga.
 
 As versões das bibliotecas estão fixadas de propósito no `platformio.ini`: a plataforma `espressif32` na 7.1.3, a `MFRC522` na 1.4.12 e a `ArduinoJson` na 6.21.6. O firmware precisa compilar igual nas cinco máquinas da equipe, e mudar uma versão é decisão de grupo, não de quem estiver editando no momento. O sistema de arquivos também está declarado explicitamente como LittleFS, em lugar do padrão da plataforma, para que a gravação do sistema de arquivos não apague o portal já gravado na mesma partição.
@@ -85,15 +87,17 @@ A especificação do projeto acompanhou o código. Ela passou por quatro rodadas
 
 ## 3 TESTES DOCUMENTADOS
 
-*Origem: os comentários das issues #17, #24, #25 e #26 e os vídeos do João · Dono: Caio, que assumiu a #28 em 22/09, escrevendo direto aqui em vez do `docs/testes-22-09.md` · Prazo: terça, 22/09 · **escrita em 22/09; faltam a foto, a tag de 7 bytes no programa do sinal de presença e o teste 8***
+*Origem: os comentários das issues #17, #24, #25 e #26 e os vídeos do João · Dono: Caio, que assumiu a #28 em 22/09, escrevendo direto aqui em vez do `docs/testes-22-09.md` · Prazo: terça, 22/09 · **escrita em 22/09; a tag de 7 bytes no programa do sinal de presença e o teste 8 estão escritos como não obtidos***
 
-> ⚠️ **Estado em 22/09, 10h:** o leitor foi soldado em 21/09, e na mesma noite o João rodou o leitor (#25, fechada) e o sinal de presença (#26). Os testes 1 e 2 estão escritos com esse retorno. Pedidos ao João na manhã de 22/09: a tag de 7 bytes no programa do sinal de presença (fecha o teste 2 e a #26), a ligação do buzzer direto no VIN (#23), a foto com a medida (#22) e, se der tempo, a persistência (#27, teste 8). Nada aqui pode ser dado como feito antes de a evidência existir.
+> ⚠️ **Estado em 22/09, 12h:** o leitor foi soldado em 21/09, e na mesma noite o João rodou o leitor (#25, fechada) e o sinal de presença (#26). A foto do João é a Figura 3, a tag adesiva é NTAG215, e o clique do buzzer acompanha o LED (João, 22/09: "só estala na primeira vez e quando o led acende"; isso corrige a transcrição do vídeo, que ouviu clique numa passada sem piscada). Ainda pedidos ao João: a tag de 7 bytes no programa do sinal de presença (fecha o teste 2 e a #26), a ligação do buzzer direto no VIN (#23) e, se der tempo, a persistência (#27, teste 8). Nada aqui pode ser dado como feito antes de a evidência existir.
 
 Os testes são executados na placa real, com o aparelho montado, e verificam apenas o comportamento externo: o que o LED e o buzzer fazem, o que sai no monitor serial e o que fica gravado em disco. Cada teste deixa evidência gravada, que pode ser uma foto, um vídeo curto ou o trecho do log com o horário, e ela fica versionada no repositório.
 
 > Fotografia do protótipo montado, de cima, com as ligações visíveis.
 
-Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a foto é pendência da #22. Se ela não chegar, a figura provisória é um quadro do vídeo do teste 1, já com o leitor montado: `docs/assets/testes/prototipo-quadro-do-video-2026-09-22.jpg`. Outro quadro do mesmo vídeo, com o monitor serial mostrando o primeiro registro, está em `docs/assets/testes/encostou-monitor-serial-2026-09-22.jpg`.)*
+Figura 3 – Protótipo montado: o ESP32 embaixo e, na protoboard, o LED, o leitor, o transistor e o buzzer. *(⚠️ marca de trabalho, sai na montagem: foto do João recebida em 22/09 (Imagem 01), versionada em `docs/assets/testes/prototipo-montado-2026-09-22.jpg`, com a rotação do celular já aplicada.)*
+
+A Figura 3 mostra o protótipo usado nos testes. O leitor RC522, o LED RGB, o transistor e o buzzer estão montados numa protoboard de 16,6 cm por 5,5 cm, com 1,0 cm de altura, e o ESP32 fica fora dela, ligado por jumpers.
 
 ### Prova de vida: as três cores do LED e o bip
 
@@ -110,7 +114,7 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 - **Descrição:** encostar uma tag Mifare, de UID com 4 bytes, três vezes em sequência.
 - **Resultado esperado:** um único registro, e não três, com a resposta do LED e do buzzer em menos de 200 ms, contados do início da conversa com o leitor. O número é declarado como piso, e não como medida exata: o tempo em que a tag espera no campo até o programa ir buscá-la não é visível de dentro do aparelho.
 - **Resultado obtido:** com o cartão Mifare (UID `62EF7E05`), o primeiro toque registrou a presença, com duas piscadas verdes. Alguns segundos depois, o mesmo cartão foi encostado de novo e recebeu uma piscada verde, com o veredito "ja registrado" no monitor serial e nenhum registro novo. Encostado logo em seguida, ainda dentro dos cinco segundos de silêncio, foi ignorado: o LED não acendeu e nada saiu no monitor. Passado esse intervalo, um novo toque deu outra vez uma piscada e nenhum registro. O chaveiro (UID `51A79F97`), encostado na sequência, registrou normalmente, com duas piscadas, porque cada crachá tem o seu próprio registro. Nas cinco leituras do log, o tempo entre o início da conversa com o leitor e o começo do feedback ficou entre 29,2 e 29,3 ms, abaixo do piso de 200 ms, e a decisão levou no máximo 0,1 ms. O teste passou no registro, na janela de silêncio e no tempo de resposta; a parte sonora não passou, porque o buzzer não apita.
-- **Problemas e correções:** em todas as aproximações ouviu-se o mesmo clique curto da prova de vida, inclusive naquelas em que o programa não aciona o buzzer, que são a recusa do crachá já registrado e o toque dentro dos cinco segundos. Como o programa só liga o buzzer no primeiro registro de cada crachá, esses cliques não vêm do comando do bip, e a causa deles não foi isolada até esta entrega. O registro, a recusa e a janela de silêncio funcionaram na primeira gravação, sem correção no programa.
+- **Problemas e correções:** no primeiro registro de cada crachá, quando o programa aciona o buzzer por 100 ms, ouviu-se apenas o clique curto já observado na prova de vida, sem bip. O clique também aparece quando o LED acende na recusa do crachá já registrado, momento em que o programa mantém o buzzer desligado, e não aparece no toque dentro dos cinco segundos, em que o LED fica apagado. Portanto, o clique acompanha o acendimento do LED, mesmo quando o programa não aciona o buzzer. As hipóteses são duas: o clique viria de uma interferência do acionamento do LED no circuito do buzzer, e a falta do bip, da peça danificada. Nenhuma das duas foi confirmada até esta entrega. O registro, a recusa e a janela de silêncio funcionaram na primeira gravação, sem correção no programa.
 - **Evidência:** vídeo gravado pelo João às 2h35 de 22/09 (`docs/assets/testes/encostou-2026-09-22.mp4`) e o log do monitor serial, colado na issue do sinal de presença (#26):
 
 ```text
@@ -123,9 +127,9 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 
 ### Teste 2: Crachá de 7 bytes
 
-- **Descrição:** encostar uma tag NTAG215, de UID com 7 bytes. *(⚠️ marca de trabalho: o João descreveu a tag adesiva como NTAG213 na #25. Para o firmware não faz diferença, porque as duas têm UID de 7 bytes, mas o nome aqui precisa bater com a embalagem.)*
+- **Descrição:** encostar uma tag NTAG215, de UID com 7 bytes.
 - **Resultado esperado:** o registro acontece pelo UID, e nada é escrito na tag.
-- **Resultado obtido:** no programa que apenas lê o crachá, a tag adesiva foi lida com UID de 7 bytes (`04B5A979C32A81`), ao lado do cartão e do chaveiro, ambos de 4 bytes, e cada crachá devolveu sempre o mesmo número. *(⚠️ marca de trabalho: falta o registro da tag de 7 bytes no programa do sinal de presença, pedido ao João na manhã de 22/09 na #26. Se não chegar, esta frase diz que o registro com 7 bytes não foi obtido.)*
+- **Resultado obtido:** no programa que apenas lê o crachá, a tag adesiva foi lida com UID de 7 bytes (`04B5A979C32A81`), ao lado do cartão e do chaveiro, ambos de 4 bytes, e cada crachá devolveu sempre o mesmo número. No programa do sinal de presença, o registro com a tag de 7 bytes não foi obtido até o envio, porque só os crachás de 4 bytes foram testados nele. *(⚠️ marca de trabalho: se o João mandar a linha da tag de 7 bytes no encostou (#26), a frase anterior vira o resultado com a linha do log.)*
 - **Problemas e correções:** a leitura exigiu aproximação cuidadosa, sobretudo com a tag adesiva: a antena dela é pequena, e o leitor só a detecta bem encostada. Nenhuma correção foi feita até esta entrega. Quanto à escrita, o programa não contém nenhum comando que grave na tag, de modo que a garantia de que nada é escrito no crachá vem do código, e não de uma observação.
 - **Evidência:** a lista dos UIDs lidos, colada na issue do leitor (#25):
 
