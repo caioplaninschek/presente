@@ -87,9 +87,9 @@ A especificação do projeto acompanhou o código. Ela passou por quatro rodadas
 
 ## 3 TESTES DOCUMENTADOS
 
-*Origem: os comentários das issues #17, #24, #25 e #26 e os vídeos do João · Dono: Caio, que assumiu a #28 em 22/09, escrevendo direto aqui em vez do `docs/testes-22-09.md` · Prazo: terça, 22/09 · **escrita em 22/09; a tag de 7 bytes no programa do sinal de presença e o teste 8 estão escritos como não obtidos***
+*Origem: os comentários das issues #17, #24, #25, #26 e #27 e os vídeos do João · Dono: Caio, que assumiu a #28 em 22/09, escrevendo direto aqui em vez do `docs/testes-22-09.md` · Prazo: terça, 22/09 · **escrita em 22/09; o teste 8 está como obtido em parte, e a tag de 7 bytes no programa do sinal de presença, como não obtida***
 
-> ⚠️ **Estado em 22/09, 12h:** o leitor foi soldado em 21/09, e na mesma noite o João rodou o leitor (#25, fechada) e o sinal de presença (#26). A foto do João é a Figura 3, a tag adesiva é NTAG215, e o clique do buzzer acompanha o LED (João, 22/09: "só estala na primeira vez e quando o led acende"; isso corrige a transcrição do vídeo, que ouviu clique numa passada sem piscada). Ainda pedidos ao João: a tag de 7 bytes no programa do sinal de presença (fecha o teste 2 e a #26), e, se der tempo, a persistência (#27, teste 8). O teste do buzzer direto no VIN foi dispensado pelo Caio em 22/09: o problema fica documentado como está. Nada aqui pode ser dado como feito antes de a evidência existir.
+> ⚠️ **Estado em 22/09, fechamento:** o leitor foi soldado em 21/09, e na mesma noite o João rodou o leitor (#25, fechada) e o sinal de presença (#26). A foto do João é a Figura 3, a tag adesiva é NTAG215, e o clique do buzzer acompanha o LED (João, 22/09: "só estala na primeira vez e quando o led acende"; isso corrige a transcrição do vídeo, que ouviu clique numa passada sem piscada). Em 22/09, 12h40, o João rodou a persistência (#27) com o cartão e o chaveiro e colou o `eventos.json` na issue; o Caio decidiu fechar o teste 8 com esses dados, como obtido em parte, sem pedir a linha "Relido" do boot. A tag de 7 bytes não rodou no encostou nem na persistência: o João relatou alcance curto da adesiva e sugeriu comprar a NTAG215 em cartão. O teste do buzzer direto no VIN foi dispensado pelo Caio em 22/09: o problema fica documentado como está.
 
 Os testes são executados na placa real, com o aparelho montado, e verificam apenas o comportamento externo: o que o LED e o buzzer fazem, o que sai no monitor serial e o que fica gravado em disco. Cada teste deixa evidência gravada, que pode ser uma foto, um vídeo curto ou o trecho do log com o horário, e ela fica versionada no repositório.
 
@@ -129,8 +129,8 @@ A Figura 3 mostra o protótipo usado nos testes. O leitor RC522, o LED RGB, o tr
 
 - **Descrição:** encostar uma tag NTAG215, de UID com 7 bytes.
 - **Resultado esperado:** o registro acontece pelo UID, e nada é escrito na tag.
-- **Resultado obtido:** no programa que apenas lê o crachá, a tag adesiva foi lida com UID de 7 bytes (`04B5A979C32A81`), ao lado do cartão e do chaveiro, ambos de 4 bytes, e cada crachá devolveu sempre o mesmo número. No programa do sinal de presença, o registro com a tag de 7 bytes não foi obtido até o envio, porque só os crachás de 4 bytes foram testados nele. *(⚠️ marca de trabalho: se o João mandar a linha da tag de 7 bytes no encostou (#26), a frase anterior vira o resultado com a linha do log.)*
-- **Problemas e correções:** a leitura exigiu aproximação cuidadosa, sobretudo com a tag adesiva: a antena dela é pequena, e o leitor só a detecta bem encostada. Nenhuma correção foi feita até esta entrega. Quanto à escrita, o programa não contém nenhum comando que grave na tag, de modo que a garantia de que nada é escrito no crachá vem do código, e não de uma observação.
+- **Resultado obtido:** no programa que apenas lê o crachá, a tag adesiva foi lida com UID de 7 bytes (`04B5A979C32A81`), ao lado do cartão e do chaveiro, ambos de 4 bytes, e cada crachá devolveu sempre o mesmo número. Nos programas do sinal de presença e da persistência, só o cartão e o chaveiro foram usados, e o registro com a tag de 7 bytes não foi obtido até o envio.
+- **Problemas e correções:** a leitura exigiu aproximação cuidadosa, sobretudo com a tag adesiva: a antena dela é pequena, e o leitor só a detecta bem encostada. Nenhuma correção foi feita até esta entrega; a equipe avalia trocar a tag adesiva por uma NTAG215 em formato de cartão, de antena maior. Quanto à escrita, o programa não contém nenhum comando que grave na tag, de modo que a garantia de que nada é escrito no crachá vem do código, e não de uma observação.
 - **Evidência:** a lista dos UIDs lidos, colada na issue do leitor (#25):
 
 ```text
@@ -143,11 +143,18 @@ A Figura 3 mostra o protótipo usado nos testes. O leitor RC522, o LED RGB, o tr
 
 - **Descrição:** trinta aproximações seguidas, com o aparelho desligado e religado no meio da sequência.
 - **Resultado esperado:** nenhuma duplicata, ou seja, um registro por crachá, com quem já estava registrado continuando recusado depois do reinício; e nenhuma perda do que já havia sido gravado.
-*(⚠️ marca de trabalho: o texto abaixo é a versão "não obtido", pronta para o caso de a #27 não rodar até o envio. Se rodar, as três linhas são reescritas com o conteúdo do `eventos.json`, o número de crachás usados e o ponto em que o cabo foi arrancado.)*
+- **Resultado obtido:** obtido em parte. O teste rodou com dois crachás, o cartão (UID `62EF7E05`) e o chaveiro (UID `51A79F97`), em vez dos trinta toques previstos. O cartão foi registrado primeiro; em seguida, a alimentação da placa foi cortada e religada, e o chaveiro foi registrado depois da volta. O próprio arquivo de eventos confirma o reinício: cada linha guarda o tempo contado desde que a placa ligou, e a do chaveiro, gravada depois, marca 9,3 s, contra 201,9 s na do cartão. Os dois crachás foram então encostados de novo, e o programa respondeu "ja registrado" a ambos, sem gravar nada. A contagem que acompanha as duas respostas, de dois crachás no total, mostra que elas vieram depois do registro do chaveiro e, portanto, depois do reinício. Como o registro do cartão é anterior ao corte de energia, a recusa dele prova que a lista de quem já estava registrado foi relida do arquivo quando a placa voltou. O arquivo terminou com duas linhas, uma por crachá, sem duplicata e sem perda de registro.
+- **Problemas e correções:** a rodada foi menor que a prevista, com dois crachás, e nem o número de toques nem o momento exato do corte de energia foram anotados. Só o cartão e o chaveiro são detectados pelo leitor com folga, porque a tag adesiva tem antena pequena, como descrito no teste 2. Também não foi guardada a linha que o programa imprime ao ligar, com o total relido do arquivo; a releitura fica demonstrada pela recusa do cartão. O programa não precisou de correção. A rodada completa, com trinta toques e mais crachás, fica para a etapa de integração.
+- **Evidência:** o conteúdo do arquivo de eventos, impresso pelo comando "l" do programa, e as respostas do monitor serial, colados na issue da persistência (#27):
 
-- **Resultado obtido:** não obtido. O programa do teste está escrito e compila, mas não foi gravado na placa até o envio desta entrega.
-- **Problemas e correções:** o leitor só foi soldado na noite de 21/09, véspera do envio, e o tempo de bancada que restou foi para os testes 1 e 2, que dependem dele e demonstram a cadeia completa. O teste 8 passa para a próxima etapa, junto com a integração.
-- **Evidência:** nenhuma, por não ter rodado.
+```text
+--- eventos.json ---
+{"uid":"62EF7E05","ms_desde_boot":201857,"origem":"nfc"}
+{"uid":"51A79F97","ms_desde_boot":9304,"origem":"nfc"}
+--- 2 linha(s); 2 cracha(s) diferente(s) registrado(s) ---
+62EF7E05  4 bytes  ja registrado - nada gravado  (2 no total)
+51A79F97  4 bytes  ja registrado - nada gravado  (2 no total)
+```
 
 ### Teste 7d: Memória livre no instante da conexão segura
 
