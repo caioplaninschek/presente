@@ -72,7 +72,7 @@ A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O 
 | 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 · **fechado em 22/09** |
 | 18 | [#19](https://github.com/caioplaninschek/presente/issues/19) | #6 | Caio | 21/09 |
 | 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | ~~Gabriel~~ Caio (22/09) | ~~21/09~~ 22/09 · **fechado em 22/09** |
-| 20 | [#30](https://github.com/caioplaninschek/presente/issues/30) | #7 | Caio | 22/09 23:59 |
+| 20 | [#30](https://github.com/caioplaninschek/presente/issues/30) | #7 | Caio | 22/09 23:59 · **fechado em 22/09** |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
 

@@ -1,7 +1,8 @@
 # 20: Montar o documento da Entrega 05 e postar no Teams
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #30 do GitHub
 Dono: Caio
 Prazo: 22/09 23:59
 Entrega: 05
