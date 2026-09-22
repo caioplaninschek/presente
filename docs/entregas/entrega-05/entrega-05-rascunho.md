@@ -32,10 +32,6 @@ O ciclo completo, portanto, é **crachá → RC522 → ESP32 → decisão → LE
 
 Figura 1 – Diagrama de blocos do sistema.
 
-> Imagem do fluxograma, a 16 cm de largura.
-
-Figura 2 – Fluxograma da lógica do programa.
-
 ### 1.1 Ligações do ESP32
 
 | Componente | Pino do módulo | GPIO | Direção |
@@ -51,6 +47,10 @@ Figura 2 – Fluxograma da lógica do programa.
 | Buzzer ativo (atuador 2) | sinal | 33 | Saída |
 
 Uma fonte de 5 V na tomada alimenta o conjunto, porque o aparelho é fixo e foi pensado para ficar preso à parede da sala; o leitor recebe os 3,3 V do regulador da própria placa. Cada linha do LED tem um resistor de 300 Ω em série, e o buzzer é acionado pelo GPIO 33 através do transistor, com o positivo ligado aos 5 V. O projeto usa **um sensor só**: o professor dispensou esta equipe da exigência de dois.
+
+> Imagem do fluxograma, a 16 cm de largura.
+
+Figura 2 – Fluxograma da lógica do programa.
 
 ---
 
@@ -157,9 +157,9 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 
 - **Descrição:** com o professor logado no painel pelo celular, o aparelho conecta a um hotspot que está em outro canal.
 - **Resultado esperado:** o painel continua aberto, sem pedir login de novo; se cair, reconecta sozinho em menos de cinco segundos. Com dois celulares do mesmo sistema operacional, o veredito sai parcial.
-- **Resultado obtido:** `[a preencher]` *(estado em 21/09: não obtido. Na única rodada registrada, o aparelho já estava conectado ao hotspot quando o botão foi apertado no celular, e o monitor avisou que a medição não teria pulo de canal. A página continuou aberta, mas sem passar pela troca de canal, que é o que o teste mede. Com um celular conectado, a memória livre antes da conexão segura foi de 229,6 KB, o que confirma o teste 7d.)*
-- **Problemas e correções:** `[a preencher]` *(a rodada precisa ser refeita desde a reinicialização: reiniciar a placa, conectar o celular do professor, fazer login e só então pedir a conexão ao hotspot.)*
-- **Evidência:** `[a preencher: trecho do log e o que foi observado nos dois celulares]`
+- **Resultado obtido:** não obtido. Na única rodada registrada, o aparelho já estava conectado ao hotspot quando o botão foi apertado no celular, e o monitor avisou que a medição não teria pulo de canal. A página continuou aberta, mas sem passar pela troca de canal, que é o que o teste mede. Com um celular conectado, a memória livre antes da conexão segura foi de 229,6 KB, o que confirma o teste 7d.
+- **Problemas e correções:** a rodada precisa ser refeita desde a reinicialização: reiniciar a placa, conectar o celular do professor, fazer login e só então pedir a conexão ao hotspot. A escolha entre manter as duas redes ao mesmo tempo e alterná-las espera essa rodada válida.
+- **Evidência:** o trecho do monitor serial da rodada, com o aviso de que ela não teria pulo de canal, colado na issue do teste do painel (#18).
 
 ---
 
