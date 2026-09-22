@@ -60,18 +60,18 @@ A aresta escondida, encontrada em 11/09: **07 antes de 05**, só pela metade. O 
 | 05 | [#15](https://github.com/caioplaninschek/presente/issues/15) | #6 | Caio | 17/09 |
 | 06 | [#20](https://github.com/caioplaninschek/presente/issues/20) | #6 | Igor | 21/09 |
 | 07 | [#21](https://github.com/caioplaninschek/presente/issues/21) | #6 | Caio | 17/09 |
-| 08 | [#22](https://github.com/caioplaninschek/presente/issues/22) | #7 | João | ~~16/09~~ 19/09, o leitor depois da solda |
+| 08 | [#22](https://github.com/caioplaninschek/presente/issues/22) | #7 | João | ~~16/09~~ 19/09, o leitor depois da solda · **fechado em 22/09** |
 | 09 | [#13](https://github.com/caioplaninschek/presente/issues/13) | #5 | Caio | 14/09 |
 | 10 | [#16](https://github.com/caioplaninschek/presente/issues/16) | #6 | Caio | 17/09 |
-| 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | ~~16/09~~ 19/09, antes do 12 |
+| 11 | [#23](https://github.com/caioplaninschek/presente/issues/23) | #7 | João | ~~16/09~~ 19/09, antes do 12 · **fechado em 22/09** |
 | 12 | [#24](https://github.com/caioplaninschek/presente/issues/24) | #7 | Cauã + João | ~~17/09~~ 19/09, assim que o 04 funcionar |
 | 13 | [#25](https://github.com/caioplaninschek/presente/issues/25) | #7 | Cauã + João | 19/09, depois da solda · **fechado em 22/09** |
 | 14 | [#17](https://github.com/caioplaninschek/presente/issues/17) | #6 | João | 19/09 |
-| 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 |
+| 15 | [#26](https://github.com/caioplaninschek/presente/issues/26) | #7 | Cauã + João | 20/09 · **fechado em 22/09** |
 | 16 | [#18](https://github.com/caioplaninschek/presente/issues/18) | #6 | João | 20/09 |
-| 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 |
+| 17 | [#27](https://github.com/caioplaninschek/presente/issues/27) | #7 | Cauã + João | 20/09 · **fechado em 22/09** |
 | 18 | [#19](https://github.com/caioplaninschek/presente/issues/19) | #6 | Caio | 21/09 |
-| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | ~~Gabriel~~ Caio (22/09) | ~~21/09~~ 22/09 |
+| 19 | [#28](https://github.com/caioplaninschek/presente/issues/28) | #7 | ~~Gabriel~~ Caio (22/09) | ~~21/09~~ 22/09 · **fechado em 22/09** |
 | 20 | [#30](https://github.com/caioplaninschek/presente/issues/30) | #7 | Caio | 22/09 23:59 |
 
 Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entrega 04 · [#6](https://github.com/caioplaninschek/presente/issues/6) 21/09 · [#7](https://github.com/caioplaninschek/presente/issues/7) 22/09 · [#8](https://github.com/caioplaninschek/presente/issues/8) 29/09 · [#9](https://github.com/caioplaninschek/presente/issues/9) 05/10.
@@ -85,6 +85,8 @@ Epics no GitHub: [#5](https://github.com/caioplaninschek/presente/issues/5) Entr
 **Onde os vértices estavam em 21/09, 14h.** A solda não saiu no sábado, e a tarde de domingo não aconteceu: tudo rodou na segunda. O **04** funcionou: a placa aparece como CH340 na COM3, sem driver a instalar, e o Upload só passa segurando o `BOOT`. O **12** rodou: as três cores bateram com o monitor serial, e o vídeo chegou pelo WhatsApp. O bip saiu fraco, e o **11** terminou aí: o buzzer entrou por um transistor TIP122, e a peça vai ser trocada (R44). O **14** passou, com 236,5 KB livres antes da conexão segura. O **16** teve uma rodada sem pulo de canal, que não vale, e precisa ser refeito; o **18**, o veredito, espera por ele. O **13**, o **15** e o **17** esperam a solda do RC522, que o João faz em 21/09. O **19** e o **20** fecham com o que chegar até terça.
 
 **Onde os vértices estavam em 22/09, 10h.** O RC522 foi soldado na noite de 21/09, e o João rodou o **13** e o **15** na mesma noite. O **13** fechou: leram a tag adesiva, de 7 bytes, e o cartão e o chaveiro, de 4. O **15** passou no registro, na recusa do já registrado, na janela de silêncio e no tempo (29,3 ms do toque ao feedback, contra o piso de 200 ms), mas só com crachás de 4 bytes; a tag de 7 bytes nesse programa foi pedida ao João na manhã de 22/09, e é o que falta para ele fechar. As tags são difíceis de ler, a adesiva mais que as outras. O buzzer não apita: faz um clique curto em todo toque, até nos que o programa não manda bipar, e o João diz que a peça, testada à parte num Arduino, está danificada. O **08** (foto e medida), o **11** (buzzer direto no VIN) e o **17** (persistência) ficaram sem retorno e também foram pedidos de manhã. O **19** passou para o Caio, que escreve a seção 3 direto no rascunho da entrega, sem o `docs/testes-22-09.md`.
+
+**Onde os vértices estavam em 22/09, à noite.** O **08** fechou com a foto do João, que virou a Figura 3, e com a medida da protoboard; a medida do conjunto fica para a caixa (#8). O **11** fechou sem o teste do buzzer direto no VIN, dispensado pelo Caio: o problema entra no documento como está. O clique do buzzer acompanha o acendimento do LED, e não todo toque. O **17** rodou às 12h40, com o cartão e o chaveiro em vez de trinta toques, e passou: o `eventos.json` terminou com uma linha por crachá, e o cartão gravado antes do corte de energia foi recusado depois dele. O reinício se prova pelo próprio arquivo, porque o `ms_desde_boot` do chaveiro, gravado depois, é menor que o do cartão. Entrou no documento como **obtido em parte**. O **15** fechou sem a tag de 7 bytes, porque a adesiva tem alcance curto no RC522 e o João sugeriu comprar a NTAG215 em cartão. O registro de 7 bytes fica para a integração. O **19** fechou com a seção 3 do rascunho. O **20** fecha com o envio. O **16** e o **18** continuam abertos: o teste 7c não teve rodada válida, e o veredito espera por ela.
 
 ## Onde mora o código de cada vértice (R28)
 

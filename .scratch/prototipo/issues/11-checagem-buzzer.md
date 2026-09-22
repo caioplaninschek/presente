@@ -1,7 +1,8 @@
 # 11: Checagem do buzzer
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #23 do GitHub
 Dono: João
 Prazo: ~~16/09~~ antes do 12, até 19/09; não espera a solda (atualizado em 17/09)
 Entrega: —

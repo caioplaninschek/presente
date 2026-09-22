@@ -1,7 +1,8 @@
 # 19: Dossiê de evidências dos testes de 22/09
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #28 do GitHub
 Dono: Caio (assumiu em 22/09; era do Gabriel)
 Prazo: 21/09 (adiantado em 13/09)
 Entrega: 05

@@ -8,7 +8,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
-| 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | 🟡 em andamento |
+| 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue |
 | 29/09\* | Estrutura física do protótipo | ⬜ |
 | 05/10\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
 | 20/10\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
@@ -127,6 +127,8 @@ O envio no Teams deve conter:
 
 A dispensa do segundo sensor (R18) continua valendo, e o documento a repete em uma frase, como nas Entregas 03 e 04.
 
-### Como está sendo montada
+### Como foi montada
 
-O documento sai do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 é o próprio dossiê de testes (issue #28), escrito direto no rascunho em 22/09. A montagem e o envio são a issue #30. Depois do envio, o PDF e a transcrição ficam na mesma pasta, no padrão das Entregas 03 e 04.
+O documento saiu do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 é o próprio dossiê de testes (issue #28), escrito direto no rascunho em 22/09. A montagem e o envio foram a issue #30. **Enviado em 22/09**, com 11 páginas (capa + 10). O post no Teams levou o PDF e todos os arquivos de `docs/assets/testes/`: os vídeos da prova de vida e do sinal de presença, a foto do protótipo montado, o quadro do vídeo e a foto do monitor serial. O post foi só os anexos, sem texto. O PDF está em [`entregas/entrega-05/entrega-05.pdf`](entregas/entrega-05/entrega-05.pdf) e a transcrição em [`entregas/entrega-05/entrega-05.md`](entregas/entrega-05/entrega-05.md).
+
+Dos testes, o 1 e o 7d passaram; o 2 saiu em parte (a tag de 7 bytes foi lida, mas não registrada no programa do sinal de presença); o 8 saiu em parte (dois crachás em vez de trinta toques); e o 7c não teve rodada válida. A demonstração no laboratório é na aula de 22/09.

@@ -1,7 +1,8 @@
 # 15: Encostou: verde, bip, sem duplicar
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #26 do GitHub
 Dono: Cauã (preparar) + João (rodar)
 Prazo: 20/09 (programa pronto até 19/09; adiantado em 13/09)
 Entrega: —
