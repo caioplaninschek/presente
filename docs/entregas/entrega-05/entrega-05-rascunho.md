@@ -93,7 +93,7 @@ Os testes são executados na placa real, com o aparelho montado, e verificam ape
 
 > Fotografia do protótipo montado, de cima, com as ligações visíveis.
 
-Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a foto é pendência da #22. O João gravou em 21/09 um vídeo do protótipo montado sem o leitor, que ainda não tinha sido soldado; um quadro dele serve de foto provisória se a foto com o leitor não chegar.)*
+Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a foto é pendência da #22. Se ela não chegar, a figura provisória é um quadro do vídeo do teste 1, já com o leitor montado: `docs/assets/testes/prototipo-quadro-do-video-2026-09-22.jpg`. Outro quadro do mesmo vídeo, com o monitor serial mostrando o primeiro registro, está em `docs/assets/testes/encostou-monitor-serial-2026-09-22.jpg`.)*
 
 ### Prova de vida: as três cores do LED e o bip
 
@@ -139,9 +139,11 @@ Figura 3 – Protótipo montado. *(⚠️ marca de trabalho, sai na montagem: a 
 
 - **Descrição:** trinta aproximações seguidas, com o aparelho desligado e religado no meio da sequência.
 - **Resultado esperado:** nenhuma duplicata, ou seja, um registro por crachá, com quem já estava registrado continuando recusado depois do reinício; e nenhuma perda do que já havia sido gravado.
-- **Resultado obtido:** `[a preencher]`
-- **Problemas e correções:** `[a preencher]`
-- **Evidência:** `[a preencher: conteúdo do arquivo de eventos e a contagem de boot]`
+*(⚠️ marca de trabalho: o texto abaixo é a versão "não obtido", pronta para o caso de a #27 não rodar até o envio. Se rodar, as três linhas são reescritas com o conteúdo do `eventos.json`, o número de crachás usados e o ponto em que o cabo foi arrancado.)*
+
+- **Resultado obtido:** não obtido. O programa do teste está escrito e compila, mas não foi gravado na placa até o envio desta entrega.
+- **Problemas e correções:** o leitor só foi soldado na noite de 21/09, véspera do envio, e o tempo de bancada que restou foi para os testes 1 e 2, que dependem dele e demonstram a cadeia completa. O teste 8 passa para a próxima etapa, junto com a integração.
+- **Evidência:** nenhuma, por não ter rodado.
 
 ### Teste 7d: Memória livre no instante da conexão segura
 
