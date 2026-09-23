@@ -1,7 +1,8 @@
 # Como o professor volta ao painel depois da troca de rádio
 
 Type: prototype
-Status: in-progress
+Status: resolved
+Resolvido em: 23/09/2026, pela R49 (opção (a), com a retomada pelo login); a pergunta 3 se confere na placa nas tarefas #42 e #50 do GitHub
 Dono: Caio (frente "Rede" do §9 da spec; assumido na issue #3 em 10/09/2026)
 Parent: map.md
 Blocked by: ~~placa física — o ESP32 está com o João; combinado de passar na segunda, 15/09~~ — a placa não circula (R23, 11/09). ~~Hoje: os testes 7d (#17) e 7c (#18), que o João roda, e o veredito (#19)~~ — os três fecharam em 22/09 (R45). Hoje: o portal do professor rodando dentro do aparelho, na integração (epic #9)
@@ -31,7 +32,7 @@ O que segue valendo nos dois planos:
 
 1. **Ordem de operação.** O `Set-Cookie` da resposta do login tem que chegar inteiro ao celular **antes** de `softAPdisconnect`. Hoje o §5 (`net.cpp`) fixa a sequência da troca de rádio, mas não amarra essa sequência à conclusão da resposta HTTP. Vira requisito explícito, ou fica como cuidado de implementação?
 
-2. **Onde o cookie mora.** Se o professor logar dentro do Captive Network Assistant (a janelinha do iOS/Android), o cookie fica no armazenamento daquele mini-navegador, que o sistema fecha por conta própria. Reabrir em Safari/Chrome pode significar login de novo. Opções vivas: (a) manter tudo no CNA; (b) usar o CNA só para trazer o professor e seguir em `192.168.4.1` no navegador normal. ~~(c) abandonar o cookie e carregar o token no próprio endereço da página~~ — ⛔ **derrubada em 10/09 na issue #3**, por objeção do Cauã aceita pelo Caio: credencial no endereço fica exposta em histórico de navegador, em captura de tela e em registro de acesso de servidor. Registrada na spec em 11/09 como **R25**; não voltar a listá-la como alternativa.
+2. **Onde o cookie mora.** Se o professor logar dentro do Captive Network Assistant (a janelinha do iOS/Android), o cookie fica no armazenamento daquele mini-navegador, que o sistema fecha por conta própria. Reabrir em Safari/Chrome pode significar login de novo. Opções vivas: (a) manter tudo no CNA; ~~(b) usar o CNA só para trazer o professor e seguir em `192.168.4.1` no navegador normal.~~ Derrubada em 23/09 pela R49: com a retomada pelo login, o cookie perdido custa só digitar a senha de novo. ~~(c) abandonar o cookie e carregar o token no próprio endereço da página~~ — ⛔ **derrubada em 10/09 na issue #3**, por objeção do Cauã aceita pelo Caio: credencial no endereço fica exposta em histórico de navegador, em captura de tela e em registro de acesso de servidor. Registrada na spec em 11/09 como **R25**; não voltar a listá-la como alternativa.
 
 3. **Manter o celular preso ao AP.** Na reassociação, o sistema refaz o teste de conectividade (`captive.apple.com`, `generate_204`). Se o DNS continuar sequestrando tudo, o celular marca "rede sem internet" e pode migrar para o 4G sozinho — levando o painel junto, no meio da aula. Responder o probe de modo que o sistema considere a rede "assinada" resolve, mas muda o comportamento do portal cativo e precisa ser decidido junto com o item 2.
 
@@ -52,3 +53,5 @@ O que segue valendo nos dois planos:
 **Este é o candidato natural a primeira fatia vertical do projeto.** Ele ataca o §10 (principal desafio técnico) isoladamente, só precisa do ESP32 que já está em mãos, e é exatamente o "código inicial preparado" que o professor cobra em 21/09. Se funcionar, o resto do firmware é montagem sobre um esqueleto que já se provou.
 
 Resolvido quando existir: o veredito entre Plano A e Plano B com as duas medidas registradas (comportamento do celular no pulo de canal e heap livre no handshake), a decisão dos itens 2 e 3 verificada nos dois sistemas, e o resultado escrito no §5, no §6 e no R4 da spec. Desde 13/09 o fechamento é em duas partes: o veredito sai na #19, e os itens 2 e 3 fecham depois da Entrega 05, quando o portal rodar dentro do aparelho. Evidência gravada, conforme a política do §8 — log serial com o número do heap e vídeo curto do painel sobrevivendo à sincronização.
+
+✅ **Resolvido em 23/09 (R49):** o professor fica na janela do portal cativo, e um novo login volta à chamada aberta, porque ela vive no aparelho. O item 4 segue na tarefa das mensagens entre o portal e o aparelho (#36), e o item 3 se observa na placa.

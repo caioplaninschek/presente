@@ -1,8 +1,9 @@
 # Material e prazo da estrutura física
 
 Type: task
-Status: in-progress
-Adiado em: 10/09/2026, pela issue #4 do GitHub (R22) — a caixa fica fora do protótipo de 22/09. O material só se escolhe depois da placa montada, com o tamanho real conhecido. ~~Entrega da estrutura física continua em 29/09~~; dono continua João.
+Status: resolved
+Resolvido em: 23/09/2026, pela R53 (papelão ou material reaproveitado, feito pelo grupo, com um desenho) e pelas tarefas #31 a #34 do GitHub
+Adiado em: 10/09/2026, pela issue #4 do GitHub (R22) — a caixa fica fora do protótipo de 22/09. O material só se escolhe depois da placa montada, com o tamanho real conhecido. ~~Entrega da estrutura física continua em 29/09~~; ~~dono continua João~~ (a caixa é de todos, R52 e R53, 23/09).
 Retomado em: 23/09/2026 — o gatilho do adiamento passou: a placa está montada e medida (#22, protoboard de 16,6 × 5,5 × 1,0 cm), e o protótipo foi aprovado na demonstração de 22/09. A entrega passou para 06/10. As quatro perguntas abaixo continuam sem resposta; em 23/09 o Caio disse que nada foi escolhido e que até papelão serve.
 Parent: map.md
 Blocked by: —
@@ -19,10 +20,12 @@ O que precisa ser levantado antes de escolher:
 3. **Quanto tempo leva** entre "modelo pronto" e "peça na mão", contando fila e possíveis reimpressões?
 4. **Qual o fallback**, e até que data ele pode ser acionado sem estourar o ~~29/09~~ 06/10?
 
+⚠️ **Respondido em 23/09 (R53):** ninguém do grupo modela em CAD, e não há impressora disponível. A caixa é de papelão ou de material reaproveitado, feita pelo grupo, com um desenho.
+
 Restrições que o material precisa atender (vêm da spec): aparelho **fixo na parede**, alimentado por fonte 5V na tomada, com a **antena do RC522 acessível pela frente** (encostar a tag).
 
 ## Notas
 
 `task` porque a decisão de material é trivial *depois* que o fato "existe ou não acesso a impressora, e alguém modela" estiver estabelecido. Sem esse fato, decidir agora é chutar.
 
-Recomendação registrada, caso o levantamento dê negativo: MDF cortado em papelaria + parafusos. Barato, rápido, aceito pelo professor, e não depende de ninguém aprender CAD em três semanas.
+~~Recomendação registrada, caso o levantamento dê negativo: MDF cortado em papelaria + parafusos. Barato, rápido, aceito pelo professor, e não depende de ninguém aprender CAD em três semanas.~~ Caiu em 23/09: o MDF custa e exige ferramenta, e o papelão atende (R53).

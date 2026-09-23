@@ -48,3 +48,5 @@ O papel do Caio é **amplo por desenho**, e isso é deliberado: "integração" l
 **Decorrência que fecha outro ticket:** se na prática uma ou duas pessoas escrevem o código, o fluxo de git não precisa de branch nem PR. Ver *Quem escreve firmware, e como o time evita conflito no repo*.
 
 **O que continua valendo:** o Caio ainda deve mandar a tabela no grupo — não para pedir autorização, mas para que ninguém seja pego de surpresa vendo o próprio nome num papel no PDF entregue.
+
+⚠️ **23/09: a R52 tornou o trabalho livre.** Cada integrante pega as issues que quiser, e só as que dependem de acesso ou de trabalho em andamento nascem com dono. A tabela continua como registro do que foi entregue.

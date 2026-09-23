@@ -107,7 +107,7 @@ Código que dois programas dividirem sobe para `lib/<módulo do §5>/`.
 
 ## Não fragmentado ainda
 
-Os epics #8 (estrutura física, ~~29/09~~ 06/10) e #9 (dashboard e o aparelho falando com a nuvem, ~~05/10~~ data a confirmar) ficam como issue única. A caixa depende do tamanho real da placa montada e o dashboard depende do banco com dados dentro; vértice escrito hoje precisaria ser reescrito. Graduam depois de 22/09, pela mesma regra que o `map.md` já usa para outubro e novembro.
+Os epics #8 (estrutura física, ~~29/09~~ 06/10) e #9 (dashboard e o aparelho falando com a nuvem, ~~05/10~~ data a confirmar) ficam como issue única. A caixa depende do tamanho real da placa montada e o dashboard depende do banco com dados dentro; vértice escrito hoje precisaria ser reescrito. Graduam depois de 22/09, pela mesma regra que o `map.md` já usa para outubro e novembro. ⚠️ Fragmentados em 23/09: ver `.scratch/integracao/graph.md`.
 
 ## Riscos conhecidos, registrados na abertura
 

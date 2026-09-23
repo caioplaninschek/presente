@@ -21,6 +21,9 @@ São três lugares, com papéis diferentes. Confundi-los produz duas versões di
 - **Issues do GitHub** — o fórum do grupo e, desde 11/09, **o enunciado completo de cada tarefa de execução**: passo a passo de bancada, o que tem que aparecer, o que fazer se der errado. É onde os integrantes leem e respondem com log e foto.
 - **`.scratch/presente/`** — tickets de **decisão**, indexados pelo `map.md`. `Status: resolved` quer dizer "a pergunta foi respondida".
 - **`.scratch/prototipo/`** — tickets de **execução**, indexados pelo `graph.md`. Pronto quer dizer "o código roda e tem evidência", e o ticket pronto vira `Status: done`, com a data e a issue que o fecharam. São finos de propósito: título, dono, prazo, aresta, `HU-xx` e ponteiro para a issue — o texto rico vive lá, não aqui.
+- **`.scratch/integracao/`**: tickets de execução do plano de 23/09 até a entrega final, indexados pelo `graph.md` de lá, no mesmo formato fino.
+
+**Como se pega uma issue (R52).** Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* diz o que a issue exige, e só as de dono natural já nascem atribuídas. Ninguém designa tarefa a ninguém.
 
 **Todo ticket de implementação cita a história de usuário que justifica o seu critério** (`HU-xx`, §1.1 da spec). O §1.1 declara as histórias como a referência citável dos critérios de aceitação; sem a citação, as 40 histórias viram texto que ninguém abre e o critério perde a razão de ser o que é. Ticket de documentação, logística ou montagem física pode não ter `HU` — nesse caso, não invente uma.
 
@@ -63,7 +66,7 @@ A partição de LittleFS é **uma só**, dividida entre o portal (`data/`) e o `
 
 O HTML, o CSS e o JavaScript do portal moram em **`data/`** na raiz, que é a pasta de onde o PlatformIO gera a imagem de filesystem (R27). É uma página só, sem biblioteca e sem recurso externo (R10), e credencial nenhuma viaja no endereço (R25). Nenhuma tela avança sem o aparelho confirmar: todo pedido tem tempo-limite, com falha visível e o botão liberado (R40).
 
-Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec.
+Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec. Desde 23/09, o contrato se escreve no §6 da spec (tarefa 5.2, #36), e, quando o portal for ligado ao aparelho (tarefa 5.3, #37), o `mentira.js` passa a carregar só com `?mentira=1` no endereço (R51).
 
 ## Banco
 

@@ -207,3 +207,17 @@ Depois da demonstração, com dois celulares na mesma sala, o grupo refez o test
 Com a memória aprovada na véspera e o painel aprovado nos dois sistemas, o projeto adotou o modo simultâneo: o aparelho mantém a própria rede no ar enquanto busca a lista da turma e envia o relatório, e a alternância entre os dois modos, com a espera de 5 a 15 segundos a cada troca, saiu da especificação.
 
 Na mesma aula, o professor adiou a entrega da estrutura física de 29/09 para 06/10, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana.
+
+## Semana 6 · Entrega 06
+
+**Foco:** estrutura física do protótipo e o plano até a entrega final.
+
+**O grupo planejou o que falta até a entrega final (23/09).** Com o protótipo aprovado, o Caio levantou o que o projeto ainda precisa para funcionar de ponta a ponta e dividiu esse trabalho em tarefas no repositório. A maior parte está no programa do aparelho: hoje existem seis programas de teste separados, cada um provando uma peça, e nenhum deles junta o portal do professor, a conversa com o banco e o registro da chamada. Esse programa único vai ser escrito em cinco partes, e cada uma é testada na placa antes da seguinte: primeiro o portal dentro do aparelho, depois a lista da turma pela internet, a chamada, o relatório e, por último, a volta depois de uma queda de energia.
+
+Algumas decisões saíram junto. O envio bem-sucedido do relatório fecha a chamada, e o crachá encostado depois disso recebe o sinal vermelho, para que o aluno atrasado procure o professor em vez de achar que foi registrado. A troca da senha no primeiro uso e a configuração do hotspot pelo portal ficaram de fora do protótipo, e a turma passou a ser fixa na configuração do aparelho.
+
+**A caixa vai ser feita pelo grupo, com material reaproveitado.** Ninguém do grupo modela em 3D, e a ideia é gastar o mínimo. Cada integrante propõe uma solução até 01/10, o Caio escolhe uma em 02/10, e a montagem com a placa acontece em 03 e 04/10. A caixa precisa deixar passar tanto o sinal do leitor, que fica atrás de uma tampa fina na frente, quanto o do Wi-Fi.
+
+**O grupo também mudou a forma de dividir o trabalho.** Até aqui, cada tarefa tinha um responsável designado. A partir de agora, cada integrante escolhe as tarefas que vai assumir, e só ficam com dono as que dependem de acesso ou de trabalho já em andamento: o banco de dados com o Caio, as compras com o João e as telas do professor com o Igor.
+
+Vão ser comprados um buzzer novo, do tipo ativo, porque o atual só estala, e cartões com antena maior, que o leitor detecta com mais folga do que a tag adesiva.
