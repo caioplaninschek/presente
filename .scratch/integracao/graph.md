@@ -33,7 +33,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 
 | Local | GitHub | Epic | Dono natural ou livre | Requer | Prazo-alvo |
 |---|---|---|---|---|---|
-| 01 | #31 | #8 | livre (todos mandam ideia; o Caio escolhe) | nada | 01/10 e 02/10 |
+| 01 | #31 | #8 | livre (todos mandam ideia; o grupo escolhe, e o Caio decide se ninguém responder) | nada | 01/10 e 02/10 |
 | 02 | #32 | #8 | livre | a placa | 03-04/10 |
 | 03 | #33 | #8 | livre | a placa | 04-05/10 |
 | 04 | #34 | #8 | livre | nada | 06/10 |

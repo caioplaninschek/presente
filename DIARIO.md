@@ -216,7 +216,7 @@ Na mesma aula, o professor adiou a entrega da estrutura física de 29/09 para 06
 
 Algumas decisões saíram junto. O envio bem-sucedido do relatório fecha a chamada, e o crachá encostado depois disso recebe o sinal vermelho, para que o aluno atrasado procure o professor em vez de achar que foi registrado. A troca da senha no primeiro uso e a configuração do hotspot pelo portal ficaram de fora do protótipo, e a turma passou a ser fixa na configuração do aparelho.
 
-**A caixa vai ser feita pelo grupo, com material reaproveitado.** Ninguém do grupo modela em 3D, e a ideia é gastar o mínimo. Cada integrante propõe uma solução até 01/10, o Caio escolhe uma em 02/10, e a montagem com a placa acontece em 03 e 04/10. A caixa precisa deixar passar tanto o sinal do leitor, que fica atrás de uma tampa fina na frente, quanto o do Wi-Fi.
+**A caixa vai ser feita pelo grupo, com material reaproveitado.** Ninguém do grupo modela em 3D, e a ideia é gastar o mínimo. Cada integrante propõe uma solução até 01/10, o grupo escolhe junto em 02/10 (se ninguém responder, o Caio decide), e a montagem com a placa acontece em 03 e 04/10. A caixa precisa deixar passar tanto o sinal do leitor, que fica atrás de uma tampa fina na frente, quanto o do Wi-Fi.
 
 **O grupo também mudou a forma de dividir o trabalho.** Até aqui, cada tarefa tinha um responsável designado. A partir de agora, cada integrante escolhe as tarefas que vai assumir, e só ficam com dono as que dependem de acesso ou de trabalho já em andamento: o banco de dados com o Caio, as compras com o João e as telas do professor com o Igor.
 
