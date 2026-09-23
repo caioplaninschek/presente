@@ -1,7 +1,8 @@
 # 16: Teste 7c: painel sobrevive ao pulo de canal
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #18 do GitHub (painel sem novo login com iPhone e Android, pelo relato do grupo e sem log; R45)
 Dono: João
 Prazo: 20/09
 Entrega: —

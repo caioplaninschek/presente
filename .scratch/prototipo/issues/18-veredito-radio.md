@@ -1,7 +1,8 @@
 # 18: Veredito Plano A ou Plano B na spec
 
 Type: task
-Status: ready-for-human
+Status: done
+Fechado em: 22/09/2026, pela issue #19 do GitHub (Plano A, R45)
 Dono: Caio
 Prazo: 21/09
 Entrega: —

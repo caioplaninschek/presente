@@ -5,7 +5,7 @@ Status: deferred
 Adiado em: 10/09/2026, pela issue #4 do GitHub (R22) — a caixa fica fora do protótipo de 22/09. O material só se escolhe depois da placa montada, com o tamanho real conhecido. Entrega da estrutura física continua em 29/09; dono continua João.
 Parent: map.md
 Blocked by: —
-Prazo real: 29/09 (entregável "estrutura física do protótipo")
+Prazo real: ~~29/09~~ 06/10 (entregável "estrutura física do protótipo"; adiado pelo professor em 22/09, porque 29/09 é dia de prova)
 
 ## Question
 

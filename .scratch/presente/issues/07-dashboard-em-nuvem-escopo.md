@@ -5,7 +5,7 @@ Status: resolved
 Resolvido em: 10/09/2026, pela issue #2 do GitHub (R21) — a página existe, na opção B (histórico simples lendo o banco, sem tocar no firmware), e o dono é o Igor. Fecha `HU-30`.
 Parent: map.md
 Blocked by: 03
-Prazo real: 05/10 (entregável "Dashboard")
+Prazo real: ~~05/10~~ cerca de uma semana depois, a confirmar no enunciado (entregável "Dashboard"; em 22/09 o professor avisou que as entregas depois de 29/09 andam uma semana)
 
 Discussao do grupo: https://github.com/caioplaninschek/presente/issues/2
 Versao em linguagem simples, para debate com o grupo: docs/pauta-do-grupo.md — Parte 2, ponto 7.

@@ -43,7 +43,7 @@
         <mxCell id="radio" value="&lt;b&gt;Rádio Wi-Fi&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 13px&quot; color=&quot;#40606F&quot;&gt;uma antena só&lt;/font&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F8FA;strokeColor=#004D7B;strokeWidth=1.4;fontFamily=Calibri;fontSize=17;fontColor=#10232E;" vertex="1" parent="1">
           <mxGeometry x="320" y="250" width="176" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="nota-radio" value="&lt;b&gt;ao mesmo tempo (Plano A) ou alternando (Plano B)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;" vertex="1" parent="1">
+        <mxCell id="nota-radio" value="&lt;b&gt;ao mesmo tempo, no mesmo canal (Plano A)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Calibri;fontSize=13;fontColor=#004D7B;" vertex="1" parent="1">
           <mxGeometry x="243" y="308" width="330" height="20" as="geometry" />
         </mxCell>
 

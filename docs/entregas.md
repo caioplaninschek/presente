@@ -8,12 +8,14 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 02/09 | Canvas + lista de componentes + diagrama em blocos | ✅ entregue |
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
-| 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue |
-| 29/09\* | Estrutura física do protótipo | ⬜ |
-| 05/10\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
-| 20/10\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
-| 27/10\* | Exposição oficial na Semana da Computação | ⬜ |
-| 30/11\* | Relatório técnico completo + versão final aprimorada | ⬜ |
+| 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue e aprovada na demonstração |
+| ~~29/09~~ 06/10\* | Estrutura física do protótipo | ⬜ |
+| ~~05/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
+| ~~20/10~~\*\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
+| ~~27/10~~\*\* | Exposição oficial na Semana da Computação | ⬜ |
+| ~~30/11~~\*\* | Relatório técnico completo + versão final aprimorada | ⬜ |
+
+\*\* **Adiamento de 22/09.** Na aula, o professor adiou a estrutura física de 29/09 para **06/10**, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana. A única data nova dita com certeza é 06/10. As outras não se somam de cabeça: uma semana depois de 05/10 cai no feriado de 12/10, e uma semana depois de 20/10 cai em 27/10, o dia da Semana da Computação, que é evento da universidade e pode não mudar. Cada data se confirma no enunciado.
 
 Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores** (⚠️ **dispensado para este projeto** — o João acertou com o professor que o RC522 basta como sensor único; a exigência continua publicada no Teams, e a Entrega 03 declara a dispensa em uma linha no §4 para não ser lida como descumprimento — ver R18 na spec); mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
 
@@ -131,4 +133,10 @@ A dispensa do segundo sensor (R18) continua valendo, e o documento a repete em u
 
 O documento saiu do rascunho em [`entregas/entrega-05/entrega-05-rascunho.md`](entregas/entrega-05/entrega-05-rascunho.md), com as quatro seções na ordem do enunciado, e a seção 3 é o próprio dossiê de testes (issue #28), escrito direto no rascunho em 22/09. A montagem e o envio foram a issue #30. **Enviado em 22/09**, com 11 páginas (capa + 10). O post no Teams levou o PDF e todos os arquivos de `docs/assets/testes/`: os vídeos da prova de vida e do sinal de presença, a foto do protótipo montado, o quadro do vídeo e a foto do monitor serial. O post foi só os anexos, sem texto. O PDF está em [`entregas/entrega-05/entrega-05.pdf`](entregas/entrega-05/entrega-05.pdf) e a transcrição em [`entregas/entrega-05/entrega-05.md`](entregas/entrega-05/entrega-05.md).
 
-Dos testes, o 1 e o 7d passaram; o 2 saiu em parte (a tag de 7 bytes foi lida, mas não registrada no programa do sinal de presença); o 8 saiu em parte (dois crachás em vez de trinta toques); e o 7c não teve rodada válida. A demonstração no laboratório é na aula de 22/09.
+Dos testes, o 1 e o 7d passaram; o 2 saiu em parte (a tag de 7 bytes foi lida, mas não registrada no programa do sinal de presença); o 8 saiu em parte (dois crachás em vez de trinta toques); e o 7c não teve rodada válida.
+
+### A demonstração
+
+Feita na aula de 22/09, com o programa do sinal de presença (issue #26) gravado na placa. **O professor aprovou o protótipo.** Ele perguntou se o buzzer era ativo ou passivo e sugeriu que a falta de som viesse da alimentação em 5 V; o João respondeu que a peça também não funcionou ligada à parte num Arduino, e que suspeita do disco cerâmico (R44 na spec).
+
+Depois da demonstração, o grupo refez na sala o teste do painel do professor (issue #18), que no documento entregue aparece como não obtido, e ele passou em iPhone e Android: vale o Plano A (R45 na spec, issue #19). O PDF entregue não muda; o resultado fica registrado aqui e na spec.

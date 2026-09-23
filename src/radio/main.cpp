@@ -4,6 +4,7 @@
 // spec): a memoria livre no instante da conexao segura (teste 7d, R13a) e se a
 // pagina do celular sobrevive ao pulo de canal quando o aparelho conecta no
 // hotspot (teste 7c). Sem leitor de cracha, sem LED, sem buzzer, sem banco.
+// Os dois passaram, e o veredito saiu em 22/09: vale o Plano A (R45).
 //
 // ---------------------------------------------------------------------------
 // O QUE ESTE PROGRAMA NAO E

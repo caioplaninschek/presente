@@ -1,7 +1,8 @@
 # Comportamento do rádio: quando sincronizar e o que acontece quando a troca falha
 
 Type: grilling
-Status: reopened
+Status: resolved
+Resolvido de novo em: 22/09/2026, pela issue #19 do GitHub (R45) — vale o Plano A. A resposta 1 (sincronizar no login) continua valendo, sem a troca de rádio. A resposta 2 (duas tentativas e `ESP.restart()` quando o AP não volta) caiu, porque no Plano A o AP nunca é desligado. A resposta 3 (`sessao_atual.json` como requisito) continua, por causa da queda de energia.
 Reaberto em: 10/09/2026, pela issue #3 do GitHub (R19) — a premissa "AP e STA nunca simultâneos" (R4) está errada: `WIFI_AP_STA` é nativo. O ticket continua válido em tudo que trata de *quando* sincronizar e do que fazer quando a rede falha; o que caiu foi a suposição de que a alternância é o único arranjo possível. A escolha entre Plano A (simultâneo) e Plano B (alternância) é medida nos testes 7c e 7d do §8, dentro do ticket 09.
 Parent: map.md
 Blocked by: —

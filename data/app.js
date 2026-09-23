@@ -13,9 +13,10 @@
   // De quanto em quanto tempo a tela de espera pergunta se a lista já chegou.
   var ESPERA_INTERVALO_MS = 1000;
 
-  // Quando a tela de espera desiste. A troca de rádio do Plano B leva de 5 a
-  // 15 s (R14, R19); 25 s dá margem e ainda é curto o bastante para o professor
-  // não achar que o aparelho morreu. Valor de partida, a calibrar na bancada —
+  // Quando a tela de espera desiste. Com o Plano A (R45) o rádio não troca, e a
+  // espera é só a busca da lista pelo hotspot; os 25 s vieram da troca de rádio
+  // do Plano B (5 a 15 s, R14 e R19), que caiu em 22/09, e ainda são curtos o
+  // bastante para o professor não achar que o aparelho morreu. Valor de partida, a calibrar na bancada —
   // o item 4 do ticket `.scratch/presente/issues/09` ainda está em aberto.
   var ESPERA_LIMITE_MS = 25000;
 

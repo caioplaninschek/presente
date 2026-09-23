@@ -10,7 +10,7 @@
  * aparelho de verdade e nada mais muda.
  *
  * Para experimentar, com a página aberta, pelo console do navegador:
- *   mentira.esperaMs = 14000     // a espera longa do Plano B (5 a 15 s, R14 e R19)
+ *   mentira.esperaMs = 14000     // uma espera longa, com o hotspot lento
  *   mentira.sincronizaFalha = true   // login sem internet: cai em modo offline
  *   mentira.envioFalha = true        // o Enviar falha e sobra o Compartilhar
  */
