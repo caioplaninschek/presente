@@ -1,8 +1,9 @@
 # Material e prazo da estrutura física
 
 Type: task
-Status: deferred
-Adiado em: 10/09/2026, pela issue #4 do GitHub (R22) — a caixa fica fora do protótipo de 22/09. O material só se escolhe depois da placa montada, com o tamanho real conhecido. Entrega da estrutura física continua em 29/09; dono continua João.
+Status: in-progress
+Adiado em: 10/09/2026, pela issue #4 do GitHub (R22) — a caixa fica fora do protótipo de 22/09. O material só se escolhe depois da placa montada, com o tamanho real conhecido. ~~Entrega da estrutura física continua em 29/09~~; dono continua João.
+Retomado em: 23/09/2026 — o gatilho do adiamento passou: a placa está montada e medida (#22, protoboard de 16,6 × 5,5 × 1,0 cm), e o protótipo foi aprovado na demonstração de 22/09. A entrega passou para 06/10. As quatro perguntas abaixo continuam sem resposta; em 23/09 o Caio disse que nada foi escolhido e que até papelão serve.
 Parent: map.md
 Blocked by: —
 Prazo real: ~~29/09~~ 06/10 (entregável "estrutura física do protótipo"; adiado pelo professor em 22/09, porque 29/09 é dia de prova)
@@ -16,7 +17,7 @@ O que precisa ser levantado antes de escolher:
 1. **O João tem acesso real a uma impressora 3D?** Própria, de amigo, de laboratório da UVA, ou serviço pago? Com que disponibilidade?
 2. **Quem modela?** Impressão 3D exige alguém que saiba modelar em CAD. Se ninguém sabe, o acesso à impressora não resolve nada.
 3. **Quanto tempo leva** entre "modelo pronto" e "peça na mão", contando fila e possíveis reimpressões?
-4. **Qual o fallback**, e até que data ele pode ser acionado sem estourar o 29/09?
+4. **Qual o fallback**, e até que data ele pode ser acionado sem estourar o ~~29/09~~ 06/10?
 
 Restrições que o material precisa atender (vêm da spec): aparelho **fixo na parede**, alimentado por fonte 5V na tomada, com a **antena do RC522 acessível pela frente** (encostar a tag).
 

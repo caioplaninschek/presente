@@ -4,8 +4,8 @@ Type: prototype
 Status: in-progress
 Dono: Caio (frente "Rede" do §9 da spec; assumido na issue #3 em 10/09/2026)
 Parent: map.md
-Blocked by: ~~placa física — o ESP32 está com o João; combinado de passar na segunda, 15/09~~ — a placa não circula (R23, 11/09). Hoje: os testes 7d (#17) e 7c (#18), que o João roda, e o veredito (#19)
-Prazo real: 21/09 (item "código inicial preparado" do checklist do professor)
+Blocked by: ~~placa física — o ESP32 está com o João; combinado de passar na segunda, 15/09~~ — a placa não circula (R23, 11/09). ~~Hoje: os testes 7d (#17) e 7c (#18), que o João roda, e o veredito (#19)~~ — os três fecharam em 22/09 (R45). Hoje: o portal do professor rodando dentro do aparelho, na integração (epic #9)
+Prazo real: ~~21/09 (item "código inicial preparado" do checklist do professor)~~ o veredito saiu em 22/09; os itens 2 e 3 fecham na integração, com a data do dashboard (epic #9) ainda a confirmar
 Discussão do grupo: https://github.com/caioplaninschek/presente/issues/3
 Versão em linguagem simples: docs/pauta-do-grupo.md — Parte 3, ponto 8.
 
