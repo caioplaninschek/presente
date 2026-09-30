@@ -1,6 +1,6 @@
 # Entregas — enunciados do professor
 
-Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunciado do professor.** As datas marcadas com \* ainda não têm enunciado publicado: vêm do cronograma passado ao grupo em 05/09 e se conferem quando o enunciado sair. Os enunciados das Entregas 03 e 04 citavam **21/09** como a data da preparação; o da Entrega 05 saiu em 20/09 e fixou **22/09, 23:59**. ~~O cronograma válido é o revisado (datas de terça); as datas de segunda são da outra turma~~ — informação errada, corrigida em 13/09.
+Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunciado do professor.** As datas marcadas com \*\* ainda não têm enunciado publicado: vêm do cronograma passado ao grupo em 05/09 e se conferem quando o enunciado sair. Os enunciados das Entregas 03 e 04 citavam **21/09** como a data da preparação; o da Entrega 05 saiu em 20/09 e fixou **22/09, 23:59**. ~~O cronograma válido é o revisado (datas de terça); as datas de segunda são da outra turma~~ — informação errada, corrigida em 13/09.
 
 | Data | Entrega | Estado |
 |---|---|---|
@@ -9,7 +9,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
 | 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue e aprovada na demonstração |
-| ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório | ⬜ enunciado recebido em 29/09 |
+| ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório em data a confirmar | ⬜ enunciado recebido em 29/09 |
 | ~~05/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
 | ~~20/10~~\*\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
 | ~~27/10~~\*\* | Exposição oficial na Semana da Computação | ⬜ |

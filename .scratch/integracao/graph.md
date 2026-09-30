@@ -12,6 +12,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 ```
 #8   01 ideias ──> 04 desenho ──> 02 montagem ──> 03 caixa fechada ──> 23 arquivos e os cinco postando
      01 ideias ──> 24 modelo no Tinkercad ───────────────────────────> 23
+     09 buzzer (epic #9) ──> 02 montagem
 
 #9   05 banco acordado                     (solto; vence em 27/09)
      06 contrato ──> 07 portal no contrato
@@ -46,7 +47,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 | 09 | #39 | #9 | João | a placa | o buzzer até 02/10 (R57); os cartões ≈08/10 |
 | 10 | #40 | #9 | Caio | Supabase | depois do 09 |
 | 11 | #41 | #9 | livre | nada | ≈02/10 |
-| 12 | #42 | #9 | livre | a placa | ≈03/10 |
+| 12 | #42 | #9 | livre | a placa | ~~≈03/10~~ depois do 03 (a caixa fechada), sem data até o cronograma novo da #9 |
 | 13 | #43 | #9 | livre | nada | ≈06/10 |
 | 14 | #44 | #9 | livre | a placa | ≈07/10 |
 | 15 | #45 | #9 | livre | nada | ≈09/10 |
