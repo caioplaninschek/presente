@@ -153,7 +153,7 @@ A versão física deve conter, sempre que se aplicar: o microcontrolador, os sen
 
 O enunciado pede, nesta ordem:
 
-**1. Planejamento da estrutura.** Pelo menos um desenho, esboço ou modelo digital, feito antes ou durante a construção, que mostre o caminho *como imaginamos → como construímos*.
+**1. Planejamento da estrutura.** Pelo menos um desenho, esboço ou modelo digital, feito antes ou durante a construção, que mostre o caminho *como imaginamos → como construímos*. O enunciado aceita desenho à mão, sketch, Tinkercad, Fusion 360, AutoCAD, SketchUp, Canva, PowerPoint ou outro programa. Fora do enunciado, o professor pediu também um modelo no Tinkercad (informação do Caio, 29/09).
 
 **2. Documentação obrigatória no Diário de Bordo.** Fotos do início da construção, da montagem e da estrutura pronta; os materiais usados; as alterações feitas; os problemas encontrados e as soluções adotadas; os integrantes envolvidos; os testes realizados. O professor avisa que não basta registrar o resultado final.
 

@@ -11,6 +11,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 
 ```
 #8   01 ideias ──> 04 desenho ──> 02 montagem ──> 03 caixa fechada ──> 23 arquivos e os cinco postando
+     01 ideias ──> 24 modelo no Tinkercad ───────────────────────────> 23
 
 #9   05 banco acordado                     (solto; vence em 27/09)
      06 contrato ──> 07 portal no contrato
@@ -26,7 +27,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 
 **A aresta que serializa:** a placa. Todo "rodar" exige quem estiver com ela (R23), e cada rodada custa cerca de um dia. Por isso o pacote só vai para a placa depois da revisão por alguém que não é o autor (R51).
 
-**A aresta que o enunciado de 06/10 mudou:** o desenho (04) vem antes da montagem (02), e não depois dela, porque o enunciado pede o caminho "como imaginamos → como construímos" (R56). A entrega saiu do 04 para o 23, que depende do teste com a caixa fechada (03). E o buzzer novo (09) passou a entrar antes da montagem (R57), com a compra até 02/10.
+**A aresta que o enunciado de 06/10 mudou:** o desenho (04) vem antes da montagem (02), e não depois dela, porque o enunciado pede o caminho "como imaginamos → como construímos" (R56). A entrega saiu do 04 para o 23, que depende do teste com a caixa fechada (03). O modelo no Tinkercad (24), pedido pelo professor fora do enunciado, não precisa da placa e corre ao lado do desenho. E o buzzer novo (09) passou a entrar antes da montagem (R57), com a compra até 02/10.
 
 **A aresta escondida:** o 09 (compras) antes do 16. Sem os cartões novos cadastrados, o teste 2 (7 bytes) e o teste 3 (crachá de fora da turma) não têm crachá para rodar.
 
@@ -57,6 +58,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 | 21 | #51 | #9 | Caio | Supabase | ≈13/10 |
 | 22 | #52 | #9 | livre | nada | data do enunciado |
 | 23 | #56 | #8 | livre | nada | arquivos em 04/10; os cinco postam até 06/10 |
+| 24 | #57 | #8 | livre | uma conta no Tinkercad | 03/10 |
 
 Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final).
 

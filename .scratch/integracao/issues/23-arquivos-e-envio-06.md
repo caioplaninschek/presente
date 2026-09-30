@@ -6,7 +6,7 @@ Tarefa: 4.5 (epic #8)
 Dono: livre
 Requer: nada
 Prazo: arquivos prontos em 04/10, à noite; cada integrante posta até 06/10, 23:59
-Blocked by: 03
+Blocked by: 03, 24
 GitHub: https://github.com/caioplaninschek/presente/issues/56
 
 ## O que entrega
