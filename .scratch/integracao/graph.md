@@ -37,8 +37,8 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 | Local | GitHub | Epic | Dono natural ou livre | Requer | Prazo-alvo |
 |---|---|---|---|---|---|
 | 01 | #31 | #8 | livre (todos mandam ideia; o grupo escolhe, e o Caio decide se ninguém responder; a ideia base do Caio vale se ninguém propuser outra) | nada | 01/10 e 02/10 |
-| 02 | #32 | #8 | livre | a placa | ~~03-04/10~~ 03/10 |
-| 03 | #33 | #8 | livre | a placa | ~~04-05/10~~ até 04/10 |
+| 02 | #32 | #8 | livre | a placa | ~~03-04/10~~ ~~03/10~~ 03-04/10 com quem está com a placa, se a caixa for simples; senão, 05/10 na faculdade (R59) |
+| 03 | #33 | #8 | livre | a placa | ~~04-05/10~~ ~~até 04/10~~ 05/10 na faculdade (R59) |
 | 04 | #34 | #8 | livre | nada | ~~06/10~~ 02/10 (só o desenho, R56) |
 | 05 | #35 | #9 | Caio | Supabase, admin do repo | 27/09 |
 | 06 | #36 | #9 | livre | nada | 01/10 |
@@ -58,7 +58,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 | 20 | #50 | #9 | livre | a placa e dois celulares | ≈18-20/10 |
 | 21 | #51 | #9 | Caio | Supabase | ≈13/10 |
 | 22 | #52 | #9 | livre | nada | data do enunciado |
-| 23 | #56 | #8 | livre | nada | arquivos em 04/10; os cinco postam até 06/10 |
+| 23 | #56 | #8 | livre | nada | ~~arquivos em 04/10~~ rascunho em 04/10 e arquivos em 05/10 (R59); os cinco postam até 06/10 |
 | 24 | #57 | #8 | livre | uma conta no Tinkercad | 03/10 |
 
 Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final).
@@ -82,5 +82,5 @@ Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* d
 
 ## Riscos acrescentados em 29/09, com o enunciado da estrutura física
 
-7. **A placa fica com a caixa em 03 e 04/10.** O pacote 1 (12) tinha alvo em 03/10 e cede o fim de semana. Em 29/09, ninguém tinha pegado o contrato (06) nem o pacote 1 (11), e os alvos da epic #9 se refazem quando o enunciado do dashboard sair.
-8. **Os cinco precisam postar.** O enunciado não aceita envio atrasado, e um integrante que não postar fica sem a entrega. Mitigação: os arquivos ficam prontos no domingo (R58), e o 23 tem uma caixa de marcar por integrante.
+7. **A placa fica com a caixa ~~em 03 e 04/10~~ de 03 a 05/10** *(30/09: o teste com a caixa fechada passou para a segunda, R59)*. O pacote 1 (12) tinha alvo em 03/10 e cede ~~o fim de semana~~ o fim de semana e a segunda. Em 29/09, ninguém tinha pegado o contrato (06) nem o pacote 1 (11), e os alvos da epic #9 se refazem quando o enunciado do dashboard sair.
+8. **Os cinco precisam postar.** O enunciado não aceita envio atrasado, e um integrante que não postar fica sem a entrega. Mitigação: os arquivos ficam prontos ~~no domingo (R58)~~ na segunda à noite, com rascunho no domingo *(30/09: R59; sobra só a terça para postar, custo aceito)*, e o 23 tem uma caixa de marcar por integrante.

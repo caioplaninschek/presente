@@ -5,7 +5,7 @@ Status: ready-for-human
 Tarefa: 4.5 (epic #8)
 Dono: livre
 Requer: nada
-Prazo: arquivos prontos em 04/10, à noite; cada integrante posta até 06/10, 23:59
+Prazo: ~~arquivos prontos em 04/10, à noite~~ rascunho em 04/10 e arquivos prontos em 05/10, à noite, depois do teste *(30/09, R59)*; cada integrante posta até 06/10, 23:59
 Blocked by: 03, 24
 GitHub: https://github.com/caioplaninschek/presente/issues/56
 

@@ -5,7 +5,7 @@ Status: ready-for-human
 Tarefa: 4.2 (epic #8)
 Dono: livre
 Requer: a placa (hoje com o João)
-Prazo: ~~03 e 04/10~~ 03/10, porque os arquivos da entrega ficam prontos em 04/10 (R58)
+Prazo: ~~03 e 04/10~~ ~~03/10, porque os arquivos da entrega ficam prontos em 04/10 (R58)~~ 03 e 04/10, com quem está com a placa, se a caixa for simples; senão, 05/10, na faculdade *(30/09: ninguém vai à casa do João, R59)*
 Blocked by: ~~01~~ 04, o desenho (R56), e 09, o buzzer novo (R57)
 GitHub: https://github.com/caioplaninschek/presente/issues/32
 

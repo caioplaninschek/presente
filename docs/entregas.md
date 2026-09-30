@@ -165,4 +165,4 @@ O enunciado pede, nesta ordem:
 
 **6. Apresentação no laboratório.** A equipe leva o protótipo físico e deve estar pronta para apresentar a estrutura, identificar os principais componentes, explicar por que a estrutura foi construída daquela maneira, demonstrar o funcionamento, realizar pelo menos um teste e contar as dificuldades da construção. ⚠️ O enunciado não diz a data da apresentação; o grupo se prepara para a aula de 06/10, e a data se confirma com o professor.
 
-A dispensa do segundo sensor (R18) continua valendo. Como o grupo organizou esta entrega está na rodada 17 da spec (R56 a R58) e nas tarefas da epic #8.
+A dispensa do segundo sensor (R18) continua valendo. Como o grupo organizou esta entrega está nas rodadas 17 e 18 da spec (R56 a R59) e nas tarefas da epic #8.

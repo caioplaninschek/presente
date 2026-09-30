@@ -5,7 +5,7 @@ Status: ready-for-human
 Tarefa: 4.3 (epic #8)
 Dono: livre
 Requer: a placa (hoje com o João)
-Prazo: ~~04 e 05/10~~ até 04/10 (R58)
+Prazo: ~~04 e 05/10~~ ~~até 04/10 (R58)~~ 05/10, na faculdade, com a placa que o João leva *(30/09: o teste passou para a segunda, R59)*
 Blocked by: 02
 GitHub: https://github.com/caioplaninschek/presente/issues/33
 
