@@ -11,4 +11,4 @@ GitHub: https://github.com/caioplaninschek/presente/issues/31
 
 ## O que entrega
 
-A ideia escolhida para a caixa, dentro das restrições das antenas (R53). O enunciado completo vive na issue do GitHub. Ver o porquê em `../graph.md`.
+A ideia escolhida para a caixa, dentro das restrições das antenas (R53), com a tampa que abre sem rasgar e as etiquetas (R57). Como ninguém mandou ideia até 29/09, o Caio posta uma ideia base, que vale se ninguém propuser outra até 01/10 (R56). O enunciado completo vive na issue do GitHub. Ver o porquê em `../graph.md`.

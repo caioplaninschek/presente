@@ -56,6 +56,8 @@ O professor exige evidência de evolução semanal. São **duas camadas com cad�
 
 A entrada é em **terceira pessoa, nomeando quem fez** (`docs/padrao-editorial.md`).
 
+**Foto entra no diário quando a entrega pede o processo** (a estrutura física, R56). A foto mora em `docs/assets/<frente>/`, com a data no nome, e entra na entrada da semana como imagem, com uma legenda que diz a etapa e quem aparece fazendo. A regra de não citar nome de arquivo vale para o texto, e não para o endereço da imagem.
+
 ## Firmware
 
 Programa novo ganha pasta própria em `src/<nome>/` e ambiente próprio no `platformio.ini`; nunca defina `default_envs`. **Código que dois programas dividirem sobe para `lib/<módulo>/`**, com o nome do módulo do §5 que ele vai virar (`rfid`, `feedback`, `storage`…): tudo que está em `lib/` fica visível a todos os ambientes, sem configuração. Nenhuma biblioteca entra sem versão fixada. O porquê está na spec (R28, R29).

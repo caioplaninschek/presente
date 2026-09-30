@@ -9,13 +9,13 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
 | 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue e aprovada na demonstração |
-| ~~29/09~~ 06/10\* | Estrutura física do protótipo | ⬜ |
+| ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório | ⬜ enunciado recebido em 29/09 |
 | ~~05/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
 | ~~20/10~~\*\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
 | ~~27/10~~\*\* | Exposição oficial na Semana da Computação | ⬜ |
 | ~~30/11~~\*\* | Relatório técnico completo + versão final aprimorada | ⬜ |
 
-\*\* **Adiamento de 22/09.** Na aula, o professor adiou a estrutura física de 29/09 para **06/10**, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana. A única data nova dita com certeza é 06/10. As outras não se somam de cabeça: uma semana depois de 05/10 cai no feriado de 12/10, e uma semana depois de 20/10 cai em 27/10, o dia da Semana da Computação, que é evento da universidade e pode não mudar. Cada data se confirma no enunciado.
+\*\* **Adiamento de 22/09.** Na aula, o professor adiou a estrutura física de 29/09 para **06/10**, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana. A única data nova dita com certeza é 06/10, e o enunciado da estrutura física, recebido em 29/09, a confirmou. As outras não se somam de cabeça: uma semana depois de 05/10 cai no feriado de 12/10, e uma semana depois de 20/10 cai em 27/10, o dia da Semana da Computação, que é evento da universidade e pode não mudar. Cada data se confirma no enunciado.
 
 Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores** (⚠️ **dispensado para este projeto** — o João acertou com o professor que o RC522 basta como sensor único; a exigência continua publicada no Teams, e a Entrega 03 declara a dispensa em uma linha no §4 para não ser lida como descumprimento — ver R18 na spec); mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
 
@@ -140,3 +140,29 @@ Dos testes, o 1 e o 7d passaram; o 2 saiu em parte (a tag de 7 bytes foi lida, m
 Feita na aula de 22/09, com o programa do sinal de presença (issue #26) gravado na placa. **O professor aprovou o protótipo.** Ele perguntou se o buzzer era ativo ou passivo e sugeriu que a falta de som viesse da alimentação em 5 V; o João respondeu que a peça também não funcionou ligada à parte num Arduino, e que suspeita do disco cerâmico (R44 na spec).
 
 Depois da demonstração, o grupo refez na sala o teste do painel do professor (issue #18), que no documento entregue aparece como não obtido, e ele passou em iPhone e Android: vale o Plano A (R45 na spec, issue #19). O PDF entregue não muda; o resultado fica registrado aqui e na spec.
+
+---
+
+## Entrega 06: Estrutura física do protótipo
+
+**Prazo: 06/10/2026, 23:59. Vários envios permitidos. Todos os cinco integrantes enviam no Teams**, e o professor avisou que não há prorrogação. O enunciado chegou ao grupo em 29/09.
+
+A entrega leva o projeto do circuito que funciona para uma estrutura física que o acomode, proteja e posicione, respondendo à pergunta do professor: *como esse sistema seria construído fisicamente para ser usado numa situação real?* O acabamento não precisa ser profissional. O material é livre (MDF, papelão, acrílico, impressão 3D, EVA, madeira, reciclável, peça feita pela equipe), e o professor avisa que não avalia qual é o mais caro ou sofisticado, e sim se a estrutura serve à função. O critério, nas palavras dele: **funcionalidade + criatividade + adequação ao problema + integração com o sistema eletrônico**.
+
+A versão física deve conter, sempre que se aplicar: o microcontrolador, os sensores, os atuadores, a estrutura de suporte, o posicionamento adequado dos sensores, a localização dos atuadores, a alimentação e as conexões, o espaço para os componentes eletrônicos e a **identificação dos principais elementos**. No exemplo de controle de acesso do enunciado, o sensor e o atuador ficam posicionados de acordo com o funcionamento esperado, e é o caso mais próximo do Presente!.
+
+O enunciado pede, nesta ordem:
+
+**1. Planejamento da estrutura.** Pelo menos um desenho, esboço ou modelo digital, feito antes ou durante a construção, que mostre o caminho *como imaginamos → como construímos*.
+
+**2. Documentação obrigatória no Diário de Bordo.** Fotos do início da construção, da montagem e da estrutura pronta; os materiais usados; as alterações feitas; os problemas encontrados e as soluções adotadas; os integrantes envolvidos; os testes realizados. O professor avisa que não basta registrar o resultado final.
+
+**3. Teste do protótipo.** Depois de montada a estrutura, verificar se ela atrapalha o funcionamento eletrônico: se os sensores leem, se o atuador funciona, se os componentes estão firmes, se os fios estão organizados, se o microcontrolador está protegido, se dá para chegar à alimentação e ao USB quando preciso, se a estrutura permite manutenção e ajustes, e se o protótipo cumpre a função para a qual foi projetado. Toda alteração que o teste exigir vai para o Diário de Bordo.
+
+**4. Evidência do funcionamento.** Vídeo curto, sem exigência de qualidade profissional, na ordem *estrutura física → sensores → processamento → atuador → resultado*.
+
+**5. Entrega no Teams.** Uma postagem até 06/10 com: foto do protótipo completo, fotos do processo de construção, o desenho, o vídeo, os materiais usados, a descrição das alterações, os problemas e as soluções, e a atualização do Diário de Bordo.
+
+**6. Apresentação no laboratório.** A equipe leva o protótipo físico e deve estar pronta para apresentar a estrutura, identificar os principais componentes, explicar por que a estrutura foi construída daquela maneira, demonstrar o funcionamento, realizar pelo menos um teste e contar as dificuldades da construção. ⚠️ O enunciado não diz a data da apresentação; o grupo se prepara para a aula de 06/10, e a data se confirma com o professor.
+
+A dispensa do segundo sensor (R18) continua valendo. Como o grupo organizou esta entrega está na rodada 17 da spec (R56 a R58) e nas tarefas da epic #8.
