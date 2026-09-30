@@ -14,7 +14,7 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
      01 ideias ──> 24 modelo no Tinkercad ───────────────────────────> 23
      09 buzzer (epic #9) ──> 02 montagem
 
-#9   05 banco acordado                     (solto; vence em 27/09)
+#9   05 banco acordado                     (descartado em 30/09, R60; vencia em 27/09)
      06 contrato ──> 07 portal no contrato
      06 contrato ──> 11 escrever P1 ──> 12 rodar P1 ──> 13 escrever P2 ──> 14 rodar P2
                  ──> 15 escrever P3 ──> 16 rodar P3 ──> 17 escrever P4 ──> 18 rodar P4
@@ -37,10 +37,10 @@ O grafo de `.scratch/prototipo/` fechou em 22/09, com a demonstração aprovada.
 | Local | GitHub | Epic | Dono natural ou livre | Requer | Prazo-alvo |
 |---|---|---|---|---|---|
 | 01 | #31 | #8 | livre (todos mandam ideia; o grupo escolhe, e o Caio decide se ninguém responder; a ideia base do Caio vale se ninguém propuser outra) | nada | 01/10 e 02/10 |
-| 02 | #32 | #8 | livre | a placa | ~~03-04/10~~ ~~03/10~~ 03-04/10 com quem está com a placa, se a caixa for simples; senão, 05/10 na faculdade (R59) |
+| 02 | #32 | #8 | livre | a placa | ~~03-04/10~~ ~~03/10~~ ~~03-04/10 com quem está com a placa, se a caixa for simples; senão,~~ 05/10 na faculdade (R59; o João viaja no fim de semana, rodada 19) |
 | 03 | #33 | #8 | livre | a placa | ~~04-05/10~~ ~~até 04/10~~ 05/10 na faculdade (R59) |
 | 04 | #34 | #8 | livre | nada | ~~06/10~~ 02/10 (só o desenho, R56) |
-| 05 | #35 | #9 | Caio | Supabase, admin do repo | 27/09 |
+| 05 | #35 | #9 | Caio | Supabase, admin do repo | ~~27/09~~ descartado em 30/09 (R60) |
 | 06 | #36 | #9 | livre | nada | 01/10 |
 | 07 | #37 | #9 | Igor | nada | 07/10 |
 | 08 | #38 | #9 | Igor | login de leitura | ≈11/10 |
@@ -77,7 +77,7 @@ Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* d
 2. **Semana de provas em 28 e 29/09.** O contrato (06) e o pacote 1 (11) caem logo depois dela.
 3. **As datas dos enunciados ainda não saíram**, fora a de 06/10. Os prazos daqui são alvos.
 4. **A evidência do teste do painel é fraca** (R45). Ele se refaz com log no 20.
-5. **O Supabase pausa sem uso.** O 05 resolve, e vence antes da pausa prevista.
+5. **O Supabase pausa sem uso.** ~~O 05 resolve, e vence antes da pausa prevista.~~ *(30/09: o 05 foi descartado, R60)* Mitigação: quem encontrar o banco pausado avisa o Caio, que o reativa pelo celular.
 6. **Tarefa livre que ninguém pega.** A regra dos dois dias (R52) é a mitigação.
 
 ## Riscos acrescentados em 29/09, com o enunciado da estrutura física
