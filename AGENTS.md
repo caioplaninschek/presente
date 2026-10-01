@@ -68,7 +68,7 @@ A partição de LittleFS é **uma só**, dividida entre o portal (`data/`) e o `
 
 O HTML, o CSS e o JavaScript do portal moram em **`data/`** na raiz, que é a pasta de onde o PlatformIO gera a imagem de filesystem (R27). É uma página só, sem biblioteca e sem recurso externo (R10), e credencial nenhuma viaja no endereço (R25). Nenhuma tela avança sem o aparelho confirmar: todo pedido tem tempo-limite, com falha visível e o botão liberado (R40).
 
-Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec. Desde 23/09, o contrato se escreve no §6 da spec (tarefa 5.2, #36), e, quando o portal for ligado ao aparelho (tarefa 5.3, #37), o `mentira.js` passa a carregar só com `?mentira=1` no endereço (R51).
+Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. ~~As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec. Desde 23/09, o contrato se escreve no §6 da spec (tarefa 5.2, #36), e, quando o portal for ligado ao aparelho (tarefa 5.3, #37), o `mentira.js` passa a carregar só com `?mentira=1` no endereço (R51).~~ *(30/09)* As rotas `/api/*` são contrato desde a R62 e estão no §6.1 da spec; o portal e o firmware seguem esse texto, não o `mentira.js`. Ele ainda responde às rotas antigas até a ligação do portal ao aparelho (tarefa 5.3, #37), que o atualiza e o faz carregar só com `?mentira=1` no endereço (R51).
 
 ## Banco
 
