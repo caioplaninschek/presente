@@ -21,7 +21,7 @@ São três lugares, com papéis diferentes. Confundi-los produz duas versões di
 - **Issues do GitHub** — o fórum do grupo e, desde 11/09, **o enunciado completo de cada tarefa de execução**: passo a passo de bancada, o que tem que aparecer, o que fazer se der errado. É onde os integrantes leem e respondem com log e foto.
 - **`.scratch/presente/`** — tickets de **decisão**, indexados pelo `map.md`. `Status: resolved` quer dizer "a pergunta foi respondida".
 - **`.scratch/prototipo/`** — tickets de **execução**, indexados pelo `graph.md`. Pronto quer dizer "o código roda e tem evidência", e o ticket pronto vira `Status: done`, com a data e a issue que o fecharam. São finos de propósito: título, dono, prazo, aresta, `HU-xx` e ponteiro para a issue — o texto rico vive lá, não aqui.
-- **`.scratch/integracao/`**: tickets de execução do plano de 23/09 até a entrega final, indexados pelo `graph.md` de lá, no mesmo formato fino.
+- **`.scratch/integracao/`**: ~~tickets de execução do plano de 23/09 até a entrega final, indexados pelo `graph.md` de lá, no mesmo formato fino.~~ *(30/09)* só o `graph.md`, o mapa de dependências das tarefas do plano de 23/09 até a entrega final. Os tickets locais daqui foram apagados em 30/09, porque repetiam as issues e as duas cópias se desencontravam. Desde então, o enunciado, o dono, o prazo e o andamento de cada tarefa vivem só na issue do GitHub.
 
 **Como se pega uma issue (R52).** Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* diz o que a issue exige, e só as de dono natural já nascem atribuídas. Ninguém designa tarefa a ninguém.
 
@@ -82,7 +82,7 @@ Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próp
 
 ### Issue tracker
 
-Os tickets vivem como markdown em `.scratch/<feature>/`, mas a spec é `docs/spec.md`, e o enunciado das tarefas de execução vive nas Issues do GitHub (ver "Onde o trabalho vive"). See `docs/agents/issue-tracker.md`.
+Os tickets vivem como markdown em `.scratch/<feature>/`, mas a spec é `docs/spec.md`, e o enunciado das tarefas de execução vive nas Issues do GitHub (ver "Onde o trabalho vive"). *(30/09)* Tarefa de execução nova não ganha ticket local: nasce e vive só como issue. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

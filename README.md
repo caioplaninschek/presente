@@ -36,7 +36,7 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
-| [`.scratch/integracao/graph.md`](.scratch/integracao/graph.md) | Registro de execução desde 23/09: as tarefas até a entrega final, o grafo de dependência e o de-para com as Issues |
+| [`.scratch/integracao/graph.md`](.scratch/integracao/graph.md) | ~~Registro de execução desde 23/09: as tarefas até a entrega final, o grafo de dependência e o de-para com as Issues~~ *(30/09)* O grafo de dependência das tarefas até a entrega final; cada tarefa vive na sua issue |
 | [`.scratch/prototipo/graph.md`](.scratch/prototipo/graph.md) | Registro de execução até a demonstração de 22/09, já fechado |
 | [Issues](https://github.com/caioplaninschek/presente/issues) | O fórum do grupo e o enunciado completo de cada tarefa — passo a passo, o que tem que aparecer, o que fazer se der errado |
 | [`AGENTS.md`](AGENTS.md) | Convenções do repositório |

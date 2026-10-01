@@ -1,6 +1,8 @@
 # Issue tracker: Local Markdown
 
-> **Neste repo:** a spec é `docs/spec.md`, e não `.scratch/<feature-slug>/spec.md`. Os tickets de execução (`.scratch/prototipo/` até 22/09, `.scratch/integracao/` desde 23/09) são finos de propósito: o enunciado completo de cada um, e a conversa sobre ele, vivem na issue do GitHub. Ver `AGENTS.md`, "Onde o trabalho vive".
+> **30/09/2026: tarefa de execução vive só na issue do GitHub.** O enunciado, o dono, o prazo, a conversa e o andamento ficam lá, e nenhuma tarefa nova ganha ticket local. Os tickets de `.scratch/integracao/` foram apagados nesse dia, porque repetiam as issues e as duas cópias se desencontravam; o `graph.md` de lá ficou como mapa de dependências. Os de `.scratch/prototipo/`, todos fechados, ficam como registro. Daqui em diante, o que este arquivo diz sobre tickets locais vale só para os mapas de decisão do `/wayfinder`, como o `.scratch/presente/`.
+>
+> **Neste repo:** a spec é `docs/spec.md`, e não `.scratch/<feature-slug>/spec.md`. ~~Os tickets de execução (`.scratch/prototipo/` até 22/09, `.scratch/integracao/` desde 23/09) são finos de propósito: o enunciado completo de cada um, e a conversa sobre ele, vivem na issue do GitHub.~~ *(30/09: ver o parágrafo acima)* Ver `AGENTS.md`, "Onde o trabalho vive".
 
 Issues and specs for this repo live as markdown files in `.scratch/`.
 
@@ -14,7 +16,7 @@ Issues and specs for this repo live as markdown files in `.scratch/`.
 
 ## When a skill says "publish to the issue tracker"
 
-Create a new file under `.scratch/<feature-slug>/` (creating the directory if needed).
+~~Create a new file under `.scratch/<feature-slug>/` (creating the directory if needed).~~ *(30/09)* Tarefa de execução: abrir uma issue no GitHub (`gh issue create`), sem arquivo local. Só o mapa de decisão do `/wayfinder` continua em `.scratch/<effort>/`, como diz a seção "Wayfinding operations".
 
 ## When a skill says "fetch the relevant ticket"
 
