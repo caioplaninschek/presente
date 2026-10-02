@@ -1,14 +1,9 @@
 #include "feedback.h"
 
+#include <config.h>  // os pinos do LED e do buzzer
+
 namespace feedback {
 namespace {
-
-// Pinos da secao 4.1 da spec. Cada perna do LED tem um resistor em serie: a
-// montagem de 21/09 usa 300 ohm, onde a spec previa 220 (R44).
-const byte PINO_VERMELHO = 25;
-const byte PINO_VERDE = 26;
-const byte PINO_AZUL = 27;
-const byte PINO_BUZZER = 33;
 
 // O ponto unico de inversao da polaridade do LED. O porque e o que fazer com
 // ele estao no cabecalho do feedback.h. true = catodo comum (perna comum no

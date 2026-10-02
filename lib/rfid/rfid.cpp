@@ -2,14 +2,10 @@
 
 #include <MFRC522.h>
 #include <SPI.h>
+#include <config.h>  // PINO_SS e PINO_RST
 
 namespace rfid {
 namespace {
-
-// Pinos da secao 4.1 da spec. SCK 18, MOSI 23 e MISO 19 sao o VSPI por
-// hardware e ficam implicitos no SPI.begin() padrao do ESP32.
-const byte PINO_SS = 5;    // pino de strapping: precisa estar alto no boot
-const byte PINO_RST = 22;
 
 MFRC522 leitor(PINO_SS, PINO_RST);
 

@@ -24,8 +24,9 @@
 //     em lib/feedback/feedback.cpp, a constante CATODO_COMUM passa de true para
 //     false.
 //
-// Nao ha outro lugar a mexer: os pinos tambem moram la, e todo digitalWrite do
-// LED passa por essa constante. Nao inverta o valor dentro de acender().
+// Nao ha outro lugar a mexer: todo digitalWrite do LED passa por essa
+// constante. Nao inverta o valor dentro de acender(). Os pinos nao moram la,
+// e sim no lib/config/config.h, porque a polaridade nao e pino.
 // ---------------------------------------------------------------------------
 //
 // O buzzer e ativo (secao 4.1): nivel alto ja produz o som, sem tone() e sem PWM.
