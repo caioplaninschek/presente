@@ -170,7 +170,7 @@ E faltaria comprar:
 • LED RGB (catodo comum) + 3 resistores de 220 ohm
 • Buzzer ativo 5V
 • Jumpers macho-macho e macho-fêmea
-• Fonte 5V 2A (ou cabo micro-USB com carregador)
+• Fonte 5V 2A (ou cabo USB-C com carregador)
 
 Consegue confirmar o que realmente está na mão, e com quem está?
 
