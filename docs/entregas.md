@@ -9,7 +9,7 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 07/09 20:00 | Projeto detalhado da solução | ✅ entregue |
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
 | 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue e aprovada na demonstração |
-| ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório ~~em data a confirmar~~ na aula de 06/10, informal *(30/09)* | ⬜ enunciado recebido em 29/09 |
+| ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório ~~em data a confirmar~~ na aula de 06/10, informal *(30/09)* | ✅ entregue em 06/10, postada pelos cinco no Teams *(informação do Caio, 10/10)* |
 | ~~05/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
 | ~~20/10~~\*\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
 | ~~27/10~~\*\* | Exposição oficial na Semana da Computação | ⬜ |
@@ -166,3 +166,9 @@ O enunciado pede, nesta ordem:
 **6. Apresentação no laboratório.** A equipe leva o protótipo físico e deve estar pronta para apresentar a estrutura, identificar os principais componentes, explicar por que a estrutura foi construída daquela maneira, demonstrar o funcionamento, realizar pelo menos um teste e contar as dificuldades da construção. ⚠️ O enunciado não diz a data da apresentação; o grupo se prepara para a aula de 06/10~~, e a data se confirma com o professor~~. *(30/09: o Caio confirmou a aula de 06/10. A apresentação é informal, e o grupo mostra a caixa ao professor.)*
 
 A dispensa do segundo sensor (R18) continua valendo. Como o grupo organizou esta entrega está nas rodadas 17 e 18 da spec (R56 a R59), com os ajustes de 30/09 à tarde na rodada 19, e nas tarefas da epic #8.
+
+### Como foi entregue
+
+**Entregue em 06/10.** Os cinco integrantes postaram a entrega no Teams até 23:59 (informação do Caio, 10/10). O PDF final e a transcrição ainda serão arquivados em `entregas/entrega-06/`, como nas entregas anteriores. O vídeo da caixa funcionando, gravado em 05/10, está em [`assets/estrutura/entrega-06-video-2026-10-05.mp4`](assets/estrutura/entrega-06-video-2026-10-05.mp4).
+
+Na aula do mesmo dia, o grupo fez o teste com a caixa fechada (teste 9, #33), e o Cauã gravou o vídeo; o resultado detalhado, as fotos e o vídeo ainda não foram postados na issue. O furo do LED na tampa e os fios que o levariam até lá não foram feitos e continuam pendentes, sem data (informação do Caio, 10/10).

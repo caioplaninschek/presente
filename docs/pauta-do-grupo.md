@@ -18,7 +18,7 @@ Documento para **conversar com a equipe**, em linguagem direta. O detalhe técni
 > | 8 | Voltar ao painel depois da troca de rede | issue #3 → R19 — **a premissa estava errada:** `WIFI_AP_STA` existe, e o projeto passa a ter Plano A e Plano B, a decidir na bancada. **Decidido em 22/09 (R45): vale o Plano A**, e o aparelho não sai da própria rede |
 > | Parte 4 | Material e caixa | issue #4 → R22 — material completo, com o João; caixa adiada. Em 23/09 (R53), a caixa passou a ser de papelão, feita pelo grupo, e ~~o voto no MDF da mensagem ao João~~ caiu |
 >
-> **O corpo abaixo preserva as premissas de 08–10/09 e não se reescreve** — é o registro de como as perguntas foram feitas. Duas delas já não valem: o ponto 8 afirma que o aparelho não consegue ser rede e usar internet ao mesmo tempo (a R19 derrubou: `WIFI_AP_STA` existe), e a mensagem pronta ao João manda comprar transistor 2N2222 e resistor de 1 kΩ (a R22 trocou por uma checagem de bancada, e o transistor só entra se as duas ligações diretas reprovarem; a checagem terminou no transistor em 21/09, com um TIP122, pela R44). O que vale está na `spec.md`.
+> **O corpo abaixo preserva as premissas de 08–10/09 e não se reescreve** — é o registro de como as perguntas foram feitas. Duas delas já não valem: o ponto 8 afirma que o aparelho não consegue ser rede e usar internet ao mesmo tempo (a R19 derrubou: `WIFI_AP_STA` existe), e a mensagem pronta ao João manda comprar transistor 2N2222 e resistor de 1 kΩ (a R22 trocou por uma checagem de bancada, e o transistor só entra se as duas ligações diretas reprovarem; a checagem terminou no transistor em 21/09, com um TIP122, pela R44). A mesma mensagem fala em cabo micro-USB, mas a placa usa USB-C (06/10, R64). O que vale está na `spec.md`.
 
 ---
 
@@ -170,7 +170,7 @@ E faltaria comprar:
 • LED RGB (catodo comum) + 3 resistores de 220 ohm
 • Buzzer ativo 5V
 • Jumpers macho-macho e macho-fêmea
-• Fonte 5V 2A (ou cabo USB-C com carregador)
+• Fonte 5V 2A (ou cabo micro-USB com carregador)
 
 Consegue confirmar o que realmente está na mão, e com quem está?
 

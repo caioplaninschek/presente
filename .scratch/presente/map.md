@@ -47,9 +47,9 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 
 Névoa em escopo, ainda sem nitidez para virar ticket:
 
-- **Apresentação da Semana da Computação (27/10).** Quem fala, o que é demonstrado ao vivo, e qual o plano B se a demo falhar na hora. Só dá para decidir com o protótipo de pé. Tem epic desde 23/09: #54.
-- **Vídeo de 2 minutos (20/10).** Roteiro, quem grava, quem edita, o que aparece. Depende do protótipo estar montado. Tem epic desde 23/09: #53.
-- **Relatório técnico ABNT (30/11).** Ferramenta, estrutura, quem consolida, e como as decisões da spec viram texto acadêmico. Depende de quase tudo. Tem epic desde 23/09: #55.
+- **Apresentação da Semana da Computação (27/10, data provisória, sem enunciado do professor *(10/10)*).** Quem fala, o que é demonstrado ao vivo, e qual o plano B se a demo falhar na hora. Só dá para decidir com o protótipo de pé. Tem epic desde 23/09: #54.
+- **Vídeo de 2 minutos (20/10, data provisória, sem enunciado do professor *(10/10)*).** Roteiro, quem grava, quem edita, o que aparece. Depende do protótipo estar montado. Tem epic desde 23/09: #53.
+- **Relatório técnico ABNT (30/11, data provisória, sem enunciado do professor *(10/10)*).** Ferramenta, estrutura, quem consolida, e como as decisões da spec viram texto acadêmico. Depende de quase tudo. Tem epic desde 23/09: #55.
 - ~~**Dados de teste.** Quantos alunos fictícios, com que nomes, e como as tags físicas são atribuídas a eles. Fica nítido quando o Supabase existir.~~ Graduou em 11/09: os dados entram no banco pela #21, e os UIDs das tags reais saem da leitura na #25 (13/09).
 - **Design e usabilidade do portal do professor.** Provável ticket de `prototype` quando o firmware servir a primeira página.
 - **Instalação na sala para a demo.** Tomada disponível, fixação, autorização da UVA para prender algo na parede. Pode virar `task` perto de 27/10.

@@ -32,7 +32,7 @@ epic #9
 
 **A aresta que serializa:** a placa. Todo "rodar" exige quem estiver com ela (R23), e cada rodada custa cerca de um dia. Por isso o pacote só vai para a placa depois da revisão por alguém que não é o autor (R51).
 
-**A aresta que o enunciado de 06/10 mudou:** o desenho (#34) vem antes da montagem (#32), e não depois dela, porque o enunciado pede o caminho "como imaginamos → como construímos" (R56). A entrega saiu da #34 para a #56, que depende do teste com a caixa fechada (#33). O modelo no Tinkercad (#57), pedido pelo professor fora do enunciado, não precisa da placa e corre ao lado do desenho. E o buzzer novo (#39) passou a entrar antes da montagem (R57), com a compra até 02/10.
+**A aresta que o enunciado de 29/09 mudou:** o desenho (#34) vem antes da montagem (#32), e não depois dela, porque o enunciado pede o caminho "como imaginamos → como construímos" (R56). A entrega saiu da #34 para a #56, que depende do teste com a caixa fechada (#33). O modelo no Tinkercad (#57), pedido pelo professor fora do enunciado, não precisa da placa e corre ao lado do desenho. E o buzzer novo (#39) passou a entrar antes da montagem (R57), com a compra até 02/10.
 
 **A aresta escondida:** a #39 (compras) antes da #46. Sem os cartões novos cadastrados, o teste 2 (7 bytes) e o teste 3 (crachá de fora da turma) não têm crachá para rodar.
 
