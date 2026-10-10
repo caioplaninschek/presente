@@ -16,6 +16,7 @@ epic #8
   #31 ideias ──> #34 desenho ──> #32 montagem ──> #33 caixa fechada ──> #56 arquivos e os cinco postando
   #31 ideias ──> #57 modelo no Tinkercad ─────────────────────────────> #56
   #39 buzzer (epic #9) ──> #32 montagem
+  #32 montagem ──> #58 furo e extensão do LED   (4.7, sobra da caixa; aula de 13/10)
 
 epic #9
   #35 banco acordado                     (descartado em 30/09, R60; vencia em 27/09)
