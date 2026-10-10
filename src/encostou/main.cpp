@@ -1,7 +1,7 @@
 // encostou/main.cpp -- programa da issue #26.
 //
 // Junta o leitor e o feedback: o aluno encosta o cracha, o LED pisca verde e o
-// buzzer apita. Cobre os testes 1 e 2 da secao 8 da spec.
+// buzzer apita. Cobre o teste 1 da secao 8 da spec (o teste 2 caiu em 10/10, R65).
 //
 // O comportamento e o da maquina de estados da secao 5, na parte que existe sem
 // a lista da turma dentro do aparelho:

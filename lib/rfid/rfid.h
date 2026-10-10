@@ -18,8 +18,9 @@
 namespace rfid {
 
 // 10 bytes cobre os tres tamanhos que o padrao preve (4, 7 e 10). O projeto
-// so usa 4 (Mifare Classic) e 7 (NTAG215), mas o tamanho nao e assumido em
-// lugar nenhum do codigo -- e sempre o que a tag respondeu.
+// usa 4 (os cartoes, R65); 7 (NTAG215) e aceito, mas nao e testado na placa.
+// O tamanho nao e assumido em lugar nenhum do codigo -- e sempre o que a tag
+// respondeu.
 const byte UID_MAX_BYTES = 10;
 
 // Dois caracteres por byte, mais o terminador.
