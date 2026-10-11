@@ -4,8 +4,9 @@
 // qualquer cracha (R28: codigo compartilhado sobe para lib/<modulo da secao 5>/).
 //
 // Este modulo e o embriao do storage.cpp da secao 5 da spec. Dela, ja existem o
-// append de eventos e quem ja esta registrado na sessao (R30). Os professores e
-// o sessao_atual.json (R16) nao -- o segundo e lacuna declarada no secao 8.
+// append de eventos, quem ja esta registrado na sessao (R30) e a leitura dos
+// professores (#41). O sessao_atual.json (R16) nao -- e lacuna declarada no
+// secao 8.
 //
 // ---------------------------------------------------------------------------
 // O FORMATO DO ARQUIVO -- uma linha por evento, nao um array
@@ -48,6 +49,7 @@
 #define STORAGE_H
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <rfid.h>
 
 namespace storage {
@@ -101,6 +103,14 @@ size_t imprimirEventos(Print& saida);
 
 // Apaga o eventos.json e zera a lista, para recomecar o teste do zero.
 bool apagarEventos();
+
+const char CAMINHO_DOS_PROFESSORES[] = "/professores.json";
+
+// Le o professores.json (as contas de professor, um array) para dentro de
+// destino. NAO monta o LittleFS: o firmware integrado monta com begin(false),
+// e o begin(true) de iniciarSessaoComArquivo() apagaria o portal (R41). Sem o
+// arquivo, devolve EmptyInput, o mesmo erro de um arquivo vazio.
+DeserializationError lerProfessores(JsonDocument& destino);
 
 }  // namespace storage
 
