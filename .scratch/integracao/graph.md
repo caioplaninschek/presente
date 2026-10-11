@@ -20,8 +20,9 @@ epic #8
 
 epic #9
   #35 banco acordado                     (descartado em 30/09, R60; vencia em 27/09)
-  #36 contrato ──> #37 portal no contrato
-  #36 contrato ──> #41 escrever P1 ──> #42 rodar P1 ──> #43 escrever P2 ──> #44 rodar P2
+  #36 contrato ──> #37 portal no contrato ──> #42 rodar P1 e #44 rodar P2, na mesma ida à placa
+  #36 contrato ──> #41 escrever P1 ──> #42 rodar P1
+                   #41 escrever P1 ──> #43 escrever P2 ──> #44 rodar P2
                ──> #45 escrever P3 ──> #46 rodar P3 ──> #47 escrever P4 ──> #48 rodar P4
                ──> #49 escrever P5 ──> #50 rodar P5 e rodada completa
   #39 compras e UIDs ──> #40 cadastro dos cartões ──> #46 rodar P3
@@ -30,6 +31,8 @@ epic #9
 ```
 
 **A aresta que destrava:** a #36 (contrato). O portal (#37) e o primeiro pacote do firmware (#41) dependem dela e, com ela pronta, andam ao mesmo tempo.
+
+**A aresta que o pacote 1 mudou (01/10, publicada em 11/10):** o pacote 2 (#43) passa a depender do pacote 1 publicado na `main` (#41), e não mais da rodada na placa (#42). A rodada do pacote 1 (#42) e a do pacote 2 (#44) esperam a ligação do portal (#37), porque só com ela o celular testa o portal de verdade, e as duas rodam na mesma ida à placa, sem data até o cronograma novo da epic (#9). Se essa ida atrasar além da data que o cronograma der a ela, o pacote 3 (#45) passa a depender do pacote 2 publicado (#43), pelo mesmo raciocínio.
 
 **A aresta que serializa:** a placa. Todo "rodar" exige quem estiver com ela (R23), e cada rodada custa cerca de um dia. Por isso o pacote só vai para a placa depois da revisão por alguém que não é o autor (R51).
 
@@ -62,5 +65,5 @@ Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* d
 
 ## Riscos acrescentados em 29/09, com o enunciado da estrutura física
 
-7. **A placa fica com a caixa ~~em 03 e 04/10~~ de 03 a 05/10** *(30/09: o teste com a caixa fechada passou para a segunda, R59)*. *(06/10: a montagem saiu em 05/10, e o teste com a caixa fechada passou para a terça, 06/10, R63)* O pacote 1 (#42) tinha alvo em 03/10 e cede ~~o fim de semana~~ o fim de semana e a segunda. Em 29/09, ninguém tinha pegado o contrato (#36) nem o pacote 1 (#41), e os alvos da epic #9 se refazem quando o enunciado do dashboard sair.
+7. **A placa fica com a caixa ~~em 03 e 04/10~~ de 03 a 05/10** *(30/09: o teste com a caixa fechada passou para a segunda, R59)*. *(06/10: a montagem saiu em 05/10, e o teste com a caixa fechada passou para a terça, 06/10, R63)* O pacote 1 (#42) tinha alvo em 03/10 e cede ~~o fim de semana~~ o fim de semana e a segunda. Em 29/09, ninguém tinha pegado o contrato (#36) nem o pacote 1 (#41), e os alvos da epic #9 se refazem quando o enunciado do dashboard sair. *(11/10: a caixa já foi apresentada; a rodada do pacote 1 espera a ligação do portal (#37), sem data até o cronograma novo da epic (#9).)*
 8. **Os cinco precisam postar.** O enunciado não aceita envio atrasado, e um integrante que não postar fica sem a entrega. Mitigação: os arquivos ficam prontos ~~no domingo (R58)~~ na segunda à noite, com rascunho no domingo *(30/09: R59; sobra só a terça para postar, custo aceito)* *(06/10: ficam prontos na própria terça, depois do teste com a caixa fechada, R63)*, e a #56 tem uma caixa de marcar por integrante.

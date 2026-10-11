@@ -1,5 +1,5 @@
 // lib/config/config.h -- os valores fixos do aparelho, num lugar so (secao 5
-// da spec, R63).
+// da spec, R66).
 //
 // Mora em lib/ e nao em include/ porque as bibliotecas de lib/ nao enxergam o
 // include/ do projeto, e um include/config.h ainda perderia para o config.h do
