@@ -50,20 +50,28 @@ if (-not $Nome) { $Nome = Read-Host 'nome, como aparece no painel' }
 if (-not $Senha) {
   $Senha = (New-Object Net.NetworkCredential('', (Read-Host 'senha' -AsSecureString))).Password
   $repetida = (New-Object Net.NetworkCredential('', (Read-Host 'repita a senha' -AsSecureString))).Password
-  if ($Senha -ne $repetida) {
+  if ($Senha -cne $repetida) {
     Write-Host 'ERRO: as duas senhas sao diferentes. Nada foi gravado.'
     exit 1
   }
 }
 
 # Os limites cabem nos documentos de tamanho fixo do firmware: o corpo do login tem 256 bytes,
-# o /api/estado tem 512 e as dez contas cabem em 3072 (src/presente/).
+# o /api/estado tem 512 e as dez contas cabem em 4096 (src/presente/). Contam bytes em UTF-8,
+# como o firmware guarda: letra acentuada vale 2.
 if (-not $Id -or -not $Usuario -or -not $Nome -or -not $Senha) {
   Write-Host 'ERRO: id, usuario, nome e senha sao obrigatorios. Nada foi gravado.'
   exit 1
 }
-if ($Id.Length -gt 32 -or $Usuario.Length -gt 32 -or $Nome.Length -gt 60 -or $Senha.Length -gt 64) {
-  Write-Host 'ERRO: id e usuario vao ate 32 caracteres, nome ate 60 e senha ate 64. Nada foi gravado.'
+$bytesUtf8 = [Text.Encoding]::UTF8
+if ($bytesUtf8.GetByteCount($Id) -gt 32 -or $bytesUtf8.GetByteCount($Usuario) -gt 32 -or
+    $bytesUtf8.GetByteCount($Nome) -gt 60 -or $bytesUtf8.GetByteCount($Senha) -gt 64) {
+  Write-Host 'ERRO: id e usuario vao ate 32 caracteres, nome ate 60 e senha ate 64 (letra acentuada conta 2). Nada foi gravado.'
+  exit 1
+}
+# Tab ou quebra de linha sairiam crus no JSON montado a mao, e o aparelho nao leria o arquivo.
+if (($Id + $Usuario + $Nome) -match '[\x00-\x1f\x7f]') {
+  Write-Host 'ERRO: id, usuario e nome nao podem ter tab nem quebra de linha. Nada foi gravado.'
   exit 1
 }
 if ($Salt) {

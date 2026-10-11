@@ -29,8 +29,9 @@ const byte PORTA_DNS = 53;
 
 DNSServer dns;
 
-// Global, fora da pilha do loop(): dez contas ocupam uns 2,5 KB.
-StaticJsonDocument<3072> professores;
+// Global, fora da pilha do loop(): dez contas no limite do senha-professor.ps1
+// ocupam 3236 bytes (medido com a ArduinoJson 6.21.6).
+StaticJsonDocument<4096> professores;
 
 void setup() {
   Serial.begin(115200);
