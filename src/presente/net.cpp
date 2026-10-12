@@ -115,6 +115,8 @@ void encerrar() {
 bool buscarNoBanco() {
   WiFiClientSecure cliente;
   cliente.setInsecure();
+  static_assert(LIMITE_DA_CONEXAO_SEGURA_MS >= 1000 && LIMITE_DA_CONEXAO_SEGURA_MS % 1000 == 0,
+                "o setHandshakeTimeout so aceita segundos inteiros");
   cliente.setHandshakeTimeout(LIMITE_DA_CONEXAO_SEGURA_MS / 1000);  // em segundos
 
   HTTPClient http;

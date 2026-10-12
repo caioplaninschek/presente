@@ -1,16 +1,17 @@
-// presente/portal.cpp -- pacote 1 do firmware (#41): o portal dentro do aparelho.
+// presente/portal.cpp -- pacotes 1 e 2 do firmware (#41, #43): o portal dentro
+// do aparelho.
 //
-// Das nove rotas do secao 6.1, o pacote 1 tem duas: POST /api/login e
-// GET /api/estado. Qualquer outra rota de /api/, e metodo errado nessas duas,
-// recebe 404 ROTA_DESCONHECIDA. Iniciar, Enviar e Encerrar chegam nos pacotes
-// seguintes (#45, #47).
+// Das nove rotas do secao 6.1, os pacotes 1 e 2 tem tres: POST /api/login,
+// GET /api/estado e POST /api/seguir-offline. Qualquer outra rota de /api/, e
+// metodo errado nessas tres, recebe 404 ROTA_DESCONHECIDA. Iniciar, Enviar e
+// Encerrar chegam nos pacotes seguintes (#45, #47).
 //
-// SEM BUSCA DA TURMA
+// A BUSCA DA TURMA (#43)
 //
-// Pelo secao 6.1, o login em AGUARDANDO_LOGIN responde e entao busca a turma.
-// A busca e do pacote 2 (#43). Ate la, a senha certa leva direto a
-// AGUARDANDO_INICIAR em modo offline, o mesmo caminho da busca que falha (R3):
-// o portal chega ao painel sem pedir rota que ainda nao existe.
+// Pelo secao 6.1, o login em AGUARDANDO_LOGIN responde e entao busca a turma:
+// o estado passa a SINCRONIZANDO, com o azul lento, e volta a AGUARDANDO_INICIAR
+// quando o net:: sai do hotspot, com a lista (online) ou sem ela (offline, R3).
+// O seguir-offline abandona a busca em curso.
 //
 // FORA DE /api/ (R67)
 //
@@ -27,12 +28,15 @@
 #include <LittleFS.h>
 #include <WebServer.h>
 #include <config.h>
+#include <feedback.h>
 #include <mbedtls/sha256.h>
+
+#include "net.h"
 
 namespace portal {
 namespace {
 
-enum class Estado { AGUARDANDO_LOGIN, AGUARDANDO_INICIAR };
+enum class Estado { AGUARDANDO_LOGIN, SINCRONIZANDO, AGUARDANDO_INICIAR };
 
 WebServer server(80);
 
@@ -133,9 +137,11 @@ void aoLogin() {
   snprintf(token, sizeof(token), "%08x%08x", esp_random(), esp_random());
 
   // Fora de AGUARDANDO_LOGIN, o login so devolve um token: estado e professor
-  // ficam como estao, e o professor volta a chamada em curso (R49).
-  if (estado == Estado::AGUARDANDO_LOGIN) {
-    estado = Estado::AGUARDANDO_INICIAR;
+  // ficam como estao, sem busca nova, e o professor volta a chamada em curso
+  // (R49).
+  const bool buscar = estado == Estado::AGUARDANDO_LOGIN;
+  if (buscar) {
+    estado = Estado::SINCRONIZANDO;
     professorAtual = encontrado;
   }
   Serial.printf("Login aceito: %s.\n", usuario);
@@ -144,6 +150,11 @@ void aoLogin() {
   snprintf(cookie, sizeof(cookie), "sessao=%s; HttpOnly; Path=/", token);
   server.sendHeader("Set-Cookie", cookie);
   responderJson(200, "{\"ok\":true}");
+
+  // Responde e entao busca (secao 6.1).
+  if (buscar) {
+    net::comecarBusca();
+  }
 }
 
 void aoEstado() {
@@ -153,8 +164,9 @@ void aoEstado() {
     doc["autenticado"] = false;
   } else {
     JsonObjectConst professor = (*contas)[professorAtual];
+    const bool sincronizando = estado == Estado::SINCRONIZANDO;
     doc["autenticado"] = true;
-    doc["sincronizando"] = false;
+    doc["sincronizando"] = sincronizando;
     doc["modo"] = "offline";
     doc["roster_carregado"] = false;
     JsonObject quem = doc.createNestedObject("professor");
@@ -169,11 +181,35 @@ void aoEstado() {
     doc["n_presentes"] = nullptr;
     doc["n_eventos"] = 0;
     doc["versao"] = 0;
+
+    // Atribuir a uma chave que ja existe troca o valor no lugar.
+    if (sincronizando) {
+      doc["modo"] = nullptr;  // null enquanto a busca nao termina
+    } else if (net::comLista()) {
+      doc["modo"] = "online";
+      doc["roster_carregado"] = true;
+      doc["total_alunos"] = net::totalDeAlunos();
+      doc["n_presentes"] = 0;
+      doc["versao"] = 1;  // sobe quando a lista chega (secao 6.1)
+    }
   }
 
   char saida[512];
   serializeJson(doc, saida, sizeof(saida));
   responderJson(200, saida);
+}
+
+// A primeira rota que exige o cookie (secao 6.1).
+void aoSeguirOffline() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+  // Durante a conexao segura este pedido espera o fim dela, porque o loop()
+  // esta parado. O atender() passa a AGUARDANDO_INICIAR antes do pedido seguinte.
+  net::abandonar();
+  responderJson(200, net::comLista() ? "{\"ok\":true,\"modo\":\"online\"}"
+                                     : "{\"ok\":true,\"modo\":\"offline\"}");
 }
 
 const char* tipoDoArquivo(const String& caminho) {
@@ -202,7 +238,8 @@ void mandarParaOLogin() {
   server.send(302);
 }
 
-// Tudo o que nao e POST /api/login nem GET /api/estado cai aqui.
+// Tudo o que nao e POST /api/login, GET /api/estado nem POST /api/seguir-offline
+// cai aqui.
 void aoResto() {
   const String caminho = server.uri();
 
@@ -239,11 +276,22 @@ void iniciar(const JsonDocument& professores, bool littlefsMontado) {
   server.collectHeaders(cabecalhos, 1);
   server.on("/api/login", HTTP_POST, aoLogin);
   server.on("/api/estado", HTTP_GET, aoEstado);
+  server.on("/api/seguir-offline", HTTP_POST, aoSeguirOffline);
   server.onNotFound(aoResto);
   server.begin();
 }
 
 void atender() {
+  // Antes do handleClient(): o pedido seguinte ja ve o estado do net::.
+  if (estado == Estado::SINCRONIZANDO) {
+    if (!net::buscando()) {
+      estado = Estado::AGUARDANDO_INICIAR;
+      feedback::acender(feedback::Cor::AZUL);
+    } else if (!feedback::piscando()) {
+      // O azul lento sem mexer na lib/feedback: uma piscada por vez, rearmada aqui.
+      feedback::piscar(feedback::Cor::AZUL, 1, PISCADA_LENTA_MS, PISCADA_LENTA_MS);
+    }
+  }
   server.handleClient();
 }
 

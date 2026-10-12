@@ -1,9 +1,10 @@
-// presente/main.cpp -- o firmware de verdade (R51), pacote 1 (#41).
+// presente/main.cpp -- o firmware de verdade (R51), pacotes 1 e 2 (#41, #43).
 //
 // O aparelho poe a rede propria no ar, o portal cativo abre a pagina gravada
 // em data/, e o professor entra com a senha conferida por hash e recebe o
-// cookie sessao. O leitor de cracha, a busca da turma e o envio chegam nos
-// pacotes seguintes (#43 a #49).
+// cookie sessao. Depois do login, o aparelho busca a lista da turma pelo
+// hotspot do professor (net.cpp). O leitor de cracha e o envio chegam nos
+// pacotes seguintes (#45 a #49).
 //
 // Os pinos, a turma e o endereco do aparelho vem do lib/config/config.h (R66);
 // o nome e a senha da rede, do secrets.h.
@@ -23,6 +24,7 @@
 #include <secrets.h>
 #include <storage.h>
 
+#include "net.h"
 #include "portal.h"
 
 const byte PORTA_DNS = 53;
@@ -36,7 +38,7 @@ StaticJsonDocument<4096> professores;
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Presente! - firmware, pacote 1 (#41)");
+  Serial.println("Presente! - firmware, pacote 2 (#43)");
 
   feedback::iniciar();
   feedback::acender(feedback::Cor::AZUL);  // AGUARDANDO_LOGIN
@@ -64,7 +66,7 @@ void setup() {
                 professores.capacity());
 
   WiFi.persistent(false);
-  WiFi.mode(WIFI_AP_STA);  // o STA fica parado ate a busca da turma (pacote 2)
+  WiFi.mode(WIFI_AP_STA);  // o STA so entra no hotspot durante a busca da turma (net.cpp)
   if (WiFi.softAP(AP_SSID, AP_PASSWORD)) {
     Serial.printf("Rede do aparelho no ar: %s, endereco %s\n", AP_SSID,
                   WiFi.softAPIP().toString().c_str());
@@ -80,6 +82,7 @@ void setup() {
 
 void loop() {
   dns.processNextRequest();
+  net::atender();  // antes do portal, que ve o fim da busca na mesma volta
   portal::atender();
   feedback::atualizar();
 }

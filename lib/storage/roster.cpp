@@ -20,7 +20,7 @@ bool gravarRoster(const JsonDocument& lista) {
   const size_t escritos = serializeJson(lista, arquivo);
   arquivo.close();
   // Flash cheia no meio: um arquivo cortado faria o pacote 5 reler lixo.
-  if (escritos == 0 || escritos != measureJson(lista)) {
+  if (escritos != measureJson(lista)) {
     LittleFS.remove(CAMINHO_DO_ROSTER);
     return false;
   }
