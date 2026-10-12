@@ -36,3 +36,14 @@ constexpr char DISCIPLINA[] = "Sistemas Embarcados";
 // --- Endereco do aparelho na propria rede -------------------------
 // Para onde o portal cativo manda o celular.
 constexpr char ENDERECO_DO_APARELHO[] = "192.168.4.1";
+
+// --- Tempos da busca da turma (pacote 2, #43, R68) -----------------
+// As quatro fases somam 20 s, o limite da busca no secao 6.1, sem relogio a
+// parte. A conexao segura e a leitura travam o loop(), e cada uma fica abaixo
+// dos 6 s em que o portal desiste de um pedido.
+constexpr unsigned long ESPERA_DO_HOTSPOT_MS = 7000;         // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long ESPERA_DA_RESERVA_MS = 5000;         // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long LIMITE_DA_CONEXAO_SEGURA_MS = 4000;  // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long LIMITE_DA_RESPOSTA_MS = 4000;        // valor de partida, a calibrar na placa (secao 8)
+// O azul lento de SINCRONIZANDO: aceso e apagado por este tempo cada.
+constexpr unsigned long PISCADA_LENTA_MS = 500;              // valor de partida, a calibrar na placa (secao 8)

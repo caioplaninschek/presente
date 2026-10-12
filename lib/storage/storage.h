@@ -4,9 +4,9 @@
 // qualquer cracha (R28: codigo compartilhado sobe para lib/<modulo da secao 5>/).
 //
 // Este modulo e o embriao do storage.cpp da secao 5 da spec. Dela, ja existem o
-// append de eventos, quem ja esta registrado na sessao (R30) e a leitura dos
-// professores (#41). O sessao_atual.json (R16) nao -- e lacuna declarada no
-// secao 8.
+// append de eventos, quem ja esta registrado na sessao (R30), a leitura dos
+// professores (#41) e a lista da turma em disco (#43). O sessao_atual.json
+// (R16) nao -- e lacuna declarada no secao 8.
 //
 // ---------------------------------------------------------------------------
 // O FORMATO DO ARQUIVO -- uma linha por evento, nao um array
@@ -111,6 +111,19 @@ const char CAMINHO_DOS_PROFESSORES[] = "/professores.json";
 // e o begin(true) de iniciarSessaoComArquivo() apagaria o portal (R41). Sem o
 // arquivo, devolve EmptyInput, o mesmo erro de um arquivo vazio.
 DeserializationError lerProfessores(JsonDocument& destino);
+
+const char CAMINHO_DO_ROSTER[] = "/roster.json";
+
+// A lista da turma que a busca trouxe do banco (#43, R2). O arquivo so existe
+// quando a ultima busca deu certo: a busca o apaga ao comecar e o grava so com
+// a lista boa. Como lerProfessores(), nenhuma das duas monta o LittleFS (R41).
+//
+// gravarRoster devolve false se o LittleFS nao montou ou se a gravacao nao
+// terminou; nesse caso, nao deixa arquivo pela metade.
+bool gravarRoster(const JsonDocument& lista);
+
+// Devolve true tambem quando nao havia arquivo.
+bool apagarRoster();
 
 }  // namespace storage
 
