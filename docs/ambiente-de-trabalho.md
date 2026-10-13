@@ -72,7 +72,7 @@ Faça commits pequenos, um por assunto. O histórico do git é a prova de evolu�
 
 - **A issue** é o enunciado completo da tarefa: o passo a passo, o que tem que aparecer e o que fazer se der errado.
 - **`docs/spec.md`** guarda a decisão que sustenta o critério, a pinagem do §4.1 e o contrato de dados do §7.
-- **`.scratch/prototipo/graph.md`** mostra de quem a sua tarefa depende e quem está esperando por ela.
+- **`.scratch/integracao/graph.md`** mostra de quem a sua tarefa depende e quem está esperando por ela. ~~O `.scratch/prototipo/graph.md` fazia isso~~ *(12/10: esse grafo fechou em 22/09.)*
 
 Se a IA propuser mudar arquitetura, pinagem ou contrato de dados, pare. Isso é decisão de grupo, e o caminho dela está no `AGENTS.md`.
 
@@ -93,6 +93,13 @@ cp include/secrets.example.h include/secrets.h
 ```
 
 Preencha o `include/secrets.h` e nunca o commite. O repositório é público. O `.gitignore` já bloqueia o arquivo, mas a conferência final é sua.
+
+Para o ambiente `presente`, faltam dois passos antes do Upload:
+
+1. **Gere o `data/professores.json`**, o arquivo com a conta do professor, que não vai para o git. Na pasta do repositório, rode `powershell -ExecutionPolicy Bypass -File ferramentas\senha-professor.ps1`; o script pede o id, o usuário, o nome e a senha.
+2. **Grave a pasta `data/` na placa.** Com `env:presente` selecionado, abra a aba do PlatformIO, entre em `presente` > `Platform` e clique em **Upload Filesystem Image**, com o `BOOT` apertado, como no Upload. Só depois faça o Upload do programa. Sem esse passo, a placa avisa que o portal não foi gravado.
+
+O passo a passo completo, com o que tem que aparecer e o que fazer se der errado, está na issue de rodar o pacote 1 na placa (#42).
 
 ## 8. Se travar
 

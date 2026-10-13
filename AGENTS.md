@@ -4,7 +4,7 @@ Terminal embarcado (ESP32 + RC522) para contabilização de presença em sala de
 
 A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem. **Quantas rodadas já fecharam, leia no cabeçalho da própria spec** — não confie em contagem escrita fora dela, aqui inclusive.
 
-O mapa de decisões em aberto está em `.scratch/presente/map.md`. Leia o mapa antes de trabalhar um ticket.
+O mapa de decisões está em `.scratch/presente/map.md`; hoje ele não tem decisão em aberto. Leia o mapa antes de trabalhar um ticket.
 
 Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`. **O prazo de cada entrega é o do enunciado.** Data que ainda não saiu de enunciado é provisória e se confere quando ele for publicado; não deduza prazo de dia da semana nem de turma.
 
@@ -68,15 +68,15 @@ A partição de LittleFS é **uma só**, dividida entre o portal (`data/`) e o `
 
 O HTML, o CSS e o JavaScript do portal moram em **`data/`** na raiz, que é a pasta de onde o PlatformIO gera a imagem de filesystem (R27). É uma página só, sem biblioteca e sem recurso externo (R10), e credencial nenhuma viaja no endereço (R25). Nenhuma tela avança sem o aparelho confirmar: todo pedido tem tempo-limite, com falha visível e o botão liberado (R40).
 
-Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho. ~~As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec. Desde 23/09, o contrato se escreve no §6 da spec (tarefa 5.2, #36), e, quando o portal for ligado ao aparelho (tarefa 5.3, #37), o `mentira.js` passa a carregar só com `?mentira=1` no endereço (R51).~~ *(30/09)* As rotas `/api/*` são contrato desde a R62 e estão no §6.1 da spec; o portal e o firmware seguem esse texto, não o `mentira.js`. Ele ainda responde às rotas antigas até a ligação do portal ao aparelho (tarefa 5.3, #37), que o atualiza e o faz carregar só com `?mentira=1` no endereço (R51).
+~~Enquanto o firmware não serve as páginas, `data/mentira.js` faz o papel do aparelho.~~ *(12/10: o firmware serve as páginas desde o pacote 1, #41, R67.)* Enquanto o portal não estiver ligado ao aparelho (tarefa 5.3, #37), `data/mentira.js` faz o papel do aparelho. ~~As rotas `/api/*` que ele responde são **provisórias** e não são contrato — o contrato fecha no `portal.cpp`, e está declarado como lacuna no §8 da spec. Desde 23/09, o contrato se escreve no §6 da spec (tarefa 5.2, #36), e, quando o portal for ligado ao aparelho (tarefa 5.3, #37), o `mentira.js` passa a carregar só com `?mentira=1` no endereço (R51).~~ *(30/09)* As rotas `/api/*` são contrato desde a R62 e estão no §6.1 da spec; o portal e o firmware seguem esse texto, não o `mentira.js`. Ele ainda responde às rotas antigas até a ligação do portal ao aparelho (tarefa 5.3, #37), que o atualiza e o faz carregar só com `?mentira=1` no endereço (R51).
 
 ## Banco
 
-O SQL do Supabase mora em `supabase/`, em arquivos numerados e aplicados pelo editor de SQL do painel. **Arquivo já aplicado não se edita:** mudança no banco vira o arquivo seguinte (`003-…`). Depois de aplicar qualquer um, rode `supabase/verificar.ps1`, que testa o banco com a chave do aparelho. O porquê está na spec (R33, R34, R35).
+O SQL do Supabase mora em `supabase/`, em arquivos numerados e aplicados pelo editor de SQL do painel. **Arquivo já aplicado não se edita:** mudança no banco vira o arquivo de número seguinte. Depois de aplicar qualquer um, rode `supabase/verificar.ps1`, que testa o banco com a chave do aparelho. O porquê está na spec (R33, R34, R35).
 
 ## Credenciais
 
-Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, com os campos em branco. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
+Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, sem credencial real: os campos do hotspot e do banco vêm em branco, e o nome e a senha da rede do aparelho vêm com valor de exemplo, para trocar. As contas de professor vivem em `data/professores.json`, gerado pelo `ferramentas/senha-professor.ps1` e também fora do git; o que é versionado é o `data/professores.example.json`. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
 
 ## Agent skills
 

@@ -19,6 +19,7 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
                           ↓
         modo AP: portal do professor (celular)
         modo STA: Supabase (roster + relatório)
+        os dois no ar ao mesmo tempo, no mesmo canal (R45)
 ```
 
 **Sensor:** RC522 (leitura de UID 13,56 MHz).
@@ -31,6 +32,8 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 |---|---|
 | [`docs/ambiente-de-trabalho.md`](docs/ambiente-de-trabalho.md) | Como preparar a máquina: clone, IA lendo o contexto do projeto, rotina de `git pull` |
 | [`docs/spec.md`](docs/spec.md) | Especificação completa: decisões, arquitetura, contrato de dados, plano de testes |
+| [`docs/padrao-editorial.md`](docs/padrao-editorial.md) | O padrão de escrita de todo texto que sai do projeto: entregas, relatório, diário, roteiro de vídeo |
+| [`docs/pauta-do-grupo.md`](docs/pauta-do-grupo.md) | A pauta de conversa de 08 a 10/09, já encerrada; as datas do corpo são as da época |
 | [`docs/entregas.md`](docs/entregas.md) | Os enunciados do professor e o que saiu em cada entrega |
 | [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral |
 | [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
@@ -46,9 +49,13 @@ Onde mora o código:
 | Onde | O quê |
 |---|---|
 | `src/<nome>/` | Um programa de bancada por pasta, com o ambiente de mesmo nome no `platformio.ini` (R28) |
+| `src/presente/` | O firmware de verdade, ambiente `presente`: pacotes 1 e 2 (o portal e o login, a lista da turma pela internet) |
 | `lib/<módulo>/` | O que dois programas dividem, com o nome do módulo do §5 da spec: `rfid`, `feedback`, `storage` |
+| `lib/config/` | Pinos e tempos do aparelho num lugar só (R66) |
 | `data/` | O portal do professor (HTML, CSS e JS). É desta pasta que sai a imagem de filesystem da placa (R27) |
 | `supabase/` | O SQL do banco, em arquivos numerados. Arquivo já aplicado não se edita (R33) |
+| `ferramentas/` | O script que gera as contas de professor (`senha-professor.ps1`) |
+| `include/` | O `secrets.example.h`, modelo das credenciais |
 
 ## Equipe
 
@@ -62,3 +69,5 @@ Este repositório é público. Credenciais vivem em `include/secrets.h`, que **n
 cp include/secrets.example.h include/secrets.h
 # preencha os campos
 ```
+
+As contas de professor ficam em `data/professores.json`, que também **não** é versionado: o `ferramentas/senha-professor.ps1` o gera, com o hash de cada senha. O que está no git é o `data/professores.example.json`.

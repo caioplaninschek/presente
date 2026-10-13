@@ -10,7 +10,7 @@ Issues and specs for this repo live as markdown files in `.scratch/`.
 
 - One feature per directory: `.scratch/<feature-slug>/`
 - The spec is `docs/spec.md` — a single spec for the whole project, not one per feature directory
-- Implementation issues are one file per ticket at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`, never a single combined tickets file
+- ~~Implementation issues are one file per ticket at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`, never a single combined tickets file~~ *(30/09: só ticket de decisão; tarefa de execução é issue do GitHub, AGENTS.md)*
 - Triage state is recorded as a `Status:` line near the top of each issue file (see `triage-labels.md` for the role strings)
 - Comments and conversation history live in the GitHub issue the ticket points at, not at the bottom of the file
 

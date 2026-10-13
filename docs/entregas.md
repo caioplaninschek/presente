@@ -10,12 +10,14 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | 14/09 | Projeto de desenvolvimento: programação planejada, lógica, conexões, plano de testes | ✅ entregue |
 | 22/09 23:59 | Integração sensor + atuador + testes documentados, com demonstração no laboratório | ✅ entregue e aprovada na demonstração |
 | ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório ~~em data a confirmar~~ na aula de 06/10, informal *(30/09)* | ✅ entregue em 06/10, postada pelos cinco no Teams *(informação do Caio, 10/10)* |
-| ~~05/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ |
+| ~~05/10~~ 13/10\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ⬜ alvo do grupo, sem enunciado *(12/10)* |
 | ~~20/10~~\*\* | Protótipo completo + vídeo de demonstração (2 minutos) | ⬜ |
 | ~~27/10~~\*\* | Exposição oficial na Semana da Computação | ⬜ |
 | ~~30/11~~\*\* | Relatório técnico completo + versão final aprimorada | ⬜ |
 
 \*\* **Adiamento de 22/09.** Na aula, o professor adiou a estrutura física de 29/09 para **06/10**, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana. A única data nova dita com certeza é 06/10, e o enunciado da estrutura física, recebido em 29/09, a confirmou. As outras não se somam de cabeça: uma semana depois de 05/10 cai no feriado de 12/10, e uma semana depois de 20/10 cai em 27/10, o dia da Semana da Computação, que é evento da universidade e pode não mudar. Cada data se confirma no enunciado.
+
+*(12/10, R69)* **O enunciado do dashboard não saiu**, embora devesse ter saído junto com a aula de 06/10, pelo atraso de uma semana avisado em 22/09. Sem ele, o grupo entrega o dashboard pela própria interpretação do cronograma de 05/09 ("Dashboard (ESP32 obrigatório) ou interface Serial/Processing"), com alvo na aula de terça, **13/10**. O que entra se decide na tarefa da entrega do dashboard (#52). A diferença para as outras linhas marcadas com \*\*: ~~05/10~~ era a data do cronograma; **13/10 é um alvo do grupo, e não um prazo de enunciado**. Se o enunciado sair, vale o dele.
 
 Requisitos obrigatórios do projeto integrador, válidos para todas as entregas: microcontrolador **ESP32**; mínimo de **2 sensores** (⚠️ **dispensado para este projeto** — o João acertou com o professor que o RC522 basta como sensor único; a exigência continua publicada no Teams, e a Entrega 03 declara a dispensa em uma linha no §4 para não ser lida como descumprimento — ver R18 na spec); mínimo de **1 atuador**; programação em **C/C++**; estrutura física; documentação completa; dashboard ou interface de monitoramento. Diário de bordo semanal obrigatório.
 
