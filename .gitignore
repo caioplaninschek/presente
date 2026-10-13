@@ -12,6 +12,7 @@ secrets.h
 src/secrets.h
 include/secrets.h
 data/professores.json
+historico/config.js
 .env
 *.pem
 *.key

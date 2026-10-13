@@ -1,0 +1,239 @@
+/* Presente! — página de histórico das aulas.
+
+   A paleta é a mesma do portal do professor, repetida aqui de propósito: o
+   `data/estilo.css` vai dentro da imagem de filesystem que sobe para a placa, e
+   esta página é publicada no GitHub Pages. Um arquivo só obrigaria um dos dois
+   a buscar o outro pela rede — e, na sala, a rede do aparelho não tem internet.
+
+   Cores da UVA: azul institucional e amarelo da marca, turquesa e magenta dos
+   materiais da universidade, escurecidos para o texto sobre eles passar no
+   contraste da WCAG AA. */
+:root {
+  --uva-azul: #0b5285;
+  --uva-amarelo: #ffc709;
+  --uva-turquesa: #0b7a64;
+  --uva-magenta: #c4006b;
+
+  --fundo: #f2f5f8;
+  --papel: #ffffff;
+  --tinta: #10263a;
+  --tinta-fraca: #55667a;
+  --borda: #d2dae3;
+  --borda-campo: #838f9c;
+  --acento: var(--uva-azul);
+  --alerta-fundo: #fff6d6;
+  --alerta-borda: var(--uva-amarelo);
+  --alerta-tinta: #6b5200;
+  --erro-fundo: #fdeaf3;
+  --erro-borda: #f0a8ca;
+  --toque: 3rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0d1922;
+    --papel: #15242f;
+    --tinta: #e8eef4;
+    --tinta-fraca: #96a6b6;
+    --borda: #2a3d4d;
+    --borda-campo: #6d8296;
+    --acento: #4a9ad4;
+    --alerta-fundo: #3a3016;
+    --alerta-tinta: #ffdf8a;
+    --erro-fundo: #3a1c2a;
+    --erro-borda: #7d3357;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 1rem 3rem;
+  background: var(--fundo);
+  color: var(--tinta);
+  font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+main { max-width: 60rem; margin: 0 auto; }
+
+/* ---------------------------------------------------------------- topo -- */
+
+.topo {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1.25rem 0 .75rem;
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.marca { margin: 0; font-size: 1.5rem; color: var(--acento); }
+.topo .sub { margin: 0; flex: 1; }
+.sub { color: var(--tinta-fraca); margin: .25rem 0 1rem; }
+
+h2 { margin: .5rem 0 .25rem; font-size: 1.25rem; }
+h2:focus-visible { outline: 2px solid var(--acento); outline-offset: 4px; }
+h3 { margin: 1.25rem 0 .5rem; font-size: 1rem; }
+.conta { color: var(--tinta-fraca); font-weight: 400; }
+
+/* --------------------------------------------------------- formulário -- */
+
+form { max-width: 24rem; }
+
+label { display: block; margin: .75rem 0 .25rem; font-weight: 600; }
+
+input {
+  width: 100%;
+  min-height: var(--toque);
+  padding: 0 .75rem;
+  font: inherit;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--borda-campo);
+  border-radius: .5rem;
+}
+
+input:focus-visible,
+button:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+.botao {
+  min-height: var(--toque);
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--borda-campo);
+  border-radius: .5rem;
+  cursor: pointer;
+}
+
+.botao.primario {
+  margin-top: 1rem;
+  width: 100%;
+  color: #fff;
+  background: var(--acento);
+  border-color: var(--acento);
+  font-weight: 600;
+}
+
+.botao.fantasma { background: none; border-color: transparent; color: var(--acento); padding: 0 .5rem; }
+.botao.fantasma:hover { text-decoration: underline; }
+.botao[disabled] { opacity: .55; cursor: default; }
+
+/* ------------------------------------------------------------- avisos -- */
+
+.erro {
+  margin: .75rem 0 0;
+  padding: .75rem;
+  background: var(--erro-fundo);
+  border: 1px solid var(--erro-borda);
+  border-radius: .5rem;
+}
+
+.aviso {
+  margin: .75rem 0 0;
+  padding: .75rem;
+  background: var(--alerta-fundo);
+  border: 1px solid var(--alerta-borda);
+  border-radius: .5rem;
+  color: var(--alerta-tinta);
+}
+
+.vazio { color: var(--tinta-fraca); font-style: italic; }
+
+.rodape {
+  max-width: 60rem;
+  margin: 2rem auto 0;
+  color: var(--tinta-fraca);
+  font-size: .85rem;
+}
+
+/* ------------------------------------------------------------ pílulas -- */
+
+.pilulas { display: flex; gap: .4rem; flex-wrap: wrap; margin: .5rem 0 0; }
+
+.pilula {
+  display: inline-block;
+  padding: .1rem .55rem;
+  font-size: .8rem;
+  border-radius: 999px;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  color: var(--tinta-fraca);
+}
+
+.pilula.atencao {
+  background: var(--alerta-fundo);
+  border-color: var(--alerta-borda);
+  color: var(--alerta-tinta);
+}
+
+.pilula.estado-finalizada { border-color: var(--uva-turquesa); color: var(--uva-turquesa); }
+.pilula.estado-aberta     { border-color: var(--acento);       color: var(--acento); }
+.pilula.estado-cancelada  { border-color: var(--uva-magenta);  color: var(--uva-magenta); text-decoration: line-through; }
+
+/* ---------------------------------------------------- lista de aulas --- */
+
+.lista-aulas { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+
+.cartao-aula {
+  display: grid;
+  gap: .15rem;
+  width: 100%;
+  padding: .85rem 1rem;
+  text-align: left;
+  font: inherit;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: .75rem;
+  cursor: pointer;
+}
+
+.cartao-aula:hover { border-color: var(--acento); }
+.cartao-aula .data { font-weight: 600; }
+.cartao-aula .quem,
+.cartao-aula .turma { color: var(--tinta-fraca); font-size: .9rem; }
+
+/* -------------------------------------------------- listas de pessoas -- */
+
+.colunas { display: grid; gap: 1rem 2rem; grid-template-columns: 1fr; }
+
+@media (min-width: 46rem) {
+  .colunas { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+
+.lista-pessoas { list-style: none; margin: 0; padding: 0; }
+
+.lista-pessoas li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 .5rem;
+  padding: .5rem .75rem;
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: .5rem;
+  margin-bottom: .4rem;
+}
+
+.lista-pessoas .nome { font-weight: 600; }
+.lista-pessoas .hora { color: var(--tinta-fraca); font-variant-numeric: tabular-nums; }
+
+.lista-pessoas .matricula,
+.lista-pessoas .motivo {
+  grid-column: 1 / -1;
+  color: var(--tinta-fraca);
+  font-size: .85rem;
+}
+
+.lista-pessoas .marca-manual {
+  justify-self: start;
+  padding: 0 .4rem;
+  font-size: .75rem;
+  border-radius: 999px;
+  background: var(--alerta-fundo);
+  border: 1px solid var(--alerta-borda);
+  color: var(--alerta-tinta);
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presente! — histórico das aulas</title>
+<meta name="description" content="As aulas registradas no banco do Presente!, com presentes e faltantes de cada uma.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <h1 class="marca">Presente!</h1>
+  <p class="sub">Histórico das aulas</p>
+  <button class="botao fantasma" id="acao-sair" type="button" hidden>Sair</button>
+</header>
+
+<main>
+
+  <!-- ------------------------------------------------------- 1. LOGIN ---- -->
+  <!--
+    A leitura do histórico exige login (R34). Sem ele a chave vale como papel
+    `anon`, que não lê tabela nenhuma: a página abriria vazia, de propósito.
+    As contas são criadas à mão pelo Caio — o cadastro público está desligado.
+  -->
+  <section class="tela" id="tela-login" aria-labelledby="titulo-login">
+    <h2 id="titulo-login" tabindex="-1">Entrar</h2>
+    <p class="sub">O histórico só se lê com login.</p>
+
+    <form id="form-login" autocomplete="on" novalidate>
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" autocomplete="username"
+             inputmode="email" required>
+
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+
+      <p class="erro" id="erro-login" role="alert" hidden></p>
+
+      <button class="botao primario" id="botao-entrar" type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <!-- ------------------------------------------------------- 2. AULAS ---- -->
+  <section class="tela" id="tela-aulas" hidden aria-labelledby="titulo-aulas">
+    <h2 id="titulo-aulas" tabindex="-1">Aulas</h2>
+    <p class="sub" id="aulas-resumo"></p>
+
+    <p class="erro" id="erro-aulas" role="alert" hidden></p>
+    <p class="vazio" id="vazio-aulas" hidden>Nenhuma aula registrada ainda.</p>
+
+    <ul class="lista-aulas" id="lista-aulas"></ul>
+  </section>
+
+  <!-- ---------------------------------------------------- 3. UMA AULA ---- -->
+  <section class="tela" id="tela-aula" hidden aria-labelledby="titulo-aula">
+    <button class="botao fantasma" id="acao-voltar" type="button">← Todas as aulas</button>
+
+    <h2 id="titulo-aula" tabindex="-1">Aula</h2>
+    <p class="sub" id="aula-cabecalho"></p>
+    <p class="pilulas" id="aula-pilulas"></p>
+
+    <p class="aviso" id="aula-nota" hidden></p>
+    <p class="erro" id="erro-aula" role="alert" hidden></p>
+
+    <div class="colunas">
+      <section aria-labelledby="titulo-presentes">
+        <h3 id="titulo-presentes">Presentes <span class="conta" id="conta-presentes"></span></h3>
+        <p class="vazio" id="vazio-presentes" hidden>Ninguém registrado nesta aula.</p>
+        <ul class="lista-pessoas" id="lista-presentes"></ul>
+      </section>
+
+      <section aria-labelledby="titulo-faltantes">
+        <h3 id="titulo-faltantes">Faltantes <span class="conta" id="conta-faltantes"></span></h3>
+        <p class="vazio" id="vazio-faltantes" hidden>Ninguém faltou.</p>
+        <ul class="lista-pessoas" id="lista-faltantes"></ul>
+      </section>
+    </div>
+  </section>
+
+</main>
+
+<p class="rodape">
+  Leitura apenas. Os dados vêm do banco do projeto e nada nesta página os altera.
+</p>
+
+<!--
+  O config.js não é versionado: ele é escrito pelo workflow do GitHub Actions a
+  partir dos segredos do repositório, e é só ali que a chave existe (R50). Para
+  rodar na própria máquina, copie o config.example.js para config.js e ponha os
+  valores — o .gitignore cuida para que ele não suba.
+-->
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

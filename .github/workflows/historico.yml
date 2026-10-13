@@ -1,0 +1,91 @@
+# Publica a página de histórico no GitHub Pages (R50).
+#
+# O que o workflow existe para fazer é uma coisa só: escrever o `config.js` com
+# a URL e a chave publicável vindas dos segredos do repositório, e só então
+# publicar a pasta. A chave nunca entra no git — é por isso que a publicação
+# não é o Pages apontado direto para a pasta, e sim este passo no meio.
+#
+# Antes da primeira publicação, quem é admin do repositório precisa de duas
+# coisas (as duas são do Caio):
+#   1. Settings › Pages › Source = "GitHub Actions".
+#   2. Settings › Secrets and variables › Actions, com os dois segredos abaixo.
+#
+# A chave fica visível para quem abrir a página publicada: é o custo assumido
+# na R50, e por isso ela é a publicável, que sozinha não lê nada — a leitura
+# exige login (R34).
+
+name: Página de histórico
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'historico/**'
+      - '.github/workflows/historico.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicação de cada vez, sem cancelar a que já começou: duas publicações
+# ao mesmo tempo deixariam no ar a que terminasse por último, que não é
+# necessariamente a mais nova.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacao.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir os segredos
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          # Sem isto a página subiria com a configuração vazia e só mostraria
+          # erro de login, sem dizer que o que faltou foi o segredo.
+          faltando=""
+          [ -z "$SUPABASE_URL" ] && faltando="$faltando SUPABASE_URL"
+          [ -z "$SUPABASE_PUBLISHABLE_KEY" ] && faltando="$faltando SUPABASE_PUBLISHABLE_KEY"
+          if [ -n "$faltando" ]; then
+            echo "Faltam segredos do repositório:$faltando" >&2
+            echo "Settings > Secrets and variables > Actions (R50)." >&2
+            exit 1
+          fi
+
+      - name: Montar o config.js
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          # jq escapa os valores: aspas ou barra invertida num segredo quebrariam
+          # o JavaScript se ele fosse montado com interpolação de shell.
+          jq -n \
+            --arg url "$SUPABASE_URL" \
+            --arg chave "$SUPABASE_PUBLISHABLE_KEY" \
+            '{url: $url, chave: $chave}' \
+            > /tmp/config.json
+          {
+            echo "/* Gerado pelo workflow da página de histórico. Não versionado (R50). */"
+            printf 'window.CONFIG = '
+            cat /tmp/config.json
+            echo ';'
+          } > historico/config.js
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: historico
+
+      - id: publicacao
+        uses: actions/deploy-pages@v4
