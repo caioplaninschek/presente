@@ -4,7 +4,7 @@ Terminal embarcado (ESP32 + RC522) para contabilização de presença em sala de
 
 A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualquer mudança de arquitetura, contrato JSON ou pinagem. **Quantas rodadas já fecharam, leia no cabeçalho da própria spec** — não confie em contagem escrita fora dela, aqui inclusive.
 
-O mapa de decisões está em `.scratch/presente/map.md`; hoje ele não tem decisão em aberto. Leia o mapa antes de trabalhar um ticket.
+O mapa de decisões está em `.scratch/presente/map.md`; hoje ele não tem ticket de decisão em aberto. Leia o mapa antes de trabalhar um ticket.
 
 Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`. **O prazo de cada entrega é o do enunciado.** Data que ainda não saiu de enunciado é provisória e se confere quando ele for publicado; não deduza prazo de dia da semana nem de turma.
 
