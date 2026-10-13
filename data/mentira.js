@@ -81,7 +81,24 @@
   var JANELA_DE_SILENCIO_MS = 5000;   // Q5, redefinida pela R30
 
   /* ---------------------------------------------- estado do aparelho ---- */
-  var st = zerar();
+  // O aparelho de verdade guarda a chamada nele, e não no celular: recarregar
+  // a página volta ao painel (R49). Aqui o "aparelho" mora na própria página,
+  // e por isso o estado vai para o sessionStorage quando ela sai e volta quando
+  // ela abre de novo. Fechar a aba apaga tudo, como desligar o aparelho.
+  var st = recuperar() || zerar();
+
+  function recuperar() {
+    try {
+      var guardado = JSON.parse(sessionStorage.getItem('presente-mentira'));
+      if (guardado) { guardado.relogio = null; guardado.busca = null; }
+      return guardado;
+    } catch (e) { return null; }
+  }
+
+  window.addEventListener('pagehide', function () {
+    try { sessionStorage.setItem('presente-mentira', JSON.stringify(st)); }
+    catch (e) { /* sem armazenamento, recarregar volta ao login */ }
+  });
 
   function zerar() {
     return {
@@ -98,7 +115,8 @@
       versao: 0,               // sobe a cada mudança nas listas (§6.1)
       hora: null,              // a hora do celular, que chega no login (§6.1)
       passo: 0,                // onde o roteiro de toques está
-      relogio: null            // id do temporizador dos toques
+      relogio: null,           // id do temporizador dos toques
+      busca: null              // id do temporizador da busca da turma
     };
   }
 
@@ -198,6 +216,20 @@
 
   function desligarLeitor() {
     if (st.relogio) { clearInterval(st.relogio); st.relogio = null; }
+  }
+
+  // A sincronização do R14: a resposta do login sai primeiro, e só então o
+  // aparelho vai atrás da lista da turma. É essa espera que a tela mostra.
+  function agendarBusca() {
+    if (st.busca) clearTimeout(st.busca);
+    st.busca = setTimeout(function () {
+      st.busca = null;
+      if (!st.autenticado) return;             // encerrou no meio da espera
+      if (mentira.sincronizaFalha) { st.modo = 'offline'; st.roster = null; }
+      else                         { st.modo = 'online';  st.roster = ALUNOS.slice(); }
+      st.sincronizando = false;
+      st.versao++;                           // a lista da turma chegou (§6.1)
+    }, mentira.esperaMs);
   }
 
   /* ------------------------------------------------------- relatório ---- */
@@ -329,16 +361,7 @@
       st.professor = achado;
       st.sincronizando = true;
 
-      // A sincronização do R14: a resposta do login sai primeiro, e só então o
-      // aparelho vai atrás da lista da turma. É essa espera que a tela mostra.
-      setTimeout(function () {
-        if (!st.autenticado) return;             // encerrou no meio da espera
-        if (mentira.sincronizaFalha) { st.modo = 'offline'; st.roster = null; }
-        else                         { st.modo = 'online';  st.roster = ALUNOS.slice(); }
-        st.sincronizando = false;
-        st.versao++;                           // a lista da turma chegou (§6.1)
-      }, mentira.esperaMs);
-
+      agendarBusca();
       return { ok: true, sincronizando: true };
     },
 
@@ -422,6 +445,9 @@
     'POST /api/encerrar': function () {
       // LGPD por desenho (§6): a lista da turma e os eventos morrem aqui.
       desligarLeitor();
+      // A busca em curso também: senão ela terminaria antes da hora a busca do
+      // próximo login.
+      if (st.busca) clearTimeout(st.busca);
       st = zerar();
       return { ok: true };
     }
@@ -438,6 +464,10 @@
     get: function (rota) { return despachar('GET', rota); },
     post: function (rota, corpo) { return despachar('POST', rota, corpo); }
   };
+  // Recarregada a página, o aparelho retoma o que ela interrompeu: o leitor
+  // da chamada aberta e a busca da turma em curso.
+  if (st.sessao && st.sessao.estado === 'aberta') ligarLeitor();
+  if (st.sincronizando) agendarBusca();
   window.mentira = mentira;
 
   /* Recado na tela de login, para quem abrir o arquivo saber com o que

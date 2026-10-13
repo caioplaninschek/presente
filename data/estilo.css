@@ -284,7 +284,7 @@ form .botao { margin-top: 1.25rem; }
   .fundo-modal { align-items: center; }
 }
 
-/* Nota dos dados de mentira: só existe enquanto o mentira.js existir. */
+/* Nota dos dados de mentira: só aparece com ?mentira=1, quando o mentira.js carrega. */
 .nota-mentira {
   margin-top: 2rem;
   padding: .625rem .75rem;

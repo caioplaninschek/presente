@@ -178,6 +178,7 @@
   // estado traz a `versao` corrente; enquanto ela não mudar, estas servem.
   var listas = null;
   var versaoDasListas = null;
+  var buscandoPresencas = false;   // um /api/presencas por vez: o aparelho atende um pedido de cada vez
 
   var TELAS = ['login', 'espera', 'painel', 'relatorio'];
 
@@ -209,6 +210,7 @@
 
   function falhouOAparelho() {
     enviandoAgora = false;
+    buscandoPresencas = false;
 
     // O que o pedido travou volta a aceitar toque: sem isto a nova tentativa
     // que a mensagem pede não seria possível.
@@ -242,9 +244,15 @@
       recado(aviso);
     }
 
-    // O modal fica por cima de tudo, e o que está atrás dele não se lê.
+    // O modal fica por cima de tudo, e o que está atrás dele não se lê: o
+    // aviso vai para dentro dele, se ele tem onde escrever, ou o modal fecha.
     var err = $('erro-manual');
-    if (err && !$('fundo-modal').hidden) { err.textContent = aviso; err.hidden = false; }
+    if (!$('fundo-modal').hidden) {
+      if (err) { err.textContent = aviso; err.hidden = false; }
+      // A caixa do relatório (a saída do Compartilhar) não depende do
+      // aparelho e fica aberta, para o professor terminar de copiar.
+      else if (modalAoConfirmar !== fecharModal) fecharModal();
+    }
   }
 
   function aparelhoRespondeu() {
@@ -393,11 +401,24 @@
   }
 
   $('botao-seguir-offline').addEventListener('click', function () {
-    enviar('/api/seguir-offline', {}).then(function () { mostrar('painel'); });
+    enviar('/api/seguir-offline', {}).then(function (r) {
+      if (r.erro) {
+        recadoDaEspera('O aparelho não aceitou seguir sem a lista. Espere alguns segundos e toque de novo.');
+        return;
+      }
+      mostrar('painel');
+    });
   });
 
   $('botao-voltar-login').addEventListener('click', function () {
-    enviar('/api/encerrar', {}).then(function () { irParaLogin(); });
+    enviar('/api/encerrar', {}).then(function (r) {
+      // Recusado, a tela fica (R40), e o Seguir sem a lista continua valendo.
+      if (r.erro) {
+        recadoDaEspera('O aparelho não voltou ao login. Toque em Seguir sem a lista.');
+        return;
+      }
+      irParaLogin();
+    });
   });
 
   /* ------------------------------------------------------ 3. PAINEL ----- */
@@ -424,9 +445,18 @@
       // mudou — e ele atende um pedido de cada vez.
       if (listas && e.versao === versaoDasListas) { pintarRelatorio(e); return; }
 
+      if (buscandoPresencas) return;
+      buscandoPresencas = true;
       pedir('/api/presencas').then(function (p) {
+        buscandoPresencas = false;
         if (telaAtual !== 'relatorio') return;
-        if (!p || p.erro) return;
+        if (!p || p.erro) {
+          $('relatorio-recado').textContent = 'O aparelho não mandou a lista de presenças. ' +
+                                              'Esta tela tenta de novo em alguns segundos.';
+          $('relatorio-recado').hidden = false;
+          return;
+        }
+        $('relatorio-recado').hidden = true;
         listas = p;
         versaoDasListas = (p.versao === undefined) ? e.versao : p.versao;
         pintarRelatorio(e);
@@ -674,8 +704,14 @@
       corpo.appendChild(texto('p', 'sub',
         'Se o relatório ainda não foi enviado, salve com Compartilhar antes.'));
     }, 'Encerrar', function () {
-      enviar('/api/encerrar', {}).then(function () {
+      enviar('/api/encerrar', {}).then(function (r) {
         fecharModal();
+        // Recusado, o painel fica (R40): voltar ao login com a chamada ainda
+        // no aparelho enganaria o professor.
+        if (r.erro) {
+          recado('O aparelho não encerrou a chamada. Espere alguns segundos e toque de novo.');
+          return;
+        }
         irParaLogin();
       });
     });
@@ -690,6 +726,8 @@
     // de uma chamada que acabou, e o próximo professor não pode vê-las.
     listas = null;
     versaoDasListas = null;
+    // Um /api/presencas que recebeu 401 nunca responde, e a trava ficaria presa.
+    buscandoPresencas = false;
     recado('');
     mostrar('login');
   }
@@ -776,7 +814,10 @@
   // a falha tem de ser lida.
   function comecar() {
     mostrar('login');
+    // O Entrar fica travado até a resposta, para o login não cruzar com ela.
+    $('botao-entrar').disabled = true;
     pedir('/api/estado').then(function (e) {
+      $('botao-entrar').disabled = false;
       if (!e || !e.autenticado) return;
       mostrar(e.sincronizando ? 'espera' : 'painel');
     });
