@@ -5,9 +5,10 @@
  * encostando no leitor, para as três telas rodarem no navegador sem depender
  * do ESP32 (issue #20). Os dados são inventados e moram neste arquivo.
  *
- * Quando o firmware existir, este arquivo e a linha que o carrega no
- * index.html são apagados: o `app.js` passa a falar por `fetch()` com o
- * aparelho de verdade e nada mais muda.
+ * Este arquivo fica no repositório: é o jeito de testar o portal sem placa.
+ * Com a ligação do portal ao aparelho (#37), ele passa a carregar só com
+ * `?mentira=1` no endereço (R51); sem isso, o `app.js` fala por `fetch()` com
+ * o aparelho de verdade.
  *
  * Para experimentar, com a página aberta, pelo console do navegador:
  *   mentira.esperaMs = 14000     // uma espera longa, com o hotspot lento

@@ -164,8 +164,9 @@
 
 <!--
   mentira.js é o aparelho de mentira: responde as mesmas rotas que o firmware
-  vai responder e simula os crachás encostando. Apagar este arquivo e a linha
-  abaixo é o que troca o protótipo pelo aparelho de verdade.
+  responde e simula os crachás encostando. Ele fica no repositório e continua
+  sendo o jeito de testar o portal sem placa; a ligação do portal ao aparelho
+  de verdade (#37) o faz carregar só com ?mentira=1 no endereço (R51).
 -->
 <script src="mentira.js"></script>
 <script src="app.js"></script>

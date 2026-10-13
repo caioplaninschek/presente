@@ -3,8 +3,10 @@
 //
 // Das nove rotas do secao 6.1, os pacotes 1 e 2 tem tres: POST /api/login,
 // GET /api/estado e POST /api/seguir-offline. Qualquer outra rota de /api/, e
-// metodo errado nessas tres, recebe 404 ROTA_DESCONHECIDA. Iniciar, Enviar e
-// Encerrar chegam nos pacotes seguintes (#45, #47).
+// metodo errado nessas tres, recebe 404 ROTA_DESCONHECIDA. As seis que faltam
+// chegam nos pacotes seguintes: POST /api/iniciar, POST /api/manual e
+// GET /api/presencas no pacote 3 (#45); GET /api/relatorio, POST /api/enviar e
+// POST /api/encerrar no pacote 4 (#47).
 //
 // A BUSCA DA TURMA (#43)
 //

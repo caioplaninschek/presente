@@ -102,8 +102,9 @@ void bipar(unsigned long duracaoMs) {
   duracaoDoBip = duracaoMs;
   buzzerLigado = true;
   digitalWrite(PINO_BUZZER, HIGH);  // buzzer ativo: nivel alto ja e som.
-  // Buzzer passivo so estala com nivel constante; e a hipotese da R44 para o
-  // som fraco de 21/09, a conferir na peca antes de mexer aqui.
+  // Buzzer passivo so estala com nivel constante; era a hipotese da R44 para o
+  // som fraco de 21/09. A R54 dispensou a conferencia: a compra e de buzzer
+  // ativo de 5 V, e este codigo nao muda.
 }
 
 bool bipando() {
