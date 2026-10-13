@@ -6,9 +6,10 @@
  * do ESP32 (issue #20). Os dados são inventados e moram neste arquivo.
  *
  * Este arquivo fica no repositório: é o jeito de testar o portal sem placa.
- * Com a ligação do portal ao aparelho (#37), ele passa a carregar só com
- * `?mentira=1` no endereço (R51); sem isso, o `app.js` fala por `fetch()` com
- * o aparelho de verdade.
+ * Ele só carrega com `?mentira=1` no endereço (R51) — quem o traz é o
+ * `app.js`, e não uma tag do HTML; sem isso, o portal fala por `fetch()` com o
+ * aparelho de verdade. As rotas aqui seguem o contrato do §6.1 da spec (R62),
+ * que é o mesmo que o `portal.cpp` segue do outro lado.
  *
  * Para experimentar, com a página aberta, pelo console do navegador:
  *   mentira.esperaMs = 14000     // uma espera longa, com o hotspot lento
@@ -94,6 +95,8 @@
       registrados: {},         // uid -> true, para a regra de uma presença por sessão
       ultimaLeitura: {},       // uid -> instante, para a janela de silêncio
       ultimo: null,            // o que aconteceu no último toque
+      versao: 0,               // sobe a cada mudança nas listas (§6.1)
+      hora: null,              // a hora do celular, que chega no login (§6.1)
       passo: 0,                // onde o roteiro de toques está
       relogio: null            // id do temporizador dos toques
     };
@@ -118,6 +121,13 @@
     return TURMA + '-' +
            u.getUTCFullYear() + pad(u.getUTCMonth() + 1) + pad(u.getUTCDate()) + '-' +
            pad(u.getUTCHours()) + pad(u.getUTCMinutes());
+  }
+
+  // ISO-8601 com fuso, como o §6.1 pede. O aparelho de verdade confere o
+  // formato, e não o valor: relógio de celular errado é problema de quem o
+  // configurou, não do aparelho.
+  function horaValida(h) {
+    return typeof h === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/.test(h);
   }
 
   function alunoPorUid(uid) {
@@ -167,6 +177,7 @@
     if (aluno) { evento.matricula = aluno.matricula; evento.nome = aluno.nome; }
 
     st.eventos.push(evento);
+    st.versao++;
     st.registrados[uid] = true;
     st.ultimo = { tipo: 'REGISTRADO', nome: aluno ? aluno.nome : null, uid: uid, timestamp: evento.timestamp };
   }
@@ -222,11 +233,12 @@
     return rel;
   }
 
-  // O recorte que as telas leem. O relatório do §7 é o de cima; este é a
-  // mesma verdade arrumada para a tela, e é o que o portal vai buscar no
-  // polling do painel.
+  // O recorte que o painel lê, de 2 em 2 s. Ele não traz lista nenhuma (§6.1):
+  // as contagens vêm prontas, e quem quiser os nomes pede o /api/presencas.
+  // Foi essa separação que a R62 fez, para o aparelho não remontar quarenta
+  // nomes a cada batida do painel.
   function montarEstado() {
-    var e = {
+    return {
       autenticado: st.autenticado,
       sincronizando: st.sincronizando,
       modo: st.modo,
@@ -237,10 +249,26 @@
       total_alunos: st.roster ? st.roster.length : null,
       sessao: st.sessao ? { sessaoId: st.sessao.sessaoId, estado: st.sessao.estado, inicio: st.sessao.inicio } : null,
       ultimo: st.ultimo,
-      presentes: [],
-      faltantes: [],
-      sem_nome: []
+      n_presentes: st.roster ? contarPresentes() : null,
+      n_eventos: st.eventos.length,
+      versao: st.versao
     };
+  }
+
+  // Quantas matrículas da turma já apareceram. Sem a lista não há o que
+  // contar: o que existe são eventos, e quem os conta é o `n_eventos`.
+  function contarPresentes() {
+    var n = 0;
+    for (var i = 0; i < st.roster.length; i++) {
+      if (matriculaPresente(st.roster[i].matricula)) n++;
+    }
+    return n;
+  }
+
+  // As listas que a tela do relatório desenha. O portal só as pede nessa tela,
+  // e só quando a `versao` do estado muda (§6.1).
+  function montarPresencas() {
+    var r = { versao: st.versao, presentes: [], faltantes: [], sem_nome: [] };
 
     if (st.roster) {
       for (var i = 0; i < st.roster.length; i++) {
@@ -249,24 +277,25 @@
           if (st.eventos[j].matricula === a.matricula) { achado = st.eventos[j]; break; }
         }
         if (achado) {
-          e.presentes.push({
+          r.presentes.push({
             matricula: a.matricula, nome: a.nome, timestamp: achado.timestamp,
             origem: achado.origem, lancado_por: achado.lancado_por || null, motivo: achado.motivo || null
           });
         } else {
-          e.faltantes.push({ matricula: a.matricula, nome: a.nome });
+          r.faltantes.push({ matricula: a.matricula, nome: a.nome });
         }
       }
-      e.presentes.sort(function (x, y) { return x.timestamp < y.timestamp ? -1 : 1; });
+      r.presentes.sort(function (x, y) { return x.timestamp < y.timestamp ? -1 : 1; });
     } else {
+      // Sem a lista, um item por evento: o nome só existe no envio (R3).
       for (var k = 0; k < st.eventos.length; k++) {
-        e.sem_nome.push({
+        r.sem_nome.push({
           uid: st.eventos[k].uid || null, matricula: st.eventos[k].matricula || null,
           timestamp: st.eventos[k].timestamp, origem: st.eventos[k].origem
         });
       }
     }
-    return e;
+    return r;
   }
 
   /* ----------------------------------------------------------- rotas ---- */
@@ -274,12 +303,20 @@
 
     'GET /api/estado': function () { return montarEstado(); },
 
+    'GET /api/presencas': function () {
+      if (!st.autenticado) return { erro: 'SEM_LOGIN' };
+      return montarPresencas();
+    },
+
     'GET /api/relatorio': function () {
       if (!st.sessao) return { erro: 'SEM_SESSAO' };
       return montarRelatorio();
     },
 
     'POST /api/login': function (corpo) {
+      // A hora do celular vem junto (§6.1). Ela ausente ou malformada não
+      // impede o login: o aparelho espera a do Iniciar.
+      if (corpo.hora) st.hora = corpo.hora;
       var achado = null;
       for (var i = 0; i < PROFESSORES.length; i++) {
         if (PROFESSORES[i].usuario === corpo.usuario && PROFESSORES[i].senha === corpo.senha) {
@@ -299,6 +336,7 @@
         if (mentira.sincronizaFalha) { st.modo = 'offline'; st.roster = null; }
         else                         { st.modo = 'online';  st.roster = ALUNOS.slice(); }
         st.sincronizando = false;
+        st.versao++;                           // a lista da turma chegou (§6.1)
       }, mentira.esperaMs);
 
       return { ok: true, sincronizando: true };
@@ -308,15 +346,23 @@
     // manda a aula acontecer assim mesmo (R3, HU-31).
     'POST /api/seguir-offline': function () {
       if (!st.autenticado) return { erro: 'SEM_LOGIN' };
+      // Se a lista já chegou, ela fica, e o modo continua online (§6.1):
+      // jogar fora uma lista que está na mão seria perder os nomes à toa.
+      if (st.roster) {
+        st.sincronizando = false;
+        return { ok: true, modo: 'online' };
+      }
       st.modo = 'offline';
-      st.roster = null;
       st.sincronizando = false;
-      return { ok: true };
+      return { ok: true, modo: 'offline' };
     },
 
-    'POST /api/iniciar': function () {
+    'POST /api/iniciar': function (corpo) {
       if (!st.autenticado) return { erro: 'SEM_LOGIN' };
       if (st.sessao) return { erro: 'SESSAO_JA_ABERTA' };
+      // O aparelho não tem relógio de bateria: é esta hora que data a chamada
+      // (§6.1), e sem ela não há sessão que se possa gravar.
+      if (!horaValida(corpo.hora)) return { erro: 'HORA_INVALIDA' };
       var agora = new Date();
       st.sessao = { sessaoId: sessaoIdDe(agora), estado: 'aberta', inicio: iso(agora) };
       ligarLeitor();                              // o leitor passa a valer
@@ -352,22 +398,25 @@
       // segundo evento para a mesma matrícula (R30). Sem a lista ele não tem
       // como ligar matrícula a UID: grava os dois, e a API junta no envio.
       if (aluno) st.registrados[aluno.uid] = true;
+      st.versao++;
 
       return { ok: true };
     },
 
     'POST /api/enviar': function () {
       if (!st.sessao) return { erro: 'SEM_SESSAO' };
-      // A idempotência do R20: sessão finalizada recusa o segundo POST, e é
-      // isso que impede o relatório duplicado quando o professor clica duas
-      // vezes (HU-39).
-      if (st.sessao.estado === 'finalizada') return { erro: 'JA_ENVIADO' };
+      // A idempotência do R20, do jeito que a R62 a escreveu: a chamada já
+      // fechada responde `ja_enviado` e não vai à internet. Responder 200, e
+      // não um erro, é o que impede o portal de chamar de falha o segundo
+      // toque do professor (HU-39).
+      if (st.sessao.estado === 'finalizada') return { resultado: 'ja_enviado' };
       if (mentira.envioFalha) return { erro: 'SEM_INTERNET' };
 
       st.sessao.estado = 'finalizada';
       st.sessao.fim = iso(new Date());
       desligarLeitor();
-      return { ok: true };
+      st.versao++;
+      return { resultado: 'gravado' };
     },
 
     'POST /api/encerrar': function () {
@@ -394,12 +443,20 @@
   /* Recado na tela de login, para quem abrir o arquivo saber com o que
      entrar. Vive aqui de propósito: apagado o mentira.js, o recado some
      junto e o portal de verdade não nasce com dica de senha na tela. */
-  document.addEventListener('DOMContentLoaded', function () {
+  function escreverRecado() {
     var alvo = document.getElementById('nota-de-mentira');
     if (!alvo) return;
     alvo.className = 'nota-mentira';
     alvo.innerHTML = 'Dados de mentira, sem aparelho nenhum atrás. ' +
       'Entre com <code>prof02</code> / <code>uva2026</code>.';
-  });
+  }
+
+  // Quem carrega este arquivo é o app.js, já com a página montada: esperar o
+  // DOMContentLoaded aqui seria esperar um evento que já passou.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', escreverRecado);
+  } else {
+    escreverRecado();
+  }
 
 })();

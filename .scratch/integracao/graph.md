@@ -74,6 +74,6 @@ Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* d
 
 ## Riscos acrescentados em 12/10
 
-9. **A ligação do portal (#37) e a página de histórico (#38) não têm andamento.** Sem a #37, o portal servido pelo aparelho ainda fala com o aparelho de mentira (`data/mentira.js`), e não com o aparelho de verdade. Isso pesa na entrega do dashboard (#52, R69), cujo alvo é a aula de 13/10.
+9. ~~**A ligação do portal (#37) e a página de histórico (#38) não têm andamento.** Sem a #37, o portal servido pelo aparelho ainda fala com o aparelho de mentira (`data/mentira.js`), e não com o aparelho de verdade. Isso pesa na entrega do dashboard (#52, R69), cujo alvo é a aula de 13/10.~~ *(13/10: a #37 saiu — o portal fala por `fetch` com o aparelho, no §6.1, e o `mentira.js` só carrega com `?mentira=1`. Com isso, as rodadas dos pacotes 1 e 2 na placa (#42, #44) deixam de esperar por ela. A página de histórico (#38) está escrita e espera o Caio habilitar o GitHub Pages e pôr os segredos.)*
 10. **A ida à placa das rodadas dos pacotes 1 e 2 (#42, #44) segue sem data.** As rodadas seguintes (#46, #48, #50) ficam sem data atrás dela, porque a #46 depende também da #44 (R70).
 11. **A limpeza dos dados de teste (#51) pode ter de esperar a página de histórico (#38),** se ela usar as aulas `teste-` (passo 1 da #51). Apagar as aulas antes tiraria da página o que ela precisa para ser testada.

@@ -56,7 +56,8 @@
       <button class="botao primario" type="submit" id="botao-entrar">Entrar</button>
     </form>
 
-    <!-- Preenchido pelo mentira.js. Some sozinho quando o aparelho for real. -->
+    <!-- Preenchido pelo mentira.js, que só carrega com ?mentira=1 (R51). Sem
+       isso, fica vazio e nada aparece. -->
     <div id="nota-de-mentira"></div>
   </section>
 
@@ -74,7 +75,8 @@
       <h1 id="titulo-espera">Carregando turma…</h1>
       <p class="sub" id="espera-explica">
         O aparelho está buscando a lista da turma na internet.
-        A rede dele pode sair do ar por alguns segundos — o celular reconecta sozinho.
+        A rede dele fica no ar, mas ele pode demorar alguns segundos para
+        responder enquanto busca.
       </p>
       <p class="contador"><span id="espera-segundos">0</span> s</p>
       <p class="aviso-vivo" id="espera-recado" role="status" aria-live="polite"></p>
@@ -103,7 +105,7 @@
 
     <div class="cartao" id="painel-resumo">
       <div class="linha-estado">
-        <span class="pilula" id="pilula-sessao">Sessão fechada</span>
+        <span class="pilula" id="pilula-sessao">Chamada não começou</span>
         <span class="pilula" id="pilula-modo"></span>
       </div>
       <p class="contagem" id="painel-contagem"></p>
@@ -118,7 +120,7 @@
       <button class="botao"          id="acao-manual"      type="button">Adicionar presença manual</button>
       <button class="botao"          id="acao-exibir"      type="button">Exibir relatório</button>
       <button class="botao"          id="acao-compartilhar" type="button">Compartilhar relatório</button>
-      <button class="botao"          id="acao-enviar"      type="button">Enviar relatório</button>
+      <button class="botao"          id="acao-enviar"      type="button">Enviar e fechar a chamada</button>
       <button class="botao perigo"   id="acao-encerrar"    type="button">Encerrar</button>
     </div>
   </section>
@@ -163,12 +165,12 @@
 </div>
 
 <!--
-  mentira.js é o aparelho de mentira: responde as mesmas rotas que o firmware
-  responde e simula os crachás encostando. Ele fica no repositório e continua
-  sendo o jeito de testar o portal sem placa; a ligação do portal ao aparelho
-  de verdade (#37) o faz carregar só com ?mentira=1 no endereço (R51).
+  Só o app.js entra aqui. O mentira.js — o aparelho de mentira, que responde as
+  mesmas rotas do firmware e simula os crachás encostando — continua no
+  repositório e continua sendo o jeito de testar o portal sem placa, mas quem o
+  carrega é o app.js, e só com ?mentira=1 no endereço (R51). Uma tag fixa nesta
+  página o levaria para dentro do aparelho de verdade.
 -->
-<script src="mentira.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
