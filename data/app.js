@@ -138,23 +138,17 @@
 
   // A hora do celular, que o aparelho não tem: ele não leva relógio de
   // bateria, e é o `hora` do login e do Iniciar que ancora os horários da
-  // chamada (§6.1). ISO-8601 em -03:00, como o resto do contrato.
+  // chamada (§6.1). Quem converte para -03:00 é o portal, e é o que se faz
+  // aqui: o instante sai do relógio do celular, e os campos se escrevem no
+  // horário de Brasília, mesmo que o celular esteja noutro fuso. O -03:00 fixo
+  // vale porque o Brasil não tem horário de verão desde 2019; se voltar a ter,
+  // é esta linha que muda.
   function horaDoCelular() {
-    var d = new Date();
+    var t = new Date(Date.now() - 3 * 60 * 60 * 1000);   // Brasília nos campos UTC
     function p(n) { return (n < 10 ? '0' : '') + n; }
-    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
-           'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds()) +
-           fusoDoCelular(d);
-  }
-
-  // O aparelho espera -03:00 (§6.1), mas quem abre o portal pode estar com o
-  // celular noutro fuso; mandar -03:00 fixo gravaria a hora errada.
-  function fusoDoCelular(d) {
-    var min = -d.getTimezoneOffset();
-    var sinal = min < 0 ? '-' : '+';
-    min = Math.abs(min);
-    function p(n) { return (n < 10 ? '0' : '') + n; }
-    return sinal + p(Math.floor(min / 60)) + ':' + p(min % 60);
+    return t.getUTCFullYear() + '-' + p(t.getUTCMonth() + 1) + '-' + p(t.getUTCDate()) +
+           'T' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes()) + ':' + p(t.getUTCSeconds()) +
+           '-03:00';
   }
 
   /* ------------------------------------------------------------ atalhos -- */
