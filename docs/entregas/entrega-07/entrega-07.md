@@ -1,5 +1,7 @@
 # Entrega 07 — Dashboard
 
+> **Não entregue (14/10, R71, R72).** Na aula de 13/10 o professor disse que o dashboard não tem entrega própria e vai na entrega final de 27/10. Este documento, escrito pelo Igor em 13/10, não foi entregue e fica como base da parte do dashboard na entrega final. O texto abaixo não se reescreve; o Quadro 2 é a situação de 13/10.
+
 > **Documento desta entrega, pronto para diagramar.** O texto abaixo substitui o `entrega-07-rascunho.md` e segue a forma da Entrega 06: capa, resumo com palavras-chave, sumário, seções numeradas, figuras e quadros com legenda acima e fonte abaixo.
 >
 > **Para quem diagrama.** As figuras estão em `docs/assets/dashboard/`, com o nome que cada legenda cita. As capturas de tela são verticais, de celular, e ficam legíveis a cerca de 8 cm de largura, duas por linha; o Quadro 2 é o único elemento largo. O sumário fica sem número de página, que só existe depois da diagramação. Esta entrega não cita obra de terceiros, e por isso não leva a seção de referências que a Entrega 06 tem.

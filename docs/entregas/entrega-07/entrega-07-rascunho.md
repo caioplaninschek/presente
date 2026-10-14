@@ -1,5 +1,7 @@
 # Entrega 07: dashboard
 
+> **Não entregue (14/10, R71, R72).** O dashboard vai na entrega final de 27/10, sem entrega própria. Este rascunho foi substituído pelo `entrega-07.md`, que também não foi entregue e fica como base da parte do dashboard na entrega final.
+
 ## Capa
 
 UNIVERSIDADE VEIGA DE ALMEIDA

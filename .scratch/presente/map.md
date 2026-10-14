@@ -1,11 +1,11 @@
-# Mapa: Presente! até 30/11
+# Mapa: Presente! até 27/10
 
 Label: `wayfinder:map`
 Criado: 2026-09-06
 
 ## Destination
 
-**30/11/2026 — o Presente! entregue e funcionando:** protótipo físico montado, firmware, portal do professor, API na nuvem, mais a documentação completa — tendo passado por ~~todos os 8 marcos do professor (07/09 · 14/09 · 22/09 · 29/09 · 05/10 · 20/10 · 27/10 · 30/11)~~ *(12/10: lista com data velha; as datas de cada marco vivem em `docs/entregas.md`)* todos os marcos do professor ⚠️ **Em 22/09 o professor adiou a estrutura física para 06/10** e avisou que as entregas seguintes andam cerca de uma semana; as datas novas saem de cada enunciado (`docs/entregas.md`).
+~~**30/11/2026**~~ *(14/10, R71: a entrega final passou a ser 27/10; não há entrega em 30/11)* **27/10/2026 — o Presente! entregue e funcionando:** protótipo físico montado, firmware, portal do professor, API na nuvem, mais a documentação completa — tendo passado por ~~todos os 8 marcos do professor (07/09 · 14/09 · 22/09 · 29/09 · 05/10 · 20/10 · 27/10 · 30/11)~~ *(12/10: lista com data velha; as datas de cada marco vivem em `docs/entregas.md`)* todos os marcos do professor ⚠️ **Em 22/09 o professor adiou a estrutura física para 06/10** e avisou que as entregas seguintes andam cerca de uma semana; as datas novas saem de cada enunciado (`docs/entregas.md`).
 
 O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir. O roteiro de execução não sai daqui: sai do `/to-spec` + `/to-tickets` depois.
 
@@ -47,11 +47,11 @@ O mapa fecha quando não sobrar nada a **decidir** antes de alguém ir construir
 
 Névoa em escopo, ainda sem nitidez para virar ticket:
 
-- **Apresentação da Semana da Computação (27/10, data provisória, sem enunciado do professor *(10/10)*).** Quem fala, o que é demonstrado ao vivo, e qual o plano B se a demo falhar na hora. Só dá para decidir com o protótipo de pé. Tem epic desde 23/09: #54.
-- **Vídeo de 2 minutos (20/10, data provisória, sem enunciado do professor *(10/10)*).** Roteiro, quem grava, quem edita, o que aparece. Depende do protótipo estar montado. Tem epic desde 23/09: #53.
-- **Relatório técnico ABNT (30/11, data provisória, sem enunciado do professor *(10/10)*).** Ferramenta, estrutura, quem consolida, e como as decisões da spec viram texto acadêmico. Depende de quase tudo. Tem epic desde 23/09: #55.
+- **Apresentação da Semana da Computação (~~27/10, data provisória, sem enunciado do professor *(10/10)*~~ *(14/10, R71: 27/10, entrega final, dita pelo professor em aula; sem enunciado escrito)*).** Quem fala, o que é demonstrado ao vivo, e qual o plano B se a demo falhar na hora. Só dá para decidir com o protótipo de pé. Tem epic desde 23/09: #54.
+- **Vídeo de 2 minutos (~~20/10, data provisória, sem enunciado do professor *(10/10)*~~ *(14/10, R71: não há entrega em 20/10; o vídeo vai na entrega final de 27/10)*).** Roteiro, quem grava, quem edita, o que aparece. Depende do protótipo estar montado. Tem epic desde 23/09: #53.
+- **Relatório técnico ABNT (~~30/11, data provisória, sem enunciado do professor *(10/10)*~~ *(14/10, R71: não há entrega em 30/11; o relatório vai na entrega final de 27/10)*).** Ferramenta, estrutura, quem consolida, e como as decisões da spec viram texto acadêmico. Depende de quase tudo. Tem epic desde 23/09: #55.
 - ~~**Dados de teste.** Quantos alunos fictícios, com que nomes, e como as tags físicas são atribuídas a eles. Fica nítido quando o Supabase existir.~~ Graduou em 11/09: os dados entram no banco pela #21, e os UIDs das tags reais saem da leitura na #25 (13/09).
-- ~~**Design e usabilidade do portal do professor.** Provável ticket de `prototype` quando o firmware servir a primeira página.~~ *(12/10: o pacote 1 serve o portal; as telas saíram da #20, e o ajuste ao aparelho de verdade é a ligação do portal (#37))*
+- ~~**Design e usabilidade do portal do professor.** Provável ticket de `prototype` quando o firmware servir a primeira página.~~ *(12/10: o pacote 1 serve o portal; as telas saíram da #20, e o ajuste ao aparelho de verdade é a ligação do portal (#37))* *(14/10: a #37 fechou)*
 - **Instalação na sala para a demo.** Tomada disponível, fixação, autorização da UVA para prender algo na parede. Pode virar `task` perto de 27/10.
 
 ## Out of scope

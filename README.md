@@ -35,7 +35,7 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [`docs/padrao-editorial.md`](docs/padrao-editorial.md) | O padrão de escrita de todo texto que sai do projeto: entregas, relatório, diário, roteiro de vídeo |
 | [`docs/pauta-do-grupo.md`](docs/pauta-do-grupo.md) | A pauta de conversa de 08 a 10/09, já encerrada; as datas do corpo são as da época |
 | [`docs/entregas.md`](docs/entregas.md) | Os enunciados do professor e o que saiu em cada entrega |
-| [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral |
+| [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral. A pasta `entrega-07` não foi entregue e é base da entrega final *(14/10, R72)* |
 | [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
