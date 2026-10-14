@@ -248,6 +248,10 @@ size_t totalDeAlunos() {
   return carregada ? lista.as<JsonArrayConst>().size() : 0;
 }
 
+JsonArrayConst alunos() {
+  return carregada ? lista.as<JsonArrayConst>() : JsonArrayConst();
+}
+
 void abandonar() {
   if (fase == Fase::PARADA) {
     return;

@@ -5,8 +5,8 @@
 //
 // Este modulo e o embriao do storage.cpp da secao 5 da spec. Dela, ja existem o
 // append de eventos, quem ja esta registrado na sessao (R30), a leitura dos
-// professores (#41) e a lista da turma em disco (#43). O sessao_atual.json
-// (R16) nao -- e lacuna declarada no secao 8.
+// professores (#41), a lista da turma em disco (#43) e, desde o pacote 3 (#45),
+// o sessao_atual.json (R16) e os eventos da chamada (lib/storage/sessao.cpp).
 //
 // ---------------------------------------------------------------------------
 // O FORMATO DO ARQUIVO -- uma linha por evento, nao um array
@@ -40,9 +40,10 @@
 // como R36 e R37 na rodada 12 da spec (15/09).
 //
 // O campo de horario chama-se ms_desde_boot e NAO timestamp. O timestamp do
-// secao 7 e ISO-8601 com fuso e vem do navegador do professor no Iniciar, que
-// ainda nao existe (clock.cpp, secao 5). Gravar milissegundos numa chave
-// chamada timestamp faria o contrato mentir para quem lesse o arquivo.
+// secao 7 e ISO-8601 com fuso e vem do navegador do professor no Iniciar
+// (src/presente/clock.cpp, desde o pacote 3), convertido so na saida. Gravar
+// milissegundos numa chave chamada timestamp faria o contrato mentir para quem
+// lesse o arquivo.
 // ---------------------------------------------------------------------------
 
 #ifndef STORAGE_H
@@ -124,6 +125,30 @@ bool gravarRoster(const JsonDocument& lista);
 
 // Devolve true tambem quando nao havia arquivo.
 bool apagarRoster();
+
+const char CAMINHO_DA_SESSAO[] = "/sessao_atual.json";
+
+// A chamada do firmware (#45, R74), em lib/storage/sessao.cpp. O registrar()
+// acima e das bancadas, com linha de 128 bytes e so uid, ms_desde_boot e origem;
+// o evento da chamada leva matricula, nome, lancado_por e motivo. Como
+// lerProfessores(), nenhuma destas monta o LittleFS (R41).
+
+// Grava o /sessao_atual.json (R16). Devolve false se nao terminou; nesse caso,
+// nao deixa arquivo pela metade.
+bool gravarSessao(const JsonDocument& sessao);
+
+// Uma linha no /eventos.json, terminada em \n, por acrescimo (R36). Devolve
+// false se nao escreveu a linha inteira, ou se ela nao caberia na releitura.
+bool acrescentarEvento(const JsonDocument& evento);
+
+// Apaga o /eventos.json e o /sessao_atual.json de uma chamada anterior, ou das
+// bancadas. Devolve true tambem quando nao havia arquivo.
+bool apagarChamada();
+
+// Le o /eventos.json uma linha por vez e chama aoLer com cada linha legivel. A
+// linha que nao e JSON (a cortada por uma queda de energia) e pulada. Devolve
+// quantas linhas passaram para aoLer; sem o arquivo, 0.
+size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento));
 
 }  // namespace storage
 

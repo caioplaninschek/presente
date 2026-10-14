@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <ArduinoJson.h>
 #include <stddef.h>
 
 namespace net {
@@ -27,6 +28,10 @@ bool comLista();
 
 // Alunos na lista; 0 sem ela.
 size_t totalDeAlunos();
+
+// A lista da turma como esta na memoria, para a chamada (#45) consultar sem
+// copiar: cada aluno com matricula, nome e uid (rpc/roster). Vazia sem a lista.
+JsonArrayConst alunos();
 
 // O professor desistiu de esperar (seguir offline): sai do hotspot, sem a
 // lista. Sem busca em curso, nao faz nada.

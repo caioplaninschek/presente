@@ -49,3 +49,12 @@ constexpr unsigned long LIMITE_DA_CONEXAO_SEGURA_MS = 4000;  // valor de partida
 constexpr unsigned long LIMITE_DA_RESPOSTA_MS = 4000;        // valor de partida, a calibrar na placa (secao 8)
 // O azul lento de SINCRONIZANDO: aceso e apagado por este tempo cada.
 constexpr unsigned long PISCADA_LENTA_MS = 500;              // valor de partida, a calibrar na placa (secao 8)
+
+// --- Tempos do sinal da chamada (pacote 3, #45, R74) ---------------
+// O sinal do toque no secao 5. A piscada verde e o bip sao os do encostou (#26),
+// que continua com as constantes dele: o codigo das bancadas nao muda.
+constexpr unsigned long BIP_DO_REGISTRO_MS = 100;            // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long PISCADA_VERDE_ACESA_MS = 90;         // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long PISCADA_VERDE_APAGADA_MS = 90;       // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long VERMELHO_DO_NAO_RECONHECIDO_MS = 1000;  // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long BUZZ_DO_NAO_RECONHECIDO_MS = 400;    // valor de partida, a calibrar na placa (secao 8)
