@@ -62,9 +62,11 @@ char horaDoInicio[relogio::TAMANHO_DA_HORA];
 Toque toque;
 bool houveToque = false;
 
+// strncmp: a chave guardada se corta em MATRICULA_MAX, e a matricula da lista,
+// que vem do banco, pode ser maior.
 bool jaPresente(const char* chave) {
   for (size_t i = 0; i < total; i++) {
-    if (strcmp(presencas[i], chave) == 0) {
+    if (strncmp(presencas[i], chave, MATRICULA_MAX) == 0) {
       return true;
     }
   }
@@ -114,6 +116,7 @@ Veredito decidir() {
       return Veredito::NAO_RECONHECIDO;  // fora da lista: nada gravado
     }
     toque.nome = aluno["nome"];
+    toque.matricula = matricula;
     chave = matricula;
   }
 
@@ -202,6 +205,7 @@ Veredito encostou(const rfid::Uid& uid, unsigned long msDesdeBoot) {
   }
   rfid::formatarUid(uid, toque.uid, sizeof(toque.uid));
   toque.nome = nullptr;
+  toque.matricula = nullptr;
   toque.msDesdeBoot = msDesdeBoot;
   toque.tipo = decidir();
   houveToque = true;

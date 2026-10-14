@@ -1,10 +1,12 @@
-// presente/main.cpp -- o firmware de verdade (R51), pacotes 1 e 2 (#41, #43).
+// presente/main.cpp -- o firmware de verdade (R51), pacotes 1 a 3 (#41, #43,
+// #45).
 //
 // O aparelho poe a rede propria no ar, o portal cativo abre a pagina gravada
 // em data/, e o professor entra com a senha conferida por hash e recebe o
 // cookie sessao. Depois do login, o aparelho busca a lista da turma pelo
-// hotspot do professor (net.cpp). O leitor de cracha e o envio chegam nos
-// pacotes seguintes (#45 a #49).
+// hotspot do professor (net.cpp). O Iniciar abre a chamada, e o cracha
+// encostado e o lancamento manual a registram (chamada.cpp). O relatorio e o
+// envio chegam nos pacotes seguintes (#47 a #49).
 //
 // Os pinos, a turma e o endereco do aparelho vem do lib/config/config.h (R66);
 // o nome e a senha da rede, do secrets.h.
@@ -21,6 +23,7 @@
 #include <LittleFS.h>
 #include <WiFi.h>
 #include <feedback.h>
+#include <rfid.h>
 #include <secrets.h>
 #include <storage.h>
 
@@ -38,10 +41,20 @@ StaticJsonDocument<4096> professores;
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Presente! - firmware, pacote 2 (#43)");
+  Serial.println("Presente! - firmware, pacote 3 (#45)");
 
   feedback::iniciar();
   feedback::acender(feedback::Cor::AZUL);  // AGUARDANDO_LOGIN
+
+  // Sem o leitor, a chamada funciona so pelo lancamento manual.
+  rfid::iniciar();
+  const byte versao = rfid::versaoDoLeitor();
+  if (rfid::leitorRespondeu()) {
+    Serial.printf("RC522 respondeu - VersionReg = 0x%02X\n", versao);
+  } else {
+    Serial.printf("RC522 nao respondeu - VersionReg = 0x%02X\n", versao);
+    Serial.println("  Confira 3,3 V no RC522, o RST no pino 22 e o SDA no pino 5.");
+  }
 
   const bool montado = LittleFS.begin(false);
   if (!montado) {

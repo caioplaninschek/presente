@@ -1,12 +1,19 @@
-// presente/portal.cpp -- pacotes 1 e 2 do firmware (#41, #43): o portal dentro
-// do aparelho.
+// presente/portal.cpp -- pacotes 1 a 3 do firmware (#41, #43, #45): o portal
+// dentro do aparelho.
 //
-// Das nove rotas do secao 6.1, os pacotes 1 e 2 tem tres: POST /api/login,
-// GET /api/estado e POST /api/seguir-offline. Qualquer outra rota de /api/, e
-// metodo errado nessas tres, recebe 404 ROTA_DESCONHECIDA. As seis que faltam
-// chegam nos pacotes seguintes: POST /api/iniciar, POST /api/manual e
-// GET /api/presencas no pacote 3 (#45); GET /api/relatorio, POST /api/enviar e
-// POST /api/encerrar no pacote 4 (#47).
+// Das nove rotas do secao 6.1, os pacotes 1 a 3 tem seis: POST /api/login,
+// GET /api/estado, POST /api/seguir-offline, POST /api/iniciar, POST /api/manual
+// e GET /api/presencas. Qualquer outra rota de /api/, e metodo errado nessas
+// seis, recebe 404 ROTA_DESCONHECIDA. As tres que faltam chegam no pacote 4
+// (#47): GET /api/relatorio, POST /api/enviar e POST /api/encerrar.
+//
+// A CHAMADA (#45)
+//
+// O Iniciar abre a chamada (chamada.cpp) e passa a SESSAO_ABERTA, com o verde
+// fixo. So nesse estado o leitor e consultado (R74): o cracha encostado antes do
+// Iniciar nao tem sinal nenhum. A decisao do toque e do chamada::; aqui fica o
+// sinal do secao 5 e a linha do serial, que leva o UID e a matricula, nunca o
+// nome do aluno (R74).
 //
 // A BUSCA DA TURMA (#43)
 //
@@ -32,13 +39,20 @@
 #include <config.h>
 #include <feedback.h>
 #include <mbedtls/sha256.h>
+#include <rfid.h>
+#include <storage.h>
 
+#include "chamada.h"
+#include "clock.h"
 #include "net.h"
 
 namespace portal {
 namespace {
 
-enum class Estado { AGUARDANDO_LOGIN, SINCRONIZANDO, AGUARDANDO_INICIAR };
+enum class Estado { AGUARDANDO_LOGIN, SINCRONIZANDO, AGUARDANDO_INICIAR, SESSAO_ABERTA };
+
+// O alvo do secao 5 para o intervalo do encostar ate o sinal.
+const unsigned long ALVO_DO_TOQUE_MS = 200;
 
 WebServer server(80);
 
@@ -60,6 +74,44 @@ void responderErro(int status, const char* codigo) {
   char corpo[48];
   snprintf(corpo, sizeof(corpo), "{\"erro\":\"%s\"}", codigo);
   responderJson(status, corpo);
+}
+
+// Junta os bytes do serializeJson antes de manda-los ao celular: sem isto, cada
+// caractere iria num write() proprio.
+class Saida : public Print {
+ public:
+  size_t write(uint8_t c) override {
+    pedaco[usados++] = c;
+    if (usados == sizeof(pedaco)) {
+      despejar();
+    }
+    return 1;
+  }
+
+  void despejar() {
+    if (usados > 0) {
+      server.sendContent(pedaco, usados);
+      usados = 0;
+    }
+  }
+
+ private:
+  char pedaco[256];
+  size_t usados = 0;
+};
+
+// Escreve o documento direto para o celular, com o tamanho medido antes: sem
+// buffer de saida, a resposta nunca sai cortada.
+void responderDocumento(int status, const JsonDocument& doc) {
+  server.setContentLength(measureJson(doc));
+  server.send(status, "application/json", "");
+  Saida saida;
+  serializeJson(doc, saida);
+  saida.despejar();
+}
+
+const char* professorId() {
+  return (*contas)[professorAtual]["id"];
 }
 
 bool comLogin() {
@@ -109,8 +161,8 @@ void aoLogin() {
     return;
   }
 
-  // A hora vem no corpo e e ignorada: o relogio e do pacote 3, e a hora do
-  // login, do pacote 5 (R62, item 3).
+  // A hora vem no corpo e e ignorada: o relogio se acerta no Iniciar (#45), e a
+  // hora do login e do pacote 5 (R62, item 3).
   const char* usuario = corpo["usuario"];
   const char* senha = corpo["senha"];
   if (usuario == nullptr || senha == nullptr) {
@@ -159,8 +211,25 @@ void aoLogin() {
   }
 }
 
+const char* codigoDoVeredito(chamada::Veredito veredito) {
+  switch (veredito) {
+    case chamada::Veredito::REGISTRADO:    return "REGISTRADO";
+    case chamada::Veredito::JA_REGISTRADO: return "JA_REGISTRADO";
+    default:                               return "NAO_RECONHECIDO";
+  }
+}
+
+// Sobe a cada evento gravado e quando a lista da turma chega (secao 6.1); nao
+// sobe com JA_REGISTRADO nem com NAO_RECONHECIDO, que nao gravam nada.
+unsigned long versao() {
+  return (net::comLista() ? 1 : 0) + chamada::eventos();
+}
+
 void aoEstado() {
-  StaticJsonDocument<512> doc;
+  // O nome do aluno vem do banco, sem limite de tamanho: os textos entram como
+  // const char*, sem copia, e o overflowed() avisa se o documento encheu.
+  StaticJsonDocument<768> doc;
+  char horaDoUltimo[relogio::TAMANHO_DA_HORA];
 
   if (!comLogin()) {
     doc["autenticado"] = false;
@@ -181,8 +250,8 @@ void aoEstado() {
     doc["sessao"] = nullptr;
     doc["ultimo"] = nullptr;
     doc["n_presentes"] = nullptr;
-    doc["n_eventos"] = 0;
-    doc["versao"] = 0;
+    doc["n_eventos"] = chamada::eventos();
+    doc["versao"] = versao();
 
     // Atribuir a uma chave que ja existe troca o valor no lugar.
     if (sincronizando) {
@@ -191,14 +260,34 @@ void aoEstado() {
       doc["modo"] = "online";
       doc["roster_carregado"] = true;
       doc["total_alunos"] = net::totalDeAlunos();
-      doc["n_presentes"] = 0;
-      doc["versao"] = 1;  // sobe quando a lista chega (secao 6.1)
+      doc["n_presentes"] = chamada::presentes();
+    }
+
+    if (chamada::aberta()) {
+      JsonObject sessao = doc.createNestedObject("sessao");
+      sessao["sessaoId"] = chamada::sessaoId();
+      sessao["estado"] = "aberta";
+      sessao["inicio"] = chamada::inicio();
+    }
+
+    const chamada::Toque* toque = chamada::ultimo();
+    if (toque != nullptr) {
+      JsonObject ultimo = doc.createNestedObject("ultimo");
+      ultimo["tipo"] = codigoDoVeredito(toque->tipo);
+      ultimo["nome"] = toque->nome;
+      ultimo["uid"] = static_cast<const char*>(toque->uid);
+      if (relogio::formatar(toque->msDesdeBoot, horaDoUltimo, sizeof(horaDoUltimo))) {
+        ultimo["timestamp"] = static_cast<const char*>(horaDoUltimo);
+      } else {
+        ultimo["timestamp"] = nullptr;
+      }
     }
   }
 
-  char saida[512];
-  serializeJson(doc, saida, sizeof(saida));
-  responderJson(200, saida);
+  if (doc.overflowed()) {
+    Serial.println("O /api/estado nao coube no documento de 768 bytes: a resposta saiu incompleta.");
+  }
+  responderDocumento(200, doc);
 }
 
 // A primeira rota que exige o cookie (secao 6.1).
@@ -212,6 +301,168 @@ void aoSeguirOffline() {
   net::abandonar();
   responderJson(200, net::comLista() ? "{\"ok\":true,\"modo\":\"online\"}"
                                      : "{\"ok\":true,\"modo\":\"offline\"}");
+}
+
+void aoIniciar() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+  // Durante a busca o modo ainda nao existe; o SESSAO_JA_ABERTA nao serve aqui,
+  // porque o portal o trata como sucesso (R74).
+  if (estado == Estado::SINCRONIZANDO) {
+    Serial.println("Iniciar recusado: AINDA_SINCRONIZANDO.");
+    responderErro(400, "AINDA_SINCRONIZANDO");
+    return;
+  }
+
+  // Corpo ilegivel ou sem a hora: hora nula, e o abrir() responde HORA_INVALIDA.
+  StaticJsonDocument<128> corpo;
+  deserializeJson(corpo, server.arg("plain"));
+  switch (chamada::abrir(corpo["hora"], professorId(), millis())) {
+    case chamada::Abertura::JA_ABERTA:
+      Serial.println("Iniciar recusado: SESSAO_JA_ABERTA.");
+      responderErro(400, "SESSAO_JA_ABERTA");
+      return;
+    case chamada::Abertura::HORA_INVALIDA:
+      Serial.println("Iniciar recusado: HORA_INVALIDA.");
+      responderErro(400, "HORA_INVALIDA");
+      return;
+    case chamada::Abertura::ABERTA:
+      break;
+  }
+
+  estado = Estado::SESSAO_ABERTA;
+  feedback::acender(feedback::Cor::VERDE);
+
+  StaticJsonDocument<192> resposta;
+  resposta["ok"] = true;
+  JsonObject sessao = resposta.createNestedObject("sessao");
+  sessao["sessaoId"] = chamada::sessaoId();
+  sessao["estado"] = "aberta";
+  sessao["inicio"] = chamada::inicio();
+  responderDocumento(200, resposta);
+}
+
+void aoManual() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+
+  // Sem copia (char*): o motivo pode vir de qualquer tamanho, e o lancar() o
+  // corta. Corpo ilegivel: matricula nula, e o lancar() responde MATRICULA_VAZIA.
+  String texto = server.arg("plain");
+  StaticJsonDocument<128> corpo;
+  deserializeJson(corpo, texto.begin());
+
+  const char* nome = nullptr;
+  const chamada::Lancamento resultado =
+      chamada::lancar(corpo["matricula"], corpo["motivo"], professorId(), millis(), nome);
+
+  const char* codigo = nullptr;
+  switch (resultado) {
+    case chamada::Lancamento::ACEITO:
+      Serial.printf("Manual aceito: %s\n", corpo["matricula"].as<const char*>());
+      responderJson(200, "{\"ok\":true}");
+      return;
+    case chamada::Lancamento::JA_PRESENTE: {
+      Serial.println("Manual recusado: JA_PRESENTE.");
+      StaticJsonDocument<64> resposta;
+      resposta["erro"] = "JA_PRESENTE";
+      resposta["nome"] = nome;
+      responderDocumento(400, resposta);
+      return;
+    }
+    case chamada::Lancamento::SEM_SESSAO:      codigo = "SEM_SESSAO"; break;
+    case chamada::Lancamento::MATRICULA_VAZIA: codigo = "MATRICULA_VAZIA"; break;
+    case chamada::Lancamento::FORA_DA_TURMA:   codigo = "FORA_DA_TURMA"; break;
+    case chamada::Lancamento::NAO_GRAVADO:     codigo = "NAO_GRAVADO"; break;  // R74
+  }
+  Serial.printf("Manual recusado: %s.\n", codigo);
+  responderErro(400, codigo);
+}
+
+// O /api/presencas sai em pedacos, um item por vez (R74): com 40 nomes a
+// resposta passa de 5 KB, e a R62 tirou as listas do /api/estado por isso.
+// O percorrerEventos() pede um ponteiro de funcao, sem captura; dai a saida e a
+// virgula guardadas aqui.
+Saida* saidaDasPresencas = nullptr;
+bool primeiroItem = true;
+
+void escreverItem(const JsonDocument& item) {
+  if (!primeiroItem) {
+    saidaDasPresencas->write(',');
+  }
+  primeiroItem = false;
+  serializeJson(item, *saidaDasPresencas);
+}
+
+void escreverEvento(JsonObjectConst evento) {
+  char hora[relogio::TAMANHO_DA_HORA];
+  StaticJsonDocument<256> item;
+  const bool manual = strcmp(evento["origem"] | "", "manual") == 0;
+  if (!net::comLista()) {
+    item["uid"] = evento["uid"].as<const char*>();
+  }
+  item["matricula"] = evento["matricula"].as<const char*>();
+  if (net::comLista()) {
+    item["nome"] = evento["nome"].as<const char*>();
+  }
+  if (relogio::formatar(evento["ms_desde_boot"].as<unsigned long>(), hora, sizeof(hora))) {
+    item["timestamp"] = static_cast<const char*>(hora);
+  } else {
+    item["timestamp"] = nullptr;
+  }
+  item["origem"] = evento["origem"].as<const char*>();
+  if (net::comLista()) {
+    item["lancado_por"] = manual ? evento["lancado_por"].as<const char*>() : nullptr;
+    item["motivo"] = manual ? evento["motivo"].as<const char*>() : nullptr;
+  }
+  escreverItem(item);
+}
+
+void aoPresencas() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  server.send(200, "application/json", "");
+  Saida saida;
+  saidaDasPresencas = &saida;
+
+  saida.printf("{\"versao\":%lu,\"presentes\":[", versao());
+  // Antes do Iniciar o arquivo nao se le: pode ser de outra chamada, ou das
+  // bancadas (R74).
+  primeiroItem = true;
+  if (net::comLista() && chamada::aberta()) {
+    storage::percorrerEventos(escreverEvento);
+  }
+
+  saida.print("],\"faltantes\":[");
+  primeiroItem = true;
+  for (JsonObjectConst aluno : net::alunos()) {
+    const char* matricula = aluno["matricula"];
+    if (!chamada::presente(matricula)) {
+      StaticJsonDocument<64> item;
+      item["matricula"] = matricula;
+      item["nome"] = aluno["nome"].as<const char*>();
+      escreverItem(item);
+    }
+  }
+
+  saida.print("],\"sem_nome\":[");
+  primeiroItem = true;
+  if (!net::comLista() && chamada::aberta()) {
+    storage::percorrerEventos(escreverEvento);
+  }
+  saida.print("]}");
+
+  saida.despejar();
+  saidaDasPresencas = nullptr;
+  // O WebServer fecha a resposta em pedacos sozinho, ao fim do pedido.
 }
 
 const char* tipoDoArquivo(const String& caminho) {
@@ -240,8 +491,7 @@ void mandarParaOLogin() {
   server.send(302);
 }
 
-// Tudo o que nao e POST /api/login, GET /api/estado nem POST /api/seguir-offline
-// cai aqui.
+// Tudo o que nao e uma das seis rotas registradas no iniciar() cai aqui.
 void aoResto() {
   const String caminho = server.uri();
 
@@ -268,6 +518,48 @@ void aoResto() {
   mandarParaOLogin();
 }
 
+// O cracha, so em SESSAO_ABERTA. A janela de silencio de 5 s esta no
+// lerTagNova() (R30), e a piscada volta sozinha ao verde fixo.
+void lerCracha() {
+  rfid::Uid uid;
+  if (!rfid::lerTagNova(uid)) {
+    return;
+  }
+  const unsigned long leituraVoltouEm = micros();
+
+  const chamada::Veredito veredito = chamada::encostou(uid, millis());
+  switch (veredito) {
+    case chamada::Veredito::REGISTRADO:
+      feedback::piscar(feedback::Cor::VERDE, 2, PISCADA_VERDE_ACESA_MS, PISCADA_VERDE_APAGADA_MS);
+      feedback::bipar(BIP_DO_REGISTRO_MS);
+      break;
+    case chamada::Veredito::JA_REGISTRADO:
+      feedback::piscar(feedback::Cor::VERDE, 1, PISCADA_VERDE_ACESA_MS, PISCADA_VERDE_APAGADA_MS);
+      break;
+    case chamada::Veredito::NAO_RECONHECIDO:
+      feedback::piscar(feedback::Cor::VERMELHO, 1, VERMELHO_DO_NAO_RECONHECIDO_MS, 0);
+      feedback::bipar(BUZZ_DO_NAO_RECONHECIDO_MS);
+      break;
+  }
+  const unsigned long feedbackComecouEm = micros();
+
+  // Os dois tempos do encostou (#26): "decidir" vai da leitura ao sinal, e
+  // "toque->feedback" inclui a conversa com o leitor e e o que responde ao alvo
+  // do secao 5, como piso (R38).
+  const chamada::Toque* toque = chamada::ultimo();
+  Serial.printf("%s  %s", toque->uid, codigoDoVeredito(veredito));
+  if (toque->matricula != nullptr) {
+    Serial.printf("  matricula %s", toque->matricula);
+  }
+  const unsigned long toqueAteFeedbackUs = feedbackComecouEm - rfid::inicioDaLeituraUs();
+  Serial.printf("  decidir: %.1f ms  toque->feedback: %.1f ms",
+                (feedbackComecouEm - leituraVoltouEm) / 1000.0, toqueAteFeedbackUs / 1000.0);
+  if (toqueAteFeedbackUs > ALVO_DO_TOQUE_MS * 1000UL) {
+    Serial.printf("  ACIMA DOS %lu ms", ALVO_DO_TOQUE_MS);
+  }
+  Serial.println();
+}
+
 }  // namespace
 
 void iniciar(const JsonDocument& professores, bool littlefsMontado) {
@@ -279,6 +571,9 @@ void iniciar(const JsonDocument& professores, bool littlefsMontado) {
   server.on("/api/login", HTTP_POST, aoLogin);
   server.on("/api/estado", HTTP_GET, aoEstado);
   server.on("/api/seguir-offline", HTTP_POST, aoSeguirOffline);
+  server.on("/api/iniciar", HTTP_POST, aoIniciar);
+  server.on("/api/manual", HTTP_POST, aoManual);
+  server.on("/api/presencas", HTTP_GET, aoPresencas);
   server.onNotFound(aoResto);
   server.begin();
 }
@@ -293,6 +588,8 @@ void atender() {
       // O azul lento sem mexer na lib/feedback: uma piscada por vez, rearmada aqui.
       feedback::piscar(feedback::Cor::AZUL, 1, PISCADA_LENTA_MS, PISCADA_LENTA_MS);
     }
+  } else if (estado == Estado::SESSAO_ABERTA) {
+    lerCracha();
   }
   server.handleClient();
 }

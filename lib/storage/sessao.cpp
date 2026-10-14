@@ -23,6 +23,10 @@ namespace {
 // gravada (acrescentarEvento).
 const size_t LINHA_MAX = 512;
 
+// Uma escrita que parou no meio deixa um pedaco sem \n. A linha seguinte comeca
+// numa linha nova: colada nele, as duas se perderiam na releitura.
+bool linhaPelaMetade = false;
+
 // Le uma linha ate o \n, como o lerLinha() do storage.cpp. Devolve false no fim
 // do arquivo; completa diz se a linha terminou em \n de verdade.
 bool lerLinha(File& arquivo, char* destino, size_t tamanho, bool& completa) {
@@ -86,15 +90,24 @@ bool acrescentarEvento(const JsonDocument& evento) {
   if (!arquivo) {
     return false;
   }
+  if (linhaPelaMetade && arquivo.write('\n') != 1) {
+    arquivo.close();
+    return false;
+  }
+  linhaPelaMetade = false;
   const size_t escritos = serializeJson(evento, arquivo);
   // O \n marca a linha como completa (R36).
   const size_t quebra = arquivo.write('\n');
   arquivo.close();
-  return escritos == tamanho && quebra == 1;
+  linhaPelaMetade = escritos != tamanho || quebra != 1;
+  return !linhaPelaMetade;
 }
 
 bool apagarChamada() {
   const bool eventos = apagar(CAMINHO_DOS_EVENTOS);
+  if (eventos) {
+    linhaPelaMetade = false;
+  }
   const bool sessao = apagar(CAMINHO_DA_SESSAO);
   return eventos && sessao;
 }

@@ -21,7 +21,8 @@ enum class Lancamento { ACEITO, SEM_SESSAO, MATRICULA_VAZIA, FORA_DA_TURMA, JA_P
 struct Toque {
   Veredito tipo;
   char uid[rfid::UID_TEXTO_TAMANHO];
-  const char* nome;  // da lista da turma; nullptr sem ela ou fora dela
+  const char* nome;       // da lista da turma; nullptr sem ela ou fora dela
+  const char* matricula;  // idem, para o serial, que nao leva nome (R74)
   unsigned long msDesdeBoot;
 };
 
