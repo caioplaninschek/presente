@@ -49,7 +49,7 @@ Onde mora o código:
 | Onde | O quê |
 |---|---|
 | `src/<nome>/` | Um programa de bancada por pasta, com o ambiente de mesmo nome no `platformio.ini` (R28) |
-| `src/presente/` | O firmware de verdade, ambiente `presente`: pacotes 1 e 2 (o portal e o login, a lista da turma pela internet) |
+| `src/presente/` | O firmware de verdade, ambiente `presente`: pacotes 1 a 3 (o portal e o login, a lista da turma pela internet, a chamada) |
 | `lib/<módulo>/` | O que dois programas dividem, com o nome do módulo do §5 da spec: `rfid`, `feedback`, `storage` |
 | `lib/config/` | Pinos e tempos do aparelho num lugar só, fora os três pinos do barramento do leitor, que o `SPI.begin()` já define (R66) |
 | `data/` | O portal do professor (HTML, CSS e JS). É desta pasta que sai a imagem de filesystem da placa (R27) |

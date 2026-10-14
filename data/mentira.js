@@ -383,6 +383,7 @@
     'POST /api/iniciar': function (corpo) {
       if (!st.autenticado) return { erro: 'SEM_LOGIN' };
       if (st.sessao) return { erro: 'SESSAO_JA_ABERTA' };
+      if (st.sincronizando) return { erro: 'AINDA_SINCRONIZANDO' };
       // O aparelho não tem relógio de bateria: é esta hora que data a chamada
       // (§6.1), e sem ela não há sessão que se possa gravar.
       if (!horaValida(corpo.hora)) return { erro: 'HORA_INVALIDA' };
@@ -413,7 +414,7 @@
         timestamp: iso(new Date()),
         origem: 'manual',
         lancado_por: st.professor.id,
-        motivo: (corpo.motivo || '').trim() || 'não informado'
+        motivo: (corpo.motivo || '').trim() || null
       });
 
       // Com a lista, o aparelho sabe o UID de quem foi lançado à mão, e o
