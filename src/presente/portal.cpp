@@ -80,6 +80,7 @@ bool comPortal = false;
 
 Estado estado = Estado::AGUARDANDO_LOGIN;
 int professorAtual = -1;  // posicao no professores.json; -1 antes do primeiro login
+int quemEntrou = -1;      // o ultimo login: o lancado_por do manual (R78)
 
 // Um token so, criado a cada login e guardado so na memoria (R62): o login
 // seguinte troca o token, e o reinicio o perde.
@@ -209,14 +210,19 @@ void aoLogin() {
 
   snprintf(token, sizeof(token), "%08x%08x", esp_random(), esp_random());
 
-  // Fora de AGUARDANDO_LOGIN, o login so devolve um token: estado e professor
-  // ficam como estao, sem busca nova, e o professor volta a chamada em curso
-  // (R49).
+  // Fora de AGUARDANDO_LOGIN, o login so devolve um token: o estado fica como
+  // esta, sem busca nova, e o professor volta a chamada em curso (R49). Outra
+  // conta tambem entra (R78): a chamada iniciada continua de quem a iniciou, que
+  // e o nome do painel, e o manual leva o id de quem entrou por ultimo; antes do
+  // Iniciar, quem entra assume o painel.
   const bool buscar = estado == Estado::AGUARDANDO_LOGIN;
   if (buscar) {
     estado = Estado::SINCRONIZANDO;
+  }
+  if (!chamada::iniciada()) {
     professorAtual = encontrado;
   }
+  quemEntrou = encontrado;
   Serial.printf("Login aceito: %s.\n", usuario);
 
   char cookie[48];
@@ -381,7 +387,7 @@ void aoManual() {
 
   const char* nome = nullptr;
   const chamada::Lancamento resultado =
-      chamada::lancar(corpo["matricula"], corpo["motivo"], professorId(), millis(), nome);
+      chamada::lancar(corpo["matricula"], corpo["motivo"], (*contas)[quemEntrou]["id"], millis(), nome);
 
   const char* codigo = nullptr;
   switch (resultado) {
@@ -591,6 +597,7 @@ void aoEncerrar() {
   }
   token[0] = '\0';  // o cookie deixa de valer
   professorAtual = -1;
+  quemEntrou = -1;
   estado = Estado::AGUARDANDO_LOGIN;
   feedback::acender(feedback::Cor::AZUL);
   Serial.println("Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.");
