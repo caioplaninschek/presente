@@ -347,6 +347,10 @@ void aoIniciar() {
       Serial.println("Iniciar recusado: HORA_INVALIDA.");
       responderErro(400, "HORA_INVALIDA");
       return;
+    case chamada::Abertura::NAO_APAGOU:  // o motivo, o chamada.cpp ja disse (R77)
+      Serial.println("Iniciar recusado: NAO_GRAVADO.");
+      responderErro(400, "NAO_GRAVADO");
+      return;
     case chamada::Abertura::ABERTA:
       break;
   }

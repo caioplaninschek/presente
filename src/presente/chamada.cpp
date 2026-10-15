@@ -180,6 +180,15 @@ Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeB
     return Abertura::HORA_INVALIDA;
   }
 
+  // O Iniciar comeca do zero (R74): os arquivos de uma chamada anterior, ou das
+  // bancadas, nao entram nesta. Se nao apagam, o Iniciar e recusado antes de
+  // mudar qualquer coisa da chamada (R77): abrir por cima misturaria as duas, e
+  // o Enviar mandaria ao banco as presencas da anterior com o sessaoId novo.
+  if (!storage::apagarChamada()) {
+    Serial.println("Nao consegui apagar os arquivos da chamada anterior: o Iniciar foi recusado.");
+    return Abertura::NAO_APAGOU;
+  }
+
   // Do texto da hora ja validada: AAAA, MM, DD, HH e MM (secao 7).
   snprintf(id, sizeof(id), "%s-%.4s%.2s%.2s-%.2s%.2s", TURMA, hora, hora + 5, hora + 8, hora + 11,
            hora + 14);
@@ -191,12 +200,6 @@ Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeB
   total = 0;
   gravados = 0;
   houveToque = false;
-
-  // O Iniciar comeca do zero (R74): os arquivos de uma chamada anterior, ou das
-  // bancadas, nao entram nesta.
-  if (!storage::apagarChamada()) {
-    Serial.println("Nao consegui apagar os arquivos da chamada anterior.");
-  }
 
   if (!gravarSessao(nullptr)) {
     // Recusar o Iniciar deixaria a aula sem chamada; cada toque ainda avisa se

@@ -13,7 +13,7 @@
 
 namespace chamada {
 
-enum class Abertura { ABERTA, JA_ABERTA, HORA_INVALIDA };
+enum class Abertura { ABERTA, JA_ABERTA, HORA_INVALIDA, NAO_APAGOU };
 
 enum class Veredito { REGISTRADO, JA_REGISTRADO, NAO_RECONHECIDO };
 
@@ -29,8 +29,9 @@ struct Toque {
 
 // O Iniciar: acerta o relogio com a hora do celular, apaga os arquivos de uma
 // chamada anterior e grava o /sessao_atual.json (R16). Falha ao gravar so avisa
-// no serial: a chamada abre assim mesmo. O modo (com ou sem a lista) fica o da
-// abertura. Com a chamada iniciada, enviada ou nao, volta JA_ABERTA.
+// no serial: a chamada abre assim mesmo. Falha ao apagar volta NAO_APAGOU, sem
+// mudar nada da chamada (R77). O modo (com ou sem a lista) fica o da abertura.
+// Com a chamada iniciada, enviada ou nao, volta JA_ABERTA.
 Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeBoot);
 
 // Houve Iniciar e nao houve Encerrar: a chamada se exibe e se compartilha,
