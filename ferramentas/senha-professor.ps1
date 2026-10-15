@@ -57,7 +57,7 @@ if (-not $Senha) {
 }
 
 # Os limites cabem nos documentos de tamanho fixo do firmware: o corpo do login tem 256 bytes,
-# o /api/estado tem 512 e as dez contas cabem em 4096 (src/presente/). Contam bytes em UTF-8,
+# o /api/estado tem 768 e as dez contas cabem em 4096 (src/presente/). Contam bytes em UTF-8,
 # como o firmware guarda: letra acentuada vale 2.
 if (-not $Id -or -not $Usuario -or -not $Nome -or -not $Senha) {
   Write-Host 'ERRO: id, usuario, nome e senha sao obrigatorios. Nada foi gravado.'
