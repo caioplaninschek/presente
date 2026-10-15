@@ -116,6 +116,8 @@ bool tentar(Fase qual) {
   }
   Serial.printf("Conectando no hotspot %s, %s (ate %lu s)...\n", rotulo(qual), nome,
                 espera(qual) / 1000);
+  // O retorno fica de fora (#43): toda recusa do core ja sai no serial como [E][WiFiSTA.cpp:<linha>],
+  // e, com o pedido aceito, ele e o status() do momento, que pode ainda ser o da tentativa anterior.
   WiFi.begin(nome, principal ? STA_PASSWORD : STA_PASSWORD_FALLBACK);
   fase = qual;
   inicioDaTentativa = millis();
