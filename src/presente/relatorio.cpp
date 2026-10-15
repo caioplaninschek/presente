@@ -2,7 +2,7 @@
 //
 // ITEM A ITEM, NUNCA O DOCUMENTO INTEIRO
 //
-// O relatorio nao cabe num documento fixo (R29). No modo offline o manual
+// O relatorio nao cabe num documento fixo (R76). No modo offline o manual
 // sempre grava, sem o limite de 64 da memoria de presencas, entao o numero de
 // eventos nao tem teto; com 40 alunos online ele ja passa de 8 KB. Por isso a
 // exportacao do secao 7 sai em pedacos: a sessao, cada evento lido do
