@@ -133,7 +133,7 @@ ol li, ul li { margin: .35rem 0; }
 <!-- ======================================================== PACOTE 1 ==== -->
 <h2 id="pacote-1">Pacote 1 (#42): o login</h2>
 <section class="bloco" data-issue="42" data-id="p1" data-titulo="Pacote 1, o login (hotspot desligado)">
-<p class="aviso">Neste bloco e no do pacote 2, <strong>não toque no Iniciar</strong>: ele é testado no bloco do pacote 3. O Enviar e o Encerrar continuam recusados até o pacote 4 (#47), e isso é esperado.</p>
+<p class="aviso">Neste bloco e no do pacote 2, <strong>não toque no Iniciar</strong>: ele é testado no bloco do pacote 3. O Enviar e o Encerrar continuam recusados até o pacote 4 (#47), e isso é esperado. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Enviar e o Encerrar passam a responder, e nenhum item desta bateria muda.)</p>
 
 <div class="item" data-id="p1-ligar" data-rotulo="Ao ligar, LED azul fixo e as linhas do serial">
 <p>Com o hotspot desligado, ligue a placa (ou aperte o <code>EN</code>). O LED fica azul fixo, porque o aparelho está esperando o login, e o monitor serial mostra:</p>
@@ -268,7 +268,7 @@ Saiu do hotspot. A rede do aparelho continua no ar.</pre>
 
 <section class="bloco" data-issue="46" data-id="p3b" data-titulo="3b, o modo offline">
 <h3>3b. O modo offline</h3>
-<p>Uma chamada nova, que apaga a da etiquetagem. Com a chamada aberta o Iniciar fica desabilitado, e o Encerrar só chega no pacote 4 (#47), então a chamada nova começa reiniciando a placa.</p>
+<p>Uma chamada nova, que apaga a da etiquetagem. Com a chamada aberta o Iniciar fica desabilitado, e o Encerrar só chega no pacote 4 (#47), então a chamada nova começa reiniciando a placa. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Encerrar passa a responder, e nenhum item desta bateria muda.)</p>
 
 <div class="item" data-id="p3b-1" data-rotulo="O crachá antes do Iniciar não faz nada">
 <p>Com o hotspot ainda desligado, reinicie a placa (<code>EN</code>), reconecte o aparelho do professor e entre com a senha certa, até o painel com "Sem a lista da turma". <strong>Antes de tocar no Iniciar</strong>, encoste um cartão. Não pode acontecer nada: nem luz, nem som, nem linha no serial (R74).</p>

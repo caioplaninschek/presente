@@ -12,9 +12,10 @@
 // O relatorio sai em pedacos, escrito pelo relatorio.cpp, enquanto houver
 // chamada iniciada, tambem depois do Enviar (R46). O Enviar grava
 // {"relatorio": ...} no /relatorio.json e o manda pelo net::, que trava o loop()
-// ate 20 s. Durante a tentativa so o LED muda, para o azul lento do secao 5: o
-// estado continua SESSAO_ABERTA, porque com SINCRONIZANDO o atender() leria o
-// fim da busca e cairia em AGUARDANDO_INICIAR. No sucesso, a chamada fecha
+// por uns 20 s, e o pior caso passa disso (R76). Durante a tentativa so o LED
+// muda, para o azul lento do secao 5: o estado continua SESSAO_ABERTA, porque
+// com SINCRONIZANDO o atender() leria o fim da busca e cairia em
+// AGUARDANDO_INICIAR. No sucesso, a chamada fecha
 // (CHAMADA_ENVIADA, azul fixo): o relatorio continua na tela, e o cracha recebe
 // o sinal de NAO_RECONHECIDO sem passar pelo chamada::, que mudaria o ultimo do
 // painel. Na falha, a chamada continua aberta, com o verde fixo. O fim do
