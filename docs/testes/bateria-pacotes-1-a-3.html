@@ -133,7 +133,7 @@ ol li, ul li { margin: .35rem 0; }
 <!-- ======================================================== PACOTE 1 ==== -->
 <h2 id="pacote-1">Pacote 1 (#42): o login</h2>
 <section class="bloco" data-issue="42" data-id="p1" data-titulo="Pacote 1, o login (hotspot desligado)">
-<p class="aviso">Neste bloco e no do pacote 2, <strong>não toque no Iniciar</strong>: ele é testado no bloco do pacote 3. O Enviar e o Encerrar continuam recusados até o pacote 4 (#47), e isso é esperado. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Enviar e o Encerrar passam a responder, e nenhum item desta bateria muda.)</p>
+<p class="aviso">Neste bloco e no do pacote 2, <strong>não toque no Iniciar</strong>: ele é testado no bloco do pacote 3. O Enviar e o Encerrar continuam recusados até o pacote 4 (#47), e isso é esperado. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Enviar e o Encerrar passam a responder<s>, e nenhum item desta bateria muda</s>.) (15/10: mudam duas coisas. A primeira linha do serial, no item abaixo, passa a dizer pacote 4; e o Iniciar pode trazer linhas <code>[E][vfs_api.cpp:105]</code>, que não são defeito, explicadas no fim deste bloco e no 3a.)</p>
 
 <div class="item" data-id="p1-ligar" data-rotulo="Ao ligar, LED azul fixo e as linhas do serial">
 <p>Com o hotspot desligado, ligue a placa (ou aperte o <code>EN</code>). O LED fica azul fixo, porque o aparelho está esperando o login, e o monitor serial mostra:</p>
@@ -142,6 +142,7 @@ RC522 respondeu - VersionReg = 0x&lt;número&gt;
 Contas de professor lidas: 1 (&lt;bytes&gt; bytes de 4096)
 Rede do aparelho no ar: &lt;AP_SSID&gt;, endereco 192.168.4.1
 Pronto. Conecte o celular na rede do aparelho.</pre>
+<p>(15/10: com a <code>main</code> de hoje, que já tem o pacote 4, a primeira linha é <code>Presente! - firmware, pacote 4 (#47)</code>. As duas valem: a do pacote 3 aparece para quem gravou antes do pacote 4.)</p>
 </div>
 
 <div class="item" data-id="p1-1" data-rotulo="Item 1: a página de login abre sozinha">
@@ -178,6 +179,7 @@ Saiu do hotspot. A rede do aparelho continua no ar.</pre>
 </div>
 
 <p>Linhas que podem aparecer e não são defeito: <code>[&lt;tempo&gt;][E][WebServer.cpp:638] _handleRequest(): request handler not found</code>, que é o celular testando se tem internet, e <code>[&lt;tempo&gt;][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation</code>, enquanto ainda não houver lista guardada.</p>
+<p>(15/10: o aviso vale para <strong>qualquer</strong> linha <code>[&lt;tempo&gt;][E][vfs_api.cpp:105] open(): /littlefs/&lt;arquivo&gt; does not exist, no permits for creation</code>, em qualquer bloco. É o aparelho conferindo se um arquivo existe antes de usá-lo: o <code>roster.json</code>, o <code>eventos.json</code>, o <code>sessao_atual.json</code>, o <code>relatorio.json</code>, ou o <code>hotspot-detect.html</code> que o iPhone pede para testar a internet. Um defeito de verdade tem frase própria, em português e sem <code>[E]</code>, como as do "Se der errado".)</p>
 </section>
 <div class="copiar" data-issue="42"></div>
 
@@ -243,6 +245,7 @@ Saiu do hotspot. A rede do aparelho continua no ar.</pre>
 <div class="item" data-id="p3a-1" data-rotulo="Iniciar no modo offline">
 <p>Com o painel em "Sem a lista da turma", toque em <strong>Iniciar</strong>. O LED fica verde fixo, o portal mostra "Chamada aberta. Pode encostar os crachás." e o serial, com a data e a hora do aparelho do professor:</p>
 <pre>Chamada aberta: 4172CMPN6A_P1-&lt;AAAAMMDD&gt;-&lt;HHMM&gt;, modo offline</pre>
+<p>(15/10: antes dessa linha podem aparecer até três linhas <code>[&lt;tempo&gt;][E][vfs_api.cpp:105] open(): /littlefs/&lt;arquivo&gt; does not exist, no permits for creation</code>, uma para o <code>eventos.json</code>, uma para o <code>sessao_atual.json</code> e uma para o <code>relatorio.json</code>. É o Iniciar conferindo se sobrou arquivo de uma chamada anterior para apagar; neste primeiro Iniciar não sobrou nenhum. Não é defeito. Nos blocos 3b e 3c, a do <code>relatorio.json</code> volta a cada Iniciar, porque esse arquivo só nasce no Enviar, do pacote 4.)</p>
 </div>
 
 <div class="item" data-id="p3a-2" data-rotulo="Os 11 cartões lidos e etiquetados">
@@ -268,7 +271,7 @@ Saiu do hotspot. A rede do aparelho continua no ar.</pre>
 
 <section class="bloco" data-issue="46" data-id="p3b" data-titulo="3b, o modo offline">
 <h3>3b. O modo offline</h3>
-<p>Uma chamada nova, que apaga a da etiquetagem. Com a chamada aberta o Iniciar fica desabilitado, e o Encerrar só chega no pacote 4 (#47), então a chamada nova começa reiniciando a placa. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Encerrar passa a responder, e nenhum item desta bateria muda.)</p>
+<p>Uma chamada nova, que apaga a da etiquetagem. Com a chamada aberta o Iniciar fica desabilitado, e o Encerrar só chega no pacote 4 (#47), então a chamada nova começa reiniciando a placa. (14/10: o pacote 4 foi publicado; depois de um <code>git pull</code>, o Encerrar passa a responder<s>, e nenhum item desta bateria muda</s>.) (15/10: reinicie a placa assim mesmo, sem usar o Encerrar. O que muda com o pacote 4 é a linha <code>[E][vfs_api.cpp:105]</code> do <code>relatorio.json</code> antes do <code>Chamada aberta</code>, explicada no 3a, e a primeira linha do serial, no pacote 1.)</p>
 
 <div class="item" data-id="p3b-1" data-rotulo="O crachá antes do Iniciar não faz nada">
 <p>Com o hotspot ainda desligado, reinicie a placa (<code>EN</code>), reconecte o aparelho do professor e entre com a senha certa, até o painel com "Sem a lista da turma". <strong>Antes de tocar no Iniciar</strong>, encoste um cartão. Não pode acontecer nada: nem luz, nem som, nem linha no serial (R74).</p>
@@ -371,6 +374,7 @@ Saiu do hotspot. A rede do aparelho continua no ar.</pre>
   <li><strong>O portal mostra "O aparelho não conseguiu baixar a lista da turma."</strong>: a espera passou de 25 s. Copie o serial inteiro. O botão "Seguir sem a lista" leva ao painel no modo offline, e isso também é resultado.</li>
   <li><strong>O Iniciar mostra "Não foi possível abrir a chamada."</strong> e o serial, <code>Iniciar recusado: AINDA_SINCRONIZANDO.</code>: a busca da turma ainda não terminou. Espere o painel e tente de novo.</li>
   <li><strong>O Iniciar mostra "O aparelho não aceitou a hora do celular."</strong> e o serial, <code>Iniciar recusado: HORA_INVALIDA.</code>: confira a data e a hora do aparelho do professor e tente de novo.</li>
+  <li>(15/10) <strong>O Iniciar mostra "Não foi possível abrir a chamada."</strong> e o serial, <code>Nao consegui apagar os arquivos da chamada anterior: o Iniciar foi recusado.</code> e <code>Iniciar recusado: NAO_GRAVADO.</code>: a memória do aparelho falhou, e ele não abre uma chamada por cima da anterior (R77). Copie o serial e chame o Caio.</li>
   <li><code>Nao consegui gravar no /eventos.json: &lt;número&gt; nao registrado.</code> ou <code>Memoria de presencas cheia (64): &lt;número&gt; nao registrado.</code>, ou um cartão que dá vermelho no modo offline: a presença não foi gravada. Copie o serial e chame o Caio.</li>
   <li><strong>O lançamento manual mostra "O aparelho recusou o lançamento."</strong> e o serial, <code>Manual recusado: NAO_GRAVADO.</code>: a mesma coisa, pelo lançamento manual. Copie o serial e chame o Caio.</li>
   <li><strong>O aparelho do professor sai da rede do aparelho ou não chega a ele depois de reiniciar a placa</strong>, mesmo aparecendo conectado: desconecte e conecte o Wi-Fi de novo.</li>

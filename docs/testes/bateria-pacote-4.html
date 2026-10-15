@@ -105,6 +105,7 @@ ol li, ul li { margin: .35rem 0; }
 <p>No fim, o botão <strong>Copiar resultado da #48</strong> monta o comentário da issue. Quando tiver internet, cole na #48, no GitHub, e anexe os arquivos JSON que o Compartilhar baixou e o vídeo, porque a página não guarda arquivo.</p>
 <p>Se alguma coisa travar, chame o Caio no WhatsApp. A meta é terça, 20/10; o que faltar se faz na aula desse dia.</p>
 <p>A ordem dos blocos segue o hotspot: o teste 4 roda com ele desligado; o teste 5 continua a mesma chamada, envia sem o hotspot e depois com ele; o teste 6 encerra essa chamada e faz outra, com o segundo professor e a lista da turma.</p>
+<p>(15/10) Linhas que podem aparecer em qualquer bloco e não são defeito: <code>[&lt;tempo&gt;][E][vfs_api.cpp:105] open(): /littlefs/&lt;arquivo&gt; does not exist, no permits for creation</code>. É o aparelho conferindo se um arquivo existe antes de usá-lo: o <code>roster.json</code>, o <code>eventos.json</code>, o <code>sessao_atual.json</code>, o <code>relatorio.json</code>, ou o <code>hotspot-detect.html</code> que o iPhone pede para testar a internet. O Iniciar confere os três arquivos da chamada antes de abrir, então, antes do <code>Chamada aberta</code> do teste 4 e do teste 6, podem aparecer até três dessas linhas; o Encerrar também pode trazer algumas. Um defeito de verdade tem frase própria, em português e sem <code>[E]</code>, como as do "Se der errado".</p>
 
 <!-- ============================================================ ANTES ==== -->
 <h2 id="antes">Antes de gravar</h2>
@@ -285,6 +286,7 @@ Enviar falhou: SEM_INTERNET. A chamada continua aberta.</pre>
   <li><strong>Passaram 25 s e o portal ficou em "O aparelho não respondeu…"</strong>, sem a mensagem do Enviar: espere mais alguns segundos e olhe a pílula. "Chamada fechada" quer dizer que o envio deu certo; "Chamada aberta", que falhou. Anote o tempo e copie o serial.</li>
   <li><strong>O crachá depois do Enviar registra</strong> (duas piscadas ou uma linha <code>REGISTRADO</code>) ou <strong>aparece uma linha da busca da turma depois do Enviar</strong>: é defeito. Copie o serial e chame o Caio.</li>
   <li><strong>O Encerrar mostra "O aparelho não encerrou a chamada. Espere alguns segundos e toque de novo."</strong>: espere e toque de novo. Se repetir, copie o serial.</li>
+  <li>(15/10) <strong>O Iniciar mostra "Não foi possível abrir a chamada."</strong> e o serial, <code>Nao consegui apagar os arquivos da chamada anterior: o Iniciar foi recusado.</code> e <code>Iniciar recusado: NAO_GRAVADO.</code>: a memória do aparelho falhou, e ele não abre uma chamada por cima da anterior (R77). Copie o serial e chame o Caio.</li>
   <li><strong>Qualquer outra coisa</strong>: copie o trecho inteiro do monitor serial para o campo do bloco e chame o Caio.</li>
 </ul>
 
