@@ -1,27 +1,34 @@
 // presente/portal.cpp -- pacotes 1 a 4 do firmware (#41, #43, #45, #47): o
 // portal dentro do aparelho.
 //
-// Das nove rotas do secao 6.1, o firmware tem oito: POST /api/login,
-// GET /api/estado, POST /api/seguir-offline, POST /api/iniciar, POST /api/manual,
-// GET /api/presencas e, do pacote 4 (#47), GET /api/relatorio e
-// POST /api/encerrar. Qualquer outra rota de /api/, e metodo errado nessas oito,
-// recebe 404 ROTA_DESCONHECIDA. O POST /api/enviar chega na segunda parte do
-// pacote 4.
+// O firmware tem as nove rotas do secao 6.1: POST /api/login, GET /api/estado,
+// POST /api/seguir-offline, POST /api/iniciar, POST /api/manual,
+// GET /api/presencas e, do pacote 4 (#47), GET /api/relatorio,
+// POST /api/enviar e POST /api/encerrar. Qualquer outra rota de /api/, e metodo
+// errado nessas nove, recebe 404 ROTA_DESCONHECIDA.
 //
-// O RELATORIO E O ENCERRAR (#47)
+// O RELATORIO, O ENVIAR E O ENCERRAR (#47)
 //
 // O relatorio sai em pedacos, escrito pelo relatorio.cpp, enquanto houver
-// chamada iniciada, tambem depois do Enviar (R46). O Encerrar vale em qualquer
-// estado com login, ate durante a busca da turma: apaga a lista, a chamada e os
-// arquivos dela, invalida o cookie e volta ao login. Responde sempre 200: a
-// memoria ja esta limpa, e prender o professor no painel nao apagaria o
-// arquivo que falhou.
+// chamada iniciada, tambem depois do Enviar (R46). O Enviar grava
+// {"relatorio": ...} no /relatorio.json e o manda pelo net::, que trava o loop()
+// ate 20 s. Durante a tentativa so o LED muda, para o azul lento do secao 5: o
+// estado continua SESSAO_ABERTA, porque com SINCRONIZANDO o atender() leria o
+// fim da busca e cairia em AGUARDANDO_INICIAR. No sucesso, a chamada fecha
+// (CHAMADA_ENVIADA, azul fixo): o relatorio continua na tela, e o cracha recebe
+// o sinal de NAO_RECONHECIDO sem passar pelo chamada::, que mudaria o ultimo do
+// painel. Na falha, a chamada continua aberta, com o verde fixo. O fim do
+// relatorio e a hora do comeco da tentativa que deu certo. O Encerrar vale em
+// qualquer estado com login, ate durante a busca da turma: apaga a lista, a
+// chamada e os arquivos dela, invalida o cookie e volta ao login. Responde
+// sempre 200: a memoria ja esta limpa, e prender o professor no painel nao
+// apagaria o arquivo que falhou.
 //
 // A CHAMADA (#45)
 //
 // O Iniciar abre a chamada (chamada.cpp) e passa a SESSAO_ABERTA, com o verde
-// fixo. So nesse estado o leitor e consultado (R74): o cracha encostado antes do
-// Iniciar nao tem sinal nenhum. A decisao do toque e do chamada::; aqui fica o
+// fixo. So nesse estado, e depois do Enviar, o leitor e consultado (R74): o
+// cracha encostado antes do Iniciar nao tem sinal nenhum. A decisao do toque e do chamada::; aqui fica o
 // sinal do secao 5 e a linha do serial, que leva o UID e a matricula, nunca o
 // nome do aluno (R74).
 //
@@ -60,7 +67,7 @@
 namespace portal {
 namespace {
 
-enum class Estado { AGUARDANDO_LOGIN, SINCRONIZANDO, AGUARDANDO_INICIAR, SESSAO_ABERTA };
+enum class Estado { AGUARDANDO_LOGIN, SINCRONIZANDO, AGUARDANDO_INICIAR, SESSAO_ABERTA, CHAMADA_ENVIADA };
 
 // O alvo do secao 5 para o intervalo do encostar ate o sinal.
 const unsigned long ALVO_DO_TOQUE_MS = 200;
@@ -493,6 +500,79 @@ void aoRelatorio() {
   saida.despejar();
 }
 
+// O azul lento sem mexer na lib/feedback: uma piscada por vez, rearmada aqui.
+void azulLento() {
+  if (!feedback::piscando()) {
+    feedback::piscar(feedback::Cor::AZUL, 1, PISCADA_LENTA_MS, PISCADA_LENTA_MS);
+  }
+}
+
+// Com o loop() parado pelo Enviar, ninguem mais conduz o LED.
+void esperandoOEnvio() {
+  azulLento();
+  feedback::atualizar();
+}
+
+bool gravarRelatorio(const char* fim) {
+  File arquivo = LittleFS.open(storage::CAMINHO_DO_RELATORIO, "w");
+  if (!arquivo) {
+    return false;
+  }
+  const char abertura[] = "{\"relatorio\":";
+  bool inteiro = arquivo.print(abertura) == strlen(abertura);
+  inteiro = relatorio::escrever(arquivo, fim) && inteiro;
+  inteiro = arquivo.print('}') == 1 && inteiro;
+  arquivo.close();
+  return inteiro;
+}
+
+void aoEnviar() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+  if (!chamada::iniciada()) {
+    responderErro(400, "SEM_SESSAO");
+    return;
+  }
+  // A segunda trava contra o envio duplicado (HU-39): sem ir a internet. Pelo
+  // chamada::, como o manual e o toque, e nao pelo estado do portal.
+  if (!chamada::aberta()) {
+    Serial.println("Enviar: a chamada ja foi enviada; ja_enviado sem ir a internet.");
+    responderJson(200, "{\"resultado\":\"ja_enviado\"}");
+    return;
+  }
+
+  // O relogio esta acertado desde o Iniciar.
+  char fim[relogio::TAMANHO_DA_HORA];
+  if (!relogio::formatar(millis(), fim, sizeof(fim)) || !gravarRelatorio(fim)) {
+    LittleFS.remove(storage::CAMINHO_DO_RELATORIO);
+    Serial.printf("Nao consegui gravar o %s: a chamada continua aberta.\n", storage::CAMINHO_DO_RELATORIO);
+    responderErro(503, "NAO_GRAVADO");
+    return;
+  }
+
+  // A cor de base fica azul: a piscada volta a ela, e o LED congela nela na
+  // conexao segura.
+  feedback::acender(feedback::Cor::AZUL);
+  const net::Envio envio = net::enviar(storage::CAMINHO_DO_RELATORIO, esperandoOEnvio);
+
+  if (envio == net::Envio::GRAVADO || envio == net::Envio::JA_ENVIADO) {
+    chamada::fechar(fim);
+    estado = Estado::CHAMADA_ENVIADA;
+    feedback::acender(feedback::Cor::AZUL);
+    Serial.printf("Chamada enviada: %s. O cracha nao registra mais.\n", chamada::sessaoId());
+    responderJson(200, envio == net::Envio::GRAVADO ? "{\"resultado\":\"gravado\"}"
+                                                    : "{\"resultado\":\"ja_enviado\"}");
+    return;
+  }
+
+  feedback::acender(feedback::Cor::VERDE);
+  const char* codigo = envio == net::Envio::SEM_INTERNET ? "SEM_INTERNET" : "BANCO_RECUSOU";
+  Serial.printf("Enviar falhou: %s. A chamada continua aberta.\n", codigo);
+  responderErro(503, codigo);
+}
+
 void aoEncerrar() {
   if (!comLogin()) {
     responderErro(401, "SEM_LOGIN");
@@ -538,7 +618,7 @@ void mandarParaOLogin() {
   server.send(302);
 }
 
-// Tudo o que nao e uma das oito rotas registradas no iniciar() cai aqui.
+// Tudo o que nao e uma das nove rotas registradas no iniciar() cai aqui.
 void aoResto() {
   const String caminho = server.uri();
 
@@ -607,6 +687,20 @@ void lerCracha() {
   Serial.println();
 }
 
+// Depois do Enviar (R46): o sinal de NAO_RECONHECIDO, sem o chamada::encostou,
+// e nada gravado. A janela de 5 s continua no lerTagNova().
+void recusarCracha() {
+  rfid::Uid uid;
+  if (!rfid::lerTagNova(uid)) {
+    return;
+  }
+  feedback::piscar(feedback::Cor::VERMELHO, 1, VERMELHO_DO_NAO_RECONHECIDO_MS, 0);
+  feedback::bipar(BUZZ_DO_NAO_RECONHECIDO_MS);
+  char texto[rfid::UID_TEXTO_TAMANHO];
+  rfid::formatarUid(uid, texto, sizeof(texto));
+  Serial.printf("%s  NAO_RECONHECIDO  chamada enviada: nada gravado\n", texto);
+}
+
 }  // namespace
 
 void iniciar(const JsonDocument& professores, bool littlefsMontado) {
@@ -622,6 +716,7 @@ void iniciar(const JsonDocument& professores, bool littlefsMontado) {
   server.on("/api/manual", HTTP_POST, aoManual);
   server.on("/api/presencas", HTTP_GET, aoPresencas);
   server.on("/api/relatorio", HTTP_GET, aoRelatorio);
+  server.on("/api/enviar", HTTP_POST, aoEnviar);
   server.on("/api/encerrar", HTTP_POST, aoEncerrar);
   server.onNotFound(aoResto);
   server.begin();
@@ -633,12 +728,13 @@ void atender() {
     if (!net::buscando()) {
       estado = Estado::AGUARDANDO_INICIAR;
       feedback::acender(feedback::Cor::AZUL);
-    } else if (!feedback::piscando()) {
-      // O azul lento sem mexer na lib/feedback: uma piscada por vez, rearmada aqui.
-      feedback::piscar(feedback::Cor::AZUL, 1, PISCADA_LENTA_MS, PISCADA_LENTA_MS);
+    } else {
+      azulLento();
     }
   } else if (estado == Estado::SESSAO_ABERTA) {
     lerCracha();
+  } else if (estado == Estado::CHAMADA_ENVIADA) {
+    recusarCracha();
   }
   server.handleClient();
 }

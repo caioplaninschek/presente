@@ -1,10 +1,10 @@
-// presente/net.cpp -- pacote 2 do firmware (#43): a lista da turma pela
-// internet.
+// presente/net.cpp -- pacotes 2 e 4 do firmware (#43, #47): a lista da turma
+// pela internet e o envio do relatorio.
 //
 // Depois do login, o aparelho entra no hotspot do professor (ou no de
 // reserva), chama o rpc/roster do banco e guarda a lista na memoria e no
 // /roster.json. A rede do aparelho fica no ar o tempo todo (WIFI_AP_STA, R45).
-// O envio do relatorio (#47) entra neste mesmo arquivo.
+// O Enviar usa o mesmo caminho ate o banco (ver O ENVIO, abaixo).
 //
 // A ESPERA PELO HOTSPOT NAO TRAVA
 //
@@ -39,6 +39,26 @@
 // o ESP32 o procuraria de canal em canal, a rede do aparelho pularia junto e o
 // celular do professor poderia cair. O Enviar (#47) entra de novo.
 //
+// O ENVIO (#47)
+//
+// O WebServer so responde ao fim do tratador, entao o Enviar trava o loop() pela
+// tentativa inteira: os mesmos tentar(), tempos e conexao segura da busca, num
+// laco sem delay() que chama o aoEsperar() de quem pediu (o portal mantem o
+// azul lento, porque o net:: nao conhece o LED). Os quatro tempos somam 20 s, e
+// o portal espera 25 s. Uma conexao segura so por Enviar (R13b). O relatorio
+// vai como arquivo (Stream com tamanho), porque o HTTPClient nao manda corpo em
+// pedacos e o relatorio nao cabe num documento fixo.
+//
+// Nao chegar ao banco (sem hotspot, sem DNS, sem conexao segura, sem resposta,
+// ou o tempo que estoura depois do corpo) e SEM_INTERNET: tentar de novo e
+// seguro, porque o banco responde ja_enviado ao repetido (HU-39). O banco que
+// responde outro status, ou 200 sem um resultado conhecido, e BANCO_RECUSOU.
+//
+// Toda saida do enviar() passa por um ponto so: sai do hotspot, poe a fase em
+// PARADA e apaga o /relatorio.json. Sem o encerrar() da busca, que diria que o
+// aparelho segue offline. A fase que ficasse em PRINCIPAL ou RESERVA faria o
+// atender() rodar a busca e apagar a lista da turma no meio da aula.
+//
 // O endereco do banco nunca sai no serial: e credencial (secrets.h), e o log vai
 // colado em comentario de issue, num repositorio publico. As frases do monitor
 // serial sao o contrato com o roteiro da #44: mudou aqui, muda la.
@@ -48,6 +68,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <LittleFS.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <config.h>
@@ -110,34 +131,53 @@ void encerrar() {
   Serial.println("Saiu do hotspot. A rede do aparelho continua no ar.");
 }
 
-// Trava o loop() pela conexao segura e pela leitura. Devolve true so com uma
-// lista de verdade em `lista`; senao, diz o motivo no serial.
-bool buscarNoBanco() {
-  WiFiClientSecure cliente;
+enum class Espera { ESPERANDO, CONECTADO, DESISTIU };
+
+// Um passo da espera pelo hotspot, o mesmo na busca e no envio: o principal e,
+// sem ele, o de reserva.
+Espera esperarHotspot() {
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.printf("Conectado no hotspot %s em %.1f s. Canal da rede do aparelho: antes %d, agora %d.\n",
+                  rotulo(fase), (millis() - inicioDaTentativa) / 1000.0f, canalAntes, canalAtual());
+    return Espera::CONECTADO;
+  }
+  if (millis() - inicioDaTentativa < espera(fase)) {
+    return Espera::ESPERANDO;
+  }
+  Serial.printf("O hotspot %s nao respondeu em %lu s.\n", rotulo(fase), espera(fase) / 1000);
+  WiFi.disconnect();
+  if (fase == Fase::PRINCIPAL && tentar(Fase::RESERVA)) {
+    return Espera::ESPERANDO;
+  }
+  Serial.println("Nenhum hotspot respondeu: confira nome, senha e se ele esta em 2,4 GHz (R13d).");
+  return Espera::DESISTIU;
+}
+
+// A conexao segura da busca e do envio, ate a ultima coisa antes do pedido.
+bool prepararPedido(WiFiClientSecure& cliente, HTTPClient& http, const char* rota) {
   cliente.setInsecure();
   static_assert(LIMITE_DA_CONEXAO_SEGURA_MS >= 1000 && LIMITE_DA_CONEXAO_SEGURA_MS % 1000 == 0,
                 "o setHandshakeTimeout so aceita segundos inteiros");
   cliente.setHandshakeTimeout(LIMITE_DA_CONEXAO_SEGURA_MS / 1000);  // em segundos
 
-  HTTPClient http;
   http.setConnectTimeout(LIMITE_DA_CONEXAO_SEGURA_MS);
   http.setTimeout(LIMITE_DA_RESPOSTA_MS);
   http.useHTTP10(true);
-  if (!http.begin(cliente, String(SUPABASE_URL) + "/rest/v1/rpc/roster")) {
+  if (!http.begin(cliente, String(SUPABASE_URL) + rota)) {
     Serial.println("O endereco do banco no secrets.h nao e um endereco https.");
     return false;
   }
   http.addHeader("apikey", SUPABASE_PUBLISHABLE_KEY);
   http.addHeader("Content-Type", "application/json");
 
-  char corpo[48];
-  snprintf(corpo, sizeof(corpo), "{\"turma\":\"%s\"}", TURMA);
-
   // A ultima coisa antes da conexao segura, no formato do programa de radio.
   const uint32_t antes = ESP.getFreeHeap();
   Serial.printf("MEMORIA ANTES da conexao segura: %u bytes (%.1f KB)\n", antes, antes / 1024.0f);
+  return true;
+}
 
-  const int status = http.POST(reinterpret_cast<uint8_t*>(corpo), strlen(corpo));
+// true, com o motivo no serial, quando o pedido nao chegou a uma resposta.
+bool semResposta(int status, WiFiClientSecure& cliente) {
   if (status == HTTPC_ERROR_CONNECTION_REFUSED) {
     // Quando o DNS falha, o connect() devolve 0 sem gravar o erro, e o lastError()
     // nao escreve no buffer nem devolve codigo.
@@ -147,10 +187,29 @@ bool buscarNoBanco() {
     if (codigo == 0) {
       Serial.println("O banco pode estar pausado (R60): reative no painel do Supabase.");
     }
-    return false;
+    return true;
   }
   if (status < 0) {
-    Serial.printf("O pedido ao banco FALHOU (%s).\n", http.errorToString(status).c_str());
+    Serial.printf("O pedido ao banco FALHOU (%s).\n", HTTPClient::errorToString(status).c_str());
+    return true;
+  }
+  return false;
+}
+
+// Trava o loop() pela conexao segura e pela leitura. Devolve true so com uma
+// lista de verdade em `lista`; senao, diz o motivo no serial.
+bool buscarNoBanco() {
+  WiFiClientSecure cliente;
+  HTTPClient http;
+  if (!prepararPedido(cliente, http, "/rest/v1/rpc/roster")) {
+    return false;
+  }
+
+  char corpo[48];
+  snprintf(corpo, sizeof(corpo), "{\"turma\":\"%s\"}", TURMA);
+
+  const int status = http.POST(reinterpret_cast<uint8_t*>(corpo), strlen(corpo));
+  if (semResposta(status, cliente)) {
     return false;
   }
   if (status != 200) {
@@ -183,6 +242,55 @@ bool buscarNoBanco() {
   return true;
 }
 
+// O pedido do envio, com o hotspot ja conectado. Sai antes do enviar() apagar o
+// arquivo, que assim ja esta fechado.
+Envio mandarAoBanco(const char* caminho) {
+  File arquivo = LittleFS.open(caminho, "r");
+  if (!arquivo) {
+    // O portal acabou de grava-lo: e defeito do disco, e o Compartilhar e o
+    // conselho certo, como no BANCO_RECUSOU.
+    Serial.printf("Nao consegui reabrir o %s.\n", caminho);
+    return Envio::BANCO_RECUSOU;
+  }
+
+  WiFiClientSecure cliente;
+  HTTPClient http;
+  if (!prepararPedido(cliente, http, "/rest/v1/rpc/enviar_relatorio")) {
+    return Envio::BANCO_RECUSOU;
+  }
+
+  Serial.printf("Mandando o relatorio: %u bytes.\n", arquivo.size());
+  const int status = http.sendRequest("POST", &arquivo, arquivo.size());
+  if (semResposta(status, cliente)) {
+    return Envio::SEM_INTERNET;
+  }
+  if (status != 200) {
+    Serial.printf("O banco respondeu %d, e nao 200.\n", status);
+    return Envio::BANCO_RECUSOU;
+  }
+
+  StaticJsonDocument<192> resposta;
+  const DeserializationError erro = deserializeJson(resposta, http.getStream());
+  http.end();
+  if (erro == DeserializationError::EmptyInput || erro == DeserializationError::IncompleteInput) {
+    // O tempo estourou na leitura, depois de o banco receber o corpo.
+    Serial.printf("A resposta do banco nao chegou inteira (%s).\n", erro.c_str());
+    return Envio::SEM_INTERNET;
+  }
+  const char* resultado = resposta["resultado"] | "";
+  if (!erro && strcmp(resultado, "gravado") == 0) {
+    Serial.printf("Relatorio enviado: gravado, %d eventos (%d enriquecidos no banco).\n",
+                  resposta["eventos"] | -1, resposta["enriquecidos_no_banco"] | -1);
+    return Envio::GRAVADO;
+  }
+  if (!erro && strcmp(resultado, "ja_enviado") == 0) {
+    Serial.println("Relatorio enviado: ja_enviado, o banco ja tinha esta chamada e nada se duplicou.");
+    return Envio::JA_ENVIADO;
+  }
+  Serial.println("A resposta do banco nao traz gravado nem ja_enviado.");
+  return Envio::BANCO_RECUSOU;
+}
+
 }  // namespace
 
 void comecarBusca() {
@@ -209,9 +317,11 @@ void atender() {
     return;
   }
 
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.printf("Conectado no hotspot %s em %.1f s. Canal da rede do aparelho: antes %d, agora %d.\n",
-                  rotulo(fase), (millis() - inicioDaTentativa) / 1000.0f, canalAntes, canalAtual());
+  const Espera passo = esperarHotspot();
+  if (passo == Espera::ESPERANDO) {
+    return;
+  }
+  if (passo == Espera::CONECTADO) {
     carregada = buscarNoBanco();
     if (!carregada) {
       lista.clear();
@@ -220,19 +330,7 @@ void atender() {
     } else {
       Serial.println("Nao consegui gravar o /roster.json: o aparelho segue online, com a lista so na memoria.");
     }
-    encerrar();
-    return;
   }
-
-  if (millis() - inicioDaTentativa < espera(fase)) {
-    return;
-  }
-  Serial.printf("O hotspot %s nao respondeu em %lu s.\n", rotulo(fase), espera(fase) / 1000);
-  WiFi.disconnect();
-  if (fase == Fase::PRINCIPAL && tentar(Fase::RESERVA)) {
-    return;
-  }
-  Serial.println("Nenhum hotspot respondeu: confira nome, senha e se ele esta em 2,4 GHz (R13d).");
   encerrar();
 }
 
@@ -273,6 +371,32 @@ void esquecerLista() {
   if (!storage::apagarRoster()) {
     Serial.println("Nao consegui apagar o /roster.json.");
   }
+}
+
+Envio enviar(const char* caminho, void (*aoEsperar)()) {
+  Serial.println("Enviando o relatorio ao banco.");
+  canalAntes = canalAtual();
+  Envio resultado = Envio::SEM_INTERNET;
+  if (tentar(Fase::PRINCIPAL) || tentar(Fase::RESERVA)) {
+    Espera passo;
+    while ((passo = esperarHotspot()) == Espera::ESPERANDO) {
+      aoEsperar();
+    }
+    if (passo == Espera::CONECTADO) {
+      resultado = mandarAoBanco(caminho);
+    }
+  } else {
+    Serial.println("Nenhum hotspot no secrets.h: STA_SSID e STA_SSID_FALLBACK vazios.");
+  }
+
+  // O ponto de saida unico, para todo desfecho (ver O ENVIO, no topo).
+  WiFi.disconnect();
+  fase = Fase::PARADA;
+  if (!LittleFS.remove(caminho)) {
+    Serial.printf("Nao consegui apagar o %s: o Encerrar tenta de novo.\n", caminho);
+  }
+  Serial.println("Envio terminado: saiu do hotspot. A lista da turma nao mudou.");
+  return resultado;
 }
 
 }  // namespace net

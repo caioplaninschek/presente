@@ -1,12 +1,14 @@
-// presente/main.cpp -- o firmware de verdade (R51), pacotes 1 a 3 (#41, #43,
-// #45).
+// presente/main.cpp -- o firmware de verdade (R51), pacotes 1 a 4 (#41, #43,
+// #45, #47).
 //
 // O aparelho poe a rede propria no ar, o portal cativo abre a pagina gravada
 // em data/, e o professor entra com a senha conferida por hash e recebe o
 // cookie sessao. Depois do login, o aparelho busca a lista da turma pelo
 // hotspot do professor (net.cpp). O Iniciar abre a chamada, e o cracha
-// encostado e o lancamento manual a registram (chamada.cpp). O relatorio e o
-// envio chegam nos pacotes seguintes (#47 a #49).
+// encostado e o lancamento manual a registram (chamada.cpp). O relatorio sai
+// no Compartilhar e no Enviar, que o manda ao banco e fecha a chamada
+// (relatorio.cpp, net.cpp); o Encerrar apaga tudo e volta ao login. A retomada
+// depois de uma queda de energia chega no pacote 5 (#49).
 //
 // Os pinos, a turma e o endereco do aparelho vem do lib/config/config.h (R66);
 // o nome e a senha da rede, do secrets.h.
@@ -41,7 +43,7 @@ StaticJsonDocument<4096> professores;
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Presente! - firmware, pacote 3 (#45)");
+  Serial.println("Presente! - firmware, pacote 4 (#47)");
 
   feedback::iniciar();
   feedback::acender(feedback::Cor::AZUL);  // AGUARDANDO_LOGIN

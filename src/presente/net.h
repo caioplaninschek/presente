@@ -1,5 +1,6 @@
 // presente/net.h -- o radio do aparelho: o hotspot do professor e o banco
 // (secao 5 da spec). Pacote 2 (#43): a busca da lista da turma depois do login.
+// Pacote 4 (#47): o envio do relatorio.
 //
 // Nao conhece o portal nem o LED: quem chama pergunta buscando() e decide o
 // que mostrar.
@@ -40,5 +41,14 @@ void abandonar();
 // O Encerrar (#47): para a busca em curso, se houver, e apaga a lista da turma
 // da memoria e do /roster.json. O login seguinte busca de novo.
 void esquecerLista();
+
+enum class Envio { GRAVADO, JA_ENVIADO, SEM_INTERNET, BANCO_RECUSOU };
+
+// O Enviar (#47): manda o arquivo em caminho, que ja traz {"relatorio": ...},
+// ao rpc/enviar_relatorio e apaga o arquivo no fim, com qualquer desfecho. Trava
+// o loop() pela tentativa inteira, no maximo os quatro tempos do config.h, e
+// chama aoEsperar() a cada volta da espera pelo hotspot. Nao mexe na lista da
+// turma.
+Envio enviar(const char* caminho, void (*aoEsperar)());
 
 }  // namespace net
