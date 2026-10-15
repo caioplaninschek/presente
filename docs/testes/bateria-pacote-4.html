@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presente!: bateria de testes do pacote 4</title>
+<!--
+  A rodada oficial do pacote 4 do firmware na placa (#48), feita a partir da
+  bateria dos pacotes 1 a 3. Tudo fica neste arquivo, sem nada da internet:
+  durante o teste, o notebook esta na rede do aparelho, que nao tem internet.
+  As frases do monitor serial sao copiadas do src/presente/ e precisam mudar
+  junto com ele.
+-->
+<style>
+:root {
+  --fundo: #f2f5f8;
+  --papel: #ffffff;
+  --tinta: #10263a;
+  --tinta-fraca: #55667a;
+  --borda: #d2dae3;
+  --acento: #0b5285;
+  --acento-tinta: #ffffff;
+  --bom: #0b7a64;
+  --ruim: #c4006b;
+  --alerta-fundo: #fff6d6;
+  --alerta-borda: #ffc709;
+  --alerta-tinta: #6b5200;
+  --codigo: #e9eef3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0d1922;
+    --papel: #15242f;
+    --tinta: #e8eef4;
+    --tinta-fraca: #96a6b6;
+    --borda: #2b3d4c;
+    --acento: #2f86c7;
+    --acento-tinta: #04141f;
+    --bom: #2fbfa0;
+    --ruim: #ff7ab8;
+    --alerta-fundo: #3a3110;
+    --alerta-borda: #a8860c;
+    --alerta-tinta: #f3dc8a;
+    --codigo: #0f1c26;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+main { max-width: 52rem; margin: 0 auto; padding: 1rem 1rem 4rem; }
+h1 { font-size: 1.6rem; margin: 1rem 0 .25rem; }
+h2 { font-size: 1.3rem; margin: 2.5rem 0 .5rem; padding-top: 1rem; border-top: 2px solid var(--borda); }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+.sub { color: var(--tinta-fraca); margin-top: 0; }
+code, pre { font-family: Consolas, "Cascadia Mono", Menlo, monospace; font-size: .9em; }
+code { background: var(--codigo); padding: 0 .25em; border-radius: 3px; overflow-wrap: anywhere; }
+pre { background: var(--codigo); padding: .6rem .75rem; border-radius: 6px; overflow-x: auto; white-space: pre; }
+.aviso { background: var(--alerta-fundo); border-left: 4px solid var(--alerta-borda); color: var(--alerta-tinta); padding: .6rem .8rem; border-radius: 4px; }
+.aviso code { background: transparent; }
+.item {
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  margin: .75rem 0;
+}
+.item.passou { border-left: 5px solid var(--bom); }
+.item.falhou { border-left: 5px solid var(--ruim); }
+.item > p:first-child { margin-top: 0; }
+.marcar { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; align-items: center; margin-top: .5rem; border: 0; padding: 0; }
+.marcar legend { padding: 0; font-weight: 600; margin-bottom: .25rem; }
+.marcar label { display: inline-flex; gap: .35rem; align-items: center; min-height: 2.75rem; cursor: pointer; }
+.marcar input[type=radio] { width: 1.2rem; height: 1.2rem; }
+.obs { width: 100%; min-height: 2.75rem; margin-top: .25rem; padding: .5rem; font: inherit; color: inherit; background: var(--fundo); border: 1px solid var(--borda); border-radius: 6px; }
+.serial { width: 100%; min-height: 8rem; font-family: Consolas, "Cascadia Mono", Menlo, monospace; font-size: .85rem; padding: .5rem; color: inherit; background: var(--papel); border: 1px solid var(--borda); border-radius: 6px; }
+label.rotulo { display: block; font-weight: 600; margin-top: 1rem; }
+.botao {
+  font: inherit; font-weight: 600;
+  min-height: 2.75rem; padding: .5rem 1.25rem; margin-top: 1rem;
+  border: 0; border-radius: 6px; cursor: pointer;
+  background: var(--acento); color: var(--acento-tinta);
+}
+.resultado { width: 100%; min-height: 10rem; margin-top: .5rem; font-family: Consolas, "Cascadia Mono", Menlo, monospace; font-size: .85rem; padding: .5rem; color: inherit; background: var(--codigo); border: 1px solid var(--borda); border-radius: 6px; }
+.copiado { color: var(--bom); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; background: var(--papel); }
+th, td { border: 1px solid var(--borda); padding: .35rem .5rem; text-align: left; overflow-wrap: anywhere; }
+ol li, ul li { margin: .35rem 0; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Presente!: bateria de testes do pacote 4</h1>
+<p class="sub">A rodada oficial na placa do pacote 4 (#48): o relatório, o Enviar e o Encerrar, com os testes 4, 5 e 6 do plano de testes (§8).</p>
+
+<p id="sem-memoria" class="aviso" hidden>Este navegador não está guardando o progresso (janela anônima ou armazenamento bloqueado). A página funciona assim mesmo, mas o que você marcar some se a aba for fechada: copie o resultado antes de fechar.</p>
+
+<h2>Como usar esta página</h2>
+<p>Faça esta bateria <strong>depois</strong> da bateria dos pacotes 1 a 3. Abra este arquivo pela pasta do repositório, depois do <code>git pull</code>: <code>docs\testes\bateria-pacote-4.html</code>, com dois cliques. Ela não precisa de internet, então pode ficar aberta enquanto o notebook está na rede do aparelho.</p>
+<p>Em cada item, marque <strong>passou</strong> ou <strong>falhou</strong> e escreva o que viu, se for diferente do esperado ou se o item pedir um número. No fim de cada bloco há um campo para colar o trecho do monitor serial daquele bloco. O navegador guarda o que você marcar: se a página recarregar, tudo volta.</p>
+<p>No fim, o botão <strong>Copiar resultado da #48</strong> monta o comentário da issue. Quando tiver internet, cole na #48, no GitHub, e anexe os arquivos JSON que o Compartilhar baixou e o vídeo, porque a página não guarda arquivo.</p>
+<p>Se alguma coisa travar, chame o Caio no WhatsApp. A meta é terça, 20/10; o que faltar se faz na aula desse dia.</p>
+<p>A ordem dos blocos segue o hotspot: o teste 4 roda com ele desligado; o teste 5 continua a mesma chamada, envia sem o hotspot e depois com ele; o teste 6 encerra essa chamada e faz outra, com o segundo professor e a lista da turma.</p>
+
+<!-- ============================================================ ANTES ==== -->
+<h2 id="antes">Antes de gravar</h2>
+<ol>
+  <li>Avise o Caio no WhatsApp que vai começar. O banco pausa sozinho depois de uns dias sem uso, e ele confere e reativa pelo celular (R60). Com o banco pausado, o Enviar falha sem defeito nenhum na placa.</li>
+  <li>Na pasta do repositório, rode <code>git pull</code>.</li>
+  <li>O leitor RC522, o <code>include/secrets.h</code> e o hotspot em 2,4 GHz ficam como na bateria dos pacotes 1 a 3. <strong>Deixe o hotspot desligado por enquanto</strong>: o primeiro bloco é sem ele.</li>
+  <li>As contas de professor: ponha na pasta <code>data/</code> o <code>professores.json</code> novo que o Caio mandou à parte, no lugar do antigo. Ele tem duas contas, <code>prof-teste-1</code> e <code>prof-teste-2</code>; guarde as senhas que vieram com ele. Esse arquivo não sobe para o git.</li>
+  <li>Separe os cartões etiquetados na bateria dos pacotes 1 a 3: Gabriel, Igor, João e SEM CADASTRO.</li>
+  <li>No VS Code, escolha <code>env:presente</code> na barra azul. Na aba do PlatformIO, abra <code>presente</code> &gt; <code>Platform</code> e clique em <strong>Upload Filesystem Image</strong>, que grava a pasta <code>data/</code> na placa. Depois clique em <strong>Upload</strong>. Se algum dos dois parar em <code>Connecting....</code>, segure o <code>BOOT</code> até a porcentagem começar a subir.</li>
+  <li>Abra o monitor serial e deixe aberto até o fim.</li>
+</ol>
+
+<!-- ========================================================= TESTE 4 ==== -->
+<h2 id="teste-4">Teste 4 do §8: o modo offline</h2>
+<section class="bloco" data-issue="48" data-id="t4" data-titulo="Teste 4, o modo offline (hotspot desligado)">
+
+<div class="item" data-id="t4-ligar" data-rotulo="Ao ligar, o pacote 4 e as duas contas">
+<p>Com o hotspot desligado, ligue a placa (ou aperte o <code>EN</code>). O LED fica azul fixo, e o monitor serial mostra:</p>
+<pre>Presente! - firmware, pacote 4 (#47)
+RC522 respondeu - VersionReg = 0x&lt;número&gt;
+Contas de professor lidas: 2 (&lt;bytes&gt; bytes de 4096)
+Rede do aparelho no ar: &lt;AP_SSID&gt;, endereco 192.168.4.1
+Pronto. Conecte o celular na rede do aparelho.</pre>
+<p>Se a primeira linha disser <code>pacote 3 (#45)</code>, faltou o <code>git pull</code> ou o <strong>Upload</strong>. Se disser <code>Contas de professor lidas: 1</code>, o <code>professores.json</code> gravado é o antigo: troque o arquivo e repita o <strong>Upload Filesystem Image</strong>.</p>
+</div>
+
+<div class="item" data-id="t4-1" data-rotulo="Login sem internet e Iniciar no modo offline">
+<p>Conecte o aparelho do professor na rede do aparelho e entre com <code>prof-teste-1</code> e a senha dele. A busca da turma falha em uns 7 s, como no pacote 1, e o painel abre com "Sem a lista da turma". Toque em <strong>Iniciar</strong>: verde fixo, e no serial:</p>
+<pre>Chamada aberta: 4172CMPN6A_P1-&lt;AAAAMMDD&gt;-&lt;HHMM&gt;, modo offline</pre>
+<p>Escreva na observação o <code>sessaoId</code> (o texto depois de "Chamada aberta: " e antes da vírgula). O teste 6 compara com ele.</p>
+</div>
+
+<div class="item" data-id="t4-2" data-rotulo="Dois crachás e um lançamento manual">
+<p>Encoste o cartão do Gabriel (<code>67571251</code>) e o SEM CADASTRO (<code>37A30251</code>). No modo offline os dois registram, com duas piscadas e um bip. Depois toque em <strong>Adicionar presença manual</strong> e lance a matrícula <code>1240990002</code> (o Bruno, aluno fictício), com o motivo "esqueceu o crachá". O painel mostra <code>3 crachás lidos</code>. No serial:</p>
+<pre>67571251  REGISTRADO  decidir: &lt;X&gt; ms  toque-&gt;feedback: &lt;Y&gt; ms
+37A30251  REGISTRADO  decidir: &lt;X&gt; ms  toque-&gt;feedback: &lt;Y&gt; ms
+Manual aceito: 1240990002</pre>
+</div>
+
+<div class="item" data-id="t4-3" data-rotulo="O Compartilhar baixa o relatório offline completo">
+<p>Toque em <strong>Compartilhar relatório</strong>. O portal mostra "Relatório salvo como presente-&lt;sessaoId&gt;.json." e o arquivo vai para os downloads do aparelho do professor. No iPhone, ele pode abrir numa aba: salve pelo botão de compartilhar do Safari, em "Salvar em Arquivos". Abra o arquivo e confira:</p>
+<ul>
+  <li>em <code>sessao</code>: o <code>sessaoId</code> do item anterior, <code>"professorId": "prof-teste-1"</code>, <code>"modo": "offline"</code>, <code>"relogio": "portal"</code>, e <strong>nenhuma</strong> chave <code>fim</code>;</li>
+  <li><code>"roster_carregado": false</code>, e nenhuma chave <code>presentes</code> nem <code>faltantes</code>;</li>
+  <li>em <code>eventos</code>, três itens, cada um com um <code>timestamp</code> no formato <code>&lt;AAAA-MM-DD&gt;T&lt;HH:MM:SS&gt;-03:00</code>, com a hora da chamada: os dois crachás com <code>"origem": "nfc"</code>, o <code>uid</code> e <code>"enriquecido": false</code>; o manual com <code>"origem": "manual"</code>, <code>"matricula": "1240990002"</code>, <code>"lancado_por": "prof-teste-1"</code> e o motivo.</li>
+</ul>
+<p>Guarde o arquivo: ele vai anexado ao comentário da #48.</p>
+</div>
+</section>
+
+<!-- ========================================================= TESTE 5 ==== -->
+<h2 id="teste-5">Teste 5 do §8: o Enviar sem e com internet</h2>
+<p>Grave em vídeo o Enviar com o hotspot ligado (item 3) e o crachá depois do Enviar (o primeiro item do bloco seguinte), com o LED e o som aparecendo. O vídeo vai no comentário da #48.</p>
+<p>Enquanto o Enviar tenta, o aparelho para de atender o portal e de ler crachá, e o LED pisca azul devagar (e pode parar por uns segundos, aceso ou apagado). Nesse intervalo o portal pode mostrar "O aparelho não respondeu. Ele se recupera sozinho em alguns segundos — espere e toque de novo." <strong>Isso é esperado: espere a mensagem do Enviar, sem tocar em nada.</strong></p>
+<section class="bloco" data-issue="48" data-id="t5" data-titulo="Teste 5, o Enviar sem e com internet">
+
+<div class="item" data-id="t5-1" data-rotulo="O Enviar sem internet falha e a chamada continua aberta">
+<p>Com o hotspot ainda desligado, toque em <strong>Enviar e fechar a chamada</strong>. O portal mostra "Enviando e fechando a chamada…"; o aparelho espera o hotspot por uns 7 s e desiste. O portal mostra "O aparelho não chegou à internet. A chamada continua aberta — tente de novo, ou salve com Compartilhar.", a pílula continua "Chamada aberta" e "Sem a lista da turma", e o LED volta ao verde fixo. No serial:</p>
+<pre>Enviando o relatorio ao banco.
+Conectando no hotspot principal, &lt;STA_SSID&gt; (ate 7 s)...
+O hotspot principal nao respondeu em 7 s.
+Hotspot de reserva vazio no secrets.h: pulado.
+Nenhum hotspot respondeu: confira nome, senha e se ele esta em 2,4 GHz (R13d).
+Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Enviar falhou: SEM_INTERNET. A chamada continua aberta.</pre>
+<p>Depois do Enviar, o serial <strong>não</strong> pode mostrar nenhuma linha da busca da turma: <code>Buscando a lista da turma ...</code>, <code>Lista da turma carregada: ...</code>, <code>Lista gravada no /roster.json.</code>, <code>Sem a lista: o aparelho segue em modo offline (R3).</code> ou <code>Saiu do hotspot. A rede do aparelho continua no ar.</code></p>
+</div>
+
+<div class="item" data-id="t5-2" data-rotulo="Depois da falha, o crachá registra e o Compartilhar funciona">
+<p>Encoste o cartão do Igor (<code>F78A1451</code>). Duas piscadas e um bip, e o painel vai a <code>4 crachás lidos</code>: a chamada continua registrando. No serial:</p>
+<pre>F78A1451  REGISTRADO  decidir: &lt;X&gt; ms  toque-&gt;feedback: &lt;Y&gt; ms</pre>
+<p>Toque em <strong>Compartilhar relatório</strong>: o arquivo baixa de novo, agora com quatro eventos e ainda sem <code>fim</code>. Guarde este também (o navegador pode chamá-lo de <code>presente-&lt;sessaoId&gt; (1).json</code>).</p>
+</div>
+
+<div class="item" data-id="t5-3" data-rotulo="O Enviar com internet grava uma vez e fecha a chamada">
+<p><strong>Em vídeo.</strong> Ligue o hotspot do celular do hotspot, em 2,4 GHz (no iPhone, com a tela do Acesso Pessoal aberta). Toque em <strong>Enviar e fechar a chamada</strong> de novo. O portal mostra "Relatório enviado. A chamada está fechada.", a pílula muda para "Chamada fechada", e o LED fica azul fixo. No serial:</p>
+<pre>Enviando o relatorio ao banco.
+Conectando no hotspot principal, &lt;STA_SSID&gt; (ate 7 s)...
+Conectado no hotspot principal em &lt;segundos&gt; s. Canal da rede do aparelho: antes &lt;X&gt;, agora &lt;Y&gt;.
+MEMORIA ANTES da conexao segura: &lt;bytes&gt; bytes (&lt;KB&gt; KB)
+Mandando o relatorio: &lt;bytes&gt; bytes.
+Relatorio enviado: gravado, 4 eventos (2 enriquecidos no banco).
+Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Chamada enviada: 4172CMPN6A_P1-&lt;AAAAMMDD&gt;-&lt;HHMM&gt;. O cracha nao registra mais.</pre>
+<p>Os 2 enriquecidos são o Gabriel e o Igor, cujos cartões o banco conhece; o SEM CADASTRO fica sem matrícula, e o manual já tinha a dele. Escreva na observação três números: quantos segundos o Enviar levou, do toque à mensagem; o número da linha <code>MEMORIA ANTES da conexao segura</code> (abaixo de 40 KB, reprova); e, se aparecer, a linha <code>Relatorio enviado: ja_enviado, o banco ja tinha esta chamada e nada se duplicou.</code> no lugar do <code>gravado</code>. Depois do Enviar, de novo, nenhuma linha da busca da turma no serial.</p>
+</div>
+
+<div class="item" data-id="t5-4" data-rotulo="O Enviar fica desabilitado depois de fechar a chamada">
+<p>O botão <strong>Enviar e fechar a chamada</strong> fica desabilitado, e o <strong>Adicionar presença manual</strong> também. A chamada só sobe uma vez: o Caio confere no banco que existe uma aula só com este <code>sessaoId</code>.</p>
+</div>
+</section>
+
+<!-- ================================================== DEPOIS DO ENVIAR == -->
+<h2 id="depois-do-enviar">Depois do Enviar</h2>
+<section class="bloco" data-issue="48" data-id="de" data-titulo="Depois do Enviar (chamada fechada)">
+
+<div class="item" data-id="de-1" data-rotulo="O crachá depois do Enviar dá vermelho e não grava">
+<p><strong>Em vídeo.</strong> Encoste o cartão do Gabriel (<code>67571251</code>). Vermelho por 1 s e o buzz longo. O painel continua com <code>4 crachás lidos</code>, e a linha do último toque não muda (continua a do Igor). No serial:</p>
+<pre>67571251  NAO_RECONHECIDO  chamada enviada: nada gravado</pre>
+</div>
+
+<div class="item" data-id="de-2" data-rotulo="O Exibir continua funcionando">
+<p>Toque em <strong>Exibir relatório</strong>. Aparece o aviso "Sessão sem lista da turma." e as quatro linhas da chamada, cada uma com a hora. Volte ao painel.</p>
+</div>
+
+<div class="item" data-id="de-3" data-rotulo="O Compartilhar continua funcionando, agora com o fim">
+<p>Toque em <strong>Compartilhar relatório</strong>. O arquivo baixa de novo, com os mesmos quatro eventos e, agora, a chave <code>fim</code> em <code>sessao</code>, com a hora do Enviar que deu certo. Guarde este também.</p>
+</div>
+</section>
+
+<!-- ========================================================= TESTE 6 ==== -->
+<h2 id="teste-6">Teste 6 do §8: dois professores em sequência</h2>
+<section class="bloco" data-issue="48" data-id="t6" data-titulo="Teste 6, dois professores em sequência (modo online)">
+
+<div class="item" data-id="t6-1" data-rotulo="O Encerrar volta ao login">
+<p>Deixe o hotspot ligado. Toque em <strong>Encerrar</strong> e, na caixa "Encerrar a chamada?", em <strong>Encerrar</strong>. O portal volta à tela de login, e o LED fica azul fixo. No serial:</p>
+<pre>Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.</pre>
+</div>
+
+<div class="item" data-id="t6-2" data-rotulo="O segundo professor entra e a turma é buscada do zero">
+<p>Entre com <code>prof-teste-2</code> e a senha dele. O aparelho busca a lista da turma de novo, como no item 1 do pacote 2, e o painel abre com "Prof. Marcos Bezerra (teste) · Sistemas Embarcados", "Lista carregada", "Chamada não começou" e <code>0 de 40 presentes</code>. O relatório anterior não existe mais: <strong>Exibir relatório</strong> e <strong>Compartilhar relatório</strong> ficam desabilitados até o Iniciar. No serial:</p>
+<pre>Login aceito: prof-teste-2.
+Buscando a lista da turma 4172CMPN6A_P1.
+Conectando no hotspot principal, &lt;STA_SSID&gt; (ate 7 s)...
+Conectado no hotspot principal em &lt;segundos&gt; s. Canal da rede do aparelho: antes &lt;X&gt;, agora &lt;Y&gt;.
+MEMORIA ANTES da conexao segura: &lt;bytes&gt; bytes (&lt;KB&gt; KB)
+Lista da turma carregada: 40 alunos (&lt;bytes&gt; bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.</pre>
+</div>
+
+<div class="item" data-id="t6-3" data-rotulo="Iniciar com outro sessaoId">
+<p>Olhe o relógio do aparelho do professor: o minuto tem de ser diferente do <code>&lt;HHMM&gt;</code> do <code>sessaoId</code> do teste 4. Se for o mesmo, espere o minuto virar, porque o <code>sessaoId</code> só vai até o minuto, e duas chamadas no mesmo minuto teriam o mesmo nome. Toque em <strong>Iniciar</strong>: verde fixo, e no serial:</p>
+<pre>Chamada aberta: 4172CMPN6A_P1-&lt;AAAAMMDD&gt;-&lt;HHMM&gt;, modo online</pre>
+<p>Escreva o <code>sessaoId</code> novo na observação.</p>
+</div>
+
+<div class="item" data-id="t6-4" data-rotulo="Um crachá registrado">
+<p>Encoste o seu cartão (<code>B77C0951</code>). Duas piscadas e um bip, e o painel mostra <code>1 de 40 presentes</code>. No serial:</p>
+<pre>B77C0951  REGISTRADO  matricula 1240108001  decidir: &lt;X&gt; ms  toque-&gt;feedback: &lt;Y&gt; ms</pre>
+</div>
+
+<div class="item" data-id="t6-5" data-rotulo="O Enviar que falha não mexe na lista da turma">
+<p>Desligue o hotspot e toque em <strong>Enviar e fechar a chamada</strong>. Como no item 1 do teste 5, o portal mostra "O aparelho não chegou à internet. A chamada continua aberta — tente de novo, ou salve com Compartilhar." e o LED volta ao verde fixo. O painel continua com "Lista carregada", "Chamada aberta" e <code>1 de 40 presentes</code>: o mesmo total de 40. O serial termina com</p>
+<pre>Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Enviar falhou: SEM_INTERNET. A chamada continua aberta.</pre>
+<p>e não mostra nenhuma linha da busca da turma (a lista está no item 1 do teste 5).</p>
+</div>
+
+<div class="item" data-id="t6-6" data-rotulo="O Enviar que dá certo também não mexe na lista da turma">
+<p>Ligue o hotspot e toque em <strong>Enviar e fechar a chamada</strong> de novo. O portal mostra "Relatório enviado. A chamada está fechada.", a pílula muda para "Chamada fechada", e o LED fica azul fixo. O painel continua com "Lista carregada" e <code>1 de 40 presentes</code>. No serial, as linhas do item 3 do teste 5, com</p>
+<pre>Relatorio enviado: gravado, 1 eventos (0 enriquecidos no banco).</pre>
+<p>e, de novo, nenhuma linha da busca da turma. Escreva na observação o número da linha <code>MEMORIA ANTES da conexao segura</code>.</p>
+</div>
+
+<div class="item" data-id="t6-7" data-rotulo="As duas chamadas não se misturam">
+<p>Toque em <strong>Compartilhar relatório</strong> e guarde o arquivo. Confira: <code>"professorId": "prof-teste-2"</code>, o <code>sessaoId</code> novo, <code>"modo": "online"</code>, a chave <code>fim</code>, <code>"roster_carregado": true</code>, um evento só (o seu cartão, com a matrícula, o nome e <code>"enriquecido": true</code>), <code>presentes</code> só com <code>1240108001</code> e <code>faltantes</code> com as outras 39 matrículas. Compare com o arquivo do teste 4: <code>sessaoId</code> diferentes, <code>professorId</code> diferentes, e nenhum evento de uma chamada aparece na outra.</p>
+</div>
+
+<div class="item" data-id="t6-8" data-rotulo="Encerrar no fim">
+<p>Toque em <strong>Encerrar</strong> e confirme. O portal volta ao login, e o serial repete a linha do Encerrar do item 1.</p>
+</div>
+
+<p>Se a página de histórico da turma (#38) estiver no ar, o Caio confere depois se as duas aulas aparecem lá. Você não precisa fazer nada.</p>
+</section>
+<div class="copiar" data-issue="48" data-video="1"></div>
+
+<!-- ===================================================== SE DER ERRADO == -->
+<h2 id="se-der-errado">Se der errado</h2>
+<p>Em qualquer caso, você pode chamar o Caio no WhatsApp durante o teste. Os casos da bateria dos pacotes 1 a 3 continuam valendo; os daqui são do pacote 4.</p>
+<ul>
+  <li><code>A conexao segura FALHOU (0: nao achei o endereco do banco).</code> seguida de <code>O banco pode estar pausado (R60): reative no painel do Supabase.</code>, e o portal diz que o aparelho não chegou à internet com o hotspot ligado: o banco está pausado. Avise o Caio, espere a reativação (uns 2 minutos) e toque em Enviar de novo. A chamada continua aberta, e nada se perde.</li>
+  <li><strong>A senha certa do <code>prof-teste-2</code> dá <code>Login recusado.</code></strong>: confira o usuário, em minúsculas e com hífen, e se a placa mostrou <code>Contas de professor lidas: 2</code> ao ligar.</li>
+  <li><code>O hotspot principal nao respondeu em 7 s.</code> com o hotspot ligado: confira se ele está em 2,4 GHz e, no iPhone, se a tela do Acesso Pessoal ficou aberta. Toque em Enviar de novo.</li>
+  <li><strong>O portal mostra "O banco recusou o relatório. A chamada continua aberta — salve com Compartilhar e avise o grupo."</strong> e o serial, <code>Enviar falhou: BANCO_RECUSOU. A chamada continua aberta.</code>: salve com Compartilhar, copie o serial inteiro desde <code>Enviando o relatorio ao banco.</code> e chame o Caio. Não toque em Enviar de novo.</li>
+  <li><strong>O portal mostra "O envio falhou. O relatório continua no aparelho — use Compartilhar para salvar no celular."</strong> e o serial, <code>Nao consegui gravar o /relatorio.json: a chamada continua aberta.</code>: salve com Compartilhar, copie o serial e chame o Caio.</li>
+  <li><strong>Passaram 25 s e o portal ficou em "O aparelho não respondeu…"</strong>, sem a mensagem do Enviar: espere mais alguns segundos e olhe a pílula. "Chamada fechada" quer dizer que o envio deu certo; "Chamada aberta", que falhou. Anote o tempo e copie o serial.</li>
+  <li><strong>O crachá depois do Enviar registra</strong> (duas piscadas ou uma linha <code>REGISTRADO</code>) ou <strong>aparece uma linha da busca da turma depois do Enviar</strong>: é defeito. Copie o serial e chame o Caio.</li>
+  <li><strong>O Encerrar mostra "O aparelho não encerrou a chamada. Espere alguns segundos e toque de novo."</strong>: espere e toque de novo. Se repetir, copie o serial.</li>
+  <li><strong>Qualquer outra coisa</strong>: copie o trecho inteiro do monitor serial para o campo do bloco e chame o Caio.</li>
+</ul>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var CHAVE = 'presente-bateria-pacote-4';
+  var estado = { itens: {}, serial: {} };
+  var guarda = true;
+
+  // O progresso e uma conveniencia: sem armazenamento (janela anonima,
+  // bloqueio do navegador), a pagina funciona e so nao lembra.
+  try {
+    var salvo = window.localStorage.getItem(CHAVE);
+    if (salvo) {
+      var lido = JSON.parse(salvo);
+      estado.itens = lido.itens || {};
+      estado.serial = lido.serial || {};
+    }
+  } catch (e) {
+    guarda = false;
+  }
+  if (!guarda) document.getElementById('sem-memoria').hidden = false;
+
+  function salvar() {
+    if (!guarda) return;
+    try {
+      window.localStorage.setItem(CHAVE, JSON.stringify(estado));
+    } catch (e) {
+      guarda = false;
+      document.getElementById('sem-memoria').hidden = false;
+    }
+  }
+
+  function el(tag, props) {
+    var n = document.createElement(tag);
+    for (var k in props) n[k] = props[k];
+    return n;
+  }
+
+  // Passou / falhou / observacao em cada item.
+  Array.prototype.forEach.call(document.querySelectorAll('.item'), function (item) {
+    var id = item.getAttribute('data-id');
+    var dado = estado.itens[id] || { r: '', obs: '' };
+    estado.itens[id] = dado;
+
+    var grupo = el('fieldset', { className: 'marcar' });
+    grupo.appendChild(el('legend', { textContent: 'Resultado' }));
+    ['passou', 'falhou'].forEach(function (valor) {
+      var rotulo = el('label', {});
+      var radio = el('input', { type: 'radio', name: 'r-' + id, value: valor, checked: dado.r === valor });
+      radio.addEventListener('change', function () {
+        dado.r = valor;
+        item.className = 'item ' + valor;
+        salvar();
+      });
+      rotulo.appendChild(radio);
+      rotulo.appendChild(document.createTextNode(valor));
+      grupo.appendChild(rotulo);
+    });
+
+    var obs = el('input', { type: 'text', className: 'obs', value: dado.obs, placeholder: 'Observação' });
+    obs.setAttribute('aria-label', 'Observação: ' + item.getAttribute('data-rotulo'));
+    obs.addEventListener('input', function () { dado.obs = obs.value; salvar(); });
+
+    item.appendChild(grupo);
+    item.appendChild(obs);
+    if (dado.r) item.className = 'item ' + dado.r;
+  });
+
+  // Um campo do monitor serial por bloco.
+  Array.prototype.forEach.call(document.querySelectorAll('.bloco'), function (bloco) {
+    var id = bloco.getAttribute('data-id');
+    var campo = el('textarea', { className: 'serial', id: 'serial-' + id, value: estado.serial[id] || '', spellcheck: false });
+    var rotulo = el('label', { className: 'rotulo', htmlFor: campo.id, textContent: 'Trecho do monitor serial deste bloco' });
+    campo.addEventListener('input', function () { estado.serial[id] = campo.value; salvar(); });
+    bloco.appendChild(rotulo);
+    bloco.appendChild(campo);
+  });
+
+  // O comentario de cada issue, pronto para colar no GitHub.
+  function montar(issue, comVideo) {
+    var hoje = new Date();
+    var data = ('0' + hoje.getDate()).slice(-2) + '/' + ('0' + (hoje.getMonth() + 1)).slice(-2) + '/' + hoje.getFullYear();
+    var linhas = ['Resultado da bateria de testes (docs/testes/bateria-pacote-4.html), em ' + data + '.', ''];
+    Array.prototype.forEach.call(document.querySelectorAll('.bloco[data-issue="' + issue + '"]'), function (bloco) {
+      linhas.push('**' + bloco.getAttribute('data-titulo') + '**', '');
+      Array.prototype.forEach.call(bloco.querySelectorAll('.item'), function (item) {
+        var dado = estado.itens[item.getAttribute('data-id')];
+        var marca = dado.r === 'passou' ? 'Passou' : dado.r === 'falhou' ? 'Falhou' : 'Não marcado';
+        var obs = dado.obs.trim();
+        linhas.push('- ' + marca + ': ' + item.getAttribute('data-rotulo') + '.' + (obs ? ' ' + obs : ''));
+      });
+      var serial = (estado.serial[bloco.getAttribute('data-id')] || '').replace(/\s+$/, '');
+      linhas.push('', 'Monitor serial:', '', '```', serial || '(não colado)', '```', '');
+    });
+    linhas.push('Relatórios baixados no Compartilhar: (arraste os arquivos .json para este comentário; se o GitHub recusar, junte-os num .zip)', '');
+    if (comVideo) linhas.push('Vídeo do Enviar com internet e do crachá depois do Enviar: (arraste o arquivo para este comentário)', '');
+    return linhas.join('\n');
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.copiar'), function (lugar) {
+    var issue = lugar.getAttribute('data-issue');
+    var comVideo = lugar.getAttribute('data-video') === '1';
+    var botao = el('button', { type: 'button', className: 'botao', textContent: 'Copiar resultado da #' + issue });
+    var aviso = el('p', { className: 'copiado' });
+    aviso.setAttribute('role', 'status');
+    var texto = el('textarea', { className: 'resultado', readOnly: true, hidden: true, spellcheck: false });
+    texto.setAttribute('aria-label', 'Comentário da #' + issue);
+
+    function avisar(ok) {
+      aviso.textContent = ok
+        ? 'Copiado. Cole como comentário na #' + issue + ', no GitHub.'
+        : 'O navegador não deixou copiar. Selecione o texto abaixo e copie com Ctrl+C.';
+    }
+
+    botao.addEventListener('click', function () {
+      texto.value = montar(issue, comVideo);
+      texto.hidden = false;
+      // Sem a API da area de transferencia, cai no comando antigo de copiar.
+      function antigo() {
+        texto.focus();
+        texto.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        avisar(ok);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto.value).then(function () { avisar(true); }, antigo);
+      } else {
+        antigo();
+      }
+    });
+
+    lugar.appendChild(botao);
+    lugar.appendChild(aviso);
+    lugar.appendChild(texto);
+  });
+})();
+</script>
+</body>
+</html>
