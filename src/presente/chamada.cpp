@@ -1,4 +1,4 @@
-// presente/chamada.cpp -- pacote 3 do firmware (#45): a chamada.
+// presente/chamada.cpp -- pacotes 3 e 4 do firmware (#45, #47): a chamada.
 //
 // O EVENTO VAI AO DISCO ANTES DA MEMORIA (R30, R36)
 //
@@ -23,6 +23,12 @@
 // Sem a lista, o toque se reconhece pelo UID, e o manual sempre grava: o
 // aparelho nao tem como ligar a matricula ao UID, e a API junta os dois no
 // envio.
+//
+// INICIADA E ABERTA (#47)
+//
+// A chamada enviada continua na tela e no Compartilhar (R46), mas nao registra
+// mais nada. Por isso duas perguntas: iniciada() vale do Iniciar ao Encerrar, e
+// aberta(), so ate o Enviar que deu certo.
 //
 // Nenhum nome de aluno no serial (R74): o log vai colado em issue, num
 // repositorio publico. O serial leva o UID ou a matricula.
@@ -54,10 +60,14 @@ char presencas[storage::CAPACIDADE][CHAVE_TAMANHO];
 size_t total = 0;
 size_t gravados = 0;
 
-bool estaAberta = false;
+bool estaIniciada = false;
+bool estaFechada = false;
 bool comLista = false;
 char id[40];
 char horaDoInicio[relogio::TAMANHO_DA_HORA];
+char horaDoFim[relogio::TAMANHO_DA_HORA];
+const char* idDoProfessor = nullptr;
+unsigned long msDoInicio = 0;
 
 Toque toque;
 bool houveToque = false;
@@ -106,6 +116,24 @@ bool gravar(const JsonDocument& evento, const char* quem) {
   return true;
 }
 
+// Os campos do Iniciar, e com o fim, estado "finalizada" (#49).
+bool gravarSessao(const char* fim) {
+  StaticJsonDocument<384> sessao;
+  sessao["sessaoId"] = static_cast<const char*>(id);
+  sessao["professorId"] = idDoProfessor;
+  sessao["turma"] = TURMA;
+  sessao["disciplina"] = DISCIPLINA;
+  sessao["inicio"] = static_cast<const char*>(horaDoInicio);
+  sessao["modo"] = comLista ? "online" : "offline";
+  sessao["relogio"] = "portal";
+  sessao["ms_desde_boot"] = msDoInicio;
+  if (fim != nullptr) {
+    sessao["estado"] = "finalizada";
+    sessao["fim"] = fim;
+  }
+  return storage::gravarSessao(sessao);
+}
+
 Veredito decidir() {
   const char* chave = toque.uid;
   const char* matricula = nullptr;
@@ -145,7 +173,7 @@ Veredito decidir() {
 }  // namespace
 
 Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeBoot) {
-  if (estaAberta) {
+  if (estaIniciada) {
     return Abertura::JA_ABERTA;
   }
   if (!relogio::acertar(hora, msDesdeBoot)) {
@@ -157,6 +185,9 @@ Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeB
            hora + 14);
   snprintf(horaDoInicio, sizeof(horaDoInicio), "%s", hora);
   comLista = net::comLista();
+  idDoProfessor = professorId;
+  msDoInicio = msDesdeBoot;
+  estaFechada = false;
   total = 0;
   gravados = 0;
   houveToque = false;
@@ -167,28 +198,23 @@ Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeB
     Serial.println("Nao consegui apagar os arquivos da chamada anterior.");
   }
 
-  StaticJsonDocument<384> sessao;
-  sessao["sessaoId"] = static_cast<const char*>(id);
-  sessao["professorId"] = professorId;
-  sessao["turma"] = TURMA;
-  sessao["disciplina"] = DISCIPLINA;
-  sessao["inicio"] = static_cast<const char*>(horaDoInicio);
-  sessao["modo"] = comLista ? "online" : "offline";
-  sessao["relogio"] = "portal";
-  sessao["ms_desde_boot"] = msDesdeBoot;
-  if (!storage::gravarSessao(sessao)) {
+  if (!gravarSessao(nullptr)) {
     // Recusar o Iniciar deixaria a aula sem chamada; cada toque ainda avisa se
     // nao gravou.
     Serial.printf("Nao consegui gravar o %s: a chamada abre assim mesmo.\n", storage::CAMINHO_DA_SESSAO);
   }
 
-  estaAberta = true;
+  estaIniciada = true;
   Serial.printf("Chamada aberta: %s, modo %s\n", id, comLista ? "online" : "offline");
   return Abertura::ABERTA;
 }
 
+bool iniciada() {
+  return estaIniciada;
+}
+
 bool aberta() {
-  return estaAberta;
+  return estaIniciada && !estaFechada;
 }
 
 const char* sessaoId() {
@@ -199,8 +225,42 @@ const char* inicio() {
   return horaDoInicio;
 }
 
+const char* professor() {
+  return idDoProfessor;
+}
+
+bool online() {
+  return comLista;
+}
+
+void fechar(const char* fim) {
+  snprintf(horaDoFim, sizeof(horaDoFim), "%s", fim);
+  estaFechada = true;
+  if (!gravarSessao(horaDoFim)) {
+    Serial.printf("Nao consegui regravar o %s como finalizada.\n", storage::CAMINHO_DA_SESSAO);
+  }
+}
+
+const char* fim() {
+  return estaFechada ? horaDoFim : nullptr;
+}
+
+void zerar() {
+  estaIniciada = false;
+  estaFechada = false;
+  comLista = false;
+  id[0] = '\0';
+  horaDoInicio[0] = '\0';
+  horaDoFim[0] = '\0';
+  idDoProfessor = nullptr;
+  msDoInicio = 0;
+  total = 0;
+  gravados = 0;
+  houveToque = false;
+}
+
 Veredito encostou(const rfid::Uid& uid, unsigned long msDesdeBoot) {
-  if (!estaAberta) {
+  if (!aberta()) {
     return Veredito::NAO_RECONHECIDO;
   }
   rfid::formatarUid(uid, toque.uid, sizeof(toque.uid));
@@ -215,7 +275,7 @@ Veredito encostou(const rfid::Uid& uid, unsigned long msDesdeBoot) {
 Lancamento lancar(const char* matricula, const char* motivo, const char* professorId,
                   unsigned long msDesdeBoot, const char*& nome) {
   nome = nullptr;
-  if (!estaAberta) {
+  if (!aberta()) {
     return Lancamento::SEM_SESSAO;
   }
   // O limite so protege a memoria: a matricula nao se confere contra o

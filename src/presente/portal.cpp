@@ -1,11 +1,21 @@
-// presente/portal.cpp -- pacotes 1 a 3 do firmware (#41, #43, #45): o portal
-// dentro do aparelho.
+// presente/portal.cpp -- pacotes 1 a 4 do firmware (#41, #43, #45, #47): o
+// portal dentro do aparelho.
 //
-// Das nove rotas do secao 6.1, os pacotes 1 a 3 tem seis: POST /api/login,
-// GET /api/estado, POST /api/seguir-offline, POST /api/iniciar, POST /api/manual
-// e GET /api/presencas. Qualquer outra rota de /api/, e metodo errado nessas
-// seis, recebe 404 ROTA_DESCONHECIDA. As tres que faltam chegam no pacote 4
-// (#47): GET /api/relatorio, POST /api/enviar e POST /api/encerrar.
+// Das nove rotas do secao 6.1, o firmware tem oito: POST /api/login,
+// GET /api/estado, POST /api/seguir-offline, POST /api/iniciar, POST /api/manual,
+// GET /api/presencas e, do pacote 4 (#47), GET /api/relatorio e
+// POST /api/encerrar. Qualquer outra rota de /api/, e metodo errado nessas oito,
+// recebe 404 ROTA_DESCONHECIDA. O POST /api/enviar chega na segunda parte do
+// pacote 4.
+//
+// O RELATORIO E O ENCERRAR (#47)
+//
+// O relatorio sai em pedacos, escrito pelo relatorio.cpp, enquanto houver
+// chamada iniciada, tambem depois do Enviar (R46). O Encerrar vale em qualquer
+// estado com login, ate durante a busca da turma: apaga a lista, a chamada e os
+// arquivos dela, invalida o cookie e volta ao login. Responde sempre 200: a
+// memoria ja esta limpa, e prender o professor no painel nao apagaria o
+// arquivo que falhou.
 //
 // A CHAMADA (#45)
 //
@@ -45,6 +55,7 @@
 #include "chamada.h"
 #include "clock.h"
 #include "net.h"
+#include "relatorio.h"
 
 namespace portal {
 namespace {
@@ -263,10 +274,10 @@ void aoEstado() {
       doc["n_presentes"] = chamada::presentes();
     }
 
-    if (chamada::aberta()) {
+    if (chamada::iniciada()) {
       JsonObject sessao = doc.createNestedObject("sessao");
       sessao["sessaoId"] = chamada::sessaoId();
-      sessao["estado"] = "aberta";
+      sessao["estado"] = chamada::aberta() ? "aberta" : "finalizada";
       sessao["inicio"] = chamada::inicio();
     }
 
@@ -437,7 +448,7 @@ void aoPresencas() {
   // Antes do Iniciar o arquivo nao se le: pode ser de outra chamada, ou das
   // bancadas (R74).
   primeiroItem = true;
-  if (net::comLista() && chamada::aberta()) {
+  if (net::comLista() && chamada::iniciada()) {
     storage::percorrerEventos(escreverEvento);
   }
 
@@ -455,7 +466,7 @@ void aoPresencas() {
 
   saida.print("],\"sem_nome\":[");
   primeiroItem = true;
-  if (!net::comLista() && chamada::aberta()) {
+  if (!net::comLista() && chamada::iniciada()) {
     storage::percorrerEventos(escreverEvento);
   }
   saida.print("]}");
@@ -463,6 +474,42 @@ void aoPresencas() {
   saida.despejar();
   saidaDasPresencas = nullptr;
   // O WebServer fecha a resposta em pedacos sozinho, ao fim do pedido.
+}
+
+void aoRelatorio() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+  if (!chamada::iniciada()) {
+    responderErro(400, "SEM_SESSAO");
+    return;
+  }
+
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  server.send(200, "application/json", "");
+  Saida saida;
+  relatorio::escrever(saida, chamada::fim());
+  saida.despejar();
+}
+
+void aoEncerrar() {
+  if (!comLogin()) {
+    responderErro(401, "SEM_LOGIN");
+    return;
+  }
+
+  net::esquecerLista();
+  chamada::zerar();
+  if (!storage::apagarChamada()) {
+    Serial.println("Nao consegui apagar os arquivos da chamada: o proximo Iniciar tenta de novo.");
+  }
+  token[0] = '\0';  // o cookie deixa de valer
+  professorAtual = -1;
+  estado = Estado::AGUARDANDO_LOGIN;
+  feedback::acender(feedback::Cor::AZUL);
+  Serial.println("Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.");
+  responderJson(200, "{\"ok\":true}");
 }
 
 const char* tipoDoArquivo(const String& caminho) {
@@ -491,7 +538,7 @@ void mandarParaOLogin() {
   server.send(302);
 }
 
-// Tudo o que nao e uma das seis rotas registradas no iniciar() cai aqui.
+// Tudo o que nao e uma das oito rotas registradas no iniciar() cai aqui.
 void aoResto() {
   const String caminho = server.uri();
 
@@ -574,6 +621,8 @@ void iniciar(const JsonDocument& professores, bool littlefsMontado) {
   server.on("/api/iniciar", HTTP_POST, aoIniciar);
   server.on("/api/manual", HTTP_POST, aoManual);
   server.on("/api/presencas", HTTP_GET, aoPresencas);
+  server.on("/api/relatorio", HTTP_GET, aoRelatorio);
+  server.on("/api/encerrar", HTTP_POST, aoEncerrar);
   server.onNotFound(aoResto);
   server.begin();
 }

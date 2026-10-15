@@ -37,4 +37,8 @@ JsonArrayConst alunos();
 // lista. Sem busca em curso, nao faz nada.
 void abandonar();
 
+// O Encerrar (#47): para a busca em curso, se houver, e apaga a lista da turma
+// da memoria e do /roster.json. O login seguinte busca de novo.
+void esquecerLista();
+
 }  // namespace net

@@ -1,4 +1,5 @@
-// presente/chamada.h -- a chamada aberta (secao 5 da spec), pacote 3 (#45).
+// presente/chamada.h -- a chamada aberta (secao 5 da spec), pacotes 3 e 4 (#45,
+// #47).
 //
 // Quem esta presente, a decisao do toque e do lancamento manual, os contadores
 // e o ultimo toque. Nao conhece o portal nem o LED (R74): devolve um veredito, e
@@ -29,14 +30,37 @@ struct Toque {
 // O Iniciar: acerta o relogio com a hora do celular, apaga os arquivos de uma
 // chamada anterior e grava o /sessao_atual.json (R16). Falha ao gravar so avisa
 // no serial: a chamada abre assim mesmo. O modo (com ou sem a lista) fica o da
-// abertura.
+// abertura. Com a chamada iniciada, enviada ou nao, volta JA_ABERTA.
 Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeBoot);
 
+// Houve Iniciar e nao houve Encerrar: a chamada se exibe e se compartilha,
+// tambem depois do Enviar (R46).
+bool iniciada();
+
+// Iniciada e ainda nao enviada: so assim o toque e o manual registram (#47).
 bool aberta();
 
 // "<TURMA>-<AAAAMMDD>-<HHMM>" (secao 7) e a hora do Iniciar, em -03:00.
 const char* sessaoId();
 const char* inicio();
+
+// O id do professor do Iniciar, para o relatorio nao depender do portal.
+const char* professor();
+
+// O modo da abertura: true com a lista da turma (online).
+bool online();
+
+// O Enviar que deu certo (#47): a chamada para de registrar e o
+// /sessao_atual.json se regrava com os campos do Iniciar, estado "finalizada"
+// e o fim (o pacote 5, #49, rele o arquivo). Falha ao gravar so avisa no
+// serial.
+void fechar(const char* fim);
+
+// A hora do fim do Enviar que deu certo; nullptr antes dele.
+const char* fim();
+
+// O Encerrar (#47): esquece a chamada inteira. Os arquivos sao de quem chama.
+void zerar();
 
 // O cracha lido. Fora da chamada aberta, NAO_RECONHECIDO sem gravar nada.
 Veredito encostou(const rfid::Uid& uid, unsigned long msDesdeBoot);

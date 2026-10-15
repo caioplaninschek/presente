@@ -141,8 +141,13 @@ bool gravarSessao(const JsonDocument& sessao);
 // false se nao escreveu a linha inteira, ou se ela nao caberia na releitura.
 bool acrescentarEvento(const JsonDocument& evento);
 
-// Apaga o /eventos.json e o /sessao_atual.json de uma chamada anterior, ou das
-// bancadas. Devolve true tambem quando nao havia arquivo.
+// O relatorio que o Enviar (#47) grava para mandar ao banco. So existe durante
+// a tentativa.
+const char CAMINHO_DO_RELATORIO[] = "/relatorio.json";
+
+// Apaga o /eventos.json, o /sessao_atual.json e o /relatorio.json de uma
+// chamada anterior, ou das bancadas. Devolve true tambem quando nao havia
+// arquivo.
 bool apagarChamada();
 
 // Le o /eventos.json uma linha por vez e chama aoLer com cada linha legivel. A

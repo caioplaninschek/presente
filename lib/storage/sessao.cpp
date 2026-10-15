@@ -109,7 +109,8 @@ bool apagarChamada() {
     linhaPelaMetade = false;
   }
   const bool sessao = apagar(CAMINHO_DA_SESSAO);
-  return eventos && sessao;
+  const bool relatorio = apagar(CAMINHO_DO_RELATORIO);
+  return eventos && sessao && relatorio;
 }
 
 size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento)) {

@@ -260,4 +260,19 @@ void abandonar() {
   encerrar();
 }
 
+// Sem o encerrar(): a frase dele diria que o aparelho segue offline, e o
+// Encerrar volta ao login.
+void esquecerLista() {
+  if (fase != Fase::PARADA) {
+    WiFi.disconnect();
+    fase = Fase::PARADA;
+    Serial.println("Busca interrompida pelo Encerrar: saiu do hotspot.");
+  }
+  lista.clear();
+  carregada = false;
+  if (!storage::apagarRoster()) {
+    Serial.println("Nao consegui apagar o /roster.json.");
+  }
+}
+
 }  // namespace net
