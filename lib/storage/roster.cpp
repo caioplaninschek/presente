@@ -31,4 +31,17 @@ bool apagarRoster() {
   return !LittleFS.exists(CAMINHO_DO_ROSTER) || LittleFS.remove(CAMINHO_DO_ROSTER);
 }
 
+DeserializationError lerRoster(JsonDocument& destino) {
+  if (!LittleFS.exists(CAMINHO_DO_ROSTER)) {
+    return DeserializationError::EmptyInput;
+  }
+  File arquivo = LittleFS.open(CAMINHO_DO_ROSTER, "r");
+  if (!arquivo) {
+    return DeserializationError::EmptyInput;
+  }
+  const DeserializationError erro = deserializeJson(destino, arquivo);
+  arquivo.close();
+  return erro;
+}
+
 }  // namespace storage

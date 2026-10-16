@@ -1,4 +1,5 @@
-// presente/chamada.cpp -- pacotes 3 e 4 do firmware (#45, #47): a chamada.
+// presente/chamada.cpp -- pacotes 3 a 5 do firmware (#45, #47, #49): a
+// chamada.
 //
 // O EVENTO VAI AO DISCO ANTES DA MEMORIA (R30, R36)
 //
@@ -29,6 +30,17 @@
 // A chamada enviada continua na tela e no Compartilhar (R46), mas nao registra
 // mais nada. Por isso duas perguntas: iniciada() vale do Iniciar ao Encerrar, e
 // aberta(), so ate o Enviar que deu certo.
+//
+// A RETOMADA (#49, R16)
+//
+// Depois de uma queda, a chamada volta do /sessao_atual.json: o sessaoId, o
+// inicio, o ms_desde_boot do Iniciar, o modo, o professor e, se ela ja tinha
+// sido enviada, o fim. O relogio se reacerta com o inicio e o ms_desde_boot do
+// Iniciar, porque e a ancora que o formatar() usa para todo evento, os de antes
+// e os de depois da queda; sem ela, o relatorio deixaria todos de fora. O
+// /eventos.json e relido para refazer os presentes e a contagem (R30), e a
+// linha cortada pela queda se descarta com aviso no serial (R36). Ate o login
+// do boot novo trazer a hora, nada se grava.
 //
 // Nenhum nome de aluno no serial (R74): o log vai colado em issue, num
 // repositorio publico. O serial leva o UID ou a matricula.
@@ -66,8 +78,16 @@ bool comLista = false;
 char id[40];
 char horaDoInicio[relogio::TAMANHO_DA_HORA];
 char horaDoFim[relogio::TAMANHO_DA_HORA];
+// Aponta o id no documento global das contas, que vive o boot inteiro (#49): o
+// documento lido do /sessao_atual.json na retomada morre ao fim dela.
 const char* idDoProfessor = nullptr;
+// So para a retomada cuja conta saiu do professores.json: o id lido do arquivo,
+// copiado aqui para nao apontar o documento que morre.
+char idCopiado[40];
 unsigned long msDoInicio = 0;
+
+// Presencas que a releitura da retomada nao coube na memoria.
+size_t semLugar = 0;
 
 Toque toque;
 bool houveToque = false;
@@ -132,6 +152,27 @@ bool gravarSessao(const char* fim) {
     sessao["fim"] = fim;
   }
   return storage::gravarSessao(sessao);
+}
+
+// Uma linha do /eventos.json na retomada: conta o evento e refaz a presenca,
+// com a mesma chave do toque e do manual. Com a lista, a matricula; sem ela, o
+// UID do toque, e o manual nao marca ninguem, como no lancar().
+void reler(JsonObjectConst evento) {
+  gravados++;
+  const char* chave = nullptr;
+  if (comLista) {
+    chave = evento["matricula"];
+  } else if (strcmp(evento["origem"] | "", "nfc") == 0) {
+    chave = evento["uid"];
+  }
+  if (chave == nullptr || jaPresente(chave)) {
+    return;
+  }
+  if (total >= storage::CAPACIDADE) {
+    semLugar++;
+    return;
+  }
+  marcarPresente(chave);
 }
 
 Veredito decidir() {
@@ -212,6 +253,71 @@ Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeB
   return Abertura::ABERTA;
 }
 
+Retomada retomar(JsonObjectConst sessao, const char* idDaConta) {
+  zerar();
+
+  const char* idLido = sessao["sessaoId"];
+  const char* inicioLido = sessao["inicio"];
+  const char* professorLido = sessao["professorId"];
+  const JsonVariantConst msLido = sessao["ms_desde_boot"];
+  if (idLido == nullptr || strlen(idLido) >= sizeof(id) || professorLido == nullptr ||
+      !msLido.is<unsigned long>()) {
+    Serial.printf("O %s nao traz uma chamada legivel: nada a retomar.\n", storage::CAMINHO_DA_SESSAO);
+    return Retomada::NENHUMA;
+  }
+  // A ancora do Iniciar volta ao relogio: e por ela que o formatar() da hora a
+  // todo evento, e o login do boot novo mede o deslocamento contra ela.
+  if (!relogio::retomar(inicioLido, msLido.as<unsigned long>())) {
+    Serial.printf("O inicio do %s nao e uma hora valida: nada a retomar.\n", storage::CAMINHO_DA_SESSAO);
+    return Retomada::NENHUMA;
+  }
+
+  snprintf(id, sizeof(id), "%s", idLido);
+  snprintf(horaDoInicio, sizeof(horaDoInicio), "%s", inicioLido);
+  msDoInicio = msLido.as<unsigned long>();
+  if (idDaConta != nullptr) {
+    idDoProfessor = idDaConta;
+  } else {
+    snprintf(idCopiado, sizeof(idCopiado), "%s", professorLido);
+    idDoProfessor = idCopiado;
+    Serial.printf("A conta %s, que iniciou a chamada, nao esta no professores.json.\n", idCopiado);
+  }
+
+  const bool eraOnline = strcmp(sessao["modo"] | "", "online") == 0;
+  comLista = eraOnline && net::comLista();
+  if (eraOnline && !comLista) {
+    Serial.println("A chamada era online, mas a lista da turma nao voltou do disco: segue offline, com o cracha reconhecido pelo UID.");
+  }
+
+  if (strcmp(sessao["estado"] | "", "finalizada") == 0) {
+    estaFechada = true;
+    const char* fimLido = sessao["fim"];
+    if (fimLido != nullptr && strlen(fimLido) == relogio::TAMANHO_DA_HORA - 1) {
+      snprintf(horaDoFim, sizeof(horaDoFim), "%s", fimLido);
+    }
+  }
+
+  // A releitura (R30). Primeiro a linha nova: a linha cortada pela queda ganha
+  // o \n e passa a ser descartada igual por todo leitor, aqui e no relatorio.
+  storage::comecarLinhaNova();
+  size_t descartadas = 0;
+  semLugar = 0;
+  storage::percorrerEventos(reler, &descartadas);
+  if (descartadas > 0) {
+    Serial.printf("%u linha(s) ilegivel(is) no %s, cortada(s) pela queda de energia: descartada(s) (R36).\n",
+                  descartadas, storage::CAMINHO_DOS_EVENTOS);
+  }
+  if (semLugar > 0) {
+    Serial.printf("Memoria de presencas cheia (%u): %u presenca(s) relida(s) ficaram fora.\n",
+                  storage::CAPACIDADE, semLugar);
+  }
+
+  estaIniciada = true;
+  Serial.printf("Chamada retomada: %s, modo %s, %s; %u eventos, %u presencas.\n", id,
+                comLista ? "online" : "offline", estaFechada ? "ja enviada" : "aberta", gravados, total);
+  return estaFechada ? Retomada::ENVIADA : Retomada::ABERTA;
+}
+
 bool iniciada() {
   return estaIniciada;
 }
@@ -245,7 +351,8 @@ void fechar(const char* fim) {
 }
 
 const char* fim() {
-  return estaFechada ? horaDoFim : nullptr;
+  // Vazio so na retomada de um arquivo finalizado sem o fim.
+  return estaFechada && horaDoFim[0] != '\0' ? horaDoFim : nullptr;
 }
 
 void zerar() {
@@ -280,6 +387,13 @@ Lancamento lancar(const char* matricula, const char* motivo, const char* profess
   nome = nullptr;
   if (!aberta()) {
     return Lancamento::SEM_SESSAO;
+  }
+  // DECISAO PENDENTE (#49): depois da retomada, antes de um login com hora, o
+  // horario do lancamento sairia errado; a recusa usa o NAO_GRAVADO que o
+  // portal ja conhece, sem codigo novo no secao 6.1.
+  if (!relogio::acertadoNesteBoot()) {
+    Serial.println("Manual recusado: este boot ainda nao tem hora (falta o login com hora).");
+    return Lancamento::NAO_GRAVADO;
   }
   // O limite so protege a memoria: a matricula nao se confere contra o
   // cadastro (R33).

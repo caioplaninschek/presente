@@ -1,5 +1,6 @@
-// presente/clock.cpp -- pacote 3 do firmware (#45): a hora do Iniciar e a hora
-// de cada evento, para o painel e o relatorio (R74).
+// presente/clock.cpp -- pacotes 3 e 5 do firmware (#45, #49): a hora do
+// Iniciar, a hora de cada evento, para o painel e o relatorio (R74), e o
+// relogio do boot que retoma a chamada depois de uma queda.
 //
 // O arquivo continua com o nome da secao 5; o namespace e relogio (clock.h).
 //
@@ -7,9 +8,23 @@
 // a volta). Nem mktime() nem gmtime_r(): o primeiro depende do fuso do sistema,
 // e o time_t deste toolchain tem 32 bits, que acabam em 2038, dentro dos anos
 // que o acertar() aceita.
+//
+// O DESLOCAMENTO DA RETOMADA (#49)
+//
+// Com a hora do login do boot novo, e a ancora do Iniciar devolvida pelo
+// retomar():
+//
+//   deslocamento = msNoAcerto + (hora do login - inicio, em s) x 1000 - millis()
+//
+// e o agora() passa a ser millis() + deslocamento. O formatar() desse instante
+// da inicio + (agora - msNoAcerto) / 1000, que e a hora do login mais o tempo
+// passado desde ele. Sem o retomar(), o boot novo nao teria ancora nenhuma: o
+// acertado volta a false a cada reinicio, e o formatar() recusaria todo evento,
+// inclusive os de antes da queda.
 
 #include "clock.h"
 
+#include <Arduino.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,6 +35,11 @@ namespace {
 bool acertado = false;
 int64_t segundosNoAcerto = 0;  // desde 1970, contados sem fuso
 unsigned long msNoAcerto = 0;
+
+// Quanto o millis() deste boot esta atras do relogio do Iniciar; 0 no proprio
+// boot do Iniciar. Com sinal: o celular do login pode estar atrasado.
+int32_t deslocamento = 0;
+bool comHoraNesteBoot = false;
 
 const char FUSO[] = "-03:00";
 
@@ -62,9 +82,9 @@ int32_t diasNoMes(int32_t ano, int32_t mes) {
   return mes == 2 && ano % 4 == 0 ? 29 : dias[mes - 1];
 }
 
-}  // namespace
-
-bool acertar(const char* hora, unsigned long msDesdeBoot) {
+// Os segundos desde 1970, sem fuso, de uma hora no formato do acertar(). false
+// se a hora nao esta no formato ou o ano sai de 2026 a 2099.
+bool lerHora(const char* hora, int64_t& segundosDesde1970) {
   if (hora == nullptr || strlen(hora) != TAMANHO_DA_HORA - 1) {
     return false;
   }
@@ -84,11 +104,58 @@ bool acertar(const char* hora, unsigned long msDesdeBoot) {
     return false;
   }
 
-  segundosNoAcerto = static_cast<int64_t>(diasDesde1970(ano, mes, dia)) * 86400 +
-                     horas * 3600 + minutos * 60 + segundos;
-  msNoAcerto = msDesdeBoot;
-  acertado = true;
+  segundosDesde1970 = static_cast<int64_t>(diasDesde1970(ano, mes, dia)) * 86400 +
+                      horas * 3600 + minutos * 60 + segundos;
   return true;
+}
+
+}  // namespace
+
+bool acertar(const char* hora, unsigned long msDesdeBoot) {
+  int64_t segundos;
+  if (!lerHora(hora, segundos)) {
+    return false;
+  }
+  segundosNoAcerto = segundos;
+  msNoAcerto = msDesdeBoot;
+  deslocamento = 0;
+  acertado = true;
+  comHoraNesteBoot = true;
+  return true;
+}
+
+bool retomar(const char* inicio, unsigned long msDoIniciar) {
+  if (!acertar(inicio, msDoIniciar)) {
+    return false;
+  }
+  comHoraNesteBoot = false;  // o millis() deste boot ainda nao tem base
+  return true;
+}
+
+bool acertarNaRetomada(const char* hora) {
+  int64_t segundos;
+  if (!acertado || !lerHora(hora, segundos)) {
+    return false;
+  }
+  const int64_t calculado = static_cast<int64_t>(msNoAcerto) +
+                            (segundos - segundosNoAcerto) * 1000 -
+                            static_cast<int64_t>(millis());
+  // O formatar() conta a diferenca em 32 bits: uma queda de mais de 24 dias no
+  // meio da mesma chamada nao cabe, e o boot fica sem hora.
+  if (calculado < INT32_MIN || calculado > INT32_MAX) {
+    return false;
+  }
+  deslocamento = static_cast<int32_t>(calculado);
+  comHoraNesteBoot = true;
+  return true;
+}
+
+bool acertadoNesteBoot() {
+  return comHoraNesteBoot;
+}
+
+unsigned long agora() {
+  return millis() + static_cast<unsigned long>(deslocamento);
 }
 
 bool formatar(unsigned long msDesdeBoot, char* destino, size_t tamanho) {
@@ -99,10 +166,10 @@ bool formatar(unsigned long msDesdeBoot, char* destino, size_t tamanho) {
   // A diferenca com sinal tambem serve a um instante anterior ao acerto, e
   // atravessa a volta do millis() aos 49 dias.
   const int32_t passadosMs = static_cast<int32_t>(msDesdeBoot - msNoAcerto);
-  const int64_t agora = (segundosNoAcerto * 1000 + passadosMs) / 1000;
+  const int64_t segundos = (segundosNoAcerto * 1000 + passadosMs) / 1000;
 
-  const int32_t dias = static_cast<int32_t>(agora / 86400);
-  const int32_t doDia = static_cast<int32_t>(agora % 86400);
+  const int32_t dias = static_cast<int32_t>(segundos / 86400);
+  const int32_t doDia = static_cast<int32_t>(segundos % 86400);
   int32_t ano, mes, dia;
   dataDosDias(dias, ano, mes, dia);
 

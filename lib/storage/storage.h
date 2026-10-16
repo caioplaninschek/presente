@@ -126,6 +126,10 @@ bool gravarRoster(const JsonDocument& lista);
 // Devolve true tambem quando nao havia arquivo.
 bool apagarRoster();
 
+// Le o /roster.json para dentro de destino, na retomada (#49). Sem o arquivo,
+// devolve EmptyInput, como lerProfessores().
+DeserializationError lerRoster(JsonDocument& destino);
+
 const char CAMINHO_DA_SESSAO[] = "/sessao_atual.json";
 
 // A chamada do firmware (#45, R74), em lib/storage/sessao.cpp. O registrar()
@@ -136,6 +140,16 @@ const char CAMINHO_DA_SESSAO[] = "/sessao_atual.json";
 // Grava o /sessao_atual.json (R16). Devolve false se nao terminou; nesse caso,
 // nao deixa arquivo pela metade.
 bool gravarSessao(const JsonDocument& sessao);
+
+// Le o /sessao_atual.json para dentro de destino, na retomada (#49). Sem o
+// arquivo, devolve EmptyInput, como lerProfessores().
+DeserializationError lerSessao(JsonDocument& destino);
+
+// A retomada comeca numa linha nova (#49): se o /eventos.json nao termina em
+// \n, a queda pegou uma escrita no meio, e o \n entra agora, antes da releitura.
+// A linha cortada vira uma linha ilegivel, que todo leitor descarta. Se o \n
+// nao entra, o acrescentarEvento() seguinte tenta de novo. Sem o arquivo, nada.
+void comecarLinhaNova();
 
 // Uma linha no /eventos.json, terminada em \n, por acrescimo (R36). Devolve
 // false se nao escreveu a linha inteira, ou se ela nao caberia na releitura.
@@ -152,8 +166,9 @@ bool apagarChamada();
 
 // Le o /eventos.json uma linha por vez e chama aoLer com cada linha legivel. A
 // linha que nao e JSON (a cortada por uma queda de energia) e pulada. Devolve
-// quantas linhas passaram para aoLer; sem o arquivo, 0.
-size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento));
+// quantas linhas passaram para aoLer; sem o arquivo, 0. Com descartadas, conta
+// nela as linhas puladas, para quem precisa avisar (a releitura da retomada).
+size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento), size_t* descartadas = nullptr);
 
 }  // namespace storage
 

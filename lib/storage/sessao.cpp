@@ -1,5 +1,6 @@
 // lib/storage/sessao.cpp -- a chamada em disco (#45, R74): o /sessao_atual.json
-// (R16) e o /eventos.json do firmware.
+// (R16) e o /eventos.json do firmware, e a releitura dos dois na retomada
+// depois de uma queda de energia (#49).
 //
 // Fora do storage.cpp pelo mesmo motivo do roster.cpp: no mesmo arquivo, o
 // codigo dos programas de bancada deixaria de sair identico. E sem o
@@ -79,6 +80,49 @@ bool gravarSessao(const JsonDocument& sessao) {
   return true;
 }
 
+DeserializationError lerSessao(JsonDocument& destino) {
+  if (!LittleFS.exists(CAMINHO_DA_SESSAO)) {
+    return DeserializationError::EmptyInput;
+  }
+  File arquivo = LittleFS.open(CAMINHO_DA_SESSAO, "r");
+  if (!arquivo) {
+    return DeserializationError::EmptyInput;
+  }
+  const DeserializationError erro = deserializeJson(destino, arquivo);
+  arquivo.close();
+  return erro;
+}
+
+void comecarLinhaNova() {
+  if (!LittleFS.exists(CAMINHO_DOS_EVENTOS)) {
+    return;
+  }
+  File arquivo = LittleFS.open(CAMINHO_DOS_EVENTOS, "r");
+  if (!arquivo) {
+    return;
+  }
+  const size_t tamanho = arquivo.size();
+  bool terminaEmQuebra = true;
+  if (tamanho > 0 && arquivo.seek(tamanho - 1)) {
+    terminaEmQuebra = arquivo.read() == '\n';
+  }
+  arquivo.close();
+  if (terminaEmQuebra) {
+    return;
+  }
+
+  // A marca so vive na memoria e volta a false no reinicio; quem sabe da linha
+  // cortada, depois de uma queda, e o ultimo byte do arquivo.
+  linhaPelaMetade = true;
+  File acrescimo = LittleFS.open(CAMINHO_DOS_EVENTOS, "a");
+  if (acrescimo && acrescimo.write('\n') == 1) {
+    linhaPelaMetade = false;
+  }
+  if (acrescimo) {
+    acrescimo.close();
+  }
+}
+
 bool acrescentarEvento(const JsonDocument& evento) {
   const size_t tamanho = measureJson(evento);
   if (tamanho + 1 > LINHA_MAX) {
@@ -113,7 +157,7 @@ bool apagarChamada() {
   return eventos && sessao && relatorio;
 }
 
-size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento)) {
+size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento), size_t* descartadas) {
   if (!LittleFS.exists(CAMINHO_DOS_EVENTOS)) {
     return 0;
   }
@@ -127,18 +171,27 @@ size_t percorrerEventos(void (*aoLer)(JsonObjectConst evento)) {
   bool completa = false;
 
   while (lerLinha(arquivo, linha, sizeof(linha), completa)) {
-    if (!completa || linha[0] == '\0') {
-      continue;  // linha cortada pela queda de energia, ou linha vazia
+    if (completa && linha[0] == '\0') {
+      continue;  // linha vazia
+    }
+    if (!completa) {
+      // Linha cortada pela queda de energia, ainda sem o \n da retomada.
+      if (descartadas != nullptr) {
+        (*descartadas)++;
+      }
+      continue;
     }
     // Documento estatico (R29). Lido de um char* que pode ser alterado, o
     // documento aponta para o texto da linha sem copia-lo, e os 512 bytes so
     // guardam a estrutura.
     StaticJsonDocument<512> doc;
-    if (deserializeJson(doc, linha) != DeserializationError::Ok) {
-      continue;
-    }
-    const JsonObjectConst evento = doc.as<JsonObjectConst>();
+    const JsonObjectConst evento =
+        deserializeJson(doc, linha) == DeserializationError::Ok ? doc.as<JsonObjectConst>() : JsonObjectConst();
     if (evento.isNull()) {
+      // A linha cortada que ganhou o \n da retomada (comecarLinhaNova()).
+      if (descartadas != nullptr) {
+        (*descartadas)++;
+      }
       continue;
     }
     aoLer(evento);

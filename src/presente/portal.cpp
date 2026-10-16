@@ -1,5 +1,5 @@
-// presente/portal.cpp -- pacotes 1 a 4 do firmware (#41, #43, #45, #47): o
-// portal dentro do aparelho.
+// presente/portal.cpp -- pacotes 1 a 5 do firmware (#41, #43, #45, #47, #49):
+// o portal dentro do aparelho.
 //
 // O firmware tem as nove rotas do secao 6.1: POST /api/login, GET /api/estado,
 // POST /api/seguir-offline, POST /api/iniciar, POST /api/manual,
@@ -24,6 +24,19 @@
 // chamada e os arquivos dela, invalida o cookie e volta ao login. Responde
 // sempre 200: a memoria ja esta limpa, e prender o professor no painel nao
 // apagaria o arquivo que falhou.
+//
+// A RETOMADA (#49)
+//
+// Ao ligar, se o /sessao_atual.json traz uma chamada, ela volta em
+// SESSAO_ABERTA, ou em CHAMADA_ENVIADA se ja tinha sido enviada, com o azul
+// fixo e sem login: o cookie nao sobrevive ao reinicio (R62, item 2). O estado
+// nunca e AGUARDANDO_LOGIN, porque o login nesse estado busca a turma, e a
+// busca apaga o /roster.json no meio da aula. O leitor so volta a ser
+// consultado no primeiro login do boot novo com hora valida, que acerta o
+// relogio deste boot (saida 2 da #49); com a chamada aberta, o LED vai ao verde
+// fixo. Ate la, o manual e o Enviar tambem recusam, porque o horario sairia
+// errado. O painel e o relatorio continuam com o professor que iniciou a
+// chamada, achado no professores.json pelo professorId do arquivo (R78).
 //
 // A CHAMADA (#45)
 //
@@ -134,6 +147,22 @@ const char* professorId() {
   return (*contas)[professorAtual]["id"];
 }
 
+// A posicao da conta com esse id no professores.json; -1 se nao ha.
+int posicaoDaConta(const char* id) {
+  if (id == nullptr) {
+    return -1;
+  }
+  int posicao = 0;
+  for (JsonObjectConst conta : contas->as<JsonArrayConst>()) {
+    const char* esse = conta["id"];
+    if (esse != nullptr && strcmp(esse, id) == 0) {
+      return posicao;
+    }
+    posicao++;
+  }
+  return -1;
+}
+
 bool comLogin() {
   if (token[0] == '\0' || !server.hasHeader("Cookie")) {
     return false;
@@ -219,11 +248,30 @@ void aoLogin() {
   if (buscar) {
     estado = Estado::SINCRONIZANDO;
   }
-  if (!chamada::iniciada()) {
+  // Na retomada cuja conta saiu do professores.json, nao ha quem mostrar no
+  // painel: quem entra o assume, e a chamada continua no id do Iniciar (#49).
+  if (!chamada::iniciada() || professorAtual < 0) {
     professorAtual = encontrado;
   }
   quemEntrou = encontrado;
   Serial.printf("Login aceito: %s.\n", usuario);
+
+  // O primeiro login do boot que retomou a chamada traz a hora que faltava
+  // (#49): com ela, o relogio deste boot se acerta, e o leitor volta.
+  if (chamada::iniciada() && !relogio::acertadoNesteBoot()) {
+    if (relogio::acertarNaRetomada(corpo["hora"])) {
+      Serial.println("Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.");
+      if (estado == Estado::SESSAO_ABERTA) {
+        feedback::acender(feedback::Cor::VERDE);
+      }
+    } else {
+      // DECISAO PENDENTE (#49): o secao 6.1 diz que a hora ausente ou fora do
+      // formato nao impede o login, e o login entra. Mas, sem hora, este boot
+      // nao grava nada: o leitor continua desligado, e o manual e o Enviar
+      // recusam com NAO_GRAVADO, ate um login com hora valida.
+      Serial.println("Login sem hora valida depois da retomada: o leitor continua desligado, e nada se grava ate um login com hora.");
+    }
+  }
 
   char cookie[48];
   snprintf(cookie, sizeof(cookie), "sessao=%s; HttpOnly; Path=/", token);
@@ -387,7 +435,7 @@ void aoManual() {
 
   const char* nome = nullptr;
   const chamada::Lancamento resultado =
-      chamada::lancar(corpo["matricula"], corpo["motivo"], (*contas)[quemEntrou]["id"], millis(), nome);
+      chamada::lancar(corpo["matricula"], corpo["motivo"], (*contas)[quemEntrou]["id"], relogio::agora(), nome);
 
   const char* codigo = nullptr;
   switch (resultado) {
@@ -554,9 +602,18 @@ void aoEnviar() {
     return;
   }
 
-  // O relogio esta acertado desde o Iniciar.
+  // DECISAO PENDENTE (#49): depois da retomada, antes de um login com hora, o
+  // fim sairia errado. O NAO_GRAVADO e o 503 que o portal ja conhece, com a
+  // mensagem que manda usar o Compartilhar, e a chamada continua aberta.
+  if (!relogio::acertadoNesteBoot()) {
+    Serial.println("Enviar recusado: este boot ainda nao tem hora (falta o login com hora).");
+    responderErro(503, "NAO_GRAVADO");
+    return;
+  }
+
+  // O fim no relogio do Iniciar, tambem depois de uma retomada (#49).
   char fim[relogio::TAMANHO_DA_HORA];
-  if (!relogio::formatar(millis(), fim, sizeof(fim)) || !gravarRelatorio(fim)) {
+  if (!relogio::formatar(relogio::agora(), fim, sizeof(fim)) || !gravarRelatorio(fim)) {
     LittleFS.remove(storage::CAMINHO_DO_RELATORIO);
     Serial.printf("Nao consegui gravar o %s: a chamada continua aberta.\n", storage::CAMINHO_DO_RELATORIO);
     responderErro(503, "NAO_GRAVADO");
@@ -666,7 +723,7 @@ void lerCracha() {
   }
   const unsigned long leituraVoltouEm = micros();
 
-  const chamada::Veredito veredito = chamada::encostou(uid, millis());
+  const chamada::Veredito veredito = chamada::encostou(uid, relogio::agora());
   switch (veredito) {
     case chamada::Veredito::REGISTRADO:
       feedback::piscar(feedback::Cor::VERDE, 2, PISCADA_VERDE_ACESA_MS, PISCADA_VERDE_APAGADA_MS);
@@ -743,12 +800,59 @@ void atender() {
     } else {
       azulLento();
     }
-  } else if (estado == Estado::SESSAO_ABERTA) {
-    lerCracha();
-  } else if (estado == Estado::CHAMADA_ENVIADA) {
-    recusarCracha();
+  } else if (relogio::acertadoNesteBoot()) {
+    // Depois da retomada, o leitor espera o login com hora (#49): ate la, nem
+    // e consultado, como antes do Iniciar (R74).
+    if (estado == Estado::SESSAO_ABERTA) {
+      lerCracha();
+    } else if (estado == Estado::CHAMADA_ENVIADA) {
+      recusarCracha();
+    }
   }
   server.handleClient();
+}
+
+void retomar() {
+  StaticJsonDocument<768> sessao;
+  const DeserializationError erro = storage::lerSessao(sessao);
+  if (erro == DeserializationError::EmptyInput) {
+    return;  // sem chamada para retomar: o login de sempre
+  }
+  if (erro) {
+    Serial.printf("O %s nao pode ser lido (%s): nada a retomar.\n", storage::CAMINHO_DA_SESSAO, erro.c_str());
+    return;
+  }
+
+  Serial.printf("Retomando a chamada do %s.\n", storage::CAMINHO_DA_SESSAO);
+  const bool eraOnline = strcmp(sessao["modo"] | "", "online") == 0;
+  if (eraOnline) {
+    net::carregarLista();
+  }
+
+  // O id que a chamada guarda aponta o documento global das contas, e nao o
+  // documento da sessao, que morre ao fim desta funcao.
+  const int posicao = posicaoDaConta(sessao["professorId"]);
+  const char* idDaConta = posicao >= 0 ? (*contas)[posicao]["id"].as<const char*>() : nullptr;
+
+  switch (chamada::retomar(sessao.as<JsonObjectConst>(), idDaConta)) {
+    case chamada::Retomada::NENHUMA:
+      // A lista relida nao serve sem chamada; o login seguinte busca de novo.
+      if (eraOnline) {
+        net::esquecerLista();
+      }
+      return;
+    case chamada::Retomada::ABERTA:
+      estado = Estado::SESSAO_ABERTA;
+      break;
+    case chamada::Retomada::ENVIADA:
+      estado = Estado::CHAMADA_ENVIADA;
+      break;
+  }
+
+  professorAtual = posicao;  // -1 se a conta saiu: o primeiro login assume o painel
+  quemEntrou = -1;
+  feedback::acender(feedback::Cor::AZUL);
+  Serial.println("O leitor espera o primeiro login com hora valida.");
 }
 
 }  // namespace portal

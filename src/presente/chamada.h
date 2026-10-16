@@ -1,5 +1,5 @@
-// presente/chamada.h -- a chamada aberta (secao 5 da spec), pacotes 3 e 4 (#45,
-// #47).
+// presente/chamada.h -- a chamada aberta (secao 5 da spec), pacotes 3 a 5
+// (#45, #47, #49).
 //
 // Quem esta presente, a decisao do toque e do lancamento manual, os contadores
 // e o ultimo toque. Nao conhece o portal nem o LED (R74): devolve um veredito, e
@@ -8,12 +8,15 @@
 
 #pragma once
 
+#include <ArduinoJson.h>
 #include <rfid.h>
 #include <stddef.h>
 
 namespace chamada {
 
 enum class Abertura { ABERTA, JA_ABERTA, HORA_INVALIDA, NAO_APAGOU };
+
+enum class Retomada { NENHUMA, ABERTA, ENVIADA };
 
 enum class Veredito { REGISTRADO, JA_REGISTRADO, NAO_RECONHECIDO };
 
@@ -33,6 +36,15 @@ struct Toque {
 // mudar nada da chamada (R77). O modo (com ou sem a lista) fica o da abertura.
 // Com a chamada iniciada, enviada ou nao, volta JA_ABERTA.
 Abertura abrir(const char* hora, const char* professorId, unsigned long msDesdeBoot);
+
+// A retomada depois de uma queda (#49, R16): a chamada volta do
+// /sessao_atual.json, ja lido em sessao, com o relogio do Iniciar reacertado e
+// os presentes e os eventos relidos do /eventos.json (R30). idDaConta e o id do
+// professor do Iniciar no documento global das contas, que vive o boot
+// inteiro; nullptr se a conta nao existe mais, e o id lido do arquivo e copiado.
+// A lista da turma ja tem de estar carregada (net::carregarLista()) se a
+// chamada era online. NENHUMA se o arquivo nao traz uma chamada legivel.
+Retomada retomar(JsonObjectConst sessao, const char* idDaConta);
 
 // Houve Iniciar e nao houve Encerrar: a chamada se exibe e se compartilha,
 // tambem depois do Enviar (R46).
@@ -67,7 +79,8 @@ void zerar();
 Veredito encostou(const rfid::Uid& uid, unsigned long msDesdeBoot);
 
 // O lancamento manual do professor. Em JA_PRESENTE, nome aponta o nome da
-// lista; nos outros casos pode ficar nullptr. motivo e opcional.
+// lista; nos outros casos pode ficar nullptr. motivo e opcional. Sem hora neste
+// boot (a retomada antes do login com hora, #49), NAO_GRAVADO.
 Lancamento lancar(const char* matricula, const char* motivo, const char* professorId,
                   unsigned long msDesdeBoot, const char*& nome);
 

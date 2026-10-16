@@ -1,5 +1,6 @@
-// presente/net.cpp -- pacotes 2 e 4 do firmware (#43, #47): a lista da turma
-// pela internet e o envio do relatorio.
+// presente/net.cpp -- pacotes 2, 4 e 5 do firmware (#43, #47, #49): a lista da
+// turma pela internet, o envio do relatorio e a lista relida do disco na
+// retomada.
 //
 // Depois do login, o aparelho entra no hotspot do professor (ou no de
 // reserva), chama o rpc/roster do banco e guarda a lista na memoria e no
@@ -373,6 +374,27 @@ void esquecerLista() {
   if (!storage::apagarRoster()) {
     Serial.println("Nao consegui apagar o /roster.json.");
   }
+}
+
+bool carregarLista() {
+  lista.clear();
+  carregada = false;
+  const DeserializationError erro = storage::lerRoster(lista);
+  if (erro) {
+    Serial.printf("Nao consegui reler o %s (%s).\n", storage::CAMINHO_DO_ROSTER, erro.c_str());
+    lista.clear();
+    return false;
+  }
+  // A mesma regra da busca (R68): so uma lista de verdade conta.
+  const JsonArrayConst alunos = lista.as<JsonArrayConst>();
+  if (alunos.isNull() || alunos.size() == 0) {
+    Serial.printf("O %s nao traz uma lista com alunos.\n", storage::CAMINHO_DO_ROSTER);
+    lista.clear();
+    return false;
+  }
+  carregada = true;
+  Serial.printf("Lista da turma relida do disco: %u alunos.\n", alunos.size());
+  return true;
 }
 
 Envio enviar(const char* caminho, void (*aoEsperar)()) {

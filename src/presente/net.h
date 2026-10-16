@@ -42,6 +42,11 @@ void abandonar();
 // da memoria e do /roster.json. O login seguinte busca de novo.
 void esquecerLista();
 
+// A retomada (#49): rele a lista da turma do /roster.json, sem ir a internet.
+// false, com o motivo no serial, se o arquivo falta, nao e legivel ou nao traz
+// aluno; a lista fica vazia, como depois de uma busca que falhou.
+bool carregarLista();
+
 enum class Envio { GRAVADO, JA_ENVIADO, SEM_INTERNET, BANCO_RECUSOU };
 
 // O Enviar (#47): manda o arquivo em caminho, que ja traz {"relatorio": ...},
