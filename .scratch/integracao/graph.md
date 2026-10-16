@@ -36,6 +36,21 @@ epic #9
   #39 compras e UIDs ──> #40 cadastro dos cartões ──> #46 rodar P3
   #51 limpeza dos dados de teste ──> #48 rodar P4
   #38 página de histórico ──> #52 entrega do dashboard   (se a página entrar; R69: o que entra se decide ao montar a entrega; 14/10, R72: vai na entrega final de 27/10)
+
+epic #53   (16/10, R80)
+  #59 roteiro do vídeo ──> #60 gravação na aula de 20/10 ──> #61 pintura e etiquetas ──> #62 edição
+  #42, #44, #46 e #48 bateria na placa ──> #60 gravação
+  #62 edição ──> #73 arquivos e postagem
+
+epic #54   (16/10, R80)
+  #59 roteiro do vídeo ──> #63 roteiro da exposição
+  respostas do professor na aula de 20/10 ──> #64 o dia da exposição
+
+epic #55   (16/10, R80)
+  #65 esqueleto ──> #66 a #70 seções ──> #71 consolidar ──> #72 PDF ──> #73 arquivos e postagem
+  #61 pintura ──> #68 seção da estrutura física
+  #42, #44, #46, #48 e #50 rodadas na placa ──> #69 seção dos testes
+  #52 capítulo do dashboard ──> #71 consolidar
 ```
 
 **A aresta que destrava:** a #36 (contrato). O portal (#37) e o primeiro pacote do firmware (#41) dependem dela e, com ela pronta, andam ao mesmo tempo. *(12/10: a #36 fechou em 30/09. Hoje, o que destrava as idas à placa é a ligação do portal (#37), de que dependem as rodadas dos pacotes 1 e 2 (#42, #44); o pacote 3 (#45) já pode andar, pela R70.)* *(14/10: a #37 fechou. As rodadas dos pacotes 1 e 2 (#42, #44) não esperam mais por ela; ~~dependem da revisão (R51) e~~ dependem de quem está com a placa, hoje o João, que testa em casa.)* *(14/10, R75: a revisão por quem não escreveu o pacote deixou de bloquear e ficou só como condição para fechar a issue. O teste do João é a rodada oficial dos pacotes 1, 2 e 3 (#42, #44, #46), numa bateria só e nessa ordem.)*
@@ -50,9 +65,9 @@ epic #9
 
 ## Epics
 
-A lista das tarefas, com quem pegou cada uma, está nas epics #8 (estrutura física) e #9 (dashboard e o aparelho falando com a nuvem).
+A lista das tarefas, com quem pegou cada uma, está nas epics #8 (estrutura física) e #9 (dashboard e o aparelho falando com a nuvem) e, desde 16/10 (R80), nas epics #53 (vídeo e pintura da caixa), #54 (exposição) e #55 (relatório técnico).
 
-Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final). *(14/10, R71: as três, com o dashboard (#52), vão juntas na entrega final de 27/10; o enunciado escrito ainda não saiu.)*
+~~Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final).~~ *(16/10, R80: sem enunciado escrito, as tarefas nasceram pela leitura do grupo, todas livres (R52): na #53, o roteiro do vídeo (#59), a gravação (#60), a pintura e as etiquetas (#61) e a edição (#62); na #54, o roteiro da exposição (#63) e o dia da exposição (#64); na #55, o esqueleto do relatório (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos e a postagem (#73). As arestas estão no grafo acima.)* *(14/10, R71: as três, com o dashboard (#52), vão juntas na entrega final de 27/10; o enunciado escrito ainda não saiu.)*
 
 ## Onde mora o código (R51)
 
