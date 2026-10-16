@@ -265,10 +265,10 @@ void aoLogin() {
         feedback::acender(feedback::Cor::VERDE);
       }
     } else {
-      // DECISAO PENDENTE (#49): o secao 6.1 diz que a hora ausente ou fora do
-      // formato nao impede o login, e o login entra. Mas, sem hora, este boot
-      // nao grava nada: o leitor continua desligado, e o manual e o Enviar
-      // recusam com NAO_GRAVADO, ate um login com hora valida.
+      // A hora ausente ou fora do formato nao impede o login (secao 6.1, R79).
+      // Mas, sem hora, este boot nao grava nada: o leitor continua desligado,
+      // e o manual e o Enviar recusam com NAO_GRAVADO, ate um login com hora
+      // valida.
       Serial.println("Login sem hora valida depois da retomada: o leitor continua desligado, e nada se grava ate um login com hora.");
     }
   }
@@ -602,9 +602,9 @@ void aoEnviar() {
     return;
   }
 
-  // DECISAO PENDENTE (#49): depois da retomada, antes de um login com hora, o
-  // fim sairia errado. O NAO_GRAVADO e o 503 que o portal ja conhece, com a
-  // mensagem que manda usar o Compartilhar, e a chamada continua aberta.
+  // Depois da retomada, antes de um login com hora, o fim sairia errado (#49,
+  // R79). O NAO_GRAVADO e o 503 que o portal ja conhece, com a mensagem que
+  // manda usar o Compartilhar, e a chamada continua aberta.
   if (!relogio::acertadoNesteBoot()) {
     Serial.println("Enviar recusado: este boot ainda nao tem hora (falta o login com hora).");
     responderErro(503, "NAO_GRAVADO");

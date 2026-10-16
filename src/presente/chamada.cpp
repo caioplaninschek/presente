@@ -388,9 +388,9 @@ Lancamento lancar(const char* matricula, const char* motivo, const char* profess
   if (!aberta()) {
     return Lancamento::SEM_SESSAO;
   }
-  // DECISAO PENDENTE (#49): depois da retomada, antes de um login com hora, o
-  // horario do lancamento sairia errado; a recusa usa o NAO_GRAVADO que o
-  // portal ja conhece, sem codigo novo no secao 6.1.
+  // Depois da retomada, antes de um login com hora, o horario do lancamento
+  // sairia errado; a recusa usa o NAO_GRAVADO que o portal ja conhece, sem
+  // codigo novo no secao 6.1 (#49, R79).
   if (!relogio::acertadoNesteBoot()) {
     Serial.println("Manual recusado: este boot ainda nao tem hora (falta o login com hora).");
     return Lancamento::NAO_GRAVADO;
