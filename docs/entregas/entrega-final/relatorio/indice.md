@@ -30,7 +30,7 @@ A ordem abaixo é uma proposta do esqueleto, e a consolidação (#71) pode mudá
 | A estrutura física, em [`estrutura-fisica.md`](estrutura-fisica.md) (#68) | R53 a R64 da `docs/spec.md`; a transcrição da Entrega 06; as fotos de `docs/assets/estrutura/` | Gabriel |
 | O portal do professor, a página de histórico e o dashboard, em [`portal-historico-e-dashboard.md`](portal-historico-e-dashboard.md) (entrega do dashboard, #52) | a Entrega 07 (`docs/entregas/entrega-07/`), atualizada para o estado final; R55 e R80 | Igor |
 | Os testes e os resultados, em [`testes-e-resultados.md`](testes-e-resultados.md) (#69) | §8 da `docs/spec.md`; os comentários das rodadas na placa (#42, #44, #46, #48 e #50) | ninguém |
-| As limitações e os caminhos descartados, em [`limitacoes-e-descartes.md`](limitacoes-e-descartes.md) (#70) | R13, R14, R33, R50, os limites declarados da R76 e da R79 e os cortes do §1 da `docs/spec.md` | ninguém |
+| As limitações e os caminhos descartados, em [`limitacoes-e-descartes.md`](limitacoes-e-descartes.md) (#70) | R13, R14, R33, R50, os limites declarados da R76, da R78 e da R79 e os cortes do §1 da `docs/spec.md` | Cauã |
 | Resumo, considerações finais, referências e quadro de quem fez o quê, sem arquivo (consolidação, #71) | as seções acima; o Quadro 7 da Entrega 06 | ninguém |
 
 O esqueleto (#65) ficou com o Cauã, e a montagem do PDF (#72), com o Gabriel. Para pegar uma seção, atribua a issue a você, comente "peguei" e troque "ninguém" pelo seu nome nesta tabela.
