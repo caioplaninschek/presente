@@ -55,7 +55,7 @@ Cada aluno tem uma presença só por chamada. O mesmo crachá lido de novo em at
 
 ## Os cinco pacotes
 
-Escrevemos o firmware em cinco pacotes, cada um numa issue, e cada um rodado na placa em outra issue. A divisão existe porque o grupo tem uma placa só, que fica com o João, e cada rodada na placa custa cerca de um dia. Quem escreve um pacote confere o próprio código antes de publicá-lo, pelo meio que escolher, e a revisão por outro integrante ficou como condição para fechar a issue do pacote, sem segurar a rodada na placa nem o pacote seguinte. Decidimos assim em 14/10, porque a espera pela revisão não cabia no prazo de fechar o código até 20/10. Parte das decisões técnicas de cada pacote foi proposta com ajuda de IA no planejamento, e todas foram aceitas ou tomadas pelo Caio.
+Escrevemos o firmware em cinco pacotes, cada um numa issue, e cada um rodado na placa em outra issue. A divisão existe porque o grupo tem uma placa só, que fica com o João, e cada rodada na placa custa cerca de um dia. Quem escreve um pacote confere o próprio código antes de publicá-lo, pelo meio que escolher, e a revisão por outro integrante ficou como condição para fechar a issue do pacote, sem segurar a rodada na placa nem o pacote seguinte. Decidimos assim em 14/10, porque a espera pela revisão não cabia no prazo de fechar o código até 20/10.
 
 ### O portal dentro do aparelho (#41)
 
