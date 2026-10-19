@@ -48,7 +48,7 @@ O protótipo deixou de fora oito funções, cada uma por uma razão declarada, e
 | O controle de saída da sala | Duplicaria o estado e as falhas sem resolver o problema que motivou o projeto; a divergência com o Canvas da Entrega 02 foi declarada na Entrega 03 |
 | Um servidor próprio, com Node ou Python e PostgreSQL | Substituído pelo Supabase, que expõe o banco sem servidor para escrever |
 | O segundo sensor e a detecção de violação da caixa | O professor dispensou a exigência de dois sensores, e o sensor de vibração saiu do projeto |
-| A troca da senha padrão no primeiro uso e a configuração do hotspot pelo portal | As contas chegam cadastradas pelo grupo, e o hotspot principal e o de reserva vêm do `secrets.h`; as duas funções acrescentariam telas e escrita na memória da placa sem mudar o que a chamada faz |
+| A troca da senha padrão no primeiro uso e a configuração do hotspot pelo portal | As contas chegam cadastradas pelo grupo, e o hotspot principal e o de reserva vêm do `secrets.h`; as duas funções acrescentariam telas e escrita na memória da placa sem mudar o que a chamada faz, e, sem a configuração pelo portal, trocar o celular do hotspot exige gravar o aparelho de novo |
 | A escolha da turma no aparelho | A turma e a disciplina ficam fixas na configuração; em produção, viriam da grade horária da instituição |
 
 Fonte: elaborado pelos autores (2026).
