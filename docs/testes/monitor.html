@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presente!: monitor do aparelho</title>
+<!--
+  O que o aparelho esta fazendo, em tela, enquanto o teste acontece.
+
+  A placa ja conta tudo pelo monitor serial, mas em texto corrido: nas rodadas
+  dos pacotes 1 a 3 o resultado foi colado nas issues como um bloco de log que
+  ninguem le na hora. Esta pagina le o mesmo texto e o desenha: o estado em que
+  o aparelho esta, a cor que o LED deve estar mostrando, cada cracha encostado
+  com o tempo de resposta, a memoria, a busca da turma e o envio ao banco.
+
+  Duas maneiras de alimentar a pagina, e as duas sem internet:
+
+  1. Pelo cabo USB, com a Web Serial do Chrome, ao vivo. Exige que o monitor do
+     PlatformIO esteja fechado, porque a porta so aceita um programa por vez.
+  2. Colando o texto do monitor, o que funciona em qualquer navegador e serve
+     tambem para enxergar uma rodada que ja aconteceu.
+
+  As frases reconhecidas sao as do src/presente/ e precisam mudar junto com ele.
+  A lista esta na constante FALAS, com o arquivo de origem de cada uma. O que a
+  pagina nao reconhece nao some: aparece na linha do tempo como "nao conheco
+  esta frase", para ninguem descobrir no fim do teste que perdeu alguma coisa.
+
+  Os criterios conferidos sozinhos sao os do 8 da docs/spec.md: os 200 ms do
+  teste 1, os 40 KB livres do teste 7d, os 8192 bytes reservados para a lista da
+  turma e a ausencia de duplicata do teste 8.
+-->
+<style>
+/* A paleta e a mesma do portal e da pagina de historico, para as telas do
+   projeto parecerem do mesmo projeto. As cores do LED fogem dela de proposito:
+   elas imitam o LED da caixa, e quem assiste precisa reconhece-las de longe. */
+:root {
+  --uva-azul: #0b5285;
+  --uva-amarelo: #ffc709;
+
+  --fundo: #f2f5f8;
+  --papel: #ffffff;
+  --tinta: #10263a;
+  --tinta-fraca: #55667a;
+  --borda: #d2dae3;
+  --acento: var(--uva-azul);
+
+  --led-azul: #2b7fd4;
+  --led-verde: #16a06a;
+  --led-vermelho: #d33a2c;
+  --led-apagado: #9aa8b5;
+
+  --ok-fundo: #e6f6ef;
+  --ok-borda: #9bd9bd;
+  --aviso-fundo: #fff6d6;
+  --aviso-borda: var(--uva-amarelo);
+  --aviso-tinta: #6b5200;
+  --erro-fundo: #fdeaf3;
+  --erro-borda: #f0a8ca;
+  --erro-tinta: #8c0b45;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0d1922;
+    --papel: #15242f;
+    --tinta: #e8eef4;
+    --tinta-fraca: #96a6b6;
+    --borda: #2a3d4d;
+    --acento: #4a9ad4;
+    --ok-fundo: #15332a;
+    --ok-borda: #2f6f56;
+    --aviso-fundo: #3a3016;
+    --aviso-tinta: #ffdf8a;
+    --erro-fundo: #3a1c2a;
+    --erro-borda: #7d3357;
+    --erro-tinta: #ffb8d6;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 1rem 4rem;
+  background: var(--fundo);
+  color: var(--tinta);
+  font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.limite { max-width: 72rem; margin: 0 auto; }
+
+header.topo {
+  display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap;
+  padding: 1rem 0 .5rem;
+}
+header.topo h1 { margin: 0; font-size: 1.4rem; color: var(--acento); }
+header.topo .sub { margin: 0; color: var(--tinta-fraca); flex: 1; }
+
+h2 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+h3 { font-size: .95rem; margin: 1rem 0 .4rem; }
+
+.cartao {
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  border-radius: .75rem;
+  padding: 1rem;
+}
+
+/* ------------------------------------------------------------- entrada -- */
+
+.fontes { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 56rem) { .fontes { grid-template-columns: 1fr 1fr; } }
+
+.botao {
+  min-height: 2.75rem; padding: 0 1rem; font: inherit; font-weight: 600;
+  color: var(--tinta); background: var(--papel);
+  border: 1px solid var(--tinta-fraca); border-radius: .5rem; cursor: pointer;
+}
+.botao.primario { color: #fff; background: var(--acento); border-color: var(--acento); }
+.botao.perigo   { color: var(--erro-tinta); border-color: var(--erro-borda); }
+.botao[disabled] { opacity: .5; cursor: default; }
+.botao:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+.linha-botoes { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+
+textarea {
+  width: 100%; min-height: 7rem; font: .85rem/1.4 "Consolas", "Courier New", monospace;
+  color: var(--tinta); background: var(--fundo);
+  border: 1px solid var(--borda); border-radius: .5rem; padding: .5rem;
+}
+
+.recado { margin: .6rem 0 0; padding: .6rem .75rem; border-radius: .5rem; border: 1px solid; }
+.recado.ok    { background: var(--ok-fundo);    border-color: var(--ok-borda); }
+.recado.aviso { background: var(--aviso-fundo); border-color: var(--aviso-borda); color: var(--aviso-tinta); }
+.recado.erro  { background: var(--erro-fundo);  border-color: var(--erro-borda); color: var(--erro-tinta); }
+
+/* --------------------------------------------------------------- estado -- */
+
+.estado {
+  display: grid; gap: 1rem; align-items: center;
+  grid-template-columns: auto 1fr; margin-top: 1rem;
+}
+
+.led {
+  width: 4.5rem; height: 4.5rem; border-radius: 50%;
+  background: var(--led-apagado); border: 3px solid rgba(0,0,0,.15);
+  box-shadow: 0 0 0 0 rgba(0,0,0,0);
+}
+.led.azul     { background: var(--led-azul);     box-shadow: 0 0 2.2rem var(--led-azul); }
+.led.verde    { background: var(--led-verde);    box-shadow: 0 0 2.2rem var(--led-verde); }
+.led.vermelho { background: var(--led-vermelho); box-shadow: 0 0 2.2rem var(--led-vermelho); }
+.led.lento    { animation: pisca-lento 1s steps(1, end) infinite; }
+.led.rapido   { animation: pisca-rapido .25s steps(1, end) infinite; }
+@keyframes pisca-lento  { 50% { opacity: .18; box-shadow: none; } }
+@keyframes pisca-rapido { 50% { opacity: .18; box-shadow: none; } }
+@media (prefers-reduced-motion: reduce) { .led.lento, .led.rapido { animation: none; } }
+
+.estado .nome { font-size: 1.6rem; font-weight: 700; line-height: 1.15; }
+.estado .diz  { color: var(--tinta-fraca); }
+
+.pilulas { display: flex; gap: .4rem; flex-wrap: wrap; margin: .6rem 0 0; }
+.pilula {
+  padding: .1rem .6rem; font-size: .8rem; border-radius: 999px;
+  background: var(--fundo); border: 1px solid var(--borda); color: var(--tinta-fraca);
+}
+.pilula.online   { border-color: var(--led-verde);    color: var(--led-verde); }
+.pilula.offline  { border-color: var(--uva-amarelo);  color: var(--aviso-tinta); background: var(--aviso-fundo); }
+.pilula.alerta   { border-color: var(--erro-borda);   color: var(--erro-tinta); background: var(--erro-fundo); }
+
+/* --------------------------------------------------------------- numeros -- */
+
+.numeros {
+  display: grid; gap: .6rem; margin-top: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 44rem) { .numeros { grid-template-columns: repeat(4, 1fr); } }
+
+.numero {
+  background: var(--papel); border: 1px solid var(--borda);
+  border-radius: .6rem; padding: .6rem .75rem;
+}
+.numero .valor { font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.numero .rotulo { font-size: .8rem; color: var(--tinta-fraca); }
+.numero.atencao { background: var(--aviso-fundo); border-color: var(--aviso-borda); }
+.numero.ruim    { background: var(--erro-fundo);  border-color: var(--erro-borda); }
+
+/* ---------------------------------------------------------------- listas -- */
+
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid var(--borda); vertical-align: top; }
+th { color: var(--tinta-fraca); font-weight: 600; font-size: .8rem; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; }
+tr.lento td { background: var(--aviso-fundo); }
+
+.chip { display: inline-block; padding: 0 .45rem; border-radius: 999px; font-size: .78rem; font-weight: 600; border: 1px solid; }
+.chip.registrado     { color: var(--led-verde);    border-color: var(--led-verde); }
+.chip.ja_registrado  { color: var(--tinta-fraca);  border-color: var(--borda); }
+.chip.nao_reconhecido{ color: var(--led-vermelho); border-color: var(--led-vermelho); }
+.chip.manual         { color: var(--acento);       border-color: var(--acento); }
+
+.mono { font-family: "Consolas", "Courier New", monospace; }
+
+/* ------------------------------------------------------------ linha do tempo */
+
+.tempo { max-height: 26rem; overflow: auto; border: 1px solid var(--borda); border-radius: .6rem; background: var(--papel); }
+.tempo ol { list-style: none; margin: 0; padding: 0; }
+.tempo li { display: grid; grid-template-columns: 5.2rem 1fr; gap: .5rem; padding: .3rem .6rem; border-bottom: 1px solid var(--borda); font-size: .88rem; }
+.tempo li:last-child { border-bottom: 0; }
+.tempo .hora { color: var(--tinta-fraca); font-variant-numeric: tabular-nums; font-size: .8rem; }
+.tempo li.erro  { background: var(--erro-fundo); }
+.tempo li.aviso { background: var(--aviso-fundo); }
+.tempo li.ruido { color: var(--tinta-fraca); }
+.tempo li.ruido .texto { font-family: "Consolas", "Courier New", monospace; font-size: .78rem; }
+.tempo li.desconhecida { border-left: 3px solid var(--uva-amarelo); }
+.tempo .porque { display: block; color: var(--tinta-fraca); font-size: .78rem; }
+
+.filtros { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin: .5rem 0; font-size: .9rem; }
+label.caixa { display: inline-flex; gap: .35rem; align-items: center; cursor: pointer; }
+
+/* ----------------------------------------------------------- conferencias -- */
+
+.confere { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.confere li { padding: .5rem .7rem; border: 1px solid var(--borda); border-radius: .5rem; background: var(--papel); }
+.confere li.passou  { background: var(--ok-fundo);    border-color: var(--ok-borda); }
+.confere li.falhou  { background: var(--erro-fundo);  border-color: var(--erro-borda); color: var(--erro-tinta); }
+.confere li.parcial { background: var(--aviso-fundo); border-color: var(--aviso-borda); color: var(--aviso-tinta); }
+.confere .detalhe { display: block; font-size: .82rem; opacity: .85; }
+
+details.ajuda { margin-top: 1rem; }
+details.ajuda summary { cursor: pointer; font-weight: 600; }
+details.ajuda ul { margin: .5rem 0; padding-left: 1.2rem; }
+details.ajuda li { margin-bottom: .3rem; }
+
+.rodape { color: var(--tinta-fraca); font-size: .85rem; margin-top: 2rem; }
+code { font-family: "Consolas", "Courier New", monospace; background: var(--fundo); padding: 0 .25rem; border-radius: .25rem; }
+</style>
+</head>
+<body>
+
+<div class="limite">
+
+<header class="topo">
+  <h1>Presente!</h1>
+  <p class="sub">Monitor do aparelho: o que a placa está fazendo, enquanto o teste acontece</p>
+  <span class="pilula" id="origem-dados">sem dados</span>
+</header>
+
+<!-- ===================================================== de onde vem o texto -->
+<section class="cartao">
+  <h2 style="margin-top:0">De onde vem o texto</h2>
+
+  <div class="fontes">
+    <div>
+      <h3>1. Ao vivo, pelo cabo USB</h3>
+      <p class="sub" style="margin:.25rem 0 .5rem;color:var(--tinta-fraca);font-size:.9rem">
+        Feche antes o monitor do PlatformIO, com <code>Ctrl+C</code>: a porta só
+        aceita um programa por vez.
+      </p>
+      <div class="linha-botoes">
+        <button class="botao primario" id="acao-conectar" type="button">Ligar no cabo USB</button>
+        <button class="botao" id="acao-reiniciar" type="button" disabled>Reiniciar a placa</button>
+        <button class="botao" id="acao-desligar" type="button" disabled>Desligar</button>
+      </div>
+      <p class="recado" id="recado-serial" hidden></p>
+    </div>
+
+    <div>
+      <h3>2. Colando o texto do monitor</h3>
+      <p class="sub" style="margin:.25rem 0 .5rem;color:var(--tinta-fraca);font-size:.9rem">
+        Funciona em qualquer navegador, e serve também para enxergar uma rodada
+        que já aconteceu, colada numa issue.
+      </p>
+      <textarea id="campo-colar" placeholder="Cole aqui o texto do monitor serial"></textarea>
+      <div class="linha-botoes" style="margin-top:.5rem">
+        <button class="botao primario" id="acao-ler" type="button">Ler o texto colado</button>
+        <button class="botao" id="acao-exemplo" type="button">Pôr um exemplo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="linha-botoes" style="margin-top:1rem">
+    <button class="botao" id="acao-resumo" type="button">Copiar o resumo para a issue</button>
+    <button class="botao" id="acao-salvar" type="button">Salvar o log em arquivo</button>
+    <button class="botao perigo" id="acao-limpar" type="button">Limpar</button>
+  </div>
+  <p class="recado" id="recado-acoes" hidden></p>
+</section>
+
+<!-- ================================================================ estado -->
+<h2>O aparelho agora</h2>
+<section class="cartao">
+  <div class="estado">
+    <div class="led" id="led" title="A cor que o LED da caixa deve estar mostrando"></div>
+    <div>
+      <div class="nome" id="estado-nome">Sem dados</div>
+      <div class="diz" id="estado-diz">Ligue no cabo USB ou cole o texto do monitor.</div>
+      <div class="pilulas" id="estado-pilulas"></div>
+    </div>
+  </div>
+
+  <div class="numeros">
+    <div class="numero"><div class="valor" id="n-presentes">0</div><div class="rotulo">presenças gravadas</div></div>
+    <div class="numero"><div class="valor" id="n-eventos">0</div><div class="rotulo">crachás encostados</div></div>
+    <div class="numero" id="caixa-pior"><div class="valor" id="n-pior">—</div><div class="rotulo">pior toque até o sinal</div></div>
+    <div class="numero" id="caixa-memoria"><div class="valor" id="n-memoria">—</div><div class="rotulo">memória antes do banco</div></div>
+  </div>
+
+  <table style="margin-top:1rem">
+    <tbody id="tabela-ficha"></tbody>
+  </table>
+</section>
+
+<!-- ================================================================ toques -->
+<h2>Crachás encostados <span class="pilula" id="conta-toques">0</span></h2>
+<section class="cartao">
+  <p class="sub" style="margin:0 0 .5rem;color:var(--tinta-fraca);font-size:.88rem">
+    Os tempos são medidos de dentro do aparelho e valem como piso: a contagem
+    começa quando ele puxa conversa com o leitor, e não quando o aluno encosta o
+    crachá. O alvo é 200&nbsp;ms (teste 1 do plano de testes).
+  </p>
+  <table>
+    <thead><tr>
+      <th>#</th><th>Crachá</th><th>Resultado</th><th>Matrícula</th>
+      <th class="num">Decidir</th><th class="num">Toque até o sinal</th>
+    </tr></thead>
+    <tbody id="tabela-toques"></tbody>
+  </table>
+  <p class="sub" id="sem-toques" style="color:var(--tinta-fraca);font-style:italic">Nenhum crachá encostado ainda.</p>
+</section>
+
+<!-- ========================================================== conferencias -->
+<h2>Conferências automáticas</h2>
+<section class="cartao">
+  <ul class="confere" id="lista-confere"></ul>
+</section>
+
+<!-- ========================================================= linha do tempo -->
+<h2>Linha do tempo</h2>
+<div class="filtros">
+  <label class="caixa"><input type="checkbox" id="filtro-ruido"> mostrar o ruído do sistema</label>
+  <label class="caixa"><input type="checkbox" id="filtro-rolar" checked> rolar sozinho</label>
+  <span class="pilula" id="conta-linhas">0 linhas</span>
+</div>
+<div class="tempo"><ol id="linha-tempo"></ol></div>
+
+<details class="ajuda">
+  <summary>O que é ruído, e por que ele não é defeito</summary>
+  <ul>
+    <li><code>request handler not found</code>: o celular testando se a rede tem internet. Aparece às dezenas e é esperado.</li>
+    <li><code>open(): ... does not exist</code>: o arquivo ainda não existe na placa. Na primeira gravação, nenhum deles existe.</li>
+    <li><code>errno: 104</code>, <code>Connection reset by peer</code>: o celular fechou a conexão antes de o aparelho terminar de responder, por exemplo ao fechar a janela do login.</li>
+    <li><code>rst:0x1 (POWERON_RESET)</code>, <code>ets Jul 29 2019</code>, <code>load:0x...</code>: o reinício da placa. Depois deles vem a primeira linha do programa.</li>
+    <li>Linhas que começam com <code>---</code> ou <code>Executing task</code>: mensagens do PlatformIO, e não da placa.</li>
+  </ul>
+  <p>Frase que a página não conhece fica marcada em amarelo na linha do tempo,
+  em vez de sumir. Se aparecer muita, o firmware mudou e a lista de frases
+  desta página precisa mudar junto.</p>
+</details>
+
+<p class="rodape">
+  Esta página não manda nada para a placa, tirando o pulso de reinício do botão
+  "Reiniciar a placa". Ela lê, conta e desenha. No modo ao vivo, o relógio das
+  linhas é o do computador, marcado na hora em que a linha chega; no texto
+  colado não há hora nenhuma, e a coluna mostra o número da linha. Os tempos em
+  milissegundos são medidos pela placa, que não tem relógio próprio.
+</p>
+
+</div>
+
+<script>
+'use strict';
+
+/* ========================================================================== *
+ * 1. As frases que o firmware imprime
+ *
+ * Cada entrada tem a expressao que reconhece a linha, de que arquivo do
+ * src/presente/ ela sai, o que fazer com o que foi capturado e como mostrar.
+ * A ordem importa: a primeira que casar ganha.
+ * ========================================================================== */
+
+var ALVO_DO_TOQUE_MS = 200;      // teste 1 do 8
+var MEMORIA_MINIMA_KB = 40;      // teste 7d do 8
+
+var FALAS = [
+
+  /* ---------------------------------------------------------------- boot -- */
+  { re: /^Presente! - firmware, (.+)$/, tipo: 'boot', grau: 'ok',
+    texto: function (m) { return 'A placa ligou. Programa: ' + m[1] + '.'; },
+    faz: function (d) { d.reiniciou = true; d.estado = 'AGUARDANDO_LOGIN'; } },
+
+  { re: /^RC522 respondeu - VersionReg = (0x[0-9A-Fa-f]{2})/, tipo: 'boot', grau: 'ok',
+    texto: function (m) { return 'O leitor de crachá respondeu (versão ' + m[1] + ').'; },
+    faz: function (d) { d.ficha.leitor = 'respondeu'; } },
+
+  { re: /^RC522 nao respondeu/, tipo: 'boot', grau: 'erro',
+    texto: function () { return 'O leitor de crachá NÃO respondeu. Confira a alimentação e os fios.'; },
+    faz: function (d) { d.ficha.leitor = 'não respondeu'; } },
+
+  { re: /^Contas de professor lidas: (\d+) \((\d+) bytes de (\d+)\)/, tipo: 'boot', grau: 'ok',
+    texto: function (m) { return m[1] + ' conta(s) de professor na placa.'; },
+    faz: function (d, m) { d.ficha.contas = m[1]; } },
+
+  { re: /^Rede do aparelho no ar: (\S+), endereco (\S+)/, tipo: 'rede', grau: 'ok',
+    texto: function (m) { return 'A rede do aparelho subiu: ' + m[1] + ', em ' + m[2] + '.'; },
+    faz: function (d, m) { d.ficha.rede = m[1]; d.ficha.endereco = m[2]; } },
+
+  { re: /^A rede do aparelho NAO subiu/, tipo: 'rede', grau: 'erro',
+    texto: function () { return 'A rede do aparelho NÃO subiu: a senha dela precisa de 8 caracteres ou mais.'; } },
+
+  { re: /^O LittleFS nao montou/, tipo: 'boot', grau: 'erro',
+    texto: function () { return 'A memória de arquivos não montou: falta gravar o portal com o uploadfs.'; } },
+
+  { re: /^Portal nao gravado/, tipo: 'boot', grau: 'erro',
+    texto: function () { return 'O portal não está gravado na placa: falta o uploadfs.'; } },
+
+  { re: /^Sem professores\.json/, tipo: 'boot', grau: 'erro',
+    texto: function () { return 'Sem o arquivo de contas: todo login vai ser recusado.'; } },
+
+  { re: /^O professores\.json nao pode ser lido/, tipo: 'boot', grau: 'erro',
+    texto: function () { return 'O arquivo de contas não pôde ser lido: todo login vai ser recusado.'; } },
+
+  { re: /^Pronto\. Conecte o celular na rede do aparelho\./, tipo: 'boot', grau: 'ok',
+    texto: function () { return 'Pronto para o celular entrar na rede.'; } },
+
+  /* --------------------------------------------------------------- login -- */
+  { re: /^Login aceito: (.+)\.$/, tipo: 'login', grau: 'ok',
+    texto: function (m) { return 'Login aceito: ' + m[1] + '.'; },
+    faz: function (d, m) { d.ficha.professor = m[1]; if (!d.professores.length || d.professores[d.professores.length - 1] !== m[1]) d.professores.push(m[1]); } },
+
+  { re: /^Login recusado\.$/, tipo: 'login', grau: 'aviso',
+    texto: function () { return 'Login recusado: usuário ou senha errados.'; },
+    faz: function (d) { d.loginsRecusados++; } },
+
+  { re: /^Hora do login:/, tipo: 'login', grau: 'ok',
+    texto: function () { return 'O relógio deste boot foi acertado pela hora do celular, e o leitor voltou a ler crachá.'; },
+    faz: function (d) { d.leitorDesligado = false; } },
+
+  { re: /^Login sem hora valida depois da retomada/, tipo: 'login', grau: 'aviso',
+    texto: function () { return 'Login sem hora válida depois da retomada: o leitor continua desligado e nada se grava.'; },
+    faz: function (d) { d.leitorDesligado = true; } },
+
+  /* ------------------------------------------------------ lista da turma -- */
+  { re: /^Buscando a lista da turma (\S+)\.$/, tipo: 'rede', grau: 'neutro',
+    texto: function (m) { return 'Buscando a lista da turma ' + m[1] + '.'; },
+    faz: function (d, m, ctx) { d.estado = 'SINCRONIZANDO'; d.ficha.turma = m[1]; d.buscaComecou = ctx.quando; } },
+
+  { re: /^Conectando no hotspot (principal|de reserva), (.+) \(ate (\d+) s\)\.\.\.$/, tipo: 'rede', grau: 'neutro',
+    texto: function (m) { return 'Procurando o hotspot ' + m[1] + ' (' + m[2] + '), até ' + m[3] + ' s.'; } },
+
+  { re: /^Hotspot (principal|de reserva) vazio no secrets\.h: pulado\.$/, tipo: 'rede', grau: 'neutro',
+    texto: function (m) { return 'O hotspot ' + m[1] + ' não está configurado: pulado.'; } },
+
+  { re: /^Conectado no hotspot (principal|de reserva) em ([\d.]+) s\. Canal da rede do aparelho: antes (-?\d+), agora (-?\d+)\./,
+    tipo: 'rede', grau: 'ok',
+    texto: function (m) {
+      var pulou = m[3] !== m[4];
+      return 'Conectado no hotspot ' + m[1] + ' em ' + m[2] + ' s. A rede do aparelho ' +
+             (pulou ? 'PULOU do canal ' + m[3] + ' para o ' + m[4] + '.' : 'ficou no canal ' + m[4] + '.');
+    },
+    faz: function (d, m) {
+      d.ficha.hotspot = m[1] + ', em ' + m[2] + ' s';
+      d.canalAntes = m[3]; d.canalDepois = m[4];
+      if (m[3] !== m[4]) d.pulouDeCanal = true;
+    } },
+
+  { re: /^O hotspot (principal|de reserva) nao respondeu em (\d+) s\./, tipo: 'rede', grau: 'aviso',
+    texto: function (m) { return 'O hotspot ' + m[1] + ' não respondeu em ' + m[2] + ' s.'; } },
+
+  { re: /^Nenhum hotspot respondeu/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'Nenhum hotspot respondeu.'; } },
+
+  { re: /^Nenhum hotspot no secrets\.h/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'Nenhum hotspot configurado no aparelho.'; } },
+
+  { re: /^MEMORIA ANTES da conexao segura: (\d+) bytes \(([\d.]+) KB\)/, tipo: 'rede', grau: 'ok',
+    texto: function (m) { return 'Memória livre antes da conexão segura: ' + m[2] + ' KB.'; },
+    faz: function (d, m) { d.memoriaKB = parseFloat(m[2]); } },
+
+  { re: /^A conexao segura FALHOU \((-?\d+): (.*)\)\./, tipo: 'rede', grau: 'erro',
+    texto: function (m) { return 'A conexão segura com o banco falhou (' + m[1] + ': ' + m[2] + ').'; } },
+
+  { re: /^O banco pode estar pausado/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'O banco pode estar pausado. Peça ao Caio para reativá-lo.'; } },
+
+  { re: /^O banco respondeu (\d+), e nao 200\./, tipo: 'rede', grau: 'erro',
+    texto: function (m) { return 'O banco respondeu ' + m[1] + ', e não 200.'; } },
+
+  { re: /^Lista da turma carregada: (\d+) alunos \((\d+) bytes de (\d+)\)/, tipo: 'rede', grau: 'ok',
+    texto: function (m) { return 'Lista da turma carregada: ' + m[1] + ' alunos (' + m[2] + ' de ' + m[3] + ' bytes).'; },
+    faz: function (d, m, ctx) {
+      d.ficha.alunos = m[1]; d.listaBytes = +m[2]; d.listaCapacidade = +m[3];
+      d.modo = 'online'; d.estado = 'AGUARDANDO_INICIAR';
+      if (d.buscaComecou && ctx.aoVivo) { d.buscaDuracao = (ctx.quando - d.buscaComecou) / 1000; }
+    } },
+
+  { re: /^Lista da turma relida do disco: (\d+) alunos\./, tipo: 'rede', grau: 'ok',
+    texto: function (m) { return 'Lista da turma relida do disco: ' + m[1] + ' alunos.'; },
+    faz: function (d, m) { d.ficha.alunos = m[1]; d.modo = 'online'; } },
+
+  { re: /^A lista da turma veio vazia/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'A lista da turma veio vazia: conta como falha, e o aparelho segue offline.'; } },
+
+  { re: /^A lista nao coube nos (\d+) bytes/, tipo: 'rede', grau: 'erro',
+    texto: function (m) { return 'A lista da turma não coube nos ' + m[1] + ' bytes reservados.'; },
+    faz: function (d) { d.listaNaoCoube = true; } },
+
+  { re: /^Sem a lista: o aparelho segue em modo offline/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'Sem a lista: o aparelho segue no modo offline e aceita todo crachá.'; },
+    faz: function (d, m, ctx) {
+      d.modo = 'offline'; d.estado = 'AGUARDANDO_INICIAR';
+      if (d.buscaComecou && ctx.aoVivo) { d.buscaDuracao = (ctx.quando - d.buscaComecou) / 1000; }
+    } },
+
+  { re: /^Busca abandonada: o professor escolheu seguir offline\./, tipo: 'rede', grau: 'neutro',
+    texto: function () { return 'O professor desistiu da espera e pediu o modo offline.'; },
+    faz: function (d) { d.modo = 'offline'; d.estado = 'AGUARDANDO_INICIAR'; } },
+
+  { re: /^Busca interrompida pelo Encerrar: saiu do hotspot\./, tipo: 'rede', grau: 'neutro',
+    texto: function () { return 'A busca foi interrompida pelo Encerrar.'; } },
+
+  { re: /^Saiu do hotspot\. A rede do aparelho continua no ar\./, tipo: 'rede', grau: 'ok',
+    texto: function () { return 'Saiu do hotspot, e a rede do aparelho continua no ar.'; } },
+
+  { re: /^Lista gravada no \/roster\.json\.$/, tipo: 'rede', grau: 'neutro',
+    texto: function () { return 'A lista da turma foi gravada na placa.'; } },
+
+  { re: /^Nao consegui gravar o \/roster\.json/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'Não gravou a lista da turma na placa: ela fica só na memória.'; } },
+
+  /* ------------------------------------------------------------- chamada -- */
+  { re: /^Chamada aberta: (\S+), modo (online|offline)$/, tipo: 'chamada', grau: 'ok',
+    texto: function (m) { return 'Chamada ABERTA (' + m[1] + '), no modo ' + m[2] + '.'; },
+    faz: function (d, m) {
+      d.estado = 'SESSAO_ABERTA'; d.ficha.chamada = m[1]; d.modo = m[2];
+      d.chamadas++; d.vistosNaChamada = {};
+    } },
+
+  { re: /^Iniciar recusado: (.+)\.$/, tipo: 'chamada', grau: 'aviso',
+    texto: function (m) { return 'Iniciar RECUSADO: ' + explicaRecusa(m[1]) + '.'; } },
+
+  { re: /^Nao consegui apagar os arquivos da chamada anterior/, tipo: 'chamada', grau: 'erro',
+    texto: function () { return 'Não apagou os arquivos da chamada anterior: o Iniciar foi recusado.'; } },
+
+  { re: /^Manual aceito: (.+)$/, tipo: 'manual', grau: 'ok',
+    texto: function (m) { return 'Presença lançada à mão: matrícula ' + m[1] + '.'; },
+    faz: function (d, m, ctx) {
+      d.toques.push({ n: d.toques.length + 1, uid: 'à mão', veredito: 'MANUAL',
+                      matricula: m[1], decidir: null, feedback: null, lento: false, quando: ctx.quando });
+      d.presencas++;
+    } },
+
+  { re: /^Manual recusado: (.+?)\.?$/, tipo: 'manual', grau: 'aviso',
+    texto: function (m) { return 'Lançamento à mão RECUSADO: ' + explicaRecusa(m[1]) + '.'; } },
+
+  { re: /^Memoria de presencas cheia \((\d+)\)/, tipo: 'chamada', grau: 'erro',
+    texto: function (m) { return 'A memória de presenças encheu (' + m[1] + '): o aluno não foi registrado.'; } },
+
+  { re: /^Nao consegui gravar no (\S+): (.+) nao registrado\.$/, tipo: 'chamada', grau: 'erro',
+    texto: function (m) { return 'Falha ao gravar no disco: ' + m[2] + ' não foi registrado.'; } },
+
+  /* ----------------------------------------------------- relatorio e envio -- */
+  { re: /^Enviando o relatorio ao banco\.$/, tipo: 'envio', grau: 'neutro',
+    texto: function () { return 'Enviando o relatório ao banco.'; },
+    faz: function (d, m, ctx) { d.envioComecou = ctx.quando; } },
+
+  { re: /^Mandando o relatorio: (\d+) bytes\./, tipo: 'envio', grau: 'neutro',
+    texto: function (m) { return 'Mandando o relatório: ' + m[1] + ' bytes.'; } },
+
+  { re: /^Relatorio enviado: gravado, (-?\d+) eventos \((-?\d+) enriquecidos no banco\)\./,
+    tipo: 'envio', grau: 'ok',
+    texto: function (m) { return 'O banco GRAVOU o relatório: ' + m[1] + ' eventos, ' + m[2] + ' enriquecidos.'; },
+    faz: function (d, m, ctx) { if (d.envioComecou && ctx.aoVivo) d.envioDuracao = (ctx.quando - d.envioComecou) / 1000; } },
+
+  { re: /^Relatorio enviado: ja_enviado/, tipo: 'envio', grau: 'ok',
+    texto: function () { return 'O banco já tinha esta chamada: nada foi duplicado.'; },
+    faz: function (d, m, ctx) { if (d.envioComecou && ctx.aoVivo) d.envioDuracao = (ctx.quando - d.envioComecou) / 1000; } },
+
+  { re: /^A resposta do banco nao traz gravado nem ja_enviado\.$/, tipo: 'envio', grau: 'erro',
+    texto: function () { return 'A resposta do banco não diz nem gravado nem já enviado.'; } },
+
+  { re: /^A resposta do banco nao chegou inteira/, tipo: 'envio', grau: 'erro',
+    texto: function () { return 'A resposta do banco não chegou inteira.'; } },
+
+  { re: /^Chamada enviada: (\S+)\. O cracha nao registra mais\./, tipo: 'envio', grau: 'ok',
+    texto: function (m) { return 'Chamada FECHADA (' + m[1] + '). O crachá não registra mais.'; },
+    faz: function (d) { d.estado = 'CHAMADA_ENVIADA'; } },
+
+  { re: /^Enviar falhou: (\S+)\. A chamada continua aberta\./, tipo: 'envio', grau: 'erro',
+    texto: function (m) { return 'O envio FALHOU (' + explicaRecusa(m[1]) + '). A chamada continua aberta.'; } },
+
+  { re: /^Enviar: a chamada ja foi enviada/, tipo: 'envio', grau: 'neutro',
+    texto: function () { return 'A chamada já tinha sido enviada: respondeu sem ir à internet.'; } },
+
+  { re: /^Enviar recusado: este boot ainda nao tem hora/, tipo: 'envio', grau: 'aviso',
+    texto: function () { return 'Envio recusado: este boot ainda não tem hora. Falta um login com hora válida.'; } },
+
+  { re: /^Nao consegui gravar o (\S+): a chamada continua aberta\.$/, tipo: 'envio', grau: 'erro',
+    texto: function () { return 'Não gravou o relatório no disco antes de enviar: a chamada continua aberta.'; } },
+
+  { re: /^Envio terminado: saiu do hotspot/, tipo: 'envio', grau: 'neutro',
+    texto: function () { return 'Envio terminado, e o aparelho saiu do hotspot.'; } },
+
+  { re: /^Evento sem hora: fica fora do relatorio\.$/, tipo: 'envio', grau: 'aviso',
+    texto: function () { return 'Um evento sem hora ficou fora do relatório.'; } },
+
+  /* ------------------------------------------------------------- encerrar -- */
+  { re: /^Encerrar: lista da turma, sessao e eventos apagados\. De volta ao login\.$/,
+    tipo: 'chamada', grau: 'ok',
+    texto: function () { return 'ENCERRADO: a lista da turma e as presenças foram apagadas. De volta ao login.'; },
+    faz: function (d) {
+      d.estado = 'AGUARDANDO_LOGIN'; d.modo = null;
+      d.ficha.chamada = null; d.ficha.professor = null; d.ficha.alunos = null;
+    } },
+
+  { re: /^Nao consegui apagar os arquivos da chamada: o proximo Iniciar tenta de novo\.$/,
+    tipo: 'chamada', grau: 'aviso',
+    texto: function () { return 'Não apagou os arquivos da chamada: o próximo Iniciar tenta de novo.'; } },
+
+  { re: /^Nao consegui apagar o (\S+): o Encerrar tenta de novo\.$/, tipo: 'chamada', grau: 'aviso',
+    texto: function (m) { return 'Não apagou ' + m[1] + ': o Encerrar tenta de novo.'; } },
+
+  /* ------------------------------------------------- queda de energia (p5) -- */
+  { re: /^Retomando a chamada do (\S+)\.$/, tipo: 'queda', grau: 'neutro',
+    texto: function () { return 'A placa achou uma chamada guardada e está retomando.'; } },
+
+  { re: /^Chamada retomada: (\S+), modo (online|offline), (ja enviada|aberta); (\d+) eventos, (\d+) presencas\./,
+    tipo: 'queda', grau: 'ok',
+    texto: function (m) {
+      return 'Chamada RETOMADA depois da queda (' + m[1] + '), modo ' + m[2] + ', ' + m[3] +
+             ': ' + m[4] + ' eventos e ' + m[5] + ' presenças de volta.';
+    },
+    faz: function (d, m) {
+      d.ficha.chamada = m[1]; d.modo = m[2];
+      d.estado = m[3] === 'ja enviada' ? 'CHAMADA_ENVIADA' : 'SESSAO_ABERTA';
+      d.retomada = { eventos: +m[4], presencas: +m[5] };
+      d.presencas = Math.max(d.presencas, +m[5]);
+    } },
+
+  { re: /^O leitor espera o primeiro login com hora valida\.$/, tipo: 'queda', grau: 'aviso',
+    texto: function () { return 'O leitor está desligado até alguém entrar e devolver a hora ao aparelho.'; },
+    faz: function (d) { d.leitorDesligado = true; } },
+
+  { re: /^(\d+) linha\(s\) ilegivel\(is\) no (\S+), cortada\(s\) pela queda de energia/,
+    tipo: 'queda', grau: 'aviso',
+    texto: function (m) { return m[1] + ' linha(s) cortada(s) pela queda de energia: descartada(s).'; },
+    faz: function (d, m) { d.linhasDescartadas = (d.linhasDescartadas || 0) + (+m[1]); } },
+
+  { re: /^A chamada era online, mas a lista da turma nao voltou do disco/, tipo: 'queda', grau: 'aviso',
+    texto: function () { return 'A lista da turma não voltou do disco: a chamada segue no modo offline.'; },
+    faz: function (d) { d.modo = 'offline'; } },
+
+  { re: /^O (\S+) nao traz uma chamada legivel: nada a retomar\.$/, tipo: 'queda', grau: 'neutro',
+    texto: function () { return 'Não havia chamada guardada para retomar.'; } },
+
+  { re: /^O inicio do (\S+) nao e uma hora valida: nada a retomar\.$/, tipo: 'queda', grau: 'aviso',
+    texto: function () { return 'A chamada guardada não tinha hora válida: nada a retomar.'; } },
+
+  { re: /^A conta (\S+), que iniciou a chamada, nao esta no professores\.json\./, tipo: 'queda', grau: 'aviso',
+    texto: function (m) { return 'A conta que iniciou a chamada (' + m[1] + ') não está mais na placa.'; } },
+
+  { re: /^Memoria de presencas cheia \((\d+)\): (\d+) presenca\(s\) relida\(s\) ficaram fora\./,
+    tipo: 'queda', grau: 'erro',
+    texto: function (m) { return m[2] + ' presença(s) relida(s) ficaram fora: a memória encheu.'; } },
+
+  { re: /^Nao consegui regravar o (\S+) como finalizada\./, tipo: 'envio', grau: 'aviso',
+    texto: function () { return 'Não regravou a chamada como finalizada.'; } },
+
+  /* ------------------------------------------------------------------ misc -- */
+  { re: /^O \/api\/estado nao coube/, tipo: 'portal', grau: 'erro',
+    texto: function () { return 'A resposta de estado não coube no documento: saiu incompleta.'; } },
+
+  { re: /^Nao consegui reabrir o (\S+)\.$/, tipo: 'envio', grau: 'erro',
+    texto: function (m) { return 'Não conseguiu reabrir ' + m[1] + '.'; } },
+
+  { re: /^Nao consegui reler o (\S+)/, tipo: 'rede', grau: 'aviso',
+    texto: function (m) { return 'Não conseguiu reler ' + m[1] + '.'; } },
+
+  { re: /^Nao consegui apagar o \/roster\.json( antigo)?\.$/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'Não conseguiu apagar a lista da turma antiga.'; } },
+
+  { re: /^O (\S+) nao traz uma lista com alunos\.$/, tipo: 'rede', grau: 'aviso',
+    texto: function () { return 'O arquivo da lista da turma não traz alunos.'; } },
+
+  { re: /^O endereco do banco no secrets\.h nao e um endereco https\.$/, tipo: 'rede', grau: 'erro',
+    texto: function () { return 'O endereço do banco não é https.'; } },
+
+  { re: /^(A resposta do banco nao e um JSON legivel|A resposta do banco nao e uma lista|O pedido ao banco FALHOU)/,
+    tipo: 'rede', grau: 'erro',
+    texto: function (m) { return 'A resposta do banco não serve: ' + m[0]; } }
+];
+
+/* O toque tem forma propria, com campos opcionais, e por isso sai da lista. */
+var RE_TOQUE = /^([0-9A-Fa-f]{8,14})\s+(REGISTRADO|JA_REGISTRADO|NAO_RECONHECIDO)(?:\s+matricula\s+(\S+))?(?:\s+decidir:\s*([\d.]+)\s*ms\s+toque->feedback:\s*([\d.]+)\s*ms)?(\s+ACIMA DOS \d+ ms)?\s*$/;
+var RE_TOQUE_FECHADA = /^(\S+)\s+NAO_RECONHECIDO chamada enviada: nada gravado$/;
+
+/* O ruido: linha que nao vem do nosso codigo, ou vem do framework. */
+var RUIDOS = [
+  { re: /_handleRequest\(\): request handler not found/, porque: 'o celular testando se a rede tem internet' },
+  { re: /open\(\):.*does not exist/,                      porque: 'o arquivo ainda não existe na placa' },
+  { re: /errno:\s*104|Connection reset by peer/,          porque: 'o celular fechou a conexão antes do fim' },
+  { re: /^\[\s*\d+\]\[[EWIDV]\]\[/,                        porque: 'mensagem interna do framework' },
+  { re: /^(rst:0x|configsip:|clk_drv:|mode:|load:0x|entry 0x|ets )/, porque: 'o reinício da placa' },
+  /* a primeira linha do reinicio chega cortada ("0x1 (POWERON_RESET),boot:0x13"),
+     porque o comeco dela se perde na troca de velocidade da porta */
+  { re: /POWERON_RESET|SPI_FAST_FLASH_BOOT|^boot:0x/,       porque: 'o reinício da placa' },
+  { re: /^---/,                                            porque: 'mensagem do PlatformIO' },
+  { re: /Executing task:/,                                 porque: 'mensagem do PlatformIO' }
+];
+
+function explicaRecusa(codigo) {
+  var mapa = {
+    AINDA_SINCRONIZANDO: 'o aparelho ainda está buscando a lista da turma',
+    SESSAO_JA_ABERTA: 'já existe uma chamada aberta',
+    HORA_INVALIDA: 'a hora que o celular mandou não serve',
+    NAO_GRAVADO: 'o aparelho não conseguiu gravar',
+    SEM_SESSAO: 'não há chamada aberta',
+    MATRICULA_VAZIA: 'a matrícula veio vazia',
+    FORA_DA_TURMA: 'a matrícula não é da turma',
+    JA_PRESENTE: 'essa pessoa já estava presente',
+    SEM_INTERNET: 'não chegou ao banco',
+    BANCO_RECUSOU: 'o banco respondeu com erro'
+  };
+  return mapa[codigo] || codigo;
+}
+
+/* ========================================================================== *
+ * 2. O estado que a pagina monta a partir das linhas
+ * ========================================================================== */
+
+var d, linhas, totalLinhas;
+/* Ao vivo, cada linha chega com a hora do computador. Colada, nao ha hora
+   nenhuma: a pagina mostra o numero da linha, e nao inventa duracao. */
+var aoVivo = false;
+
+function zerar() {
+  d = {
+    estado: null, modo: null, leitorDesligado: false, reiniciou: false,
+    ficha: {}, toques: [], presencas: 0, professores: [], chamadas: 0,
+    loginsRecusados: 0, vistosNaChamada: {}, duplicatas: [],
+    memoriaKB: null, listaBytes: null, listaCapacidade: null, listaNaoCoube: false,
+    buscaComecou: null, buscaDuracao: null, envioComecou: null, envioDuracao: null,
+    canalAntes: null, canalDepois: null, pulouDeCanal: false,
+    retomada: null, linhasDescartadas: 0, desconhecidas: 0, erros: []
+  };
+  linhas = [];
+  totalLinhas = 0;
+}
+
+var ESTADOS = {
+  AGUARDANDO_LOGIN:  { nome: 'Esperando o login',   cor: 'azul',     pisca: '',       diz: 'O professor ainda não entrou. O crachá encostado agora não faz nada.' },
+  SINCRONIZANDO:     { nome: 'Buscando a turma',    cor: 'azul',     pisca: 'lento',  diz: 'O aparelho está no hotspot, buscando a lista da turma no banco.' },
+  AGUARDANDO_INICIAR:{ nome: 'Esperando o Iniciar', cor: 'azul',     pisca: '',       diz: 'A busca terminou. O professor precisa tocar em Iniciar.' },
+  SESSAO_ABERTA:     { nome: 'Chamada aberta',      cor: 'verde',    pisca: '',       diz: 'O leitor está registrando presença.' },
+  CHAMADA_ENVIADA:   { nome: 'Chamada enviada',     cor: 'azul',     pisca: '',       diz: 'A chamada foi ao banco e fechou. O crachá encostado agora dá vermelho.' },
+  REGISTRADO:        { nome: 'Crachá registrado',   cor: 'verde',    pisca: 'rapido', diz: 'Duas piscadas verdes e um bip curto.' },
+  JA_REGISTRADO:     { nome: 'Já estava presente',  cor: 'verde',    pisca: 'rapido', diz: 'Uma piscada verde, sem som.' },
+  NAO_RECONHECIDO:   { nome: 'Crachá recusado',     cor: 'vermelho', pisca: '',       diz: 'Vermelho por 1 segundo e um som mais longo. Nada foi gravado.' }
+};
+
+/* O veredito do toque e momentaneo: ele toma a tela por um instante e depois a
+   devolve ao estado em que a chamada esta, como o LED da caixa faz. */
+var estadoDeFundo = null, relogioDoToque = null;
+
+function mostrarVeredito(veredito) {
+  if (!ESTADOS[veredito]) return;
+  if (!relogioDoToque) estadoDeFundo = d.estado;
+  pintarEstado(veredito);
+  clearTimeout(relogioDoToque);
+  relogioDoToque = setTimeout(function () {
+    relogioDoToque = null;
+    pintarEstado(estadoDeFundo || d.estado);
+  }, 1600);
+}
+
+/* ========================================================================== *
+ * 3. Ler uma linha
+ * ========================================================================== */
+
+function limpar(bruta) {
+  return bruta
+    .replace(/\r/g, '')
+    .replace(/\u001b\[[0-9;]*m/g, '')          // cor ANSI
+    .replace(/^\d{2}:\d{2}:\d{2}\.\d{3}\s*>\s*/, '')  // filtro "time" do PlatformIO
+    .trim();
+}
+
+function processar(bruta, quando) {
+  var texto = limpar(bruta);
+  if (!texto) return;
+  totalLinhas++;
+
+  var ctx = { quando: quando, aoVivo: aoVivo };
+
+  /* o toque vem primeiro: e a linha que mais importa e a mais frequente */
+  var m = RE_TOQUE.exec(texto);
+  if (m) {
+    var feedback = m[5] ? parseFloat(m[5]) : null;
+    var lento = !!m[6] || (feedback !== null && feedback > ALVO_DO_TOQUE_MS);
+    var toque = {
+      n: d.toques.length + 1, uid: m[1], veredito: m[2], matricula: m[3] || null,
+      decidir: m[4] ? parseFloat(m[4]) : null, feedback: feedback, lento: lento, quando: quando
+    };
+    d.toques.push(toque);
+    if (m[2] === 'REGISTRADO') {
+      d.presencas++;
+      if (d.vistosNaChamada[m[1]]) d.duplicatas.push(m[1]);
+      d.vistosNaChamada[m[1]] = true;
+    }
+    anotar(quando, 'toque', m[2] === 'NAO_RECONHECIDO' ? 'aviso' : 'ok',
+           descreveToque(toque), texto);
+    mostrarVeredito(m[2]);
+    desenhar();
+    return;
+  }
+
+  m = RE_TOQUE_FECHADA.exec(texto);
+  if (m) {
+    d.toques.push({ n: d.toques.length + 1, uid: m[1], veredito: 'NAO_RECONHECIDO',
+                    matricula: null, decidir: null, feedback: null, lento: false, quando: quando });
+    anotar(quando, 'toque', 'aviso',
+           'Crachá ' + m[1] + ' encostado com a chamada já enviada: vermelho, nada gravado.', texto);
+    mostrarVeredito('NAO_RECONHECIDO');
+    desenhar();
+    return;
+  }
+
+  for (var i = 0; i < FALAS.length; i++) {
+    var f = FALAS[i];
+    var achou = f.re.exec(texto);
+    if (!achou) continue;
+    if (f.faz) f.faz(d, achou, ctx);
+    var frase = f.texto(achou);
+    if (f.grau === 'erro') d.erros.push(frase);
+    anotar(quando, f.tipo, f.grau, frase, texto);
+    if (!relogioDoToque) pintarEstado(d.estado);
+    desenhar();
+    return;
+  }
+
+  for (var j = 0; j < RUIDOS.length; j++) {
+    if (RUIDOS[j].re.test(texto)) {
+      anotar(quando, 'ruido', 'ruido', texto, texto, RUIDOS[j].porque);
+      desenhar();
+      return;
+    }
+  }
+
+  d.desconhecidas++;
+  anotar(quando, 'desconhecida', 'aviso', texto, texto, 'não conheço esta frase');
+  desenhar();
+}
+
+function descreveToque(t) {
+  var q = { REGISTRADO: 'registrado', JA_REGISTRADO: 'já estava presente', NAO_RECONHECIDO: 'recusado' }[t.veredito];
+  var s = 'Crachá ' + t.uid + ': ' + q;
+  if (t.matricula) s += ', matrícula ' + t.matricula;
+  if (t.feedback !== null) s += ', ' + t.feedback.toFixed(1) + ' ms até o sinal';
+  if (t.lento) s += ' (acima dos ' + ALVO_DO_TOQUE_MS + ' ms)';
+  return s + '.';
+}
+
+function anotar(quando, tipo, grau, frase, bruta, porque) {
+  linhas.push({ quando: quando, tipo: tipo, grau: grau, frase: frase, bruta: bruta, porque: porque });
+}
+
+/* ========================================================================== *
+ * 4. Desenhar
+ * ========================================================================== */
+
+function $(id) { return document.getElementById(id); }
+
+function pintarEstado(chave) {
+  var e = ESTADOS[chave];
+  var led = $('led');
+  led.className = 'led';
+  if (!e) {
+    $('estado-nome').textContent = 'Sem dados';
+    $('estado-diz').textContent = 'Ligue no cabo USB ou cole o texto do monitor.';
+    return;
+  }
+  led.classList.add(e.cor);
+  if (e.pisca) led.classList.add(e.pisca);
+  $('estado-nome').textContent = e.nome;
+  $('estado-diz').textContent = e.diz;
+}
+
+var desenharPedido = false;
+function desenhar() {
+  if (desenharPedido) return;
+  desenharPedido = true;
+  requestAnimationFrame(function () { desenharPedido = false; desenharAgora(); });
+}
+
+function desenharAgora() {
+  /* pilulas do estado */
+  var pil = [];
+  if (d.modo) pil.push('<span class="pilula ' + d.modo + '">modo ' + d.modo + '</span>');
+  if (d.leitorDesligado) pil.push('<span class="pilula alerta">leitor desligado até o login com hora</span>');
+  if (d.retomada) pil.push('<span class="pilula">retomada depois de queda</span>');
+  if (d.pulouDeCanal) pil.push('<span class="pilula alerta">a rede do aparelho pulou de canal</span>');
+  $('estado-pilulas').innerHTML = pil.join('');
+
+  /* numeros */
+  $('n-presentes').textContent = d.presencas;
+  $('n-eventos').textContent = d.toques.length;
+
+  var pior = null;
+  d.toques.forEach(function (t) { if (t.feedback !== null && (pior === null || t.feedback > pior)) pior = t.feedback; });
+  $('n-pior').textContent = pior === null ? '—' : pior.toFixed(0) + ' ms';
+  $('caixa-pior').className = 'numero' + (pior === null ? '' : (pior > ALVO_DO_TOQUE_MS ? ' ruim' : ''));
+
+  $('n-memoria').textContent = d.memoriaKB === null ? '—' : d.memoriaKB.toFixed(1) + ' KB';
+  $('caixa-memoria').className = 'numero' +
+    (d.memoriaKB === null ? '' : (d.memoriaKB < MEMORIA_MINIMA_KB ? ' ruim' : (d.memoriaKB < 45 ? ' atencao' : '')));
+
+  /* ficha */
+  var f = d.ficha, ficha = [];
+  function linhaFicha(r, v) { if (v) ficha.push('<tr><th style="width:14rem">' + r + '</th><td>' + v + '</td></tr>'); }
+  linhaFicha('Professor logado', f.professor);
+  linhaFicha('Chamada', f.chamada ? '<span class="mono">' + f.chamada + '</span>' : null);
+  linhaFicha('Turma', f.turma);
+  linhaFicha('Alunos na lista', f.alunos);
+  linhaFicha('Rede do aparelho', f.rede ? f.rede + ' (' + (f.endereco || '') + ')' : null);
+  linhaFicha('Hotspot', f.hotspot);
+  linhaFicha('Canal da rede', d.canalDepois === null ? null :
+             (d.pulouDeCanal ? 'pulou do ' + d.canalAntes + ' para o ' + d.canalDepois : d.canalDepois));
+  linhaFicha('Leitor de crachá', f.leitor);
+  linhaFicha('Contas na placa', f.contas);
+  linhaFicha('Busca da turma', d.buscaDuracao === null ? null : d.buscaDuracao.toFixed(1) + ' s (medida pelo relógio do computador)');
+  linhaFicha('Envio ao banco', d.envioDuracao === null ? null : d.envioDuracao.toFixed(1) + ' s (medida pelo relógio do computador)');
+  $('tabela-ficha').innerHTML = ficha.join('') ||
+    '<tr><td style="color:var(--tinta-fraca);font-style:italic">Nada ainda.</td></tr>';
+
+  /* toques */
+  $('conta-toques').textContent = d.toques.length;
+  $('sem-toques').hidden = d.toques.length > 0;
+  var corpo = d.toques.slice().reverse().map(function (t) {
+    var classe = t.veredito.toLowerCase();
+    return '<tr' + (t.lento ? ' class="lento"' : '') + '>' +
+      '<td class="num">' + t.n + '</td>' +
+      '<td class="mono">' + t.uid + '</td>' +
+      '<td><span class="chip ' + classe + '">' + t.veredito.replace(/_/g, ' ').toLowerCase() + '</span></td>' +
+      '<td class="mono">' + (t.matricula || '—') + '</td>' +
+      '<td class="num">' + (t.decidir === null ? '—' : t.decidir.toFixed(1) + ' ms') + '</td>' +
+      '<td class="num">' + (t.feedback === null ? '—' : t.feedback.toFixed(1) + ' ms') +
+        (t.lento ? ' ⚠' : '') + '</td></tr>';
+  }).join('');
+  $('tabela-toques').innerHTML = corpo;
+
+  desenharConferencias();
+  desenharTempo();
+}
+
+function desenharConferencias() {
+  var itens = [];
+
+  function item(estado, titulo, detalhe) {
+    itens.push('<li class="' + estado + '"><strong>' + titulo + '</strong>' +
+               (detalhe ? '<span class="detalhe">' + detalhe + '</span>' : '') + '</li>');
+  }
+
+  var lentos = d.toques.filter(function (t) { return t.lento; });
+  var comTempo = d.toques.filter(function (t) { return t.feedback !== null; });
+  if (!comTempo.length) {
+    item('', 'Toque até o sinal, abaixo de ' + ALVO_DO_TOQUE_MS + ' ms (teste 1)', 'Nenhum crachá encostado ainda.');
+  } else if (lentos.length) {
+    item('parcial', lentos.length + ' de ' + comTempo.length + ' toques passaram dos ' + ALVO_DO_TOQUE_MS + ' ms (teste 1)',
+         'Crachás ' + lentos.map(function (t) { return t.uid; }).join(', ') +
+         '. O tempo é piso, medido de dentro do aparelho. Piso acima de 100 ms manda medir o período do loop antes do veredito.');
+  } else {
+    item('passou', 'Todos os ' + comTempo.length + ' toques abaixo dos ' + ALVO_DO_TOQUE_MS + ' ms (teste 1)');
+  }
+
+  if (d.memoriaKB === null) {
+    item('', 'Memória livre antes da conexão segura, acima de ' + MEMORIA_MINIMA_KB + ' KB (teste 7d)', 'Ainda não houve busca da turma.');
+  } else if (d.memoriaKB < MEMORIA_MINIMA_KB) {
+    item('falhou', 'Memória abaixo dos ' + MEMORIA_MINIMA_KB + ' KB (teste 7d): ' + d.memoriaKB.toFixed(1) + ' KB');
+  } else if (d.memoriaKB < 45) {
+    item('parcial', 'Memória em ' + d.memoriaKB.toFixed(1) + ' KB (teste 7d)',
+         'Entre 40 e 45 KB é suspeito, e não aprovado: a medida que decide é a feita com o celular conectado.');
+  } else {
+    item('passou', 'Memória em ' + d.memoriaKB.toFixed(1) + ' KB, acima dos ' + MEMORIA_MINIMA_KB + ' KB (teste 7d)');
+  }
+
+  if (d.listaBytes !== null) {
+    var folga = d.listaCapacidade - d.listaBytes;
+    item(d.listaNaoCoube ? 'falhou' : 'passou',
+         'A lista da turma coube: ' + d.listaBytes + ' de ' + d.listaCapacidade + ' bytes',
+         'Sobraram ' + folga + ' bytes.');
+  } else if (d.listaNaoCoube) {
+    item('falhou', 'A lista da turma NÃO coube no espaço reservado');
+  }
+
+  if (d.toques.length) {
+    if (d.duplicatas.length) {
+      item('falhou', 'Duplicata: ' + d.duplicatas.length + ' crachá(s) registrado(s) duas vezes na mesma chamada (teste 8)',
+           'Crachás ' + d.duplicatas.join(', ') + '.');
+    } else {
+      item('passou', 'Nenhuma duplicata: cada crachá registrado uma vez só (teste 8)');
+    }
+  }
+
+  if (d.linhasDescartadas) {
+    item('parcial', d.linhasDescartadas + ' linha(s) descartada(s) por corte de energia',
+         'É o comportamento previsto: a linha cortada no meio da escrita é jogada fora na releitura.');
+  }
+
+  if (d.erros.length) {
+    item('falhou', d.erros.length + ' erro(s) no log',
+         d.erros.slice(-4).join(' · '));
+  } else if (totalLinhas) {
+    item('passou', 'Nenhuma linha de erro no log');
+  }
+
+  if (d.desconhecidas) {
+    item('parcial', d.desconhecidas + ' frase(s) que esta página não conhece',
+         'Elas estão marcadas em amarelo na linha do tempo. Se forem muitas, o firmware mudou e esta página precisa mudar junto.');
+  }
+
+  $('lista-confere').innerHTML = itens.join('') ||
+    '<li style="color:var(--tinta-fraca);font-style:italic">Sem dados ainda.</li>';
+}
+
+function hora(l, ordem) {
+  if (!aoVivo) return 'linha ' + ordem;
+  var t = new Date(l.quando);
+  function p(n) { return (n < 10 ? '0' : '') + n; }
+  return p(t.getHours()) + ':' + p(t.getMinutes()) + ':' + p(t.getSeconds());
+}
+
+function desenharTempo() {
+  var mostrarRuido = $('filtro-ruido').checked;
+  var visiveis = linhas.filter(function (l) { return mostrarRuido || l.grau !== 'ruido'; });
+  $('conta-linhas').textContent = totalLinhas + ' linhas, ' +
+    linhas.filter(function (l) { return l.grau === 'ruido'; }).length + ' de ruído';
+
+  var html = visiveis.map(function (l, i) {
+    var classe = l.tipo === 'desconhecida' ? 'desconhecida' :
+                 (l.grau === 'ruido' ? 'ruido' : (l.grau === 'erro' ? 'erro' : (l.grau === 'aviso' ? 'aviso' : '')));
+    return '<li class="' + classe + '"><span class="hora">' + hora(l, i + 1) + '</span>' +
+           '<span class="texto">' + escapar(l.frase) +
+           (l.porque ? '<span class="porque">' + escapar(l.porque) + '</span>' : '') +
+           '</span></li>';
+  }).join('');
+
+  var caixa = $('linha-tempo');
+  caixa.innerHTML = html;
+  if ($('filtro-rolar').checked) {
+    var pai = caixa.parentNode;
+    pai.scrollTop = pai.scrollHeight;
+  }
+}
+
+function escapar(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ========================================================================== *
+ * 5. O cabo USB
+ * ========================================================================== */
+
+var porta = null, lendo = false, abortar = null;
+
+function recadoSerial(texto, grau) {
+  var p = $('recado-serial');
+  p.hidden = !texto;
+  p.textContent = texto || '';
+  p.className = 'recado ' + (grau || '');
+}
+
+function temSerial() { return typeof navigator !== 'undefined' && !!navigator.serial; }
+
+async function conectar() {
+  if (!temSerial()) {
+    recadoSerial('Este navegador não deixa esta página ler o cabo USB. Use o Chrome ou o Edge, ' +
+                 'e abra a página por um servidor local se ela estiver aberta como arquivo: ' +
+                 'na pasta do repositório, rode "python -m http.server 8000" e abra ' +
+                 'http://localhost:8000/docs/testes/monitor.html. Pelo campo de colar, funciona em qualquer navegador.', 'aviso');
+    return;
+  }
+  try {
+    porta = await navigator.serial.requestPort();
+    await porta.open({ baudRate: 115200 });
+    /* sem mexer nos sinais: assim a placa nao reinicia so por abrir a porta */
+    try { await porta.setSignals({ dataTerminalReady: false, requestToSend: false }); } catch (e) {}
+    recadoSerial('Ligado na porta, a 115200. Se nada aparecer, toque em "Reiniciar a placa".', 'ok');
+    $('acao-conectar').disabled = true;
+    $('acao-reiniciar').disabled = false;
+    $('acao-desligar').disabled = false;
+    aoVivo = true;
+    $('origem-dados').textContent = 'ao vivo, pelo cabo';
+    ler();
+  } catch (erro) {
+    if (erro && erro.name === 'NotFoundError') { recadoSerial('Nenhuma porta escolhida.', 'aviso'); return; }
+    recadoSerial('Não consegui abrir a porta: ' + (erro && erro.message ? erro.message : erro) +
+                 '. Se o monitor do PlatformIO estiver aberto, feche-o com Ctrl+C e tente de novo.', 'erro');
+    porta = null;
+  }
+}
+
+async function ler() {
+  lendo = true;
+  var resto = '';
+  var decodificador = new TextDecoder();
+  var leitor = porta.readable.getReader();
+  abortar = function () { try { leitor.cancel(); } catch (e) {} };
+  try {
+    while (lendo) {
+      var passo = await leitor.read();
+      if (passo.done) break;
+      var pedaco = resto + decodificador.decode(passo.value, { stream: true });
+      var partes = pedaco.split('\n');
+      resto = partes.pop();
+      var agora = Date.now();
+      for (var i = 0; i < partes.length; i++) processar(partes[i], agora);
+    }
+  } catch (erro) {
+    recadoSerial('A leitura parou: ' + (erro && erro.message ? erro.message : erro), 'erro');
+  } finally {
+    try { leitor.releaseLock(); } catch (e) {}
+  }
+}
+
+async function desligar() {
+  lendo = false;
+  if (abortar) abortar();
+  if (porta) { try { await porta.close(); } catch (e) {} }
+  porta = null;
+  $('acao-conectar').disabled = false;
+  $('acao-reiniciar').disabled = true;
+  $('acao-desligar').disabled = true;
+  recadoSerial('Desligado. A porta está livre para o monitor do PlatformIO.', 'ok');
+}
+
+async function reiniciarPlaca() {
+  if (!porta) return;
+  /* No DevKit, o RTS chega ao pino de reinicio pelo par de transistores. Em
+     placa sem esse circuito, isto nao faz nada, e o jeito e apertar o botao. */
+  try {
+    await porta.setSignals({ dataTerminalReady: false, requestToSend: true });
+    await new Promise(function (r) { setTimeout(r, 150); });
+    await porta.setSignals({ dataTerminalReady: false, requestToSend: false });
+    recadoSerial('Pulso de reinício mandado. Se a placa não reiniciar, aperte o botão EN nela.', 'ok');
+  } catch (erro) {
+    recadoSerial('Não consegui mandar o pulso de reinício: ' + erro, 'aviso');
+  }
+}
+
+/* ========================================================================== *
+ * 6. Colar, resumir, salvar
+ * ========================================================================== */
+
+function lerColado() {
+  var texto = $('campo-colar').value;
+  if (!texto.trim()) { recadoAcoes('Cole o texto do monitor antes.', 'aviso'); return; }
+  zerar();
+  aoVivo = false;
+  pintarEstado(null);
+  /* O texto colado nao tem relogio: a linha do tempo mostra o numero da linha,
+     e a duracao da busca e a do envio ficam de fora, porque ninguem as mediu. */
+  var base = Date.now();
+  texto.split('\n').forEach(function (l, i) { processar(l, base + i); });
+  $('origem-dados').textContent = 'texto colado';
+  recadoAcoes('Li ' + totalLinhas + ' linha(s). O texto colado não traz hora, então a linha do tempo mostra o número da linha, e a duração da busca e a do envio ficam de fora.', 'ok');
+  desenharAgora();
+}
+
+function recadoAcoes(texto, grau) {
+  var p = $('recado-acoes');
+  p.hidden = !texto;
+  p.textContent = texto || '';
+  p.className = 'recado ' + (grau || '');
+}
+
+function montarResumo() {
+  var L = [];
+  L.push('Monitor do aparelho, ' + new Date().toLocaleString('pt-BR') + '.');
+  L.push('');
+  L.push('**O que o aparelho mostrou**');
+  L.push('');
+  if (d.ficha.professor) L.push('- Professor logado: `' + d.ficha.professor + '`');
+  if (d.ficha.chamada) L.push('- Chamada: `' + d.ficha.chamada + '`, modo ' + (d.modo || 'não dito'));
+  if (d.ficha.alunos) L.push('- Lista da turma: ' + d.ficha.alunos + ' alunos' +
+    (d.listaBytes !== null ? ' (' + d.listaBytes + ' de ' + d.listaCapacidade + ' bytes)' : ''));
+  if (d.ficha.hotspot) L.push('- Hotspot: ' + d.ficha.hotspot +
+    (d.canalDepois !== null ? ', canal ' + (d.pulouDeCanal ? d.canalAntes + ' para ' + d.canalDepois : d.canalDepois) : ''));
+  if (d.memoriaKB !== null) L.push('- Memória antes da conexão segura: ' + d.memoriaKB.toFixed(1) + ' KB');
+  L.push('- Crachás encostados: ' + d.toques.length + '; presenças gravadas: ' + d.presencas);
+  if (d.retomada) L.push('- Retomada depois da queda: ' + d.retomada.eventos + ' eventos, ' + d.retomada.presencas + ' presenças');
+
+  if (d.toques.length) {
+    L.push('');
+    L.push('| # | Crachá | Resultado | Matrícula | Decidir | Toque até o sinal |');
+    L.push('|---|---|---|---|---|---|');
+    d.toques.forEach(function (t) {
+      L.push('| ' + t.n + ' | `' + t.uid + '` | ' + t.veredito + ' | ' + (t.matricula || '') + ' | ' +
+             (t.decidir === null ? '' : t.decidir.toFixed(1) + ' ms') + ' | ' +
+             (t.feedback === null ? '' : t.feedback.toFixed(1) + ' ms' + (t.lento ? ' **acima dos 200 ms**' : '')) + ' |');
+    });
+  }
+
+  L.push('');
+  L.push('**Conferências**');
+  L.push('');
+  var confere = $('lista-confere').querySelectorAll('li');
+  for (var i = 0; i < confere.length; i++) {
+    var forte = confere[i].querySelector('strong');
+    if (!forte) continue;
+    var marca = confere[i].className === 'passou' ? 'OK' :
+                (confere[i].className === 'falhou' ? 'FALHOU' :
+                (confere[i].className === 'parcial' ? 'ATENÇÃO' : 'sem dado'));
+    var det = confere[i].querySelector('.detalhe');
+    L.push('- ' + marca + ': ' + forte.textContent + (det ? ' (' + det.textContent + ')' : ''));
+  }
+
+  L.push('');
+  L.push('<details><summary>Monitor serial</summary>');
+  L.push('');
+  L.push('```');
+  L.push(linhas.map(function (l) { return l.bruta; }).join('\n'));
+  L.push('```');
+  L.push('');
+  L.push('</details>');
+  return L.join('\n');
+}
+
+function copiarResumo() {
+  if (!totalLinhas) { recadoAcoes('Não há nada para resumir ainda.', 'aviso'); return; }
+  var texto = montarResumo();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(
+      function () { recadoAcoes('Resumo copiado. Cole no comentário da issue da rodada.', 'ok'); },
+      function () { mostrarParaCopiar(texto); });
+  } else {
+    mostrarParaCopiar(texto);
+  }
+}
+
+function mostrarParaCopiar(texto) {
+  $('campo-colar').value = texto;
+  $('campo-colar').select();
+  recadoAcoes('O navegador não deixou copiar sozinho. O resumo está no campo acima, já selecionado.', 'aviso');
+}
+
+function salvarLog() {
+  if (!totalLinhas) { recadoAcoes('Não há log para salvar ainda.', 'aviso'); return; }
+  var conteudo = linhas.map(function (l) { return l.bruta; }).join('\n');
+  var agora = new Date();
+  function p(n) { return (n < 10 ? '0' : '') + n; }
+  var nome = agora.getFullYear() + '-' + p(agora.getMonth() + 1) + '-' + p(agora.getDate()) +
+             '-monitor-' + p(agora.getHours()) + p(agora.getMinutes()) + '.txt';
+  try {
+    var url = URL.createObjectURL(new Blob([conteudo], { type: 'text/plain;charset=utf-8' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = nome;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    recadoAcoes('Log salvo como ' + nome + '. A evidência mora em docs/assets/testes/.', 'ok');
+  } catch (e) {
+    mostrarParaCopiar(conteudo);
+  }
+}
+
+var EXEMPLO = [
+  'Presente! - firmware, pacote 5 (#49)',
+  'RC522 respondeu - VersionReg = 0x92',
+  'Contas de professor lidas: 2 (500 bytes de 4096)',
+  'Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1',
+  '[   435][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation',
+  'Pronto. Conecte o celular na rede do aparelho.',
+  '[ 28590][E][WebServer.cpp:638] _handleRequest(): request handler not found',
+  'Login aceito: prof-teste-1.',
+  'Buscando a lista da turma 4172CMPN6A_P1.',
+  'Conectando no hotspot principal, Jhonez (ate 7 s)...',
+  'Conectado no hotspot principal em 2.5 s. Canal da rede do aparelho: antes 1, agora 1.',
+  'MEMORIA ANTES da conexao segura: 213600 bytes (208.6 KB)',
+  'Lista da turma carregada: 40 alunos (4365 bytes de 8192)',
+  'Lista gravada no /roster.json.',
+  'Saiu do hotspot. A rede do aparelho continua no ar.',
+  'Chamada aberta: 4172CMPN6A_P1-20261020-0136, modo online',
+  '77751851  REGISTRADO  matricula 1240990004  decidir: 26.7 ms  toque->feedback: 56.0 ms',
+  '37A30251  NAO_RECONHECIDO  decidir: 0.2 ms  toque->feedback: 29.5 ms',
+  '67571251  REGISTRADO  matricula 1240110815  decidir: 323.2 ms  toque->feedback: 352.5 ms  ACIMA DOS 200 ms',
+  '87F2FE50  REGISTRADO  matricula 1240109764  decidir: 15.9 ms  toque->feedback: 45.3 ms',
+  'Manual aceito: 1240108001',
+  'B77C0951  JA_REGISTRADO  matricula 1240108001  decidir: 0.2 ms  toque->feedback: 29.5 ms',
+  'Enviando o relatorio ao banco.',
+  'Mandando o relatorio: 1876 bytes.',
+  'Relatorio enviado: gravado, 5 eventos (0 enriquecidos no banco).',
+  'Chamada enviada: 4172CMPN6A_P1-20261020-0136. O cracha nao registra mais.',
+  'Envio terminado: saiu do hotspot. A lista da turma nao mudou.'
+].join('\n');
+
+/* ========================================================================== *
+ * 7. Ligar os botoes
+ * ========================================================================== */
+
+zerar();
+pintarEstado(null);
+desenharAgora();
+
+$('acao-conectar').addEventListener('click', conectar);
+$('acao-desligar').addEventListener('click', desligar);
+$('acao-reiniciar').addEventListener('click', reiniciarPlaca);
+$('acao-ler').addEventListener('click', lerColado);
+$('acao-exemplo').addEventListener('click', function () {
+  $('campo-colar').value = EXEMPLO;
+  recadoAcoes('Exemplo posto no campo. Toque em "Ler o texto colado" para ver a página funcionando.', 'ok');
+});
+$('acao-limpar').addEventListener('click', function () {
+  zerar(); estadoDeFundo = null; aoVivo = false;
+  clearTimeout(relogioDoToque); relogioDoToque = null;
+  pintarEstado(null); desenharAgora();
+  $('origem-dados').textContent = 'sem dados';
+  recadoAcoes('Limpo.', 'ok');
+});
+$('filtro-ruido').addEventListener('change', desenharTempo);
+
+if (!temSerial()) {
+  recadoSerial('Este navegador não expõe o cabo USB para a página. Pelo campo de colar, tudo funciona. ' +
+               'Para o modo ao vivo, use o Chrome ou o Edge; se a página estiver aberta como arquivo e o botão não funcionar, ' +
+               'rode "python -m http.server 8000" na pasta do repositório e abra http://localhost:8000/docs/testes/monitor.html.', 'aviso');
+}
+</script>
+</body>
+</html>
