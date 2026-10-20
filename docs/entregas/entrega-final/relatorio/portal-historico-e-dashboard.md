@@ -2,7 +2,7 @@
 
 # O PORTAL DO PROFESSOR, A PÁGINA DE HISTÓRICO E O DASHBOARD
 
-O projeto integrador pede um dashboard, com o ESP32 obrigatório, ou uma interface Serial/Processing. Entregamos as duas pontas desse pedido em duas páginas, com públicos e momentos diferentes. A primeira é o portal do professor, que o próprio ESP32 guarda na memória e serve pela rede Wi-Fi que ele põe no ar: é por ela que o professor inicia a chamada, acompanha a contagem dos presentes, confere o relatório e manda a chamada ao banco. A segunda é a página de histórico, publicada na internet, que lê do banco as aulas já registradas e mostra os presentes e os faltantes de cada uma. O Quadro 1 resume a divisão.
+O projeto integrador pede um dashboard, com o ESP32 obrigatório, ou uma interface Serial/Processing. Atendemos o pedido com duas páginas, de públicos e momentos diferentes, e usamos nos testes uma terceira, que lê o serial da placa e aparece no fim da seção do portal. A primeira é o portal do professor, que o próprio ESP32 guarda na memória e serve pela rede Wi-Fi que ele põe no ar: é por ela que o professor inicia a chamada, acompanha a contagem dos presentes, confere o relatório e manda a chamada ao banco. A segunda é a página de histórico, publicada na internet, que lê do banco as aulas já registradas e mostra os presentes e os faltantes de cada uma. O Quadro 1 resume a divisão.
 
 **Quadro 1: As duas partes do dashboard**
 
@@ -85,7 +85,7 @@ O painel é a tela em que o professor passa a aula inteira, e foi por isso que o
 
 ### O relatório, o envio e o encerramento
 
-O relatório lista os presentes, com a matrícula e a hora da leitura, e os faltantes da turma (Figura 5). Na aula sem internet, em que o aparelho não tinha a lista, os crachás lidos aparecem à parte, sem nome, com um aviso de que não descontam ninguém dos faltantes, para a conta não parecer errada.
+O relatório lista os presentes, com a matrícula e a hora da leitura, e os faltantes da turma (Figura 5). Na aula sem internet, em que o aparelho não tinha a lista, os presentes aparecem pelo número do crachá, ou pela matrícula no lançamento manual, sem a lista de faltantes, e um aviso explica que os nomes e as faltas se calculam no envio.
 
 **Figura 5: O relatório, com os presentes e os faltantes**
 
@@ -113,11 +113,15 @@ Fonte: elaborado pelos autores (2026).
 
 Nenhuma tela avança sem o aparelho confirmar. Quando ele não responde, ou quando recusa, o portal mostra a falha, libera o botão e deixa a tela onde está, para o professor não ficar com a impressão de que o aparelho obedeceu. Essa é a regra que mais mudou o desenho das telas: cada botão do painel espera a resposta antes de mudar qualquer coisa, e a tela do relatório espera a resposta de um pedido antes de fazer outro, porque o aparelho atende um pedido de cada vez e a tela encheria a fila dele de pedidos que ninguém mais iria ler.
 
-Três situações da sala de aula também entraram no portal. Se a página for recarregada com a chamada aberta, o portal pergunta o estado ao aparelho e volta direto ao painel, sem pedir a senha de novo, porque o professor que fecha a janela sem querer não deve perder a chamada. Se outra conta entrar com um professor já logado, ela assume o painel enquanto a chamada não começou; depois do Iniciar, a chamada continua de quem a iniciou, e cada lançamento manual guarda quem estava logado ao lançar, porque recusar o segundo login prenderia o aparelho ao professor que saiu da sala sem encerrar. E, depois de uma queda de energia, a chamada volta como estava, mas o aparelho só torna a ler crachá quando um professor entrar de novo e lhe devolver a hora; até lá, o portal mostra a chamada aberta e o aparelho recusa o lançamento manual e o envio, porque um registro sem hora faria o banco recusar o relatório inteiro.
+Três situações da sala de aula também entraram no portal. Se a página for recarregada com a chamada aberta, o portal pergunta o estado ao aparelho e volta direto ao painel, sem pedir a senha de novo, porque o professor que fecha a janela sem querer não deve perder a chamada. Se outra conta entrar com um professor já logado, ela assume o painel enquanto a chamada não começou; depois do Iniciar, a chamada continua de quem a iniciou, e cada lançamento manual guarda quem estava logado ao lançar, porque recusar o segundo login prenderia o aparelho ao professor que saiu da sala sem encerrar. E, depois de uma queda de energia, a chamada volta como estava, mas o portal pede o login de novo, e o aparelho só torna a ler crachá quando o login lhe devolve a hora. Se o celular mandar uma hora inválida, o painel abre com a chamada, mas o aparelho ignora o crachá e recusa o lançamento manual e o envio, porque um registro sem hora faria o banco recusar o relatório inteiro.
 
 ### O que já rodou na placa
 
-Até 20/10, o portal servido pelo ESP32, falando com o aparelho de verdade, rodou na placa do login à chamada: a página de login que abre sozinha, a senha recusada e a aceita, a busca da lista da turma, a entrada no modo offline quando não há internet, o Iniciar, a leitura dos crachás nos dois modos, o lançamento manual e a tela do relatório. O envio ao banco, o encerramento e a volta depois de uma queda de energia esperam as duas rodadas que faltam. O resultado de cada item, com os números, está na seção dos testes.
+Até 20/10, o portal servido pelo ESP32, falando com o aparelho de verdade, rodou na placa do login à chamada: a página de login que abre sozinha, a senha recusada e a aceita, a busca da lista da turma, a entrada no modo offline quando não há internet, o Iniciar, a leitura dos crachás nos dois modos, o lançamento manual, a tela do relatório e o encerramento. O envio ao banco e a volta depois de uma queda de energia esperam as duas rodadas que faltam. O resultado de cada item, com os números, está na seção dos testes.
+
+### O monitor do serial
+
+Para acompanhar as rodadas na placa, escrevemos também uma página que lê o monitor serial do ESP32, a forma de interface Serial que o pedido do projeto admite. Ela fica em `docs/testes/monitor.html` e abre no navegador sem internet, ligada à placa pelo cabo USB ou com o texto do serial colado. A página mostra em que estado o aparelho está, com a cor que o LED deveria ter, a lista da turma que chegou, a memória livre antes da conexão segura e cada crachá encostado, com a matrícula e o tempo até o sinal, e confere sozinha alguns critérios dos testes, como os 200 ms do toque ao sinal e a presença registrada duas vezes. Quem a usa é o grupo, nas rodadas na placa, e os números que ela mostrou estão na seção dos testes.
 
 ## A página de histórico
 
