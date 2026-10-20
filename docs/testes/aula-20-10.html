@@ -298,7 +298,7 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   <div class="sub">
     <h3>O portal do professor (no aparelho)</h3>
     <ol class="plain">
-      <li>No celular do professor, entrar na rede Wi-Fi <code>Presente-Sala01</code>. A senha é a <code>AP_PASSWORD</code> do <code>secrets.h</code> com que o João gravou a placa. Confirmar com ele antes da aula e levar anotada.</li>
+      <li>No celular do professor, entrar na rede Wi-Fi <code>Presente-Sala01</code>. A senha é a <code>AP_PASSWORD</code> do <code>secrets.h</code> do Caio, o mesmo com que o João gravou a placa. Levar anotada.</li>
       <li>O celular avisa que a rede não tem internet. É esperado: essa rede é só entre o celular e o aparelho.</li>
       <li>A página de login abre sozinha. Se não abrir, digitar <code>http://192.168.4.1/</code> no navegador (com <code>http</code>, sem o <code>s</code>).</li>
       <li>Entrar com <code>prof-teste-1</code> ou <code>prof-teste-2</code>, em minúsculas e com hífen. As senhas estão com o Caio e são as mesmas que o João usou nas baterias.</li>
@@ -345,10 +345,8 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
         <p class="note">O firmware não mudou desde o pacote 5. O pull traz o <code>docs/testes/monitor.html</code> do Igor e o capítulo do dashboard.</p>
       </div></li>
       <li><span class="ck"><input type="checkbox" id="b0j-2" aria-label="Passo concluído"></span><div class="body">
-        <p>No <code>include\secrets.h</code>, preencher só as duas linhas da reserva com o hotspot do Galaxy (o Caio manda o nome e a senha no privado).</p>
-        <div class="serial"><div class="bar">include\secrets.h · linhas 25 e 26</div><pre>#define STA_SSID_FALLBACK      "<span class="v">nome do hotspot do Galaxy</span>"
-#define STA_PASSWORD_FALLBACK  "<span class="v">senha do hotspot do Galaxy</span>"</pre></div>
-        <p class="note">O resto do arquivo fica igual: o <code>STA_SSID</code> continua sendo o Jhonez. O <code>secrets.h</code> não sobe para o git e não precisa ser desfeito depois.</p>
+        <p>Trocar o <code>include\secrets.h</code> pelo que o Caio mandou no privado. Só esse arquivo: o <code>data\professores.json</code> continua o mesmo.</p>
+        <p class="note">O arquivo do Caio tem o Jhonez como hotspot principal e o Galaxy como reserva, e é o mesmo que vai no pendrive. Assim, a senha do Wi-Fi do aparelho fica sendo a que o Caio tem. O <code>secrets.h</code> não sobe para o git.</p>
       </div></li>
       <li><span class="ck"><input type="checkbox" id="b0j-3" aria-label="Passo concluído"></span><div class="body">
         <p>Gravar <b>só o Upload</b> (a setinha da barra azul, com o <code>env:presente</code>). <b>Não</b> fazer o Upload Filesystem Image.</p>
@@ -362,6 +360,7 @@ Contas de professor lidas: 2 (500 bytes de 4096)
 Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
 Pronto. Conecte o celular na rede do aparelho.</pre></div>
         <div class="sinais"><span class="led azul">azul fixo</span></div>
+        <p>Com o Jhonez ligado, entrar no portal com <code>prof-teste-1</code> e ver a lista carregar com 40 alunos. Se o serial disser <code>O hotspot principal nao respondeu</code>, a senha do Jhonez no arquivo do Caio está velha: avisar o Caio antes da aula.</p>
       </div></li>
       <li><span class="ck"><input type="checkbox" id="b0j-5" aria-label="Passo concluído"></span><div class="body">
         <p>Levar: a caixa, o cabo USB de dados e os cartões etiquetados.</p>
