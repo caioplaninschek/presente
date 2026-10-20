@@ -38,7 +38,7 @@ O comportamento do aparelho segue a máquina de estados do Quadro 2. O LED e o b
 
 | Estado | LED | Som | Quando |
 |---|---|---|---|
-| `AGUARDANDO_LOGIN` | azul fixo | nenhum | ao ligar, e depois que o professor encerra a chamada |
+| `AGUARDANDO_LOGIN` | azul fixo | nenhum | ao ligar sem chamada guardada, e depois que o professor encerra a chamada |
 | `SINCRONIZANDO` | azul lento | nenhum | o aparelho busca a lista da turma depois do login |
 | `AGUARDANDO_INICIAR` | azul fixo | nenhum | a busca terminou, com ou sem a lista |
 | `SESSAO_ABERTA` | verde fixo | nenhum | o professor clicou Iniciar |
@@ -97,6 +97,6 @@ O Encerrar vale em qualquer estado com login, inclusive durante a busca da turma
 
 O quinto pacote traz a chamada de volta depois de uma queda de energia. Ao ligar, se o disco guarda uma chamada legível, o aparelho devolve ao relógio a hora e o tempo desde o boot registrados no Iniciar, relê a lista da turma, se a chamada era online, e relê o arquivo de eventos para saber quem já está presente. A linha cortada pela queda é descartada, com aviso no serial. A chamada volta aberta, ou enviada, se já tinha sido, com o professor que a iniciou no painel.
 
-Até o primeiro login com hora válida depois da queda, o leitor não é consultado, e o lançamento manual e o Enviar são recusados. Escolhemos esse caminho porque um evento gravado antes desse login ficaria sem hora e, numa segunda queda, sairia do relatório ou faria o banco recusar o relatório inteiro. O login com hora válida mede quanto o relógio do boot novo está atrás do relógio do Iniciar, e daí em diante os eventos são gravados na contagem do Iniciar. Com isso, o formato do arquivo de eventos e o formato do relatório não mudaram.
+Até o primeiro login com hora válida depois da queda, o LED fica em azul fixo, ainda que a chamada esteja aberta; o leitor não é consultado, e o lançamento manual e o Enviar são recusados. Escolhemos esse caminho porque um evento gravado antes desse login ficaria sem hora e, numa segunda queda, sairia do relatório ou faria o banco recusar o relatório inteiro. O login com hora válida mede quanto o relógio do boot novo está atrás do relógio do Iniciar, e daí em diante os eventos são gravados na contagem do Iniciar. Com isso, o formato do arquivo de eventos e o formato do relatório não mudaram.
 
 Declaramos também três limites deste pacote sem código para eles. Se o Encerrar não consegue apagar os dados da chamada, o próximo reinício volta à chamada encerrada, e é preciso encerrá-la de novo. A chamada online cuja lista da turma não volta do disco segue no modo offline, e os eventos de depois da queda saem só com o crachá, sem a matrícula. Se a conta do professor que iniciou a chamada for removida do aparelho entre a queda e a volta, o relatório continua com a identificação dele, e quem entra assume o painel. Os três dependem de uma falha da memória da placa ou de um arquivo trocado no meio da aula.
