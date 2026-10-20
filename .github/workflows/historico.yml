@@ -21,6 +21,7 @@ on:
     branches: [main]
     paths:
       - 'historico/**'
+      - 'docs/testes/**'
       - '.github/workflows/historico.yml'
   workflow_dispatch:
 
@@ -80,6 +81,13 @@ jobs:
             cat /tmp/config.json
             echo ';'
           } > historico/config.js
+
+      - name: Juntar as páginas de teste
+        run: |
+          # As baterias, o monitor e o manual da aula abrem pelo clone, sem
+          # internet; publicadas aqui, abrem também no celular, em /testes/.
+          mkdir -p historico/testes
+          cp docs/testes/*.html historico/testes/
 
       - uses: actions/configure-pages@v5
 

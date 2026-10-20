@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Bancada de 20/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87,600;87,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: manual de bancada em coluna única; faixa de roteiro fixa no topo, blocos em ordem de execução, cada passo com o sinal esperado (LED, portal, serial). */
+:root {
+  --paper: #f1f4f7;
+  --sheet: #ffffff;
+  --ink: #16202b;
+  --muted: #566273;
+  --rule: #d3dae3;
+  --accent: #2442a0;
+  --accent-soft: #e3e9f8;
+  --term-bg: #0f1722;
+  --term-ink: #d6e2ef;
+  --term-dim: #7f90a4;
+  --led-azul: #2a6be0;
+  --led-verde: #149447;
+  --led-vermelho: #d02a2a;
+  --warn: #9a5a00;
+  --warn-soft: #fbefd9;
+  --done: #0e7a3b;
+  --font-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --step: 1rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #10151c;
+    --sheet: #171e27;
+    --ink: #e4e9ef;
+    --muted: #9aa6b5;
+    --rule: #2a3442;
+    --accent: #8fa7ff;
+    --accent-soft: #1d2740;
+    --term-bg: #0a0f16;
+    --term-ink: #d6e2ef;
+    --term-dim: #73859a;
+    --led-azul: #5b92ff;
+    --led-verde: #3cc26f;
+    --led-vermelho: #ff6464;
+    --warn: #f0b45a;
+    --warn-soft: #2e2414;
+    --done: #3cc26f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #10151c;
+  --sheet: #171e27;
+  --ink: #e4e9ef;
+  --muted: #9aa6b5;
+  --rule: #2a3442;
+  --accent: #8fa7ff;
+  --accent-soft: #1d2740;
+  --term-bg: #0a0f16;
+  --term-ink: #d6e2ef;
+  --term-dim: #73859a;
+  --led-azul: #5b92ff;
+  --led-verde: #3cc26f;
+  --led-vermelho: #ff6464;
+  --warn: #f0b45a;
+  --warn-soft: #2e2414;
+  --done: #3cc26f;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--sheet);
+}
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 28px 80px; display: grid; gap: 28px; }
+
+h1, h2, h3 { font-family: var(--font-display); font-stretch: 87%; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 800; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+:not(pre) > code { background: var(--accent-soft); padding: 0.05em 0.35em; border-radius: 4px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Cabeçalho */
+header.top { display: grid; gap: 10px; }
+header.top .lede { color: var(--muted); max-width: 62ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9rem; color: var(--muted); }
+.facts b { color: var(--ink); }
+
+/* Roteiro fixo */
+nav.roteiro {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--sheet); border-bottom: 1px solid var(--rule);
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px));
+}
+nav.roteiro ol { list-style: none; margin: 0 auto; padding: 0; max-width: 760px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; }
+nav.roteiro a {
+  display: flex; align-items: center; gap: 6px; white-space: nowrap; text-decoration: none;
+  font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 4px 10px;
+}
+nav.roteiro a:hover, nav.roteiro a:focus-visible { border-color: var(--accent); }
+nav.roteiro .n { color: var(--muted); }
+nav.roteiro .prog { color: var(--muted); font-variant-numeric: tabular-nums; }
+nav.roteiro a.full { border-color: var(--done); }
+nav.roteiro a.full .prog { color: var(--done); }
+
+/* Tabelas de referência */
+.ref { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 12px; }
+.tablebox { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td.mono { font-family: var(--font-mono); font-size: 0.84rem; white-space: nowrap; }
+.on, .off { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+.on { color: var(--done); }
+.off { color: var(--muted); }
+
+/* Blocos */
+section.bloco { display: grid; gap: 16px; scroll-margin-top: 64px; }
+.bloco-head { display: grid; gap: 6px; border-top: 3px solid var(--ink); padding-top: 12px; }
+.bloco-head .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.bloco-head .why { color: var(--muted); max-width: 64ch; }
+.sub { display: grid; gap: 10px; }
+.sub > h3 { color: var(--accent); }
+
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: passo; }
+ol.steps > li {
+  counter-increment: passo;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start;
+}
+ol.steps > li.checked { border-color: color-mix(in srgb, var(--done) 55%, var(--rule)); }
+ol.steps > li.checked .body > p:first-child { color: var(--muted); }
+.ck { position: relative; width: 26px; height: 26px; margin-top: 1px; }
+.ck input { appearance: none; -webkit-appearance: none; margin: 0; width: 26px; height: 26px; border: 2px solid var(--muted); border-radius: 6px; background: var(--sheet); cursor: pointer; display: grid; place-content: center; }
+.ck input::after { content: counter(passo); font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+.ck input:checked { background: var(--done); border-color: var(--done); }
+.ck input:checked::after { content: "✓"; color: var(--sheet); font-size: 0.95rem; }
+.ck input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.body { display: grid; gap: 8px; min-width: 0; }
+.body > p:first-child { font-weight: 700; }
+
+/* Sinais esperados */
+.sinais { display: flex; flex-wrap: wrap; gap: 6px; }
+.led {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-family: var(--font-mono);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 2px 9px 2px 7px; background: var(--paper);
+}
+.led::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--muted)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c, var(--muted)) 25%, transparent); }
+.led.azul { --c: var(--led-azul); }
+.led.verde { --c: var(--led-verde); }
+.led.vermelho { --c: var(--led-vermelho); }
+.led.nada { --c: transparent; }
+.led.nada::before { border: 1px dashed var(--muted); }
+.pill { font-size: 0.8rem; border-radius: 6px; padding: 2px 8px; background: var(--accent-soft); }
+.rec { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 600; color: var(--led-vermelho); border: 1px solid currentColor; border-radius: 999px; padding: 2px 8px; }
+
+/* Serial */
+.serial { background: var(--term-bg); color: var(--term-ink); border-radius: 8px; overflow: hidden; }
+.serial .bar { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--term-dim); padding: 6px 10px; border-bottom: 1px solid color-mix(in srgb, var(--term-dim) 30%, transparent); text-transform: uppercase; }
+.serial pre { margin: 0; padding: 10px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; }
+.serial .v { color: var(--term-dim); }
+
+.note { font-size: 0.92rem; color: var(--muted); }
+.anota { font-size: 0.92rem; border-left: 3px solid var(--accent); padding-left: 10px; }
+.anota b { color: var(--accent); }
+
+.alerta { background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; }
+.alerta h3 { color: var(--warn); }
+
+.plain { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; }
+
+footer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--rule); padding-top: 14px; }
+button { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.7rem; }
+  ol.steps > li { padding: 10px 12px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  ol.steps > li { transition: border-color 0.2s; }
+}
+</style>
+</head>
+<body>
+<nav class="roteiro" aria-label="Roteiro da aula">
+  <ol id="nav"></ol>
+</nav>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="eyebrow">Presente! · Sistemas Embarcados · aula de terça, 20/10</span>
+  <h1>Bancada de 20/10</h1>
+  <p class="lede">O que fazer com a caixa na aula, na ordem. Cada passo diz o que fazer e o que o LED, o portal e o monitor serial têm de mostrar. As páginas de bateria do repositório continuam sendo o lugar de marcar passou ou falhou e de montar o comentário de cada issue; este manual é a ordem do dia.</p>
+  <div class="facts">
+    <span>Entrega final: <b>27/10</b></span>
+    <span>Faltam na placa: <b>#44 item 4 · #46 3c · #48 · #50</b></span>
+    <span>Marcações ficam salvas neste navegador</span>
+    <span>No celular: <b>caioplaninschek.github.io/presente/testes/aula-20-10.html</b></span>
+  </div>
+</header>
+
+<section class="ref" aria-labelledby="ref-cobre">
+  <h2 id="ref-cobre">O que esta aula fecha</h2>
+  <p class="note">Conferido em 20/10 contra o §8 da spec, as lacunas declaradas e as issues abertas. Com os blocos abaixo, todo teste do §8 que ainda vale passa pela placa. É a última reunião do grupo antes de 27/10.</p>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Teste</th><th>Bloco</th><th>Issue</th></tr></thead>
+      <tbody>
+        <tr><td>1 · três toques, um registro, abaixo de 200 ms</td><td>2</td><td>#46</td></tr>
+        <tr><td>3 · crachá fora da turma dá vermelho</td><td>2</td><td>#46</td></tr>
+        <tr><td>7c · painel aguenta o pulo de canal</td><td>3</td><td>#44, #50</td></tr>
+        <tr><td>7d · 40 KB de memória na conexão segura</td><td>3</td><td>#50</td></tr>
+        <tr><td>Portal cativo · o login abre sozinho? troca para o 4G?</td><td>3</td><td>#50</td></tr>
+        <tr><td>4 · modo offline com relatório íntegro</td><td>4</td><td>#48</td></tr>
+        <tr><td>5 · Enviar sem e com internet, sem duplicar</td><td>4</td><td>#48</td></tr>
+        <tr><td>6 · dois professores em sequência</td><td>4</td><td>#48</td></tr>
+        <tr><td>R78 · outra conta com a chamada aberta</td><td>4</td><td>#48</td></tr>
+        <tr><td>A aula na página de histórico</td><td>4 e 5</td><td>#48</td></tr>
+        <tr><td>Quedas de energia (retomada)</td><td>5</td><td>#50</td></tr>
+        <tr><td>8 · 30 toques com queda, sem duplicata</td><td>5</td><td>#50</td></tr>
+        <tr><td>9 · caixa fechada, verde pelo furo</td><td>5</td><td>#50, #58</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note"><b>Fica para depois da aula, sem precisar do grupo:</b> o teste 9 de novo com a caixa pintada e a cena de abertura do vídeo (#61); a conta do professor, se ele pedir (#64), que exige gravar a memória da placa de novo; e a cópia da evidência para <code>docs/assets/testes/</code> (#69). <b>Fora do protótipo, sem teste:</b> o 2 (etiqueta de 7 bytes, R65) e o 7 e o 7b (Plano B, R45).</p>
+</section>
+
+<section class="ref" aria-labelledby="ref-hot">
+  <h2 id="ref-hot">Quais hotspots ficam ligados</h2>
+  <p class="note">O <b>Jhonez</b> (celular do João) é o hotspot principal do <code>secrets.h</code>. O <b>Galaxy S20 FE</b> entra como hotspot de reserva só para provocar o pulo de canal. Como o aparelho tenta a reserva quando o principal não responde, <b>o Galaxy fica desligado em todo bloco que não seja o do pulo de canal</b>; senão, os testes "sem internet" acabam conectando pela reserva.</p>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Bloco</th><th>Jhonez</th><th>Galaxy</th></tr></thead>
+      <tbody>
+        <tr><td>2 · Complemento da #46 (online)</td><td><span class="on">ligado</span></td><td><span class="off">desligado</span></td></tr>
+        <tr><td>3 · Pulo de canal, 1ª tentativa</td><td><span class="on">ligado</span></td><td><span class="off">desligado</span></td></tr>
+        <tr><td>3 · Pulo de canal, se der 1 e 1</td><td><span class="off">desligado</span></td><td><span class="on">ligado</span></td></tr>
+        <tr><td>4 · Teste 4 e início do teste 5</td><td><span class="off">desligado</span></td><td><span class="off">desligado</span></td></tr>
+        <tr><td>4 · Fim do teste 5 e teste 6</td><td>conforme o passo</td><td><span class="off">desligado</span></td></tr>
+        <tr><td>5 · Blocos A, B e C</td><td><span class="on">ligado</span></td><td><span class="off">desligado</span></td></tr>
+        <tr><td>5 · Bloco D</td><td><span class="off">desligado</span></td><td><span class="off">desligado</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="ref" aria-labelledby="ref-cards">
+  <h2 id="ref-cards">Os cartões</h2>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Etiqueta</th><th>Número no serial</th><th>Matrícula</th></tr></thead>
+      <tbody>
+        <tr><td>João</td><td class="mono">B77C0951</td><td class="mono">1240108001</td></tr>
+        <tr><td>Gabriel</td><td class="mono">67571251</td><td class="mono">1240110815</td></tr>
+        <tr><td>Igor</td><td class="mono">F78A1451</td><td class="mono">1240114118</td></tr>
+        <tr><td>Cauã</td><td class="mono">87F2FE50</td><td class="mono">1240109764</td></tr>
+        <tr><td>Caio</td><td class="mono">37700951</td><td class="mono">1240205596</td></tr>
+        <tr><td>Ana Beatriz (fictícia)</td><td class="mono">37490151</td><td class="mono">1240990001</td></tr>
+        <tr><td>Bruno (fictício)</td><td class="mono">D70B1551</td><td class="mono">1240990002</td></tr>
+        <tr><td>Camila (fictícia)</td><td class="mono">97100051</td><td class="mono">1240990003</td></tr>
+        <tr><td>Daniel (fictício)</td><td class="mono">77751851</td><td class="mono">1240990004</td></tr>
+        <tr><td>SEM CADASTRO</td><td class="mono">37A30251</td><td>fora do banco, de propósito</td></tr>
+        <tr><td>KIT</td><td class="mono">62EF7E05</td><td>cartão do kit, fora do banco</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Matrícula fora da turma, para o teste da recusa: <code>1240999999</code>.</p>
+</section>
+
+<section class="ref" aria-labelledby="ref-telas">
+  <h2 id="ref-telas">Como entrar nas duas telas</h2>
+  <p class="note">O dashboard do Igor tem duas partes. O <b>portal do professor</b> mora dentro do aparelho e só se abre pela rede Wi-Fi dele, sem internet. A <b>página de histórico</b> mora na internet e lê o banco. Os testes usam as duas: a primeira em todos os blocos, a segunda depois de cada Enviar.</p>
+  <div class="sub">
+    <h3>O portal do professor (no aparelho)</h3>
+    <ol class="plain">
+      <li>No celular do professor, entrar na rede Wi-Fi <code>Presente-Sala01</code>. A senha é a <code>AP_PASSWORD</code> do <code>secrets.h</code> com que o João gravou a placa. Confirmar com ele antes da aula e levar anotada.</li>
+      <li>O celular avisa que a rede não tem internet. É esperado: essa rede é só entre o celular e o aparelho.</li>
+      <li>A página de login abre sozinha. Se não abrir, digitar <code>http://192.168.4.1/</code> no navegador (com <code>http</code>, sem o <code>s</code>).</li>
+      <li>Entrar com <code>prof-teste-1</code> ou <code>prof-teste-2</code>, em minúsculas e com hífen. As senhas estão com o Caio e são as mesmas que o João usou nas baterias.</li>
+      <li>Se aparecer a nota "Dados de mentira", o endereço está com <code>?mentira=1</code>. Apagar esse final e recarregar: com ele, o celular fala com um aparelho falso, e o teste não prova nada.</li>
+    </ol>
+  </div>
+  <div class="sub">
+    <h3>A página de histórico (na internet)</h3>
+    <ol class="plain">
+      <li>Abrir <code>https://caioplaninschek.github.io/presente/</code> no PC da faculdade, numa janela anônima, ou num celular que esteja no 4G. Um celular ligado na <code>Presente-Sala01</code> não abre essa página, porque essa rede não tem internet.</li>
+      <li>Entrar com o e-mail e a senha da conta de demonstração, criada pelo Caio no Supabase (está no gerenciador de senhas dele). A outra conta é a do Igor. O cadastro público é desligado.</li>
+      <li>A lista mostra só as aulas que passaram pelo Enviar, da mais recente para a mais antiga. Antes do bloco 4 ela abre vazia, porque o banco foi limpo em 15/10.</li>
+      <li>Depois de cada Enviar, recarregar a página (<code>F5</code>) para ver a aula nova.</li>
+    </ol>
+    <p class="note">Se a conta não entrar, o Caio cria outra no painel do Supabase: <b>Authentication → Users → Add user → Create new user</b>, com <b>Auto Confirm User</b> marcado.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Depois de</th><th>Na lista</th><th>Ao abrir a aula</th></tr></thead>
+        <tbody>
+          <tr><td>Teste 5 (bloco 4)</td><td>conta <code>prof-teste-1</code>, Finalizada, Sem internet</td><td>presentes: Gabriel, Igor e Bruno, este marcado como manual, com o motivo "esqueceu o crachá" e lançado por <code>prof-teste-1</code>; o crachá <code>37A30251</code> aparece sem nome, com o aviso de que não desconta faltante; 37 faltantes</td></tr>
+          <tr><td>Teste 6 (bloco 4)</td><td>conta <code>prof-teste-2</code>, Finalizada, Com internet</td><td>1 presente (João) e 39 faltantes</td></tr>
+          <tr><td>Bloco C (bloco 5)</td><td>Finalizada, Com internet</td><td>cada cartão dos blocos A e B uma vez só, e o manual com o motivo "teste da queda"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Em todos os casos, uma aula só por envio que deu certo, mesmo quando o Enviar foi repetido depois de uma falha. A chamada do bloco D não é enviada e não aparece.</p>
+  </div>
+</section>
+
+<!-- ============ BLOCO 0 ============ -->
+<section class="bloco" id="b0" data-nome="Preparo">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 0 · antes da aula e na chegada</span>
+    <h2>Preparo</h2>
+    <div class="meta"><span>João em casa · Caio no PC da faculdade</span></div>
+    <p class="why">A placa chega à aula já gravada pelo João, no desktop dele, com o Galaxy como hotspot de reserva. O PC da faculdade é o único computador da aula e só precisa mostrar o serial e as páginas de teste, o que dispensa instalar qualquer coisa. Gravar por ele fica como plano B, no fim deste bloco.</p>
+  </div>
+
+  <div class="sub">
+    <h3>João, em casa, antes da aula</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b0j-1" aria-label="Passo concluído"></span><div class="body">
+        <p><code>git pull</code> na pasta do repositório.</p>
+        <p class="note">O firmware não mudou desde o pacote 5. O pull traz o <code>docs/testes/monitor.html</code> do Igor e o capítulo do dashboard.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0j-2" aria-label="Passo concluído"></span><div class="body">
+        <p>No <code>include\secrets.h</code>, preencher só as duas linhas da reserva com o hotspot do Galaxy (o Caio manda o nome e a senha no privado).</p>
+        <div class="serial"><div class="bar">include\secrets.h · linhas 25 e 26</div><pre>#define STA_SSID_FALLBACK      "<span class="v">nome do hotspot do Galaxy</span>"
+#define STA_PASSWORD_FALLBACK  "<span class="v">senha do hotspot do Galaxy</span>"</pre></div>
+        <p class="note">O resto do arquivo fica igual: o <code>STA_SSID</code> continua sendo o Jhonez. O <code>secrets.h</code> não sobe para o git e não precisa ser desfeito depois.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0j-3" aria-label="Passo concluído"></span><div class="body">
+        <p>Gravar <b>só o Upload</b> (a setinha da barra azul, com o <code>env:presente</code>). <b>Não</b> fazer o Upload Filesystem Image.</p>
+        <p class="note">O hotspot de reserva vai dentro do programa, e as duas contas de professor já estão na memória da placa. O Upload Filesystem Image apagaria essa memória sem necessidade. Se parar em <code>Connecting....</code>, segurar o <code>BOOT</code>.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0j-4" aria-label="Passo concluído"></span><div class="body">
+        <p>Abrir o monitor serial e conferir as linhas do começo.</p>
+        <div class="serial"><div class="bar">monitor serial · 115200 · ao ligar</div><pre>Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+Pronto. Conecte o celular na rede do aparelho.</pre></div>
+        <div class="sinais"><span class="led azul">azul fixo</span></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0j-5" aria-label="Passo concluído"></span><div class="body">
+        <p>Levar: a caixa, o cabo USB de dados e os cartões etiquetados.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Caio, no PC da faculdade (sem git, sem extensões)</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b0c-1" aria-label="Passo concluído"></span><div class="body">
+        <p>Baixar o repositório como ZIP, pelo Chrome ou pelo Edge.</p>
+        <p>Abrir <code>github.com/caioplaninschek/presente</code>, clicar no botão verde <b>Code</b> e em <b>Download ZIP</b>. O repositório é público, então não precisa entrar na conta. O link direto é:</p>
+        <div class="serial"><div class="bar">endereço</div><pre>https://github.com/caioplaninschek/presente/archive/refs/heads/main.zip</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0c-2" aria-label="Passo concluído"></span><div class="body">
+        <p>Extrair o ZIP: botão direito em <code>presente-main.zip</code> → <b>Extrair tudo…</b> → Área de Trabalho.</p>
+        <p class="note">Abrir a página de dentro do ZIP, sem extrair, não funciona direito. A pasta extraída se chama <code>presente-main</code>.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0c-3" aria-label="Passo concluído"></span><div class="body">
+        <p>Abrir as páginas com dois cliques, no Chrome ou no Edge:</p>
+        <ul class="plain">
+          <li><code>presente-main\docs\testes\aula-20-10.html</code>, este manual;</li>
+          <li><code>presente-main\docs\testes\monitor.html</code>, para o serial ao vivo;</li>
+          <li><code>presente-main\docs\testes\bateria-pacote-4.html</code>, para marcar a #48;</li>
+          <li><code>presente-main\docs\testes\bateria-pacotes-1-a-3.html</code>, para o bloco 2 (a #46).</li>
+        </ul>
+        <p class="note">Se abrir em outro navegador: botão direito → <b>Abrir com</b> → Chrome ou Edge. O Firefox não lê o cabo USB. No celular, as mesmas páginas estão em <code>caioplaninschek.github.io/presente/testes/</code>, com o nome do arquivo no fim. O celular não lê o cabo USB, mas serve para acompanhar o manual e marcar a bateria.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0c-4" aria-label="Passo concluído"></span><div class="body">
+        <p>Ligar a placa no USB do PC e ver se o Windows a reconhece.</p>
+        <p>Tecla Windows → digitar <b>Gerenciador de Dispositivos</b> → abrir <b>Portas (COM e LPT)</b>. Tem de aparecer <code>USB-SERIAL CH340 (COMx)</code>.</p>
+        <p class="note">Se não aparecer, falta o driver CH340 (o <code>CH341SER.EXE</code>, do site da WCH), e instalar driver costuma exigir senha de administrador. Vale pedir ao professor, porque os PCs do laboratório podem já ter, ou tentar outro PC da sala. Se nenhum reconhecer, os testes rodam assim mesmo, com o portal, o LED, a página de histórico e os vídeos como evidência. Nesse caso, filmar também a tela do celular do professor em cada passo, e anotar no resultado de cada issue que o serial ficou faltando.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0c-5" aria-label="Passo concluído"></span><div class="body">
+        <p>No <code>monitor.html</code>, clicar em <b>Ligar no cabo USB</b>, escolher a porta CH340 e clicar em <b>Conectar</b>.</p>
+        <p>Se nada aparecer, clicar em <b>Reiniciar a placa</b> (ou apertar o EN): as linhas do começo têm de ser as do passo 4 do João.</p>
+        <p class="note">A porta só aceita um programa por vez: se o VS Code estiver com o monitor serial aberto, a página não conecta.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0c-6" aria-label="Passo concluído"></span><div class="body">
+        <p>Para comentar nas issues, entrar no GitHub numa <b>janela anônima</b> (<code>Ctrl+Shift+N</code>).</p>
+        <p class="note">No fim da aula é só fechar a janela, e a conta não fica logada no PC. Pelo site, o comentário aceita arrastar os JSON e os vídeos. No plano gratuito, o GitHub aceita vídeo de até 10 MB; se passar disso, subir no Drive do grupo e colar o link.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Na chegada, todos</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b0-1" aria-label="Passo concluído"></span><div class="body">
+        <p>Combinar os papéis.</p>
+        <ul class="plain">
+          <li>Quem opera o computador e lê o serial.</li>
+          <li>Quem faz o professor, com o celular na rede do aparelho.</li>
+          <li>Quem filma (os blocos 2, 4 e 5 pedem vídeo, com o LED e o som aparecendo).</li>
+          <li>Quem anota os números e marca a página da bateria.</li>
+        </ul>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0-2" aria-label="Passo concluído"></span><div class="body">
+        <p>Caio confere o banco no painel do Supabase.</p>
+        <p class="note">Se estiver pausado, reativa pelo celular e espera uns 2 minutos (R60). Com o banco pausado, a busca da turma e o Enviar falham sem defeito nenhum na placa.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b0-3" aria-label="Passo concluído"></span><div class="body">
+        <p>Galaxy com o hotspot <b>desligado</b> até o bloco 3. Jhonez ligado, em 2,4 GHz.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="alerta">
+    <h3>Plano B: gravar pelo PC da faculdade</h3>
+    <p>Só se a placa precisar ser gravada de novo durante a aula. Conta com uns 20 a 30 minutos, porque a primeira compilação baixa as ferramentas do ESP32, e o PC precisa reconhecer a porta CH340 (passo 4 acima).</p>
+    <ol class="plain">
+      <li>Levar no pendrive (ou mandar para si mesmo) os dois arquivos que não estão no GitHub: <code>include\secrets.h</code> e <code>data\professores.json</code>, do clone do Caio.</li>
+      <li>No VS Code: <code>Ctrl+Shift+X</code>, procurar <b>PlatformIO IDE</b> e clicar em <b>Install</b>. Esperar o fim da instalação (alguns minutos) e reiniciar o VS Code quando ele pedir.</li>
+      <li><b>File → Open Folder…</b> → a pasta <code>presente-main</code>.</li>
+      <li>Copiar o <code>secrets.h</code> para <code>presente-main\include\</code> e o <code>professores.json</code> para <code>presente-main\data\</code>.</li>
+      <li>Na barra azul de baixo, escolher <code>env:presente</code> e clicar na setinha <b>Upload</b>. A primeira vez demora, porque baixa a plataforma do ESP32.</li>
+      <li>Upload Filesystem Image (ícone do PlatformIO → <code>presente</code> → <b>Platform</b>) <b>só se a memória da placa precisar ser regravada</b>. Ele apaga a chamada e a lista guardadas e grava o <code>professores.json</code> do Caio no lugar do que está na placa. Pelo tamanho (500 bytes na placa, 413 no do Caio), a diferença deve ser só de formatação, com as mesmas contas e senhas. O login com as senhas que o Caio tem confirma isso.</li>
+      <li>No fim, apagar a pasta <code>presente-main</code> do PC, porque o <code>secrets.h</code> tem as senhas da rede e a chave do banco.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCO 1 ============ -->
+<section class="bloco" id="b1" data-nome="Professor">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 1 · começo da aula</span>
+    <h2>Perguntas ao professor</h2>
+    <div class="meta"><span>uns 10 min</span><span>docs/entregas.md</span></div>
+    <p class="why">As respostas mudam o resto da semana, principalmente o tamanho do relatório. Anotar e passar ao repositório depois da aula, na seção "Entrega final" do <code>docs/entregas.md</code>.</p>
+  </div>
+  <ol class="steps">
+    <li><span class="ck"><input type="checkbox" id="b1-1" aria-label="Pergunta feita"></span><div class="body"><p>Vai sair enunciado escrito da entrega final? Que documentos ele quer além do relatório (o código, o diário de bordo, slides)?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-2" aria-label="Pergunta feita"></span><div class="body"><p>O relatório tem modelo (o da UVA, a ABNT de relatório técnico) ou limite de páginas? Pode ser um documento só, com o dashboard como capítulo?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-3" aria-label="Pergunta feita"></span><div class="body"><p>Onde e até que horas se posta em 27/10? Os cinco postam, como na estrutura física?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-4" aria-label="Pergunta feita"></span><div class="body"><p>Os 2 minutos do vídeo são o máximo? Ele vai como arquivo ou como link?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-5" aria-label="Pergunta feita"></span><div class="body"><p>A exposição: onde, a que horas, quanto tempo por grupo, se é para banca ou para público passando, se há mesa e tomada, e se podemos prender a caixa na parede (R64)?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-6" aria-label="Pergunta feita"></span><div class="body"><p>Ele quer operar o aparelho com uma conta própria? Se quiser, a conta dele se gera antes (§8).</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-7" aria-label="Passo concluído"></span><div class="body">
+      <p>Com as respostas na mão, o grupo decide junto quem pega cada tarefa que ainda está sem dono (R52).</p>
+      <ul class="plain">
+        <li>#59 roteiro do vídeo e #62 edição;</li>
+        <li>#63 roteiro da exposição, e quem fala em cada parte;</li>
+        <li>#66 introdução e arquitetura, #69 testes e resultados e #71 consolidação do relatório;</li>
+        <li>#73 arquivos da entrega e quem posta em 27/10.</li>
+      </ul>
+      <p class="note">É a última reunião antes da apresentação: o que sair daqui sem dono dificilmente fica pronto. Quem pegar se atribui no GitHub e comenta "peguei".</p>
+    </div></li>
+  </ol>
+</section>
+
+<!-- ============ BLOCO 2 ============ -->
+<section class="bloco" id="b2" data-nome="#46 · 3c">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 2 · issue #46, pacote 3</span>
+    <h2>O que faltou no modo online</h2>
+    <div class="meta"><span>uns 10 min</span><span class="rec">● filmar</span><span>Jhonez ligado</span></div>
+    <p class="why">O log que o João colou no bloco 3c não tem nenhuma linha de crachá, e o vídeo dos testes 1 e 3 não foi feito. O "Pronto quando" da #46 pede os dois. O resto da #46 já passou.</p>
+  </div>
+  <ol class="steps">
+    <li><span class="ck"><input type="checkbox" id="b2-1" aria-label="Passo concluído"></span><div class="body">
+      <p>Hotspot ligado, reiniciar a placa (EN), entrar no portal com <code>prof-teste-1</code>.</p>
+      <p>O portal mostra "Carregando turma…" e passa sozinho ao painel com "Lista carregada" e 40 alunos. Tocar em <b>Iniciar</b>.</p>
+      <div class="sinais"><span class="led azul">pisca azul, depois azul fixo</span><span class="led verde">verde fixo após o Iniciar</span></div>
+      <div class="serial"><div class="bar">serial</div><pre>Chamada aberta: 4172CMPN6A_P1-<span class="v">&lt;AAAAMMDD&gt;-&lt;HHMM&gt;</span>, modo online</pre></div>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b2-2" aria-label="Passo concluído"></span><div class="body">
+      <p><span class="rec">● filmar</span> Teste 1: encostar o cartão do João (B77C0951) três vezes seguidas.</p>
+      <p>O primeiro toque dá duas piscadas e o bip, e o painel mostra 1 de 40 presentes. Dentro de 5 s nada acontece; depois de 5 s, uma piscada sem som.</p>
+      <div class="sinais"><span class="led verde">2 piscadas + bip</span><span class="led nada">nada (até 5 s)</span><span class="led verde">1 piscada, sem som</span></div>
+      <div class="serial"><div class="bar">serial</div><pre>B77C0951  REGISTRADO  matricula 1240108001  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms
+B77C0951  JA_REGISTRADO  matricula 1240108001  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms</pre></div>
+      <p class="anota"><b>Anotar:</b> o <code>toque-&gt;feedback</code> do primeiro toque. Passa abaixo de 200 ms, sem <code>ACIMA DOS 200 ms</code> no fim da linha.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b2-3" aria-label="Passo concluído"></span><div class="body">
+      <p><span class="rec">● filmar</span> Teste 3: encostar o SEM CADASTRO (37A30251).</p>
+      <p>Vermelho por 1 s e o buzz longo. A contagem não muda, e o painel mostra "crachá 37A30251 não é da turma".</p>
+      <div class="sinais"><span class="led vermelho">vermelho 1 s + buzz longo</span></div>
+      <div class="serial"><div class="bar">serial</div><pre>37A30251  NAO_RECONHECIDO  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms</pre></div>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b2-4" aria-label="Passo concluído"></span><div class="body">
+      <p>Lançar à mão a Ana Beatriz (1240990001), motivo "esqueceu o crachá". Depois, encostar o cartão dela (37490151).</p>
+      <p>O lançamento leva o painel a 2 de 40. O cartão dá uma piscada sem som, porque ela já estava presente pelo lançamento.</p>
+      <div class="sinais"><span class="led verde">1 piscada, sem som</span></div>
+      <div class="serial"><div class="bar">serial</div><pre>Manual aceito: 1240990001
+37490151  JA_REGISTRADO  matricula 1240990001  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms</pre></div>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b2-5" aria-label="Passo concluído"></span><div class="body">
+      <p>Tocar em <b>Encerrar</b> e confirmar. Guardar o trecho do serial e o vídeo para a #46.</p>
+      <div class="serial"><div class="bar">serial</div><pre>Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.</pre></div>
+    </div></li>
+  </ol>
+</section>
+
+<!-- ============ BLOCO 3 ============ -->
+<section class="bloco" id="b3" data-nome="Pulo de canal">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 3 · issue #44 item 4, e os testes 7c e 7d da #50</span>
+    <h2>O pulo de canal com dois celulares</h2>
+    <div class="meta"><span>uns 15 min</span><span>iPhone + Android</span></div>
+    <p class="why">Em casa, o hotspot do João estava no canal 1, o mesmo da rede do aparelho, e o serial mostrou <code>antes 1, agora 1</code>. Sem pulo, o item 4 não aconteceu. O teste quer ver se o celular do professor aguenta quando a rede do aparelho muda de canal para seguir o hotspot. Este mesmo bloco fecha o 7c, o 7d e o portal cativo da rodada completa (#50).</p>
+  </div>
+  <ol class="steps">
+    <li><span class="ck"><input type="checkbox" id="b3-1" aria-label="Passo concluído"></span><div class="body">
+      <p>Conectar um iPhone e um Android na rede do aparelho (<code>Presente-Sala01</code>).</p>
+      <p>Em cada um, anotar o portal cativo: a página de login abriu sozinha? O celular avisou "rede sem internet"? Trocou sozinho para o 4G?</p>
+      <p class="anota"><b>Anotar:</b> modelo de cada celular, se o login abriu sozinho e se trocou para o 4G (R49). O modelo também responde à pergunta da #42.</p>
+      <p class="note">Android com DNS privado ligado não abre a página de login sozinho (visto em 12/10). Se acontecer, anotar e abrir <code>http://192.168.4.1/</code> no navegador.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b3-2" aria-label="Passo concluído"></span><div class="body">
+      <p>Entrar no portal pelos dois celulares e deixar os dois com a tela aberta. Fazer o login por um deles, com o Jhonez ligado.</p>
+      <div class="serial"><div class="bar">serial · a linha que decide</div><pre>Conectado no hotspot principal em <span class="v">&lt;s&gt;</span> s. Canal da rede do aparelho: antes <span class="v">&lt;X&gt;</span>, agora <span class="v">&lt;Y&gt;</span>.
+MEMORIA ANTES da conexao segura: <span class="v">&lt;bytes&gt;</span> bytes (<span class="v">&lt;KB&gt;</span> KB)</pre></div>
+      <p class="anota"><b>Anotar:</b> X, Y e a memória, que precisa dar 40 KB ou mais (teste 7d, agora com dois celulares conectados).</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b3-3" aria-label="Passo concluído"></span><div class="body">
+      <p>Se X e Y forem diferentes, ir ao passo 5. Se derem 1 e 1 de novo, trocar de hotspot.</p>
+      <p>Tocar em <b>Encerrar</b> (ou reiniciar a placa), <b>desligar o Jhonez</b> e <b>ligar o Galaxy</b> em 2,4 GHz. Os dois celulares continuam na rede do aparelho com o portal aberto.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b3-4" aria-label="Passo concluído"></span><div class="body">
+      <p>Fazer o login de novo. O aparelho espera o principal por 7 s, desiste e vai ao Galaxy (até 5 s).</p>
+      <div class="serial"><div class="bar">serial · com a reserva</div><pre>Conectando no hotspot principal, Jhonez (ate 7 s)...
+O hotspot principal nao respondeu em 7 s.
+Conectando no hotspot de reserva, <span class="v">&lt;nome do Galaxy&gt;</span> (ate 5 s)...
+Conectado no hotspot de reserva em <span class="v">&lt;s&gt;</span> s. Canal da rede do aparelho: antes 1, agora <span class="v">&lt;Y&gt;</span>.
+MEMORIA ANTES da conexao segura: <span class="v">&lt;bytes&gt;</span> bytes (<span class="v">&lt;KB&gt;</span> KB)</pre></div>
+      <p class="note">A espera total fica perto de 16 s e cabe nos 25 s do portal. Em 12/10, o Galaxy levou a rede do canal 1 para o 11.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b3-5" aria-label="Passo concluído"></span><div class="body">
+      <p>Com o canal diferente, observar os dois celulares.</p>
+      <p>Passa se o painel continuar aberto sem novo login, ou se voltar sozinho em menos de 5 s (teste 7c). Durante a conexão segura o aparelho fica uns 4 s sem responder, e a tela de espera continua contando; isso é esperado.</p>
+      <p class="anota"><b>Anotar, para cada celular:</b> continuou no painel? Avisou que saiu da rede? Quanto tempo levou para voltar?</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b3-6" aria-label="Passo concluído"></span><div class="body">
+      <p><b>Desligar o Galaxy</b> e religar o Jhonez antes do próximo bloco.</p>
+    </div></li>
+  </ol>
+  <div class="alerta">
+    <h3>Se nem o Galaxy mudar o canal</h3>
+    <p>Anotar no resultado que o pulo não se reproduziu em sala, com os canais que apareceram, e seguir para o bloco 4. Forçar o canal exige gravar pelo PC da faculdade (o plano B do bloco 0), e só vale se sobrar tempo no fim: em <code>presente-main\src\presente\main.cpp</code>, linha 86, trocar <code>WiFi.softAP(AP_SSID, AP_PASSWORD)</code> por <code>WiFi.softAP(AP_SSID, AP_PASSWORD, 6)</code>, fazer o Upload e rodar o bloco com o Jhonez. A mudança não vai para o repositório; o João regrava o programa normal em casa depois. Anotar que o canal foi forçado.</p>
+  </div>
+</section>
+
+<!-- ============ BLOCO 4 ============ -->
+<section class="bloco" id="b4" data-nome="#48 · pacote 4">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 4 · issue #48, pacote 4</span>
+    <h2>O relatório, o Enviar e o Encerrar</h2>
+    <div class="meta"><span>uns 35 min</span><span class="rec">● filmar o Enviar</span><span>bateria-pacote-4.html</span></div>
+    <p class="why">Os testes 4, 5 e 6 do §8. A página <code>bateria-pacote-4.html</code> tem o texto completo e monta o comentário da #48. Guardar todo JSON que o Compartilhar baixar, porque eles vão anexados à issue. Este bloco também põe a primeira aula de verdade no banco, que o Igor pode usar nas capturas do capítulo do dashboard (#52).</p>
+  </div>
+
+  <div class="sub">
+    <h3>Teste 4: o modo offline</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b4-1" aria-label="Passo concluído"></span><div class="body">
+        <p>Os dois hotspots desligados. Reiniciar a placa, entrar com <code>prof-teste-1</code>.</p>
+        <p>A busca falha em uns 7 s e o painel abre com "Sem a lista da turma". Tocar em <b>Iniciar</b>.</p>
+        <div class="sinais"><span class="led verde">verde fixo</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>Chamada aberta: 4172CMPN6A_P1-<span class="v">&lt;AAAAMMDD&gt;-&lt;HHMM&gt;</span>, modo offline</pre></div>
+        <p class="anota"><b>Anotar:</b> o sessaoId (o texto entre "Chamada aberta: " e a vírgula). O teste 6 compara com ele.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-2" aria-label="Passo concluído"></span><div class="body">
+        <p>Encostar o Gabriel (67571251) e o SEM CADASTRO (37A30251). Lançar à mão o Bruno (1240990002), motivo "esqueceu o crachá".</p>
+        <p>No offline os dois cartões registram. O painel vai a 3 crachás lidos.</p>
+        <div class="sinais"><span class="led verde">2 piscadas + bip, nos dois</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>67571251  REGISTRADO  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms
+37A30251  REGISTRADO  decidir: <span class="v">&lt;X&gt;</span> ms  toque-&gt;feedback: <span class="v">&lt;Y&gt;</span> ms
+Manual aceito: 1240990002</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-3" aria-label="Passo concluído"></span><div class="body">
+        <p>Tocar em <b>Compartilhar relatório</b> e abrir o JSON baixado.</p>
+        <ul class="plain">
+          <li><code>"professorId": "prof-teste-1"</code>, <code>"modo": "offline"</code>, <code>"relogio": "portal"</code> e nenhuma chave <code>fim</code>;</li>
+          <li><code>"roster_carregado": false</code>, sem <code>presentes</code> nem <code>faltantes</code>;</li>
+          <li>três eventos com hora no formato <code>AAAA-MM-DDTHH:MM:SS-03:00</code>: os dois cartões com <code>"origem": "nfc"</code> e <code>"enriquecido": false</code>, o manual com <code>"origem": "manual"</code>, a matrícula, o <code>lancado_por</code> e o motivo.</li>
+        </ul>
+        <p class="note">No iPhone o arquivo pode abrir numa aba: salvar pelo botão de compartilhar do Safari, em "Salvar em Arquivos".</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Teste 5: o Enviar sem e com internet</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b4-4" aria-label="Passo concluído"></span><div class="body">
+        <p>Com os hotspots ainda desligados, tocar em <b>Enviar e fechar a chamada</b> e esperar sem tocar em nada.</p>
+        <p>O aparelho tenta por uns 7 s e desiste. O portal diz "O aparelho não chegou à internet. A chamada continua aberta…", e a pílula continua "Chamada aberta".</p>
+        <div class="sinais"><span class="led azul">pisca azul durante a tentativa</span><span class="led verde">volta ao verde fixo</span></div>
+        <div class="serial"><div class="bar">serial · fim</div><pre>Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Enviar falhou: SEM_INTERNET. A chamada continua aberta.</pre></div>
+        <p class="note">Depois do Enviar não pode aparecer nenhuma linha da busca da turma (R76).</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-5" aria-label="Passo concluído"></span><div class="body">
+        <p>Encostar o Igor (F78A1451): a chamada continua registrando, 4 crachás lidos. Compartilhar de novo e guardar o segundo JSON (quatro eventos, ainda sem <code>fim</code>).</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-6" aria-label="Passo concluído"></span><div class="body">
+        <p><span class="rec">● filmar</span> Ligar o Jhonez e tocar em <b>Enviar e fechar a chamada</b> de novo.</p>
+        <p>O portal diz "Relatório enviado. A chamada está fechada." e a pílula muda para "Chamada fechada".</p>
+        <div class="sinais"><span class="led azul">azul fixo no fim</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>Mandando o relatorio: <span class="v">&lt;bytes&gt;</span> bytes.
+Relatorio enviado: gravado, 4 eventos (2 enriquecidos no banco).
+Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Chamada enviada: 4172CMPN6A_P1-<span class="v">&lt;...&gt;</span>. O cracha nao registra mais.</pre></div>
+        <p class="anota"><b>Anotar:</b> quantos segundos o Enviar levou, a linha <code>MEMORIA ANTES</code> e se apareceu <code>ja_enviado</code> no lugar do <code>gravado</code>. Caio confere depois que o banco tem uma aula só com esse sessaoId.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-7" aria-label="Passo concluído"></span><div class="body">
+        <p><span class="rec">● filmar</span> Encostar o Gabriel (67571251) depois do envio.</p>
+        <div class="sinais"><span class="led vermelho">vermelho 1 s + buzz longo</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>67571251  NAO_RECONHECIDO  chamada enviada: nada gravado</pre></div>
+        <p>Exibir o relatório (quatro linhas) e Compartilhar o terceiro JSON, agora com a chave <code>fim</code>.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-7h" aria-label="Passo concluído"></span><div class="body">
+        <p>Na página de histórico, recarregar e abrir a aula nova.</p>
+        <p>Tem de bater com a primeira linha da tabela "Como entrar nas duas telas": três presentes, o crachá sem nome e 37 faltantes. É o item "a aula aparece na página de histórico" da #48. Tirar um print, que pode substituir as Figuras 9 a 11 do capítulo do dashboard (#52).</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Teste 6: dois professores em sequência</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b4-8" aria-label="Passo concluído"></span><div class="body">
+        <p>Jhonez ligado. <b>Encerrar</b>, confirmar e entrar com <code>prof-teste-2</code>.</p>
+        <p>O painel abre com "Prof. Marcos Bezerra (teste)", "Lista carregada" e 0 de 40. Exibir e Compartilhar ficam desabilitados até o Iniciar.</p>
+        <p class="note">Antes do Iniciar, conferir que o minuto do relógio do celular é diferente do <code>HHMM</code> do sessaoId do teste 4. Se for o mesmo, esperar o minuto virar.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-9" aria-label="Passo concluído"></span><div class="body">
+        <p><b>Iniciar</b>, anotar o sessaoId novo e encostar o cartão do João (B77C0951): 1 de 40 presentes.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-10" aria-label="Passo concluído"></span><div class="body">
+        <p>Desligar o Jhonez, Enviar (falha, a chamada segue aberta com 1 de 40 e a lista intacta). Religar o Jhonez e Enviar de novo.</p>
+        <div class="serial"><div class="bar">serial · segundo Enviar</div><pre>Relatorio enviado: gravado, 1 eventos (0 enriquecidos no banco).</pre></div>
+        <p class="anota"><b>Anotar:</b> a linha <code>MEMORIA ANTES</code> deste envio.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-11" aria-label="Passo concluído"></span><div class="body">
+        <p>Compartilhar o quarto JSON e comparar com o do teste 4.</p>
+        <p><code>"professorId": "prof-teste-2"</code>, sessaoId diferente, <code>"modo": "online"</code>, <code>"roster_carregado": true</code>, um evento só (o João, com <code>"enriquecido": true</code>), presentes só com 1240108001 e 39 faltantes. Nenhum evento de uma chamada aparece na outra.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-12" aria-label="Passo concluído"></span><div class="body">
+        <p>Na página de histórico, conferir a segunda aula (1 presente, 39 faltantes). Depois, <b>Encerrar</b> e confirmar. Na página da bateria, tocar em <b>Copiar resultado da #48</b> e guardar o texto.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Teste extra: outra conta entra com a chamada aberta (R78)</h3>
+    <p class="note">Nenhuma bateria testa a R78, e o capítulo do dashboard descreve esse comportamento como pronto. São uns 5 minutos, com dois celulares na rede do aparelho e o Jhonez ligado. Não precisa enviar.</p>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b4-r1" aria-label="Passo concluído"></span><div class="body">
+        <p>O celular A entra com <code>prof-teste-1</code> e espera o painel. Antes do Iniciar, o celular B entra com <code>prof-teste-2</code>.</p>
+        <p>O painel passa a ser do <code>prof-teste-2</code>. Tocar em <b>Iniciar</b> pelo B.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-r2" aria-label="Passo concluído"></span><div class="body">
+        <p>Com a chamada aberta, o celular A entra de novo com <code>prof-teste-1</code> e lança à mão a Camila (1240990003), motivo "teste R78".</p>
+        <p>A chamada continua do <code>prof-teste-2</code>: o login do A não a toma para si.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b4-r3" aria-label="Passo concluído"></span><div class="body">
+        <p>Compartilhar e conferir no JSON: <code>"professorId": "prof-teste-2"</code> na sessão, e o evento manual com <code>"lancado_por": "prof-teste-1"</code>. Guardar o arquivo, <b>Encerrar</b> e comentar o resultado na #48.</p>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCO 5 ============ -->
+<section class="bloco" id="b5" data-nome="#50 · pacote 5">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 5 · issue #50, pacote 5 e rodada completa</span>
+    <h2>As quedas de energia e o teste de estresse</h2>
+    <div class="meta"><span>uns 40 min</span><span class="rec">● filmar as quedas</span><span>Jhonez ligado (exceto D)</span></div>
+    <p class="why">"Queda de energia" é tirar o cabo USB e pôr de volta. A conexão do <code>monitor.html</code> cai junto: depois de religar, clicar de novo em <b>Ligar no cabo USB</b>. Como as linhas do começo se perdem nesse meio-tempo, clicar em seguida em <b>Reiniciar a placa</b> (ou apertar o EN). É só outro reinício, que repete a retomada igual e mostra as linhas que o passo pede. Os testes 1, 3, 4, 5, 6, 7c e 7d da rodada completa já saíram nos blocos 2, 3 e 4.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Bloco A: a queda no meio da chamada (online)</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b5-1" aria-label="Passo concluído"></span><div class="body">
+        <p>Entrar, esperar a lista e tocar em <b>Iniciar</b>. Anotar a hora. Encostar três cartões cadastrados e lançar à mão um aluno que ainda não encostou, motivo "teste da queda".</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-2" aria-label="Passo concluído"></span><div class="body">
+        <p><span class="rec">● filmar</span> Queda de energia. Ao religar:</p>
+        <div class="sinais"><span class="led azul">azul fixo</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>Retomando a chamada do /sessao_atual.json.
+Lista da turma relida do disco: <span class="v">&lt;N&gt;</span> alunos.
+Chamada retomada: <span class="v">&lt;turma&gt;-&lt;data&gt;-&lt;hora&gt;</span>, modo online, aberta; 4 eventos, 4 presencas.
+O leitor espera o primeiro login com hora valida.</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-3" aria-label="Passo concluído"></span><div class="body">
+        <p><b>Antes do login</b>, encostar um dos três cartões e um quarto cartão.</p>
+        <div class="sinais"><span class="led nada">nada: sem luz, sem som, sem linha no serial</span></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-4" aria-label="Passo concluído"></span><div class="body">
+        <p>Reconectar o celular e entrar com a mesma conta. O portal vai direto ao painel da mesma chamada, com o mesmo início e as mesmas contagens. Anotar a hora do login.</p>
+        <div class="sinais"><span class="led verde">verde fixo</span></div>
+        <div class="serial"><div class="bar">serial</div><pre>Login aceito: <span class="v">&lt;usuario&gt;</span>.
+Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-5" aria-label="Passo concluído"></span><div class="body">
+        <p>Encostar um dos três cartões (uma piscada, <code>JA_REGISTRADO</code>) e o quarto cartão (duas piscadas e bip, <code>REGISTRADO</code>). Anotar a hora.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-6" aria-label="Passo concluído"></span><div class="body">
+        <p>Exibir o relatório e conferir os horários: os três toques e o manual com a hora de antes da queda; o quarto cartão com a hora do passo anterior. Ninguém duas vezes. Compartilhar e guardar o JSON.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Bloco B: teste 8, 30 toques com uma queda no meio</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b5-7" aria-label="Passo concluído"></span><div class="body">
+        <p>Na mesma chamada, fazer 15 toques, repetindo cartões e encostando cada cadastrado pelo menos uma vez. Contar quantos cartões diferentes já encostaram, incluindo os do bloco A.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-8" aria-label="Passo concluído"></span><div class="body">
+        <p>Queda de energia logo depois de um toque, de preferência com o cartão ainda no leitor.</p>
+        <div class="serial"><div class="bar">serial · pode aparecer</div><pre>1 linha(s) ilegivel(is) no /eventos.json, cortada(s) pela queda de energia: descartada(s) (R36).</pre></div>
+        <p class="anota"><b>Anotar:</b> se essa linha apareceu e a contagem da <code>Chamada retomada:</code>.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-9" aria-label="Passo concluído"></span><div class="body">
+        <p>Entrar de novo e fazer mais 15 toques, repetindo cartões.</p>
+        <p>Passa se cada cartão aparece uma vez só no relatório e todo cartão que encostou aparece. Depois da queda, quem já estava registrado dá uma piscada sem som. Se a linha cortada apareceu, encostar aquele cartão de novo e ver se ele registra.</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-10" aria-label="Passo concluído"></span><div class="body">
+        <p>Colar o log do bloco B no <code>monitor.html</code> e ler as conferências: nenhuma duplicata e quantos toques passaram de 200 ms.</p>
+      </div></li>
+    </ol>
+    <div class="alerta">
+      <h3>De olho nos 200 ms</h3>
+      <p>Em casa, um toque do Gabriel levou 352,5 ms. Os toques que não gravam (<code>JA_REGISTRADO</code>, <code>NAO_RECONHECIDO</code>) decidem em 0,1 a 0,2 ms; os que gravam, em 16 a 67 ms. A suspeita é a gravação na memória flash antes do sinal. O teste 1 mede só o primeiro toque, mas a HU-40 pede menos de 200 ms com o aparelho cheio de eventos. Anotar quantos dos 30 passaram e de quanto. Se o pico se repetir, a proposta é não mexer no firmware e declarar o limite nas seções dos testes (#69) e das limitações (#70).</p>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>Bloco C: a queda depois do Enviar</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b5-11" aria-label="Passo concluído"></span><div class="body">
+        <p>Na mesma chamada, <b>Enviar e fechar</b>. Tem de voltar <code>gravado</code>, com o LED azul fixo. Queda de energia.</p>
+        <div class="serial"><div class="bar">serial</div><pre>Chamada retomada: <span class="v">...</span>, ja enviada; <span class="v">...</span></pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-12" aria-label="Passo concluído"></span><div class="body">
+        <p>Entrar no portal: o painel mostra a chamada finalizada. Encostar qualquer cartão.</p>
+        <div class="sinais"><span class="led vermelho">vermelho 1 s + som longo</span></div>
+        <div class="serial"><div class="bar">serial</div><pre><span class="v">&lt;UID&gt;</span>  NAO_RECONHECIDO  chamada enviada: nada gravado</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-13" aria-label="Passo concluído"></span><div class="body">
+        <p>Exibir o relatório (abre, com o fim preenchido). <b>Encerrar</b>. Queda de energia mais uma vez.</p>
+        <p>Ao religar <b>não</b> pode aparecer <code>Retomando a chamada</code>: o aparelho liga no login de sempre, com o azul fixo.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Bloco D: a queda no modo offline</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b5-14" aria-label="Passo concluído"></span><div class="body">
+        <p>Os dois hotspots desligados. Entrar, esperar o modo offline e <b>Iniciar</b>. Encostar dois cartões, um deles duas vezes (com mais de 5 s entre os toques).</p>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-15" aria-label="Passo concluído"></span><div class="body">
+        <p>Queda de energia.</p>
+        <div class="serial"><div class="bar">serial</div><pre>Chamada retomada: <span class="v">...</span>, modo offline, aberta; 2 eventos, 2 presencas.</pre></div>
+      </div></li>
+      <li><span class="ck"><input type="checkbox" id="b5-16" aria-label="Passo concluído"></span><div class="body">
+        <p>Entrar e encostar o cartão repetido: uma piscada, sem som. O relatório tem os dois cartões, uma vez cada. <b>Encerrar</b>.</p>
+      </div></li>
+    </ol>
+  </div>
+
+  <div class="sub">
+    <h3>Teste 9: a caixa fechada</h3>
+    <ol class="steps">
+      <li><span class="ck"><input type="checkbox" id="b5-17" aria-label="Passo concluído"></span><div class="body">
+        <p><span class="rec">● filmar</span> Tampa fechada, chamada aberta, portal no ar no celular.</p>
+        <p>O cartão é lido através da tampa, e o verde e o bip se percebem a um passo de distância. O verde tem de aparecer pelo furo do LED.</p>
+        <p class="anota"><b>Fotografar</b> a tampa fechada com o LED aceso e a caixa aberta com os fios do LED. As fotos fecham a #58, que ainda não tem nenhuma.</p>
+        <ul class="plain">
+          <li>peças firmes e fios presos, sem passar na frente do leitor;</li>
+          <li>placa protegida e cabo de energia alcançável;</li>
+          <li>a tampa abre sem rasgar, para gravar programa novo.</li>
+        </ul>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCO 6 ============ -->
+<section class="bloco" id="b6" data-nome="Fechamento">
+  <div class="bloco-head">
+    <span class="eyebrow">Bloco 6 · antes de sair da sala</span>
+    <h2>Guardar a evidência</h2>
+    <div class="meta"><span>uns 10 min</span></div>
+    <p class="why">O que fica só no celular de alguém se perde. Cada issue fecha pelo comentário com o resultado, o serial, os vídeos e os JSON.</p>
+  </div>
+  <ol class="steps">
+    <li><span class="ck"><input type="checkbox" id="b6-1" aria-label="Passo concluído"></span><div class="body">
+      <p>Juntar os vídeos (blocos 2, 4 e 5) e os JSON do Compartilhar num lugar do grupo antes de cada um ir embora.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-2" aria-label="Passo concluído"></span><div class="body">
+      <p>Salvar o log de cada bloco pelo botão "Salvar o log em arquivo" do <code>monitor.html</code>, para ir a <code>docs/assets/testes/</code>, como o §8 pede.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-3" aria-label="Passo concluído"></span><div class="body">
+      <p>Comentar em cada issue:</p>
+      <ul class="plain">
+        <li><b>#44</b>: o item 4, com X e Y do canal e o que cada celular fez;</li>
+        <li><b>#46</b>: o serial do bloco 2 e o vídeo dos testes 1 e 3;</li>
+        <li><b>#48</b>: o texto do "Copiar resultado", os quatro JSON e o vídeo do Enviar;</li>
+        <li><b>#50</b>: os blocos A a D, o teste 8, o 7c, o 7d, o portal cativo e o teste 9;</li>
+        <li><b>#42</b>: o modelo do celular usado no pacote 1.</li>
+      </ul>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-4" aria-label="Passo concluído"></span><div class="body">
+      <p>Na página de histórico, conferir a aula do bloco C e contar as aulas: uma por envio que deu certo, sem nenhuma repetida.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-5" aria-label="Passo concluído"></span><div class="body">
+      <p>Gravar o bruto do vídeo (#60). Sem o roteiro (#59), gravar na horizontal uma tomada contínua da demonstração inteira: login, Iniciar, um crachá que registra, o mesmo repetido, o SEM CADASTRO, um lançamento manual, o Enviar e a aula na página de histórico.</p>
+      <p class="note">Os brutos vão para uma pasta combinada agora, com o endereço comentado na #60. Os vídeos da Entrega 06 se perderam por falta disso. A cena da caixa pintada fica para depois da pintura (#61).</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-6" aria-label="Passo concluído"></span><div class="body">
+      <p>Passada da exposição (#63): fazer a demonstração uma vez, como se fosse para o professor, com quem fala em cada parte.</p>
+    </div></li>
+  </ol>
+</section>
+
+<section class="ref" aria-labelledby="ref-err">
+  <h2 id="ref-err">Se der errado</h2>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>O que aparece</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td><code>A conexao segura FALHOU (0: nao achei o endereco do banco)</code></td><td>Banco pausado. Caio reativa, espera 2 min, repete o item. No Enviar, a chamada continua aberta e nada se perde.</td></tr>
+        <tr><td><code>O hotspot principal nao respondeu em 7 s.</code> com o hotspot ligado</td><td>Conferir 2,4 GHz e, no iPhone, a tela do Acesso Pessoal aberta. Repetir.</td></tr>
+        <tr><td>Senha certa dá <code>Login recusado.</code></td><td>Conferir o usuário em minúsculas e com hífen, e se a placa leu 2 contas ao ligar.</td></tr>
+        <tr><td><code>Iniciar recusado: AINDA_SINCRONIZANDO.</code></td><td>A busca da turma não terminou. Esperar o painel e tocar de novo.</td></tr>
+        <tr><td><code>Iniciar recusado: HORA_INVALIDA.</code></td><td>Conferir a data e a hora do celular do professor.</td></tr>
+        <tr><td><code>Enviar falhou: BANCO_RECUSOU.</code></td><td>Compartilhar, copiar o serial desde <code>Enviando o relatorio</code> e chamar o Caio. Não tocar em Enviar de novo.</td></tr>
+        <tr><td>Crachá registra depois do Enviar, ou aparece busca da turma depois do Enviar</td><td>Defeito. Copiar o serial e chamar o Caio.</td></tr>
+        <tr><td><code>NAO_GRAVADO</code> no Iniciar ou no manual</td><td>A memória do aparelho falhou. Copiar o serial e chamar o Caio.</td></tr>
+        <tr><td>Celular aparece conectado mas não chega ao portal depois de reiniciar a placa</td><td>Desconectar e conectar o Wi-Fi de novo.</td></tr>
+        <tr><td><code>request handler not found</code> e <code>does not exist, no permits for creation</code></td><td>Não é defeito: é o celular testando a internet e o aparelho conferindo arquivo que ainda não existe.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <span>Fontes: bateria-pacotes-1-a-3.html, bateria-pacote-4.html, corpo da #50 e §8 da spec.</span>
+  <button type="button" id="limpar">Desmarcar tudo</button>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var KEY = "bancada-20-10";
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  function store() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('ol.steps input[type="checkbox"]'));
+  var blocos = Array.prototype.slice.call(document.querySelectorAll("section.bloco"));
+  var nav = document.getElementById("nav");
+  var links = {};
+
+  blocos.forEach(function (sec, i) {
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    a.href = "#" + sec.id;
+    a.innerHTML = '<span class="n">' + i + '</span><span>' + sec.dataset.nome + '</span><span class="prog"></span>';
+    li.appendChild(a); nav.appendChild(li);
+    links[sec.id] = a;
+  });
+
+  function refresh() {
+    blocos.forEach(function (sec) {
+      var b = sec.querySelectorAll('ol.steps input[type="checkbox"]');
+      var done = 0;
+      b.forEach(function (x) { if (x.checked) done++; });
+      var a = links[sec.id];
+      a.querySelector(".prog").textContent = done + "/" + b.length;
+      a.classList.toggle("full", done === b.length && b.length > 0);
+    });
+  }
+
+  boxes.forEach(function (box) {
+    if (saved[box.id]) box.checked = true;
+    box.closest("li").classList.toggle("checked", box.checked);
+    box.addEventListener("change", function () {
+      saved[box.id] = box.checked;
+      box.closest("li").classList.toggle("checked", box.checked);
+      store(); refresh();
+    });
+  });
+
+  var limpar = document.getElementById("limpar");
+  var armado = false;
+  limpar.addEventListener("click", function () {
+    if (!armado) { armado = true; limpar.textContent = "Toque de novo para desmarcar"; setTimeout(function () { armado = false; limpar.textContent = "Desmarcar tudo"; }, 3000); return; }
+    armado = false; limpar.textContent = "Desmarcar tudo";
+    saved = {}; store();
+    boxes.forEach(function (b) { b.checked = false; b.closest("li").classList.remove("checked"); });
+    refresh();
+  });
+
+  refresh();
+})();
+</script>
+
+</body>
+</html>
