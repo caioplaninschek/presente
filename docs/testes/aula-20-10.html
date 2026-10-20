@@ -227,6 +227,7 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 <section class="ref" aria-labelledby="ref-cobre">
   <h2 id="ref-cobre">O que esta aula fecha</h2>
   <p class="note">Conferido em 20/10 contra o §8 da spec, as lacunas declaradas e as issues abertas. Com os blocos abaixo, todo teste do §8 que ainda vale passa pela placa. É a última reunião do grupo antes de 27/10.</p>
+  <p class="note">Na triagem de 20/10, antes da aula, fecharam seis issues: a epic da estrutura física (#8), o capítulo do dashboard (#52), o furo do LED (#58) e as seções do relatório #65, #67 e #70.</p>
   <div class="tablebox">
     <table>
       <thead><tr><th>Teste</th><th>Bloco</th><th>Issue</th></tr></thead>
@@ -454,7 +455,8 @@ Pronto. Conecte o celular na rede do aparelho.</pre></div>
   </div>
   <ol class="steps">
     <li><span class="ck"><input type="checkbox" id="b1-1" aria-label="Pergunta feita"></span><div class="body"><p>Vai sair enunciado escrito da entrega final? Que documentos ele quer além do relatório (o código, o diário de bordo, slides)?</p></div></li>
-    <li><span class="ck"><input type="checkbox" id="b1-2" aria-label="Pergunta feita"></span><div class="body"><p>O relatório tem modelo (o da UVA, a ABNT de relatório técnico) ou limite de páginas? Pode ser um documento só, com o dashboard como capítulo?</p></div></li>
+    <li><span class="ck"><input type="checkbox" id="b1-2" aria-label="Pergunta feita"></span><div class="body"><p>O relatório tem modelo (o da UVA, a ABNT de relatório técnico) ou limite de páginas? Pode ser um documento só, com o dashboard como capítulo?</p>
+      <p class="note">Se ele limitar as páginas, o capítulo do dashboard corta primeiro as Figuras 2 e 7.</p></div></li>
     <li><span class="ck"><input type="checkbox" id="b1-3" aria-label="Pergunta feita"></span><div class="body"><p>Onde e até que horas se posta em 27/10? Os cinco postam, como na estrutura física?</p></div></li>
     <li><span class="ck"><input type="checkbox" id="b1-4" aria-label="Pergunta feita"></span><div class="body"><p>Os 2 minutos do vídeo são o máximo? Ele vai como arquivo ou como link?</p></div></li>
     <li><span class="ck"><input type="checkbox" id="b1-5" aria-label="Pergunta feita"></span><div class="body"><p>A exposição: onde, a que horas, quanto tempo por grupo, se é para banca ou para público passando, se há mesa e tomada, e se podemos prender a caixa na parede (R64)?</p></div></li>
@@ -462,7 +464,8 @@ Pronto. Conecte o celular na rede do aparelho.</pre></div>
     <li><span class="ck"><input type="checkbox" id="b1-7" aria-label="Passo concluído"></span><div class="body">
       <p>Com as respostas na mão, o grupo decide junto quem pega cada tarefa que ainda está sem dono (R52).</p>
       <ul class="plain">
-        <li>#59 roteiro do vídeo e #62 edição;</li>
+        <li>#60 gravação do vídeo, que acontece hoje, no bloco 6;</li>
+        <li>#59 roteiro do vídeo e #62 edição, que sugerimos juntar: quem editar monta o roteiro a partir do bruto (a decisão é do grupo);</li>
         <li>#63 roteiro da exposição, e quem fala em cada parte;</li>
         <li>#66 introdução e arquitetura, #69 testes e resultados e #71 consolidação do relatório;</li>
         <li>#73 arquivos da entrega e quem posta em 27/10.</li>
@@ -570,7 +573,7 @@ MEMORIA ANTES da conexao segura: <span class="v">&lt;bytes&gt;</span> bytes (<sp
     <span class="eyebrow">Bloco 4 · issue #48, pacote 4</span>
     <h2>O relatório, o Enviar e o Encerrar</h2>
     <div class="meta"><span>uns 35 min</span><span class="rec">● filmar o Enviar</span><span>bateria-pacote-4.html</span></div>
-    <p class="why">Os testes 4, 5 e 6 do §8. A página <code>bateria-pacote-4.html</code> tem o texto completo e monta o comentário da #48. Guardar todo JSON que o Compartilhar baixar, porque eles vão anexados à issue. Este bloco também põe a primeira aula de verdade no banco, que o Igor pode usar nas capturas do capítulo do dashboard (#52).</p>
+    <p class="why">Os testes 4, 5 e 6 do §8. A página <code>bateria-pacote-4.html</code> tem o texto completo e monta o comentário da #48. Guardar todo JSON que o Compartilhar baixar, porque eles vão anexados à issue. Este bloco também põe a primeira aula de verdade no banco. As Figuras 9 a 11 do capítulo do dashboard ficam como estão, salvo pedido; o Caio atualiza o capítulo depois da aula, com os resultados da #48 e da #50.</p>
   </div>
 
   <div class="sub">
@@ -635,7 +638,7 @@ Chamada enviada: 4172CMPN6A_P1-<span class="v">&lt;...&gt;</span>. O cracha nao 
       </div></li>
       <li><span class="ck"><input type="checkbox" id="b4-7h" aria-label="Passo concluído"></span><div class="body">
         <p>Na página de histórico, recarregar e abrir a aula nova.</p>
-        <p>Tem de bater com a primeira linha da tabela "Como entrar nas duas telas": três presentes, o crachá sem nome e 37 faltantes. É o item "a aula aparece na página de histórico" da #48. Tirar um print, que pode substituir as Figuras 9 a 11 do capítulo do dashboard (#52).</p>
+        <p>Tem de bater com a primeira linha da tabela "Como entrar nas duas telas": três presentes, o crachá sem nome e 37 faltantes. É o item "a aula aparece na página de histórico" da #48. Tirar um print, que vai como evidência na #48 e na seção dos testes do relatório (#69).</p>
       </div></li>
     </ol>
   </div>
@@ -748,7 +751,7 @@ Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o crach
     </ol>
     <div class="alerta">
       <h3>De olho nos 200 ms</h3>
-      <p>Em casa, um toque do Gabriel levou 352,5 ms. Os toques que não gravam (<code>JA_REGISTRADO</code>, <code>NAO_RECONHECIDO</code>) decidem em 0,1 a 0,2 ms; os que gravam, em 16 a 67 ms. A suspeita é a gravação na memória flash antes do sinal. O teste 1 mede só o primeiro toque, mas a HU-40 pede menos de 200 ms com o aparelho cheio de eventos. Anotar quantos dos 30 passaram e de quanto. Se o pico se repetir, a proposta é não mexer no firmware e declarar o limite nas seções dos testes (#69) e das limitações (#70).</p>
+      <p>Em casa, um toque do Gabriel levou 352,5 ms. Os toques que não gravam (<code>JA_REGISTRADO</code>, <code>NAO_RECONHECIDO</code>) decidem em 0,1 a 0,2 ms; os que gravam, em 16 a 67 ms. A suspeita é a gravação na memória flash antes do sinal. O teste 1 mede só o primeiro toque, mas a HU-40 pede menos de 200 ms com o aparelho cheio de eventos. Anotar quantos dos 30 passaram e de quanto. Se o pico se repetir, a proposta é não mexer no firmware e declarar o limite na seção dos testes (#69) e direto no <code>limitacoes-e-descartes.md</code>, sem reabrir a #70, que já fechou.</p>
     </div>
   </div>
 
@@ -793,7 +796,7 @@ Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o crach
       <li><span class="ck"><input type="checkbox" id="b5-17" aria-label="Passo concluído"></span><div class="body">
         <p><span class="rec">● filmar</span> Tampa fechada, chamada aberta, portal no ar no celular.</p>
         <p>O cartão é lido através da tampa, e o verde e o bip se percebem a um passo de distância. O verde tem de aparecer pelo furo do LED.</p>
-        <p class="anota"><b>Fotografar</b> a tampa fechada com o LED aceso e a caixa aberta com os fios do LED. As fotos fecham a #58, que ainda não tem nenhuma.</p>
+        <p class="anota"><b>Fotografar</b> a tampa fechada com o LED aceso e a caixa aberta com os fios do LED. As fotos vão num comentário na #58, mesmo fechada, como o comentário de fechamento dela prometeu.</p>
         <ul class="plain">
           <li>peças firmes e fios presos, sem passar na frente do leitor;</li>
           <li>placa protegida e cabo de energia alcançável;</li>
@@ -826,8 +829,13 @@ Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o crach
         <li><b>#46</b>: o serial do bloco 2 e o vídeo dos testes 1 e 3;</li>
         <li><b>#48</b>: o texto do "Copiar resultado", os quatro JSON e o vídeo do Enviar;</li>
         <li><b>#50</b>: os blocos A a D, o teste 8, o 7c, o 7d, o portal cativo e o teste 9;</li>
+        <li><b>#58</b>: as fotos do teste 9;</li>
         <li><b>#42</b>: o modelo do celular usado no pacote 1.</li>
       </ul>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-7" aria-label="Passo concluído"></span><div class="body">
+      <p>Os resultados da #48 e da #50 (o serial, os JSON e os vídeos) ficam comentados antes de irmos embora. Decidir na hora quem posta cada um.</p>
+      <p class="note">O Caio atualiza o capítulo do dashboard depois da aula a partir desses dois comentários; sem eles, o capítulo fica parado.</p>
     </div></li>
     <li><span class="ck"><input type="checkbox" id="b6-4" aria-label="Passo concluído"></span><div class="body">
       <p>Na página de histórico, conferir a aula do bloco C e contar as aulas: uma por envio que deu certo, sem nenhuma repetida.</p>
@@ -838,6 +846,10 @@ Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o crach
     </div></li>
     <li><span class="ck"><input type="checkbox" id="b6-6" aria-label="Passo concluído"></span><div class="body">
       <p>Passada da exposição (#63): fazer a demonstração uma vez, como se fosse para o professor, com quem fala em cada parte.</p>
+    </div></li>
+    <li><span class="ck"><input type="checkbox" id="b6-8" aria-label="Passo concluído"></span><div class="body">
+      <p>O Caio sai da aula com a caixa, para a pintura (#61), que fica pronta até 23/10; a tinta tem de chegar até 22/10.</p>
+      <p class="note">Com a caixa pintada, repetimos o teste 9.</p>
     </div></li>
   </ol>
 </section>
