@@ -1,6 +1,8 @@
 # Entrega 07 — Dashboard
 
 > **Não entregue (14/10, R71, R72).** Na aula de 13/10 o professor disse que o dashboard não tem entrega própria e vai na entrega final de 27/10. Este documento, escrito pelo Igor em 13/10, não foi entregue e fica como base da parte do dashboard na entrega final. O texto abaixo não se reescreve; o Quadro 2 é a situação de 13/10.
+>
+> *(20/10, R80: o dashboard não tem documento nem postagem próprios, e este texto virou o capítulo do portal do professor, da página de histórico e do dashboard, em [`docs/entregas/entrega-final/relatorio/portal-historico-e-dashboard.md`](../entrega-final/relatorio/portal-historico-e-dashboard.md). É lá que está o estado atual, com os cinco pacotes do firmware na `main` e o que a bateria na placa já conferiu.)*
 
 > **Documento desta entrega, pronto para diagramar.** O texto abaixo substitui o `entrega-07-rascunho.md` e segue a forma da Entrega 06: capa, resumo com palavras-chave, sumário, seções numeradas, figuras e quadros com legenda acima e fonte abaixo.
 >
