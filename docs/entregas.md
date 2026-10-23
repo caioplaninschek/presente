@@ -210,13 +210,13 @@ O grupo segue a ABNT, como em todas as entregas. ~~⚠️ O professor não falou
 1. Vai sair enunciado escrito da entrega final? Que documentos ele quer além do relatório (o código, o diário de bordo, slides)?
    *Resposta (20/10):* vai sair enunciado escrito, mais adiante. Os documentos além do relatório não foram respondidos.
 2. O relatório tem modelo (o da UVA, a ABNT de relatório técnico) ou limite de páginas? Pode ser um documento só, com o dashboard como capítulo?
-   *Resposta (20/10):* vai ter modelo, e o professor vai passá-lo. O limite de páginas e o documento único não foram respondidos.
+   *Resposta (20/10):* vai ter modelo, e o professor vai passá-lo. Pelo entendimento do Caio, o relatório é para a semana seguinte a 27/10, e não para o dia da exposição. O limite de páginas e o documento único não foram respondidos.
 3. Onde e até que horas se posta em 27/10? Os cinco postam, como na estrutura física?
    *Resposta (20/10):* não tem postagem.
 4. Os 2 minutos do vídeo são o máximo? Ele vai como arquivo ou como link?
    *Resposta (20/10):* o professor pediu para adiar o vídeo de explicação. A exposição é sem vídeo.
 5. A exposição: onde, a que horas, quanto tempo por grupo, se é para banca ou para público passando, se há mesa e tomada, e se podemos prender a caixa na parede (R64)?
-   *Resposta (20/10):* às 18h30, no andar de baixo. O tempo por grupo, a banca, a mesa, a tomada e a parede não foram respondidos.
+   *Resposta (20/10):* às 18h30, no andar de baixo. É no formato de feira de ciências: o grupo fica atrás de uma mesa e mostra o projeto a quem passar, então a caixa vai na mesa, e não na parede (informação do Caio, 23/10). O tempo e a tomada não foram respondidos.
 6. Ele quer operar o aparelho com uma conta própria? Se quiser, a conta dele se gera antes (§8).
    *Resposta (20/10):* o professor vai chamar outros professores para o evento. Se eles não operarem o aparelho, tanto faz quem opera: ele ou outra pessoa. A conta própria não se gera (R81).
 
