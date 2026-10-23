@@ -1,0 +1,334 @@
+Monitor serial da aula de 20/10/2026, PC do laboratorio, porta COM3, 115200.
+Copiado do monitor ate as 20h14. Os testes que vieram depois (a chamada offline enviada as 20h27
+e o Enviar com o cracha depois do envio, as 20h34) nao entraram neste log; estao nos videos desta pasta.
+O endereco do banco foi trocado por <projeto>.supabase.co.
+
+--- Terminal on COM3 | 115200 8-N-1
+--- Available filters and text transformations: debug, default, direct, esp32_exception_decoder, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+
+Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+Retomando a chamada do /sessao_atual.json.
+Lista da turma relida do disco: 40 alunos.
+Chamada retomada: 4172CMPN6A_P1-20261020-0155, modo online, aberta; 1 eventos, 1 presencas.
+O leitor espera o primeiro login com hora valida.
+Pronto. Conecte o celular na rede do aparelho.
+[338220][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[339412][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[339574][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[339659][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[339680][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[341942][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[342018][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[342048][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.
+[364446][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[377176][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.4 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 211556 bytes (206.6 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[858338][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[858595][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[858707][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[859019][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[859112][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[859160][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[859197][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[1459345][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[2044119][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[2044132][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[2044145][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Chamada aberta: 4172CMPN6A_P1-20261020-1948, modo online
+[2094899][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[2094941][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+[2115147][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[2143194][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.2 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 211268 bytes (206.3 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[2156285][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[2156295][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[2156306][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Chamada aberta: 4172CMPN6A_P1-20261020-1950, modo online
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+
+Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+Retomando a chamada do /sessao_atual.json.
+Lista da turma relida do disco: 40 alunos.
+[   464][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[   475][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+Chamada retomada: 4172CMPN6A_P1-20261020-1950, modo online, aberta; 0 eventos, 0 presencas.
+O leitor espera o primeiro login com hora valida.
+Pronto. Conecte o celular na rede do aparelho.
+[ 27271][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 28925][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29023][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29107][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29251][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29359][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29379][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 29404][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.
+F78A1451  REGISTRADO  matricula 1240114118  decidir: 15.2 ms  toque->feedback: 44.6 ms
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+
+Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+Retomando a chamada do /sessao_atual.json.
+Lista da turma relida do disco: 40 alunos.
+Chamada retomada: 4172CMPN6A_P1-20261020-1950, modo online, aberta; 1 eventos, 1 presencas.
+O leitor espera o primeiro login com hora valida.
+Pronto. Conecte o celular na rede do aparelho.
+[ 20760][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22210][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22331][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22433][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22451][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22797][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22831][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 22851][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 25868][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 26017][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 26186][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 26203][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 27087][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 27108][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 27202][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login recusado.
+Login aceito: prof-teste-1.
+Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.
+[ 65142][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[ 74238][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.3 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 213152 bytes (208.2 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[ 86709][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[ 86721][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[ 86733][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Chamada aberta: 4172CMPN6A_P1-20261020-1955, modo online
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+
+Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+Retomando a chamada do /sessao_atual.json.
+Lista da turma relida do disco: 40 alunos.
+[   542][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[   554][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+Chamada retomada: 4172CMPN6A_P1-20261020-1955, modo online, aberta; 0 eventos, 0 presencas.
+O leitor espera o primeiro login com hora valida.
+Pronto. Conecte o celular na rede do aparelho.
+[ 51940][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 54059][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 54208][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 55776][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 56010][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 56103][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 56135][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 56158][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Hora do login: o relogio deste boot foi acertado, e o leitor volta a ler o cracha.
+[ 69573][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[ 69609][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+
+Presente! - firmware, pacote 5 (#49)
+RC522 respondeu - VersionReg = 0x92
+Contas de professor lidas: 2 (500 bytes de 4096)
+Rede do aparelho no ar: Presente-Sala01, endereco 192.168.4.1
+[   448][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+Pronto. Conecte o celular na rede do aparelho.
+[  8886][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 14602][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 14837][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 15036][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 15051][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 15817][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 15856][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[ 15878][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[ 25728][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.3 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 215004 bytes (210.0 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[ 35202][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[ 35215][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[ 35228][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Chamada aberta: 4172CMPN6A_P1-20261020-1958, modo online
+37700951  REGISTRADO  matricula 1240205596  decidir: 265.8 ms  toque->feedback: 295.2 ms  ACIMA DOS 200 ms
+87F2FE50  REGISTRADO  matricula 1240109764  decidir: 15.9 ms  toque->feedback: 45.3 ms
+F78A1451  REGISTRADO  matricula 1240114118  decidir: 21.0 ms  toque->feedback: 50.4 ms
+77751851  REGISTRADO  matricula 1240990004  decidir: 24.4 ms  toque->feedback: 53.8 ms
+37A30251  NAO_RECONHECIDO  decidir: 0.2 ms  toque->feedback: 29.5 ms
+37A30251  NAO_RECONHECIDO  decidir: 0.2 ms  toque->feedback: 29.5 ms
+62EF7E05  NAO_RECONHECIDO  decidir: 0.2 ms  toque->feedback: 29.5 ms
+62EF7E05  NAO_RECONHECIDO  decidir: 0.2 ms  toque->feedback: 29.6 ms
+97100051  REGISTRADO  matricula 1240990003  decidir: 58.1 ms  toque->feedback: 87.3 ms
+97100051  JA_REGISTRADO  matricula 1240990003  decidir: 0.2 ms  toque->feedback: 29.4 ms
+Manual aceito: 1240990001
+37490151  JA_REGISTRADO  matricula 1240990001  decidir: 0.2 ms  toque->feedback: 29.6 ms
+[344655][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[420506][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.2 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 213668 bytes (208.7 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[425458][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[425472][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[425486][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Chamada aberta: 4172CMPN6A_P1-20261020-2005, modo online
+D70B1551  REGISTRADO  matricula 1240990002  decidir: 13.4 ms  toque->feedback: 42.8 ms
+Enviando o relatorio ao banco.
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.1 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 210436 bytes (205.5 KB)
+Mandando o relatorio: 1016 bytes.
+Relatorio enviado: gravado, 1 eventos (0 enriquecidos no banco).
+Envio terminado: saiu do hotspot. A lista da turma nao mudou.
+Chamada enviada: 4172CMPN6A_P1-20261020-2005. O cracha nao registra mais.
+[542587][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+[616017][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[685156][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[685288][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[685386][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[685701][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[685791][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[698039][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[698079][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[707046][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[713102][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.1 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 211340 bytes (206.4 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+[773324][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[773337][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[773350][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+Login aceito: prof-teste-1.
+Buscando a lista da turma 4172CMPN6A_P1.
+[810694][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+O hotspot principal nao respondeu em 7 s.
+Conectando no hotspot de reserva, CaioS20FE (ate 5 s)...
+Conectado no hotspot de reserva em 0.3 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 210560 bytes (205.6 KB)
+[825070][E][WiFiGeneric.cpp:1583] hostByName(): DNS Failed for <projeto>.supabase.co
+A conexao segura FALHOU (0: nao achei o endereco do banco).
+O banco pode estar pausado (R60): reative no painel do Supabase.
+Sem a lista: o aparelho segue em modo offline (R3).
+Saiu do hotspot. A rede do aparelho continua no ar.
+[846548][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[846960][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[847072][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[847296][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[847364][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[847386][E][WebServer.cpp:638] _handleRequest(): request handler not found
+[847412][E][WebServer.cpp:638] _handleRequest(): request handler not found
+Login aceito: prof-teste-2.
+[900679][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+[900693][E][vfs_api.cpp:105] open(): /littlefs/eventos.json does not exist, no permits for creation
+[900705][E][vfs_api.cpp:105] open(): /littlefs/sessao_atual.json does not exist, no permits for creation
+[900719][E][vfs_api.cpp:105] open(): /littlefs/relatorio.json does not exist, no permits for creation
+Encerrar: lista da turma, sessao e eventos apagados. De volta ao login.
+Login aceito: prof-teste-2.
+Buscando a lista da turma 4172CMPN6A_P1.
+[916712][E][vfs_api.cpp:105] open(): /littlefs/roster.json does not exist, no permits for creation
+Conectando no hotspot principal, Jhonez (ate 7 s)...
+Conectado no hotspot principal em 0.1 s. Canal da rede do aparelho: antes 1, agora 1.
+MEMORIA ANTES da conexao segura: 210796 bytes (205.9 KB)
+Lista da turma carregada: 40 alunos (4365 bytes de 8192)
+Lista gravada no /roster.json.
+Saiu do hotspot. A rede do aparelho continua no ar.
+
