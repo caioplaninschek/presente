@@ -342,4 +342,10 @@ Dois resultados ficaram declarados. Um toque passou de novo dos 200 ms, e o Caio
 
 **O professor respondeu às perguntas do grupo, e o vídeo ficou adiado (20/10).** Na mesma aula, o professor disse que o enunciado escrito da entrega final ainda vai sair, que o relatório terá um modelo, que ele vai passar, e que não há postagem. Pediu para adiar o vídeo de explicação, e a exposição de 27/10, às 18h30, no andar de baixo, é sem vídeo. Ele vai chamar outros professores para o evento, e quem opera o aparelho tanto faz. Sugeriu também um formulário curto e anônimo, de seis perguntas, para quem passar pela exposição responder sobre o projeto, com um modelo que vai pôr no Teams. O João ficou com o formulário e quer levar a ele por um cartão NFC. Com isso, as tarefas do vídeo pararam, o PDF do relatório espera o modelo, e o formulário virou tarefa nova.
 
+**A caixa foi pintada de prata (22/10).** O Caio pintou a caixa por fora com tinta spray prateada, a única lata que havia. A tarefa pedia uma tinta sem metal na tampa da frente, porque o metal na frente do leitor pode bloquear a leitura do crachá. Por isso, a conferência da leitura pela tampa pintada, com a placa de volta na caixa, passou a ser o passo que decide: se o cartão não for lido, só a área da tampa sobre o leitor é raspada, e o resto da caixa continua prata. As etiquetas ainda não foram coladas.
+
+![A caixa pintada de prata, ainda sem as etiquetas](docs/assets/estrutura/caixa-pintada-sem-etiquetas-2026-10-22.jpg)
+
+*Caixa pintada, 22/10: a tampa e a base em tinta prateada, ainda sem as etiquetas, com os quatro furos do som à esquerda, o LED saindo pela tampa à direita e o furo do cabo na lateral.*
+
 **A exposição é no formato de feira (23/10).** O Caio trouxe o formato da exposição de 27/10: é uma feira de ciências, com o grupo atrás de uma mesa, mostrando o projeto a quem passar, e a caixa vai na mesa, e não presa na parede. Pelo entendimento dele, o relatório técnico é para a semana seguinte a 27/10, e não para o dia da exposição.
