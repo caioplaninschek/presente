@@ -41,13 +41,16 @@ epic #53   (16/10, R80)
   #59 roteiro do vídeo ──> #60 gravação na aula de 20/10 ──> #61 pintura e etiquetas ──> #62 edição
   #42, #44, #46 e #48 bateria na placa ──> #60 gravação
   #62 edição ──> #73 arquivos e postagem
+  (22/10, R81: o professor adiou o vídeo; #59, #60 e #62 e a cena de abertura da #61 param até ele pedir)
 
 epic #54   (16/10, R80)
   #59 roteiro do vídeo ──> #63 roteiro da exposição
   respostas do professor na aula de 20/10 ──> #64 o dia da exposição
+  modelo do formulário no Teams ──> 7.3 formulário da exposição e o cartão NFC   (22/10, R81)
 
 epic #55   (16/10, R80)
   #65 esqueleto ──> #66 a #70 seções ──> #71 consolidar ──> #72 PDF ──> #73 arquivos e postagem
+  modelo do professor ──> #72 PDF;  enunciado ──> #73 arquivos   (22/10, R81: sem postagem)
   #61 pintura ──> #68 seção da estrutura física
   #42, #44, #46, #48 e #50 rodadas na placa ──> #69 seção dos testes
   #52 capítulo do dashboard ──> #71 consolidar

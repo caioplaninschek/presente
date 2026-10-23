@@ -181,7 +181,7 @@ Na aula do mesmo dia, o grupo fez o teste com a caixa fechada (teste 9, #33), co
 
 ## Entrega final: protótipo completo, vídeo, dashboard, exposição e relatório técnico
 
-**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*.
+**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*. *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; o enunciado e o modelo do relatório ainda vêm)*
 
 ### O que o professor disse
 
@@ -194,28 +194,30 @@ Sem enunciado, o grupo adianta as cinco peças pela própria leitura e corrige n
 | Peça | Leitura do grupo | Onde está |
 |---|---|---|
 | Protótipo completo | o firmware dos cinco pacotes na placa, com a rodada completa dos testes do §8 | rodadas na placa da epic #9: a bateria dos pacotes 1 a 4 (#42, #44, #46 e #48) e a rodada completa (#50) |
-| Vídeo de 2 minutos | na ordem do vídeo da Entrega 06 (estrutura física, sensor, processamento, atuador e resultado), em duas gravações: as cenas com a placa na aula de 20/10 e a abertura com a caixa pintada depois | epic #53: o roteiro do vídeo (#59), a gravação (#60), a pintura da caixa (#61) e a edição (#62) |
+| Vídeo de 2 minutos | ~~na ordem do vídeo da Entrega 06 (estrutura física, sensor, processamento, atuador e resultado), em duas gravações: as cenas com a placa na aula de 20/10 e a abertura com a caixa pintada depois~~ *(22/10, R81: o professor adiou o vídeo; as tarefas param até ele pedir)* | epic #53: o roteiro do vídeo (#59), a gravação (#60), a pintura da caixa (#61) e a edição (#62) |
 | Dashboard | o portal do professor no aparelho e a página de histórico, como capítulo do relatório, a partir da Entrega 07 | a tarefa da entrega do dashboard (#52) |
-| Exposição | a demonstração ao vivo, com o vídeo como plano B, e o hotspot, a energia, a sala e o banco acordado no dia | epic #54: o roteiro da exposição (#63) e o dia da exposição (#64) |
-| Relatório técnico | um documento só, na ABNT, no modelo das Entregas 05 e 06, com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, com a postagem (#73) |
+| Exposição | a demonstração ao vivo, ~~com o vídeo como plano B,~~ *(22/10, R81: sem vídeo)* às 18h30, no andar de baixo, e o hotspot, a energia, a sala e o banco acordado no dia | epic #54: o roteiro da exposição (#63) e o dia da exposição (#64) |
+| Relatório técnico | um documento só, na ABNT, no modelo das Entregas 05 e 06, com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, ~~com a postagem~~ (#73) *(22/10, R81: o PDF espera o modelo do professor, os arquivos esperam o enunciado, e não há postagem)* |
 
-O calendário é do grupo, e não prazo do professor: as seções do relatório até 23/10, o vídeo editado até 24/10, o PDF até 25/10, a postagem até 26/10 e o dia 27/10 só para a exposição (R80).
+O calendário é do grupo, e não prazo do professor: as seções do relatório até 23/10, ~~o vídeo editado até 24/10, o PDF até 25/10, a postagem até 26/10~~ e o dia 27/10 só para a exposição (R80). *(22/10, R81: o vídeo foi adiado, o PDF espera o modelo do professor, e não há postagem)*
 
 ### O formato do relatório
 
-O grupo segue a ABNT, como em todas as entregas. ⚠️ O professor não falou de modelo nem de número de páginas, e a pergunta vai para a aula de 20/10.
+O grupo segue a ABNT, como em todas as entregas. ~~⚠️ O professor não falou de modelo nem de número de páginas, e a pergunta vai para a aula de 20/10.~~ *(22/10, R81: o professor disse em 20/10 que o relatório terá um modelo, que ele vai passar; o número de páginas não foi respondido)*
 
 ### Perguntas para a aula de 20/10
 
 1. Vai sair enunciado escrito da entrega final? Que documentos ele quer além do relatório (o código, o diário de bordo, slides)?
-   *Resposta:*
+   *Resposta (20/10):* vai sair enunciado escrito, mais adiante. Os documentos além do relatório não foram respondidos.
 2. O relatório tem modelo (o da UVA, a ABNT de relatório técnico) ou limite de páginas? Pode ser um documento só, com o dashboard como capítulo?
-   *Resposta:*
+   *Resposta (20/10):* vai ter modelo, e o professor vai passá-lo. O limite de páginas e o documento único não foram respondidos.
 3. Onde e até que horas se posta em 27/10? Os cinco postam, como na estrutura física?
-   *Resposta:*
+   *Resposta (20/10):* não tem postagem.
 4. Os 2 minutos do vídeo são o máximo? Ele vai como arquivo ou como link?
-   *Resposta:*
+   *Resposta (20/10):* o professor pediu para adiar o vídeo de explicação. A exposição é sem vídeo.
 5. A exposição: onde, a que horas, quanto tempo por grupo, se é para banca ou para público passando, se há mesa e tomada, e se podemos prender a caixa na parede (R64)?
-   *Resposta:*
+   *Resposta (20/10):* às 18h30, no andar de baixo. O tempo por grupo, a banca, a mesa, a tomada e a parede não foram respondidos.
 6. Ele quer operar o aparelho com uma conta própria? Se quiser, a conta dele se gera antes (§8).
-   *Resposta:*
+   *Resposta (20/10):* o professor vai chamar outros professores para o evento. Se eles não operarem o aparelho, tanto faz quem opera: ele ou outra pessoa. A conta própria não se gera (R81).
+
+**Sugestão do professor (20/10):** um Google Forms curto e anônimo, de seis perguntas, para quem passar pela exposição responder sobre o projeto. Ele vai pôr um modelo no Teams. O João ficou com o formulário e quer levar a ele por um cartão NFC (tarefa 7.3, R81).
