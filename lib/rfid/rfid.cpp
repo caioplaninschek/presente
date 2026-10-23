@@ -61,7 +61,9 @@ void esquecerUltimaTag() {
 
 bool lerTagNova(Uid& uid) {
   // Marcado antes de qualquer conversa com o RC522: o tempo do barramento SPI
-  // esta dentro do intervalo que a secao 5 limita a 200 ms, e e ele que pesa.
+  // esta dentro do intervalo que a secao 5 limita a 200 ms. Nas bancadas e ele
+  // que pesa; no firmware, a gravacao do evento antes do sinal (R74) tambem
+  // entra, e passou dos 200 ms em dois toques (R82).
   const unsigned long comecouEm = micros();
 
   if (!leitor.PICC_IsNewCardPresent()) {

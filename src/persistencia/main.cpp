@@ -25,7 +25,8 @@
 // com a razao que caiu, esta no cabecalho do lib/storage/storage.h.
 //
 // ms_desde_boot nao e timestamp. O timestamp do secao 7 e ISO-8601 com fuso e
-// vem do navegador do professor no Iniciar, que ainda nao existe. O porque
+// vem do navegador do professor no Iniciar, que este programa de bancada nao
+// tem. O porque
 // inteiro esta no cabecalho do lib/storage/storage.h.
 // ---------------------------------------------------------------------------
 //

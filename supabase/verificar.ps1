@@ -8,7 +8,7 @@
 # 2 = falta configuracao; 3 = erro de rede.
 #
 # Cada rodada grava uma sessao "verificacao-TESTE01-..." na turma ficticia TESTE01.
-# Ela sai junto com as aulas "teste-" na integracao (epic #9).
+# Ela sai com o supabase/004-limpeza-dos-testes.sql, que pode rodar de novo (#51).
 
 $ErrorActionPreference = 'Stop'
 

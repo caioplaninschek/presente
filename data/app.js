@@ -34,8 +34,8 @@
   // bancada junto dos outros tempos (§8).
   var PEDIDO_LIMITE_MS = 6000;
 
-  // O Enviar é o único pedido que sai da sala: o aparelho tenta o banco por
-  // até 20 s antes de responder `SEM_INTERNET` (§6.1). Esperar os 6 s dos
+  // O Enviar é o único pedido que sai da sala: cada fase da tentativa tem
+  // prazo próprio, e o pior caso passa dos 20 s (§6.1, R76). Esperar os 6 s dos
   // outros faria o portal desistir de um envio que ainda vai dar certo.
   var ENVIO_LIMITE_MS = 25000;
 
@@ -441,7 +441,7 @@
 
       // As listas vêm do /api/presencas, e só são pedidas quando a `versao` do
       // estado muda (§6.1). O painel bate de 2 em 2 s; pedir as listas a cada
-      // batida faria o aparelho remontar, a cada duas segundos, o que não
+      // batida faria o aparelho remontar, a cada dois segundos, o que não
       // mudou — e ele atende um pedido de cada vez.
       if (listas && e.versao === versaoDasListas) { pintarRelatorio(e); return; }
 

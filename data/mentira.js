@@ -1,7 +1,7 @@
 'use strict';
 /* Presente! — o aparelho de mentira.
  *
- * Responde as mesmas rotas que o `portal.cpp` vai responder e simula crachás
+ * Responde as mesmas rotas que o `portal.cpp` responde e simula crachás
  * encostando no leitor, para as três telas rodarem no navegador sem depender
  * do ESP32 (issue #20). Os dados são inventados e moram neste arquivo.
  *

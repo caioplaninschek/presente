@@ -5,13 +5,11 @@
 // bip quando o cracha e lido (R28: codigo compartilhado sobe para
 // lib/<modulo da secao 5>/).
 //
-// Este modulo e o embriao do feedback.cpp da secao 5 da spec, mas ainda nao e
-// ele: aqui estao o mecanismo e os tempos, nao a maquina de estados. Quem decide
-// que REGISTRADO sao duas piscadas verdes com bip e que JA_REGISTRADO e uma
-// piscada sem som e o programa, nao esta biblioteca -- aqui ninguem sabe por que
-// o verde acendeu. A maquina de estados inteira (secao 5) se monta na
-// integracao, depois da Entrega 05, e o proprio plano de testes ja a declara
-// como lacuna conhecida.
+// Este modulo e o feedback.cpp da secao 5 da spec, mas so o mecanismo: aqui
+// estao a cor, a piscada e o bip, nao a maquina de estados. Quem decide que
+// REGISTRADO sao duas piscadas verdes com bip e que JA_REGISTRADO e uma piscada
+// sem som e o programa, nao esta biblioteca -- aqui ninguem sabe por que o verde
+// acendeu. No firmware, quem decide e o src/presente/portal.cpp (R74, R76).
 //
 // ---------------------------------------------------------------------------
 // POLARIDADE DO LED -- o ponto unico de inversao

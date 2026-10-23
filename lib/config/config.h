@@ -42,7 +42,8 @@ constexpr char ENDERECO_DO_APARELHO[] = "192.168.4.1";
 // parte. A conexao segura e a leitura travam o loop(). O LIMITE_DA_CONEXAO_SEGURA_MS
 // vale duas vezes, uma para a conexao e outra para o handshake, e a busca do
 // endereco tem prazo proprio: no pior caso a trava passa dos 6 s em que o portal
-// desiste de um pedido, e a busca, dos 20 s. A #44 mede e calibra (secao 8).
+// desiste de um pedido, e a busca, dos 20 s. A rodada na placa (#44) rodou com
+// estes valores, e eles ficaram (secao 8).
 constexpr unsigned long ESPERA_DO_HOTSPOT_MS = 7000;         // valor de partida, a calibrar na placa (secao 8)
 constexpr unsigned long ESPERA_DA_RESERVA_MS = 5000;         // valor de partida, a calibrar na placa (secao 8)
 constexpr unsigned long LIMITE_DA_CONEXAO_SEGURA_MS = 4000;  // valor de partida, a calibrar na placa (secao 8)

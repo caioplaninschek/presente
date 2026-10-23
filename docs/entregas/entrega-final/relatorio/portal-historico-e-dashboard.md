@@ -117,7 +117,7 @@ Três situações da sala de aula também entraram no portal. Se a página for r
 
 ### O que já rodou na placa
 
-Até 20/10, o portal servido pelo ESP32, falando com o aparelho de verdade, rodou na placa do login à chamada: a página de login que abre sozinha, a senha recusada e a aceita, a busca da lista da turma, a entrada no modo offline quando não há internet, o Iniciar, a leitura dos crachás nos dois modos, o lançamento manual, a tela do relatório e o encerramento. O envio ao banco e a volta depois de uma queda de energia esperam as duas rodadas que faltam. O resultado de cada item, com os números, está na seção dos testes.
+Até 20/10, o portal servido pelo ESP32, falando com o aparelho de verdade, rodou na placa do login à chamada: a página de login que abre sozinha, a senha recusada e a aceita, a busca da lista da turma, a entrada no modo offline quando não há internet, o Iniciar, a leitura dos crachás nos dois modos, o lançamento manual, a tela do relatório e o encerramento. O envio ao banco e a volta depois de uma queda de energia rodaram na placa na aula de 20/10. O resultado de cada item, com os números, está na seção dos testes.
 
 ### O monitor do serial
 
@@ -129,7 +129,7 @@ Ao fim da aula, o aparelho envia a chamada a um banco de dados na nuvem, na plat
 
 Escrevemos a página porque a apresentação precisa mostrar um sistema, e não só um leitor de crachá. O portal do professor morre com a aula: ao Encerrar, o aparelho apaga tudo o que guardava. O que resta da aula fica no banco, e sem uma tela que o leia esse banco seria uma afirmação nossa, e não uma coisa que o professor pode abrir e conferir.
 
-A página está no ar em `https://caioplaninschek.github.io/presente/` desde 13/10. As figuras desta seção são desse dia, com as aulas de teste que o banco então tinha. Em 15/10 esvaziamos o banco, antes das rodadas na placa, para que as primeiras aulas de verdade não se misturassem às inventadas; até a rodada do envio ao banco, a página abre sem aula nenhuma.
+A página está no ar em `https://caioplaninschek.github.io/presente/` desde 13/10. As figuras desta seção são desse dia, com as aulas de teste que o banco então tinha. Em 15/10 esvaziamos o banco, antes das rodadas na placa, para que as primeiras aulas de verdade não se misturassem às inventadas; até a rodada do envio ao banco, em 20/10, a página abria sem aula nenhuma.
 
 ### O login e a lista das aulas
 

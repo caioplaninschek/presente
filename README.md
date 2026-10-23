@@ -49,10 +49,12 @@ Onde mora o código:
 | Onde | O quê |
 |---|---|
 | `src/<nome>/` | Um programa de bancada por pasta, com o ambiente de mesmo nome no `platformio.ini` (R28) |
-| `src/presente/` | O firmware de verdade, ambiente `presente`: pacotes 1 a 3 (o portal e o login, a lista da turma pela internet, a chamada) |
+| `src/presente/` | O firmware de verdade, ambiente `presente`: os pacotes 1 a 5 (o portal e o login, a lista da turma pela internet, a chamada, o relatório com o Enviar e o Encerrar, e a volta depois de uma queda de energia) |
 | `lib/<módulo>/` | O que dois programas dividem, com o nome do módulo do §5 da spec: `rfid`, `feedback`, `storage` |
 | `lib/config/` | Pinos e tempos do aparelho num lugar só, fora os três pinos do barramento do leitor, que o `SPI.begin()` já define (R66) |
 | `data/` | O portal do professor (HTML, CSS e JS). É desta pasta que sai a imagem de filesystem da placa (R27) |
+| `historico/` | A página de histórico das aulas, publicada no GitHub Pages em <https://caioplaninschek.github.io/presente/>; a leitura exige login (R34, R50) |
+| `docs/testes/` | As páginas das rodadas na placa e o monitor do serial, publicadas no mesmo endereço, em `/testes/<nome>.html` |
 | `supabase/` | O SQL do banco, em arquivos numerados. Arquivo já aplicado não se edita (R33) |
 | `ferramentas/` | O script que gera as contas de professor (`senha-professor.ps1`) |
 | `include/` | O `secrets.example.h`, modelo das credenciais |

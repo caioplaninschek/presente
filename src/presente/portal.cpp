@@ -210,8 +210,8 @@ void aoLogin() {
     return;
   }
 
-  // A hora vem no corpo e e ignorada: o relogio se acerta no Iniciar (#45), e a
-  // hora do login e do pacote 5 (R62, item 3).
+  // A hora vem no corpo e so vale na retomada (#49, R79), mais abaixo: fora dela,
+  // o relogio se acerta no Iniciar (#45).
   const char* usuario = corpo["usuario"];
   const char* senha = corpo["senha"];
   if (usuario == nullptr || senha == nullptr) {

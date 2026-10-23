@@ -1,6 +1,7 @@
 // presente/net.h -- o radio do aparelho: o hotspot do professor e o banco
 // (secao 5 da spec). Pacote 2 (#43): a busca da lista da turma depois do login.
-// Pacote 4 (#47): o envio do relatorio.
+// Pacote 4 (#47): o envio do relatorio. Pacote 5 (#49): a lista relida do disco
+// na retomada.
 //
 // Nao conhece o portal nem o LED: quem chama pergunta buscando() e decide o
 // que mostrar.
@@ -18,7 +19,8 @@ namespace net {
 void comecarBusca();
 
 // Precisa ser chamada a cada volta do loop(). So trava durante a conexao
-// segura e a leitura da resposta, no maximo os dois limites do config.h.
+// segura e a leitura da resposta; no pior caso a trava passa dos dois limites
+// do config.h (ver o comentario dos tempos la).
 void atender();
 
 // true do comecarBusca() ate o aparelho sair do hotspot, com ou sem a lista.
@@ -51,7 +53,7 @@ enum class Envio { GRAVADO, JA_ENVIADO, SEM_INTERNET, BANCO_RECUSOU };
 
 // O Enviar (#47): manda o arquivo em caminho, que ja traz {"relatorio": ...},
 // ao rpc/enviar_relatorio e apaga o arquivo no fim, com qualquer desfecho. Trava
-// o loop() pela tentativa inteira, no maximo os quatro tempos do config.h, e
+// o loop() pela tentativa inteira, uns 20 s, e o pior caso passa disso (R76), e
 // chama aoEsperar() a cada volta da espera pelo hotspot. Nao mexe na lista da
 // turma.
 Envio enviar(const char* caminho, void (*aoEsperar)());

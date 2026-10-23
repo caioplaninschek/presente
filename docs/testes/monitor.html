@@ -691,7 +691,7 @@ var FALAS = [
 
 /* O toque tem forma propria, com campos opcionais, e por isso sai da lista. */
 var RE_TOQUE = /^([0-9A-Fa-f]{8,14})\s+(REGISTRADO|JA_REGISTRADO|NAO_RECONHECIDO)(?:\s+matricula\s+(\S+))?(?:\s+decidir:\s*([\d.]+)\s*ms\s+toque->feedback:\s*([\d.]+)\s*ms)?(\s+ACIMA DOS \d+ ms)?\s*$/;
-var RE_TOQUE_FECHADA = /^(\S+)\s+NAO_RECONHECIDO chamada enviada: nada gravado$/;
+var RE_TOQUE_FECHADA = /^(\S+)\s+NAO_RECONHECIDO\s+chamada enviada: nada gravado$/;
 
 /* O ruido: linha que nao vem do nosso codigo, ou vem do framework. */
 var RUIDOS = [

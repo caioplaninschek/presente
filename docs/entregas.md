@@ -12,8 +12,8 @@ Fonte: Teams da disciplina, aba Tarefas. **O prazo de cada entrega é o do enunc
 | ~~29/09~~ 06/10 23:59 | Estrutura física do protótipo, com apresentação no laboratório ~~em data a confirmar~~ na aula de 06/10, informal *(30/09)* | ✅ entregue em 06/10, postada pelos cinco no Teams *(informação do Caio, 10/10)* |
 | ~~05/10~~ ~~13/10~~\*\* | Dashboard (ESP32 obrigatório) ou interface Serial/Processing | ~~alvo do grupo, sem enunciado *(12/10)*~~ *(14/10, R71, R72)* sem entrega própria: vai na entrega final de 27/10; o documento da Entrega 07 não foi entregue |
 | ~~20/10~~\*\* | ~~Protótipo completo + vídeo de demonstração (2 minutos)~~ | *(14/10, R71)* não há entrega em 20/10: passou para a entrega final de 27/10 |
-| 27/10\*\*\* | **Entrega final:** protótipo completo, vídeo de demonstração (2 minutos), dashboard, exposição oficial na Semana da Computação e relatório técnico/documentação final | ⬜ *(16/10, R80)* sem enunciado escrito; o grupo adianta as cinco peças pela própria leitura, nas tarefas das epics #53, #54 e #55, e corrige no caminho o que um enunciado mudar (ver "Entrega final", abaixo) |
-| ~~30/11~~\*\* | ~~Relatório técnico completo + versão final aprimorada~~ | *(14/10, R71)* não há entrega em 30/11: o relatório técnico vai na entrega final de 27/10 |
+| 27/10\*\*\* | **Entrega final:** protótipo completo, ~~vídeo de demonstração (2 minutos)~~, dashboard, exposição oficial na Semana da Computação e relatório técnico/documentação final *(22/10, R81: o professor adiou o vídeo)* | ⬜ *(16/10, R80)* sem enunciado escrito; o grupo adianta as cinco peças pela própria leitura, nas tarefas das epics #53, #54 e #55, e corrige no caminho o que um enunciado mudar (ver "Entrega final", abaixo) *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; 23/10: no formato de feira, e, pelo entendimento do Caio, o relatório fica para a semana seguinte)* |
+| ~~30/11~~\*\* | ~~Relatório técnico completo + versão final aprimorada~~ | *(14/10, R71)* não há entrega em 30/11: o relatório técnico vai na entrega final de 27/10 *(23/10, R81: pelo entendimento do Caio, o relatório é para a semana seguinte a 27/10)* |
 
 \*\* **Adiamento de 22/09.** Na aula, o professor adiou a estrutura física de 29/09 para **06/10**, porque 29/09 é dia de prova, e avisou que as entregas seguintes andam cerca de uma semana. A única data nova dita com certeza é 06/10, e o enunciado da estrutura física, recebido em 29/09, a confirmou. As outras não se somam de cabeça: uma semana depois de 05/10 cai no feriado de 12/10, e uma semana depois de 20/10 cai em 27/10, o dia da Semana da Computação, que é evento da universidade e pode não mudar. Cada data se confirma no enunciado. *(14/10: o calendário de 20/10 em diante foi refeito na aula de 13/10; ver a nota \*\*\* abaixo, R71.)*
 
@@ -181,7 +181,7 @@ Na aula do mesmo dia, o grupo fez o teste com a caixa fechada (teste 9, #33), co
 
 ## Entrega final: protótipo completo, vídeo, dashboard, exposição e relatório técnico
 
-**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*. *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; o enunciado e o modelo do relatório ainda vêm)*
+**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*. *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; o enunciado e o modelo do relatório ainda vêm)* *(23/10, informação do Caio: a exposição é no formato de feira de ciências, com a caixa na mesa; pelo entendimento dele, o relatório é para a semana seguinte a 27/10)*
 
 ### O que o professor disse
 
@@ -196,8 +196,8 @@ Sem enunciado, o grupo adianta as cinco peças pela própria leitura e corrige n
 | Protótipo completo | o firmware dos cinco pacotes na placa, com a rodada completa dos testes do §8 | rodadas na placa da epic #9: a bateria dos pacotes 1 a 4 (#42, #44, #46 e #48) e a rodada completa (#50) |
 | Vídeo de 2 minutos | ~~na ordem do vídeo da Entrega 06 (estrutura física, sensor, processamento, atuador e resultado), em duas gravações: as cenas com a placa na aula de 20/10 e a abertura com a caixa pintada depois~~ *(22/10, R81: o professor adiou o vídeo; as tarefas param até ele pedir)* | epic #53: o roteiro do vídeo (#59), a gravação (#60), a pintura da caixa (#61) e a edição (#62) |
 | Dashboard | o portal do professor no aparelho e a página de histórico, como capítulo do relatório, a partir da Entrega 07 | a tarefa da entrega do dashboard (#52) |
-| Exposição | a demonstração ao vivo, ~~com o vídeo como plano B,~~ *(22/10, R81: sem vídeo)* às 18h30, no andar de baixo, e o hotspot, a energia, a sala e o banco acordado no dia | epic #54: o roteiro da exposição (#63) e o dia da exposição (#64) |
-| Relatório técnico | um documento só, na ABNT, no modelo das Entregas 05 e 06, com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, ~~com a postagem~~ (#73) *(22/10, R81: o PDF espera o modelo do professor, os arquivos esperam o enunciado, e não há postagem)* |
+| Exposição | a demonstração ao vivo, ~~com o vídeo como plano B,~~ *(22/10, R81: sem vídeo)* às 18h30, no andar de baixo, *(23/10: no formato de feira de ciências, com o grupo atrás de uma mesa e a caixa na mesa, e não na parede)* e o hotspot, a energia, a sala e o banco acordado no dia | epic #54: o roteiro da exposição (#63) e o dia da exposição (#64) |
+| Relatório técnico | um documento só, na ABNT, ~~no modelo das Entregas 05 e 06,~~ *(22/10, R81: no modelo que o professor vai passar)* com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, ~~com a postagem~~ (#73) *(22/10, R81: o PDF espera o modelo do professor, os arquivos esperam o enunciado, e não há postagem)* |
 
 O calendário é do grupo, e não prazo do professor: as seções do relatório até 23/10, ~~o vídeo editado até 24/10, o PDF até 25/10, a postagem até 26/10~~ e o dia 27/10 só para a exposição (R80). *(22/10, R81: o vídeo foi adiado, o PDF espera o modelo do professor, e não há postagem)*
 

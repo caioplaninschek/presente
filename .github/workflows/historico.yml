@@ -1,6 +1,7 @@
-# Publica a página de histórico no GitHub Pages (R50).
+# Publica a página de histórico no GitHub Pages (R50) e, junto dela, em
+# /testes/, as páginas de docs/testes/.
 #
-# O que o workflow existe para fazer é uma coisa só: escrever o `config.js` com
+# O passo que justifica o workflow é um só: escrever o `config.js` com
 # a URL e a chave publicável vindas dos segredos do repositório, e só então
 # publicar a pasta. A chave nunca entra no git — é por isso que a publicação
 # não é o Pages apontado direto para a pasta, e sim este passo no meio.

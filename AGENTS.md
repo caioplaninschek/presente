@@ -76,7 +76,7 @@ O SQL do Supabase mora em `supabase/`, em arquivos numerados e aplicados pelo ed
 
 ## Credenciais
 
-Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, sem credencial real: os campos do hotspot e do banco vêm em branco, e o nome e a senha da rede do aparelho vêm com valor de exemplo, para trocar. As contas de professor vivem em `data/professores.json`, gerado pelo `ferramentas/senha-professor.ps1` e também fora do git; o que é versionado é o `data/professores.example.json`. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
+Chave e URL do Supabase, SSID e senha do hotspot e SSID e senha da rede do próprio aparelho vivem em `secrets.h`, que está no `.gitignore`. O que é versionado é `secrets.example.h`, sem credencial real: os campos do hotspot e a chave do banco vêm em branco, e a URL do banco e o nome e a senha da rede do aparelho vêm com valor de exemplo, para trocar. As contas de professor vivem em `data/professores.json`, gerado pelo `ferramentas/senha-professor.ps1` e também fora do git; o que é versionado é o `data/professores.example.json`. Nunca commitar credencial real, nem em exemplo, nem em comentário, nem no relatório.
 
 ## Agent skills
 

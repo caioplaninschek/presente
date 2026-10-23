@@ -40,11 +40,11 @@ epic #9
 epic #53   (16/10, R80)
   #59 roteiro do vídeo ──> #60 gravação na aula de 20/10 ──> #61 pintura e etiquetas ──> #62 edição
   #42, #44, #46 e #48 bateria na placa ──> #60 gravação
-  #62 edição ──> #73 arquivos e postagem
+  #62 edição ──> #73 arquivos e postagem   (22/10, R81: sem postagem)
   (22/10, R81: o professor adiou o vídeo; #59, #60 e #62 e a cena de abertura da #61 param até ele pedir)
 
 epic #54   (16/10, R80)
-  #59 roteiro do vídeo ──> #63 roteiro da exposição
+  ~~#59 roteiro do vídeo ──> #63 roteiro da exposição~~   (22/10, R81: a exposição é sem vídeo, e o roteiro dela não espera mais o do vídeo)
   respostas do professor na aula de 20/10 ──> #64 o dia da exposição
   modelo do formulário no Teams ──> #74 formulário da exposição e o cartão NFC   (22/10, R81)
 
@@ -70,7 +70,7 @@ epic #55   (16/10, R80)
 
 A lista das tarefas, com quem pegou cada uma, está nas epics #8 (estrutura física) e #9 (dashboard e o aparelho falando com a nuvem) e, desde 16/10 (R80), nas epics #53 (vídeo e pintura da caixa), #54 (exposição) e #55 (relatório técnico).
 
-~~Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final).~~ *(16/10, R80: sem enunciado escrito, as tarefas nasceram pela leitura do grupo, todas livres (R52): na #53, o roteiro do vídeo (#59), a gravação (#60), a pintura e as etiquetas (#61) e a edição (#62); na #54, o roteiro da exposição (#63) e o dia da exposição (#64); na #55, o esqueleto do relatório (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos e a postagem (#73). As arestas estão no grafo acima.)* *(14/10, R71: as três, com o dashboard (#52), vão juntas na entrega final de 27/10; o enunciado escrito ainda não saiu.)*
+~~Epics esqueleto, sem tarefas até o enunciado sair: #53 (protótipo completo e vídeo), #54 (Semana da Computação) e #55 (relatório final).~~ *(16/10, R80: sem enunciado escrito, as tarefas nasceram pela leitura do grupo, todas livres (R52): na #53, o roteiro do vídeo (#59), a gravação (#60), a pintura e as etiquetas (#61) e a edição (#62); na #54, o roteiro da exposição (#63) e o dia da exposição (#64); na #55, o esqueleto do relatório (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos e a postagem (#73). As arestas estão no grafo acima.)* *(14/10, R71: as três, com o dashboard (#52), vão juntas na entrega final de 27/10; o enunciado escrito ainda não saiu.)* *(22/10, R81: em 27/10 o grupo faz só a exposição (#54), sem vídeo e sem postagem; o vídeo (#53) fica adiado, e o relatório (#55) espera o modelo e o enunciado do professor. 23/10: pelo entendimento do Caio, o relatório é para a semana seguinte a 27/10.)*
 
 ## Onde mora o código (R51)
 
@@ -84,8 +84,8 @@ Atribua a issue a você e comente "peguei" antes de começar. A linha *Requer* d
 
 1. **Cada rodada na placa custa cerca de um dia**, porque a placa não circula (R23). ~~Mitigação: a revisão por outra pessoa antes da rodada oficial na placa (R51).~~ *(12/10, R68: o teste informal de quem escreveu o pacote e está com a placa pode vir antes da revisão; só a rodada oficial espera por ela.)* *(14/10, R75: a mitigação passa a ser o autor se certificar do pacote antes de publicar, e as rodadas dos pacotes 1, 2 e 3 numa bateria só, com o João.)*
 2. ~~**Semana de provas em 28 e 29/09.** O contrato (#36) e o pacote 1 (#41) caem logo depois dela.~~ *(12/10: passou. A semana de provas acabou em 29/09, e o contrato (#36) e o pacote 1 (#41) já foram escritos.)*
-3. ~~**As datas dos enunciados ainda não saíram**, fora a de 06/10. Os prazos daqui são alvos.~~ *(12/10: o grafo não tem prazos desde 30/09, porque eles vivem nas issues. O enunciado do dashboard não saiu, e o grupo segue a interpretação do cronograma de 05/09, com alvo na aula de 13/10 (R69). As datas das epics do protótipo completo (#53), da Semana da Computação (#54) e do relatório (#55) são provisórias.)* *(14/10, R71 e R72: o professor disse em aula que não há entrega em 20/10 nem em 30/11; tudo, dashboard incluído, vai na entrega final de 27/10. Sem enunciado escrito; confere-se quando sair.)*
-4. **A evidência do teste do painel é fraca** (R45). Ele se refaz com log na #50.
+3. ~~**As datas dos enunciados ainda não saíram**, fora a de 06/10. Os prazos daqui são alvos.~~ *(12/10: o grafo não tem prazos desde 30/09, porque eles vivem nas issues. O enunciado do dashboard não saiu, e o grupo segue a interpretação do cronograma de 05/09, com alvo na aula de 13/10 (R69). As datas das epics do protótipo completo (#53), da Semana da Computação (#54) e do relatório (#55) são provisórias.)* *(14/10, R71 e R72: o professor disse em aula que não há entrega em 20/10 nem em 30/11; tudo, dashboard incluído, vai na entrega final de 27/10. Sem enunciado escrito; confere-se quando sair.)* *(22/10, R81: o vídeo ficou adiado, e o relatório espera o modelo e o enunciado; 23/10, pelo entendimento do Caio, o relatório é para a semana seguinte a 27/10.)*
+4. **A evidência do teste do painel é fraca** (R45). Ele se refaz com log na #50. *(22/10, R82: na aula de 20/10 o pulo de canal não aconteceu, porque os dois hotspots estavam no canal 1; o teste do painel (7c) fica como não observado, declarado na seção dos testes do relatório (#69).)*
 5. **O Supabase pausa sem uso.** ~~A #35 resolve, e vence antes da pausa prevista.~~ *(30/09: a #35 foi descartada, R60)* Mitigação: quem encontrar o banco pausado avisa o Caio, que o reativa pelo celular.
 6. **Tarefa livre que ninguém pega.** A regra dos dois dias (R52) é a mitigação.
 
