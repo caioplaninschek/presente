@@ -46,7 +46,7 @@ epic #53   (16/10, R80)
 epic #54   (16/10, R80)
   #59 roteiro do vídeo ──> #63 roteiro da exposição
   respostas do professor na aula de 20/10 ──> #64 o dia da exposição
-  modelo do formulário no Teams ──> 7.3 formulário da exposição e o cartão NFC   (22/10, R81)
+  modelo do formulário no Teams ──> #74 formulário da exposição e o cartão NFC   (22/10, R81)
 
 epic #55   (16/10, R80)
   #65 esqueleto ──> #66 a #70 seções ──> #71 consolidar ──> #72 PDF ──> #73 arquivos e postagem
