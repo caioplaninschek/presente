@@ -37,6 +37,8 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [`docs/entregas.md`](docs/entregas.md) | Os enunciados do professor e o que saiu em cada entrega |
 | [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral. A pasta `entrega-07` não foi entregue e é base da entrega final *(14/10, R72)* |
 | [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
+| [`docs/entregas/entrega-final/relatorio/`](docs/entregas/entrega-final/relatorio/) | O relatório técnico, documento complementar da entrega final, com um capítulo por arquivo *(25/11, R85)* |
+| [`docs/assets/exposicao/`](docs/assets/exposicao/) | A foto da equipe na exposição de 27/10, o recorte da caixa e os quadros do monitor das duas chamadas de demonstração |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |
 | [`.scratch/integracao/graph.md`](.scratch/integracao/graph.md) | ~~Registro de execução desde 23/09: as tarefas até a entrega final, o grafo de dependência e o de-para com as Issues~~ *(30/09)* O grafo de dependência das tarefas até a entrega final; cada tarefa vive na sua issue |
