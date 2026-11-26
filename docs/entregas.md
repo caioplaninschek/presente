@@ -179,9 +179,58 @@ Na aula do mesmo dia, o grupo fez o teste com a caixa fechada (teste 9, #33), co
 
 ---
 
-## Entrega final: protótipo completo, vídeo, dashboard, exposição e relatório técnico
+## Entrega final: a exposição de 27/10 e o relatório técnico simplificado
 
-**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*. *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; o enunciado e o modelo do relatório ainda vêm)* *(23/10, informação do Caio: a exposição é no formato de feira de ciências, com a caixa na mesa; pelo entendimento dele, o relatório é para a semana seguinte a 27/10)*
+**Prazo: até 28/11/2026, às 15h. Cada integrante envia pelo Teams o mesmo PDF** *(enunciado trazido pelo Caio em 25/11, R85)*. A exposição foi em 27/10, na Semana da Computação.
+
+~~**Data: 27/10/2026, na Semana da Computação. Sem enunciado escrito** *(16/10)*.~~ *(25/11, R85: o enunciado saiu depois da exposição e fixou o prazo de 28/11)* *(22/10, R81: em 27/10, a exposição às 18h30, sem vídeo e sem postagem; o enunciado e o modelo do relatório ainda vêm)* *(23/10, informação do Caio: a exposição é no formato de feira de ciências, com a caixa na mesa; pelo entendimento dele, o relatório é para a semana seguinte a 27/10)*
+
+### O enunciado
+
+Transcrição do que o professor publicou no Teams, trazida pelo Caio em 25/11:
+
+> **Entrega do Relatório Técnico – Projeto Integrador Sistemas Embarcados**
+> Data de conclusão 28 de novembro de 2026 às 15:00
+> Vários envios permitidos. Fecha 28 de novembro de 2026 às 15:00.
+>
+> Pessoal,
+> Para finalizar a avaliação do Projeto Integrador da disciplina de Sistemas Embarcados, solicito que cada equipe organize e envie um relatório técnico simplificado, contendo apenas os registros essenciais do projeto desenvolvido.
+>
+> A entrega deverá conter:
+>
+> 1. Registro fotográfico da apresentação
+> Inserir uma foto da equipe durante a exposição do projeto na Semana da Computação.
+> A foto deve permitir identificar os integrantes e registrar a participação da equipe no evento.
+> 2. Código-fonte do projeto
+> O código-fonte completo utilizado no projeto deverá ser salvo em uma pasta no Google Drive ou em um repositório GitHub.
+> O link de acesso deverá ser compartilhado comigo.
+> Verifiquem se as permissões de acesso estão habilitadas para visualização e download dos arquivos.
+> 3. Identificação da equipe
+> Informar no documento:
+> Nome do projeto;
+> Nome completo de todos os integrantes;
+> Turma.
+>
+> Orientações para envio
+> O relatório poderá ser simples, preferencialmente em PDF.
+> Todos os integrantes da equipe devem realizar o envio individualmente pelo Teams, anexando o mesmo relatório.
+> O link do Drive ou GitHub deverá estar informado no documento.
+> Atenção: não é necessário elaborar um relatório extenso. O objetivo desta entrega é registrar a participação da equipe na exposição e disponibilizar o código-fonte desenvolvido, permitindo a consulta e a avaliação do projeto.
+> Conto com a colaboração de todos!
+
+Com o enunciado, terminou a espera pelo modelo do relatório que o professor disse, em 20/10, que ia passar (R81): o enunciado não traz modelo.
+
+### Como o grupo atende o enunciado
+
+O PDF entregue traz só o que o enunciado pede: o nome do projeto, os cinco nomes completos, com a matrícula, a turma 4172CMPN6A_P1 e o professor; a foto da equipe na exposição, com a legenda dos nomes; e o link deste repositório, que é público. O relatório técnico que o Gabriel montou em 02/11, com os capítulos do grupo, foi revisado e concluído pelo Caio e fica no repositório como documento complementar, com o link citado no PDF (R85). Os capítulos estão em `docs/entregas/entrega-final/relatorio/`, e os dois PDFs vão para `docs/entregas/entrega-final/`.
+
+### Como foi a exposição
+
+Em 27/10, os cinco integrantes mostraram o Presente! numa mesa em frente à Biblioteca, no formato de feira, com a caixa prateada e etiquetada ligada pelo USB do notebook e o QR code do formulário na mesa (`docs/assets/exposicao/equipe-na-exposicao-2026-10-27.jpg`). No notebook ficou aberto o monitor do serial (`docs/testes/monitor.html`), e, pelo relato do Caio, passou o vídeo de apresentação do projeto que o Cauã fez, de 1min51. Os vídeos gravados pelo grupo mostram visitantes entrando no portal pelo celular, em Android e iPhone, cartões com o verde, o lançamento manual e o painel com 4 de 40 presentes.
+
+O monitor, filmado no notebook, mostra duas chamadas de demonstração. A `4172CMPN6A_P1-20261027-1911` tem os 40 alunos na lista, o hotspot principal em 0,3 s, a busca da turma em 4,3 s, quatro crachás registrados e uma presença manual, 204,3 KB de memória antes da conexão segura e um toque de 258,4 ms entre o crachá e o sinal, acima dos 200 ms, o limite já declarado (R82). A outra, perto das 19h34, tem os seis toques abaixo dos 200 ms, 207,4 KB de memória e a lista da turma em 4365 de 8192 bytes. Os quadros estão em `docs/assets/exposicao/`, com a hora no nome.
+
+Pelo relato do Caio, a demonstração correu sem falhas, e o professor e a reitora a acompanharam. Alguns visitantes responderam o formulário do João (#74), que guarda o link e as respostas. O material de perguntas prováveis (R84) foi feito, fora do repositório. As outras fotos e os vídeos da exposição, e o vídeo do Cauã, ficaram fora do repositório (R85).
 
 ### O que o professor disse
 
@@ -194,16 +243,16 @@ Sem enunciado, o grupo adianta as cinco peças pela própria leitura e corrige n
 | Peça | Leitura do grupo | Onde está |
 |---|---|---|
 | Protótipo completo | o firmware dos cinco pacotes na placa, com a rodada completa dos testes do §8 | rodadas na placa da epic #9: a bateria dos pacotes 1 a 4 (#42, #44, #46 e #48) e a rodada completa (#50) |
-| Vídeo de 2 minutos | ~~na ordem do vídeo da Entrega 06 (estrutura física, sensor, processamento, atuador e resultado), em duas gravações: as cenas com a placa na aula de 20/10 e a abertura com a caixa pintada depois~~ *(22/10, R81: o professor adiou o vídeo; as tarefas param até ele pedir)* | epic #53: o roteiro do vídeo (#59), a gravação (#60), a pintura da caixa (#61) e a edição (#62) |
+| Vídeo de 2 minutos | ~~na ordem do vídeo da Entrega 06 (estrutura física, sensor, processamento, atuador e resultado), em duas gravações: as cenas com a placa na aula de 20/10 e a abertura com a caixa pintada depois~~ *(22/10, R81: o professor adiou o vídeo; as tarefas param até ele pedir)* | epic #53: o roteiro do vídeo (#59), a gravação (#60), a pintura da caixa (#61) e a edição (#62) *(25/11, R85: o enunciado não pede vídeo, e as tarefas do vídeo fecharam sem ser feitas; na exposição passou o vídeo de apresentação que o Cauã fez)* |
 | Dashboard | o portal do professor no aparelho e a página de histórico, como capítulo do relatório, a partir da Entrega 07 | a tarefa da entrega do dashboard (#52) |
 | Exposição | a demonstração ao vivo, ~~com o vídeo como plano B,~~ *(22/10, R81: sem vídeo)* às 18h30, no andar de baixo, *(23/10: no formato de feira de ciências, com o grupo atrás de uma mesa e a caixa na mesa, e não na parede)* e o hotspot, a energia, a sala e o banco acordado no dia | epic #54: o roteiro da exposição (#63) e o dia da exposição (#64) |
-| Relatório técnico | um documento só, na ABNT, ~~no modelo das Entregas 05 e 06,~~ *(22/10, R81: no modelo que o professor vai passar)* com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, ~~com a postagem~~ (#73) *(22/10, R81: o PDF espera o modelo do professor, os arquivos esperam o enunciado, e não há postagem)* |
+| Relatório técnico | um documento só, na ABNT, ~~no modelo das Entregas 05 e 06,~~ *(22/10, R81: no modelo que o professor vai passar)* com uma seção por arquivo | epic #55: o esqueleto (#65), as seções (#66 a #70), a consolidação (#71), o PDF (#72) e os arquivos da entrega final, ~~com a postagem~~ (#73) *(22/10, R81: o PDF espera o modelo do professor, os arquivos esperam o enunciado, e não há postagem)* *(25/11, R85: o PDF entregue é o simplificado que o enunciado pede, e o relatório técnico fica no repositório como documento complementar)* |
 
 O calendário é do grupo, e não prazo do professor: as seções do relatório até 23/10, ~~o vídeo editado até 24/10, o PDF até 25/10, a postagem até 26/10~~ e o dia 27/10 só para a exposição (R80). *(22/10, R81: o vídeo foi adiado, o PDF espera o modelo do professor, e não há postagem)*
 
 ### O formato do relatório
 
-O grupo segue a ABNT, como em todas as entregas. ~~⚠️ O professor não falou de modelo nem de número de páginas, e a pergunta vai para a aula de 20/10.~~ *(22/10, R81: o professor disse em 20/10 que o relatório terá um modelo, que ele vai passar; o número de páginas não foi respondido)*
+O grupo segue a ABNT, como em todas as entregas. ~~⚠️ O professor não falou de modelo nem de número de páginas, e a pergunta vai para a aula de 20/10.~~ *(22/10, R81: o professor disse em 20/10 que o relatório terá um modelo, que ele vai passar; o número de páginas não foi respondido)* *(25/11, R85: o enunciado saiu sem modelo; o relatório técnico segue o das Entregas 05 e 06, e o PDF entregue é o simplificado)*
 
 ### Perguntas para a aula de 20/10
 
