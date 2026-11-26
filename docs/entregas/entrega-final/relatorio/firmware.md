@@ -18,7 +18,7 @@ O firmware do Presente! é escrito em C++ sobre o núcleo do Arduino para o ESP3
 
 Fonte: elaborado pelos autores (2026).
 
-O `loop()` nunca chama `delay()`: o LED, o buzzer e as esperas se medem pelo tempo decorrido em `millis()`, para que o aparelho continue atendendo o portal enquanto pisca. Cada evento da chamada vai para o arquivo `/eventos.json` como uma linha, acrescentada ao fim, e o arquivo nunca é reescrito; assim, uma linha cortada por queda de energia é descartada na leitura, com aviso. O horário de cada linha é o tempo desde que a placa ligou, porque o aparelho não tem relógio próprio, e a hora do relógio só se calcula na saída, a partir da hora que o navegador do professor manda.
+O `loop()` nunca chama `delay()`: o LED, o buzzer e as esperas se medem pelo tempo decorrido em `millis()`, para que o aparelho continue atendendo o portal enquanto pisca. Cada evento da chamada vai para o arquivo `/eventos.json` como uma linha, acrescentada ao fim, e o arquivo nunca é reescrito; assim, uma linha cortada por queda de energia é descartada na leitura, com aviso. O horário de cada linha é o tempo desde que a placa ligou, porque o aparelho não tem relógio próprio, e a hora do relógio só se calcula na saída, a partir da hora que o navegador do professor manda. O Apêndice A traz três trechos do código, comentados.
 
 ## 2.1 A máquina de estados
 

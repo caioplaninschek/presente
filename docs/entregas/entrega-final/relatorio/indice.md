@@ -16,6 +16,7 @@ O Gabriel montou o relatório em 02/11, a partir dos capítulos que o grupo escr
 | 5 Os testes e os resultados | [`testes-e-resultados.md`](testes-e-resultados.md) (#69) | Gabriel |
 | 6 Limitações e caminhos descartados | [`limitacoes-e-descartes.md`](limitacoes-e-descartes.md) (#70) | Cauã, condensado pelo Gabriel |
 | 7 Considerações finais, quem fez cada parte (Quadro 11) e referências | [`consideracoes-finais-e-referencias.md`](consideracoes-finais-e-referencias.md) (#71) | Gabriel, revisado pelo Caio |
+| Apêndice A, trechos comentados do código (Códigos 1 a 3) | [`apendice-a-trechos-do-codigo.md`](apendice-a-trechos-do-codigo.md) | Caio |
 
 O sumário se gera na montagem do PDF. As versões longas do firmware, do dashboard e das limitações, anteriores à consolidação, continuam no histórico do git.
 
