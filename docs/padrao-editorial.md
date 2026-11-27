@@ -1,6 +1,6 @@
 # Padrão editorial
 
-Vale para todo texto que sai deste projeto: PDFs de entrega, relatório técnico final, `DIARIO.md`, roteiro do vídeo. Não vale para código nem para comentário de código.
+Vale para todo texto que sai deste projeto: PDFs de entrega, relatório técnico final, `DIARIO.md`, ~~roteiro do vídeo~~ *(25/11, R85: o enunciado não pediu o vídeo)*. Não vale para código nem para comentário de código.
 
 Este arquivo é a **camada operativa**: o que se aplica a este projeto, e a ordem em que se aplica. A norma completa está em `docs/referencia/`, e é ela que manda em caso de conflito:
 

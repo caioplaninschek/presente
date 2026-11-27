@@ -49,7 +49,7 @@ A resposta tem que descrever os cinco passos na ordem: a decisão vira um `R<n>`
 
 ## 5. `git pull` antes de começar, sempre
 
-A regra não tem exceção. Nesta fase, a spec, os tickets de decisão e o enunciado das issues mudam quase todo dia, e código escrito sobre cópia velha é código refeito.
+A regra não tem exceção. A spec, os tickets de decisão e o enunciado das issues podem mudar de um dia para o outro, e código escrito sobre cópia velha é código refeito.
 
 ```bash
 git pull

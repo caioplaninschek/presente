@@ -2,7 +2,7 @@
 
 O relatório técnico é o documento complementar da entrega final (R85). O enunciado, trazido pelo Caio em 25/11, pede um PDF simplificado, com a identificação da equipe, a foto da exposição e o link do código, e esse PDF cita o link deste relatório. O enunciado não trouxe modelo, e o relatório segue o das Entregas 05 e 06, na ABNT.
 
-O Gabriel montou o relatório em 02/11, a partir dos capítulos que o grupo escreveu nesta pasta, e o Caio o revisou e concluiu em 25/11, com as correções da revisão: a exposição de 27/10, o vídeo do Cauã, a contagem dos toques acima de 200 ms, as correções que os capítulos já tinham recebido e as referências. Cada capítulo mora num arquivo, já com a numeração final das seções, dos quadros e das figuras, e o PDF sai deles para `docs/entregas/entrega-final/` (tarefa do PDF do relatório, #72).
+O Gabriel montou o relatório em 02/11, a partir dos capítulos que o grupo escreveu nesta pasta, e o Caio o revisou e concluiu em 25/11, com as correções da revisão: a exposição de 27/10, o vídeo do Cauã, a contagem dos toques acima de 200 ms, as correções que os capítulos já tinham recebido e as referências. Cada capítulo mora num arquivo, já com a numeração final das seções, dos quadros e das figuras, e o PDF foi montado a partir deles e está em `docs/entregas/entrega-final/` (tarefa do PDF do relatório, #72, fechada em 25/11).
 
 ## Os arquivos, na ordem do documento
 

@@ -23,15 +23,16 @@
   // espera é só a busca da lista pelo hotspot; os 25 s vieram da troca de rádio
   // do Plano B (5 a 15 s, R14 e R19), que caiu em 22/09, e ainda são curtos o
   // bastante para o professor não achar que o aparelho morreu. Valor de
-  // partida, a calibrar na rodada do pacote 2 na placa (#44): o item 4 do
+  // partida, mantido depois da rodada do pacote 2 na placa (#44, fechada em
+  // 23/10): o item 4 do
   // ticket `.scratch/presente/issues/09` foi fechado pela R62.
   var ESPERA_LIMITE_MS = 25000;
 
   // Quanto um pedido espera antes de a falha ser dada por certa (R40). O
   // aparelho está do outro lado da sala, na rede dele, e responde em
   // milissegundos; passado isso, ele não está respondendo. A busca da lista no
-  // login é a exceção, e tem o limite acima. Valor de partida, a calibrar na
-  // bancada junto dos outros tempos (§8).
+  // login é a exceção, e tem o limite acima. Valor de partida (§8), mantido
+  // depois das rodadas na placa.
   var PEDIDO_LIMITE_MS = 6000;
 
   // O Enviar é o único pedido que sai da sala: cada fase da tentativa tem

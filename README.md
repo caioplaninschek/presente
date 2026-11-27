@@ -4,6 +4,8 @@ Terminal embarcado que registra presença em sala de aula por aproximação de t
 
 Projeto integrador da disciplina **Sistemas Embarcados** — Universidade Veiga de Almeida, campus Barra, 2026.2.
 
+O projeto está concluído. O aparelho foi apresentado na exposição de 27/10, na Semana da Computação, e a entrega final é o PDF [`docs/entregas/entrega-final/entrega-final.pdf`](docs/entregas/entrega-final/entrega-final.pdf), com o relatório técnico como documento complementar.
+
 ## O problema
 
 O professor gasta de 10 a 15 minutos por aula fazendo chamada manual no sistema da UVA: lê nome por nome, pergunta à turma, marca a caixa. É tempo de aula perdido, e um deslize de linha marca falta no aluno errado.
@@ -35,9 +37,10 @@ Um aparelho fixo ao lado da porta. O professor conecta o celular na rede Wi-Fi d
 | [`docs/padrao-editorial.md`](docs/padrao-editorial.md) | O padrão de escrita de todo texto que sai do projeto: entregas, relatório, diário, roteiro de vídeo |
 | [`docs/pauta-do-grupo.md`](docs/pauta-do-grupo.md) | A pauta de conversa de 08 a 10/09, já encerrada; as datas do corpo são as da época |
 | [`docs/entregas.md`](docs/entregas.md) | Os enunciados do professor e o que saiu em cada entrega |
-| [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral. A pasta `entrega-07` não foi entregue e é base da entrega final *(14/10, R72)* |
+| [`docs/entregas/`](docs/entregas/) | Uma pasta por entrega: o PDF entregue, a transcrição e o rascunho com o texto integral. A pasta `entrega-07` não foi entregue e é base da entrega final *(14/10, R72)* *(20/10: o texto dela virou o capítulo do portal no relatório técnico)* |
+| [`docs/entregas/entrega-final/entrega-final.pdf`](docs/entregas/entrega-final/entrega-final.pdf) | **A entrega final:** o PDF de 3 páginas que o enunciado pede, com a identificação da equipe, a foto da exposição e os links do repositório e do relatório técnico *(25/11, R85)* |
 | [`docs/datasheets/`](docs/datasheets/) | Os datasheets do ESP32-WROOM-32 e do MFRC522, em PDF e transcritos, com as figuras |
-| [`docs/entregas/entrega-final/relatorio/`](docs/entregas/entrega-final/relatorio/) | O relatório técnico, documento complementar da entrega final, com um capítulo por arquivo *(25/11, R85)* |
+| [`docs/entregas/entrega-final/relatorio-tecnico.pdf`](docs/entregas/entrega-final/relatorio-tecnico.pdf) | O relatório técnico (36 folhas, ABNT, com o Apêndice A de trechos do código), documento complementar da entrega final; também em [`.docx`](docs/entregas/entrega-final/relatorio-tecnico.docx). O texto vive em [`relatorio/`](docs/entregas/entrega-final/relatorio/), com um capítulo por arquivo *(25/11, R85)* |
 | [`docs/assets/exposicao/`](docs/assets/exposicao/) | A foto da equipe na exposição de 27/10, o recorte da caixa e os quadros do monitor das duas chamadas de demonstração |
 | [`DIARIO.md`](DIARIO.md) | Diário de bordo semanal |
 | [`.scratch/presente/map.md`](.scratch/presente/map.md) | Mapa das decisões de projeto, abertas e fechadas |

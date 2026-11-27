@@ -213,3 +213,15 @@ O plano de testes da especificação tem onze itens, e esta entrega apresenta ci
 **Os testes 7 e 7b** só se tornam obrigatórios se a medição do rádio indicar o arranjo alternado. Eles verificam a alternância entre a rede do aparelho e a rede externa, que deixa de existir caso o arranjo simultâneo seja aprovado. A decisão sai dos testes 7c e 7d desta entrega.
 
 **A máquina de estados completa** do firmware integrado, com os estados de rede e de sessão, e a retomada da sessão depois de um reinício também ficam para a integração, porque dependem do portal rodando dentro do aparelho, e o portal ainda roda no navegador.
+
+---
+
+## Divergência declarada depois da entrega (26/11)
+
+O texto entregue fica como está. A spec registra o que mudou depois, e estes pontos já não batem com o estado do projeto:
+
+- **O buzzer (seções 1, 3.1 e 3.2).** A peça que só estalava foi trocada por um buzzer ativo de 5 V (R54), que já apita a cada leitura nos vídeos da montagem de 05/10 (Entrega 06).
+- **O rádio (seções 3.5, 3.6 e 4).** *(22/09, R45)* Vale o Plano A, o modo simultâneo: o teste do painel passou na sala, com iPhone e Android, pelo relato do grupo e sem log. A alternância e os testes 7 e 7b saíram do projeto. *(22/10, R82)* Na aula de 20/10, o pulo de canal não aconteceu, e o teste do painel dessa rodada fica como não observado.
+- **A etiqueta de 7 bytes (seção 3.3).** *(10/10, R65)* Os cartões comprados têm número de 4 bytes e são os crachás dos testes e da entrega final. O teste 2 saiu do plano, e a leitura de 7 bytes continua no código, sem teste na placa.
+- **O plano de testes (seção 4).** Os testes 3 a 6 rodaram na placa até 20/10, e o relatório técnico registra a evidência como parcial (R82).
+- **As duas figuras.** São imagens do repositório, e as duas mudaram depois de 22/09. O diagrama de blocos (Figura 1) deixou de mostrar o rádio alternando (Plano B) e passou a mostrá-lo ao mesmo tempo, no mesmo canal (Plano A, R45). O fluxograma (Figura 2) ganhou as decisões das rodadas seguintes: o estado depois do login e depois do Enviar (R46), o Enviar (R76) e a volta da chamada depois de uma queda de energia (R79). O PDF arquivado mostra as figuras como foram entregues.

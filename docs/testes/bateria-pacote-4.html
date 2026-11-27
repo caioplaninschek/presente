@@ -97,13 +97,15 @@ ol li, ul li { margin: .35rem 0; }
 <h1>Presente!: bateria de testes do pacote 4</h1>
 <p class="sub">A rodada oficial na placa do pacote 4 (#48): o relatório, o Enviar e o Encerrar, com os testes 4, 5 e 6 do plano de testes (§8).</p>
 
+<p class="aviso">(26/11) Esta bateria é o roteiro de uma rodada que já foi feita: os testes na placa fecharam depois da aula de 20/10 (R82), e a evidência guardada está em <code>docs/assets/testes/</code>. A página fica como registro do que se pediu.</p>
+
 <p id="sem-memoria" class="aviso" hidden>Este navegador não está guardando o progresso (janela anônima ou armazenamento bloqueado). A página funciona assim mesmo, mas o que você marcar some se a aba for fechada: copie o resultado antes de fechar.</p>
 
 <h2>Como usar esta página</h2>
 <p>Faça esta bateria <strong>depois</strong> da bateria dos pacotes 1 a 3. Abra este arquivo pela pasta do repositório, depois do <code>git pull</code>: <code>docs\testes\bateria-pacote-4.html</code>, com dois cliques. Ela não precisa de internet, então pode ficar aberta enquanto o notebook está na rede do aparelho.</p>
 <p>Em cada item, marque <strong>passou</strong> ou <strong>falhou</strong> e escreva o que viu, se for diferente do esperado ou se o item pedir um número. No fim de cada bloco há um campo para colar o trecho do monitor serial daquele bloco. O navegador guarda o que você marcar: se a página recarregar, tudo volta.</p>
 <p>No fim, o botão <strong>Copiar resultado da #48</strong> monta o comentário da issue. Quando tiver internet, cole na #48, no GitHub, e anexe os arquivos JSON que o Compartilhar baixou e o vídeo, porque a página não guarda arquivo.</p>
-<p>Se alguma coisa travar, chame o Caio no WhatsApp. A meta é terça, 20/10; o que faltar se faz na aula desse dia.</p>
+<p>Se alguma coisa travar, chame o Caio no WhatsApp. A meta era terça, 20/10; o que faltou se fez na aula desse dia.</p>
 <p>A ordem dos blocos segue o hotspot: o teste 4 roda com ele desligado; o teste 5 continua a mesma chamada, envia sem o hotspot e depois com ele; o teste 6 encerra essa chamada e faz outra, com o segundo professor e a lista da turma.</p>
 <p>(15/10) Linhas que podem aparecer em qualquer bloco e não são defeito: <code>[&lt;tempo&gt;][E][vfs_api.cpp:105] open(): /littlefs/&lt;arquivo&gt; does not exist, no permits for creation</code>. É o aparelho conferindo se um arquivo existe antes de usá-lo: o <code>roster.json</code>, o <code>eventos.json</code>, o <code>sessao_atual.json</code>, o <code>relatorio.json</code>, ou o <code>hotspot-detect.html</code> que o iPhone pede para testar a internet. O Iniciar confere os três arquivos da chamada antes de abrir, então, antes do <code>Chamada aberta</code> do teste 4 e do teste 6, podem aparecer até três dessas linhas; o Encerrar também pode trazer algumas. Um defeito de verdade tem frase própria, em português e sem <code>[E]</code>, como as do "Se der errado".</p>
 

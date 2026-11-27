@@ -6,7 +6,8 @@
  * políticas do banco dão ao papel `authenticated` o select das seis tabelas e
  * mais nada (R33, R34).
  *
- * Sem biblioteca: `fetch` basta para as três chamadas que a página faz, e uma
+ * Sem biblioteca: `fetch` basta para as quatro chamadas que a página faz (o
+ * login e três leituras), e uma
  * dependência de CDN seria uma coisa a mais para sair do ar no dia da
  * apresentação.
  */

@@ -6,8 +6,8 @@
 // proprio framework. Em lib/config/, as bibliotecas e os programas de src/
 // acham este arquivo com #include <config.h>.
 //
-// O nome e a senha da rede ficam no secrets.h (secao 5). Os tempos entram no
-// pacote que os usar.
+// O nome e a senha da rede ficam no secrets.h (secao 5). Os tempos de cada
+// pacote do firmware ficam mais abaixo.
 
 #pragma once
 
@@ -44,18 +44,18 @@ constexpr char ENDERECO_DO_APARELHO[] = "192.168.4.1";
 // endereco tem prazo proprio: no pior caso a trava passa dos 6 s em que o portal
 // desiste de um pedido, e a busca, dos 20 s. A rodada na placa (#44) rodou com
 // estes valores, e eles ficaram (secao 8).
-constexpr unsigned long ESPERA_DO_HOTSPOT_MS = 7000;         // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long ESPERA_DA_RESERVA_MS = 5000;         // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long LIMITE_DA_CONEXAO_SEGURA_MS = 4000;  // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long LIMITE_DA_RESPOSTA_MS = 4000;        // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long ESPERA_DO_HOTSPOT_MS = 7000;         // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long ESPERA_DA_RESERVA_MS = 5000;         // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long LIMITE_DA_CONEXAO_SEGURA_MS = 4000;  // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long LIMITE_DA_RESPOSTA_MS = 4000;        // valor de partida, mantido depois das rodadas na placa (secao 8)
 // O azul lento de SINCRONIZANDO: aceso e apagado por este tempo cada.
-constexpr unsigned long PISCADA_LENTA_MS = 500;              // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long PISCADA_LENTA_MS = 500;              // valor de partida, mantido depois das rodadas na placa (secao 8)
 
 // --- Tempos do sinal da chamada (pacote 3, #45, R74) ---------------
 // O sinal do toque no secao 5. A piscada verde e o bip sao os do encostou (#26),
 // que continua com as constantes dele: o codigo das bancadas nao muda.
-constexpr unsigned long BIP_DO_REGISTRO_MS = 100;            // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long PISCADA_VERDE_ACESA_MS = 90;         // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long PISCADA_VERDE_APAGADA_MS = 90;       // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long VERMELHO_DO_NAO_RECONHECIDO_MS = 1000;  // valor de partida, a calibrar na placa (secao 8)
-constexpr unsigned long BUZZ_DO_NAO_RECONHECIDO_MS = 400;    // valor de partida, a calibrar na placa (secao 8)
+constexpr unsigned long BIP_DO_REGISTRO_MS = 100;            // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long PISCADA_VERDE_ACESA_MS = 90;         // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long PISCADA_VERDE_APAGADA_MS = 90;       // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long VERMELHO_DO_NAO_RECONHECIDO_MS = 1000;  // valor de partida, mantido depois das rodadas na placa (secao 8)
+constexpr unsigned long BUZZ_DO_NAO_RECONHECIDO_MS = 400;    // valor de partida, mantido depois das rodadas na placa (secao 8)

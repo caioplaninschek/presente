@@ -6,8 +6,8 @@
 # publicar a pasta. A chave nunca entra no git — é por isso que a publicação
 # não é o Pages apontado direto para a pasta, e sim este passo no meio.
 #
-# Antes da primeira publicação, quem é admin do repositório precisa de duas
-# coisas (as duas são do Caio):
+# A publicação depende de duas coisas que só quem é admin do repositório faz
+# (as duas são do Caio e já estão feitas):
 #   1. Settings › Pages › Source = "GitHub Actions".
 #   2. Settings › Secrets and variables › Actions, com os dois segredos abaixo.
 #

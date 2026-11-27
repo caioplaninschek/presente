@@ -82,7 +82,7 @@ namespace {
 
 enum class Fase { PARADA, PRINCIPAL, RESERVA };
 
-// Global, fora da pilha do loop(), e fica na memoria para o pacote 3 (#45)
+// Global, fora da pilha do loop(), e fica na memoria para a chamada (#45)
 // conferir os crachas. 40 alunos ocupam uns 5 KB.
 // shortcut: turma acima de uns 60 alunos nao cabe e cai no offline; aumentar o documento se a turma crescer
 StaticJsonDocument<8192> lista;

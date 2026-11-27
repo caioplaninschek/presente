@@ -120,7 +120,7 @@ Concentrar a rede em dois momentos é o que torna o problema tratável, porque e
 
 ## O que a compressão do João retirou
 
-Registrado porque o texto integral está no rascunho e pode ser reaproveitado nas próximas entregas — e porque parte do que saiu é informação que o relatório final de 30/11 vai precisar de volta.
+Registrado porque o texto integral está no rascunho e pode ser reaproveitado nas próximas entregas — e porque parte do que saiu é informação que o relatório final ~~de 30/11~~ *(25/11, R85: a entrega final é até 28/11, às 15h, e o relatório técnico é documento complementar)* vai precisar de volta.
 
 - **§1** — a lista dos cinco integrantes. O enunciado a pede nesta seção; ela continua na capa.
 - **§2** — os 10 a 15 minutos por chamada, a fraude por resposta de terceiro e o esforço vocal do professor. Sobrou só o erro de linha.
@@ -132,6 +132,6 @@ Registrado porque o texto integral está no rascunho e pode ser reaproveitado na
 
 Decisões posteriores a 07/09 deixaram três pontos deste documento desatualizados. O texto entregue fica como está; a spec registra cada mudança, e a Entrega 04 contou as duas primeiras ao professor.
 
-- **§6 e desafio técnico — a alternância de rádio.** O documento trata a troca entre hotspot e cliente como o único arranjo possível. Em 10/09 a R19 mostrou que o modo simultâneo é nativo do ESP32: a alternância virou o Plano B, e a escolha sai dos testes de bancada. A Entrega 04 declarou a correção na seção 1.
+- **§6 e desafio técnico — a alternância de rádio.** O documento trata a troca entre hotspot e cliente como o único arranjo possível. Em 10/09 a R19 mostrou que o modo simultâneo é nativo do ESP32: a alternância virou o Plano B, e a escolha sai dos testes de bancada. A Entrega 04 declarou a correção na seção 1. *(22/09, R45: a escolha saiu, vale o Plano A, o modo simultâneo; a alternância e o estado `FALHA_DE_RADIO` saíram do projeto.)*
 - **§7 e §8 — a divisão por papéis e o cronograma por integrante.** Em 11/09 a R23 passou a distribuir o trabalho em tarefas com dono e prazo, porque há uma placa só e ela fica com o João. A seção 7 da Entrega 04 traz o checklist que substitui o §8, e a spec declara a divergência ao pé do §9.
 - **§6, regra 2 — o mesmo crachá em 5 s.** O documento descarta a leitura repetida dentro de 5 s, com vermelho de 300 ms. Em 13/09 a R30 trocou isso por uma presença por sessão: quem já está registrado recebe verde de uma piscada, e nada é gravado, em qualquer momento da aula.

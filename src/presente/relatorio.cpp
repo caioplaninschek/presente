@@ -136,7 +136,7 @@ bool escrever(Print& saida, const char* fim) {
 
   escreverTexto("{\"sessao\":");
   escreverJson(sessao.as<JsonVariantConst>());
-  // O tempos e constante (Q8).
+  // Os tempos sao constantes (Q8).
   escreverTexto(",\"tempos\":[\"t1\",\"t2\"],\"roster_carregado\":");
   escreverTexto(chamada::online() ? "true" : "false");
   escreverTexto(",\"eventos\":[");

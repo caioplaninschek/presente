@@ -141,7 +141,7 @@ Os testes 3, 4, 5 e 6 do plano de testes não ficam prontos em 22/09: dependem d
 
 ## O que ficou fora por falta de espaço
 
-Registrado porque o texto integral está no rascunho e na spec, e parte do que saiu é informação que o relatório final de 30/11 vai precisar de volta. Para caber em capa mais quatro, o documento saiu com entrelinha 1,15 em vez de 1,5 e com o diagrama de blocos a 10 cm de largura.
+Registrado porque o texto integral está no rascunho e na spec, e parte do que saiu é informação que o relatório final ~~de 30/11~~ *(25/11, R85: a entrega final é até 28/11, às 15h, e o relatório técnico é documento complementar)* vai precisar de volta. Para caber em capa mais quatro, o documento saiu com entrelinha 1,15 em vez de 1,5 e com o diagrama de blocos a 10 cm de largura.
 
 - **§1** — a observação de que várias das cinco frentes precisavam da placa ao mesmo tempo; o programa escrito e o passo a passo que acompanham cada tarefa; os tópicos abertos no repositório como lugar das decisões; a premissa errada da decisão de 05/09; a frase que anunciava a mudança do desafio técnico; o que são as três entidades do Cauã (professor com cadastro próprio, turma como tabela e aula com estado, que impede o envio duplicado do relatório); e o Igor assumindo a tela de histórico.
 - **§3** — a fonte de 5 V na tomada, que alimenta o conjunto; e as observações pino a pino da spec §4.1: o GPIO 5 como pino de *strapping*, os resistores de 220 Ω do LED e a ordem de checagem do buzzer antes de qualquer transistor.
@@ -157,3 +157,5 @@ Na mesma data, a spec ganhou a rodada 10, e a **R30** mudou a leitura do crachá
 O teste 4 da seção 6 diz "com o Iniciar sem internet", mas desde a R14 (06/09) o modo offline se decide no login, como mostra o pseudocódigo da própria seção 5. A spec passou a dizer "login sem internet".
 
 Em 21/09 a montagem saiu diferente do que a seção 3 descreve em dois pontos, e a spec registrou os dois na R44: os resistores do LED são de 300 Ω, e não de 220 Ω, e a checagem do buzzer terminou num transistor TIP122. O documento entregue continua como está; a Entrega 05 descreve a montagem real.
+
+*(22/09, R45)* A escolha entre os dois arranjos de rádio, que o documento deixa para os testes de bancada, saiu: vale o Plano A, o modo simultâneo. A alternância, o Plano B, os testes 7 e 7b e as linhas marcadas com `*` no pseudocódigo da seção 5 saíram do projeto. *(10/10, R65)* O teste 2, o de 7 bytes, também saiu, porque os cartões comprados têm UID de 4 bytes.

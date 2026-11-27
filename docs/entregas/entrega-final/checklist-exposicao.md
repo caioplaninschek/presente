@@ -1,5 +1,7 @@
 # Checklist do dia da exposição, 27/10
 
+*(26/11) Registro: este é o checklist usado na exposição de 27/10. Como a exposição correu está em `docs/entregas.md`, na seção da entrega final.*
+
 Exposição às 18h30, no andar de baixo, no formato de feira, com a caixa na mesa (R81). Este é o checklist impresso da tarefa do dia da exposição (#64), com o pareamento do hotspot (HU-28, HU-29 e R13d da `docs/spec.md`). O que se mostra a quem passar está no roteiro da exposição (#63).
 
 **Imprima e escreva as senhas à mão.** Senha nunca entra no repositório.

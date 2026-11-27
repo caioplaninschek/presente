@@ -2,14 +2,17 @@
 /* Presente! — o aparelho de mentira.
  *
  * Responde as mesmas rotas que o `portal.cpp` responde e simula crachás
- * encostando no leitor, para as três telas rodarem no navegador sem depender
+ * encostando no leitor, para as quatro telas rodarem no navegador sem depender
  * do ESP32 (issue #20). Os dados são inventados e moram neste arquivo.
  *
  * Este arquivo fica no repositório: é o jeito de testar o portal sem placa.
  * Ele só carrega com `?mentira=1` no endereço (R51) — quem o traz é o
  * `app.js`, e não uma tag do HTML; sem isso, o portal fala por `fetch()` com o
  * aparelho de verdade. As rotas aqui seguem o contrato do §6.1 da spec (R62),
- * que é o mesmo que o `portal.cpp` segue do outro lado.
+ * que é o mesmo que o `portal.cpp` segue do outro lado, menos no cookie: este
+ * arquivo não o confere, então só `/api/presencas`, `/api/seguir-offline` e
+ * `/api/iniciar` respondem `SEM_LOGIN`, e o `/api/estado` sem login devolve o
+ * recorte inteiro, e não só `{"autenticado": false}`.
  *
  * Para experimentar, com a página aberta, pelo console do navegador:
  *   mentira.esperaMs = 14000     // uma espera longa, com o hotspot lento

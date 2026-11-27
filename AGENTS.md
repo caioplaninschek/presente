@@ -6,9 +6,9 @@ A especificação do projeto está em `docs/spec.md`. Leia antes de propor qualq
 
 O mapa de decisões está em `.scratch/presente/map.md`; hoje ele não tem ticket de decisão em aberto. Leia o mapa antes de trabalhar um ticket.
 
-Os enunciados do professor, com o detalhamento da próxima entrega, estão em `docs/entregas.md`. **O prazo de cada entrega é o do enunciado.** Data que ainda não saiu de enunciado é provisória e se confere quando ele for publicado; não deduza prazo de dia da semana nem de turma.
+Os enunciados do professor, com o detalhamento de cada entrega, estão em `docs/entregas.md`. **O prazo de cada entrega é o do enunciado.** Data que ainda não saiu de enunciado é provisória e se confere quando ele for publicado; não deduza prazo de dia da semana nem de turma.
 
-**Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, roteiro de vídeo. Leia antes de escrever qualquer documento.
+**Todo texto que sai deste projeto segue `docs/padrao-editorial.md`** — PDFs de entrega, relatório técnico, `DIARIO.md`, ~~roteiro de vídeo~~ *(25/11, R85: o enunciado não pediu o vídeo)*. Leia antes de escrever qualquer documento.
 
 **Commit direto na `main` é o padrão**, sem branch nem revisão obrigatória (§9). A exceção é uma só, e tem razão fixa: quem tomou por conta própria uma decisão que o grupo ainda não viu abre pull request, para que ela possa cair **antes** de entrar na `main` (R39).
 
